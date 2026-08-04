@@ -39,6 +39,55 @@ Menu hamburguer*/
   transition: 300ms;
 }
 
+.league-card {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+
+    width: 340px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 18px;
+    padding: 18px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    z-index: 1000;
+}
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.card-header h3{
+    margin:0;
+    font-size:22px;
+}
+
+.card-header a{
+    color:#1cb0f6;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.card-body{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.card-body img{
+    width:60px;
+}
+
+.card-body p{
+    margin:0;
+    color:#777;
+    line-height:1.4;
+}
+
 .burger::before,
 .burger::after {
   content: "";
