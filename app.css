@@ -51,7 +51,7 @@ Menu hamburguer*/
     padding: 18px;
 
     box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    z-index: 1000;
+    z-index: 5;
 }
 
 .card-header{
@@ -172,6 +172,7 @@ Menu hamburguer*/
 .options p:hover{
     text-decoration: underline;
     color: rgb(207, 207, 207);
+    cursor: pointer;
 }
 .trilha{
     display: flex;
@@ -187,6 +188,11 @@ Menu hamburguer*/
     width: 80px;
     height: 80px;
     border-radius: 50px;
+    transition: all 300ms ease;
+}
+.botaoAtividade:hover{
+  cursor: pointer;
+  filter: brightness(96%);
 }
 .botaoAtividade.par{
     margin-left: 3vw;

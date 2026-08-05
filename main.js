@@ -41,7 +41,7 @@ function entrarAtividade(id) {
     .then(data => {
         enunciado.innerHTML = data.pergunta
         respostaCerta = data.certa
-        embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.certa, data.alternativa4)
+        embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.certa, data.alternativa3)
             alternativa1.innerHTML = embaralhado[0]
             alternativa2.innerHTML = embaralhado[1]
             alternativa3.innerHTML = embaralhado[2]
@@ -57,9 +57,9 @@ function sairAtividade() {
 burguer.addEventListener('change', () => {
     if(burguer.checked) {
     menu.classList.add('ativo')
-} else {
+    } else {
     menu.classList.remove('ativo')
-}
+    }   
 })
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
