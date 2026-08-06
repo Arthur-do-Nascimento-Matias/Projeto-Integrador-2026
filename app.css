@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
+
 body{
     overflow-x: hidden;
-    
+    height: fit-content;
 }
 .menuLateralEsquerda{
     z-index: 5;
@@ -174,14 +176,19 @@ Menu hamburguer*/
     color: rgb(207, 207, 207);
     cursor: pointer;
 }
+.adicionarAtividade{
+    margin-left: 65%;
+}
+.adicionarAtividade:hover button{
+    cursor: pointer;
+}
 .trilha{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 30px;
-    margin-top: 50vh;
-    transform: translateY(-50%);
+    margin-top: 5vh;
     transition: all 200ms ease;
 }
 .botaoAtividade{
@@ -189,6 +196,8 @@ Menu hamburguer*/
     height: 80px;
     border-radius: 50px;
     transition: all 300ms ease;
+    background: #2A7B9B;
+    background: radial-gradient(circle, rgba(42, 123, 155, 1) 0%, rgba(176, 73, 73, 1) 35%, rgba(87, 199, 133, 1) 50%, rgba(128, 205, 119, 1) 64%, rgba(18, 0, 0, 1) 81%, rgba(237, 221, 83, 1) 100%);
 }
 .botaoAtividade:hover{
   cursor: pointer;
@@ -213,4 +222,21 @@ Menu hamburguer*/
 }
 .enunciado{
     color: white;
+    
+}
+.menuAdicionarAtividade{
+  position: fixed;
+  opacity: 0;
+  z-index: 999;
+  margin-left: 50%;
+  transform: translateX(-50%) translateY(-70%);
+  background-color: gray;
+  padding: 20px;
+  border-radius: 10px;
+  transition: all 300ms ease;
+  pointer-events: none;
+}
+.menuAdicionarAtividade.ativo{
+  opacity: 1;
+  pointer-events: all;
 }

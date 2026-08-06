@@ -4,16 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png">
     <link rel="stylesheet" href="app.css">
+     <link rel="stylesheet" href="atividades.css">
+     
+
+     
+    
 </head>
 <body>
+    <form class="menuAdicionarAtividade" onsubmit="adicionarAtividade()">
+        <p>Nome: <input type="text" name="" id="novoNome"></p>
+        <p>Enunciado: <input type="text" name="" id="novoEnunciado" required></p>
+        <p>Resposta: <input type="text" id="novaResposta" required></p>
+        <p>alternativa 1 <input type="text" name="" id="novaAlternativa1" required></p>
+        <p>alternativa 2 <input type="text" name="" id="novaAlternativa2" required></p>
+        <p>alternativa 3 <input type="text" name="" id="novaAlternativa3" required></p>
+        <button type="submit">Adicionar atividade</button>
+    </form>
     <div class="menuLateralEsquerda">
         <div class="burger-icon">
          <label class="burger" for="burger">
          <input class="line" type="checkbox" id="burger" />
          </label>
         </div>
-
 
         <div class="options">
             <p>Aprender</p>
@@ -22,16 +36,27 @@
             <p>Biblioteca</p>
             <p>IA para estudos</p>
         </div>
+        <div class="adicionarAtividade">
+            <button onclick="AbrirAdicionarAtividade()">Adicione uma atividade na trilha</button>
+        </div>
     </div>
     <div class="trilha"></div>
-    <div class="atividade">
-        <button onclick="sairAtividade()">Sair</button>
-        <h1 class="enunciado"></h1>
-        <button class="alternativa1" onclick="verificar(0)"></button>
-        <button class="alternativa2" onclick="verificar(1)"></button>
-        <button class="alternativa3" onclick="verificar(2)"></button>
-        <button class="alternativa4" onclick="verificar(3)"></button>
-        </div>
+
+        <div class="atividade">
+            <button onclick="sairAtividade()">Sair</button>
+            <h1 class="enunciado"></h1>
+            <button class="alternativa1" onclick="verificar(0)"></button>
+            <button class="alternativa2" onclick="verificar(1)"></button>
+            <button class="alternativa3" onclick="verificar(2)"></button>
+            <button class="alternativa4" onclick="verificar(3)"></button>
+            </div>
+            
+            <div class="parabens">
+            <h1>🎉 Parabéns!</h1>
+            <p>Você concluiu esta atividade.</p>
+            <button onclick="fecharParabens()">Continuar</button>
+</div>
+
     </div>
           <div class="MenuLateraldireita">
 

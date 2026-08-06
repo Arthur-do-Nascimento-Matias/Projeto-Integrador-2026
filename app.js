@@ -1,28 +1,14 @@
 const http = require('http')
 const url = require('url')
+const Tarefa = require('./Atividades')
+const Atividades = require('./Atividades')
 
-const perguntas = [
-    'O antônimo de agitado é...',
-    'Qual dos advérbios abaixo não existe?',
-    'Uma agitação barulhenta, tumulto ou alvoroço é chamada de:',
-    'O verbo "aferir" está relacionado a:',
-    'Qual das palavras abaixo apresenta erro de grafia?'
-]
-
-const alternativas = [
-    ['afobado', 'atrasado', 'elefante'],
-    ['bastante', 'quanto', 'tanto'],
-    ['dilema', 'discernimento', 'atrasamento'],
-    ['machucar', 'localizar', 'capacitar'],
-    ['bruxa', 'xingar', 'encher']
-]
-
-const respostasCerta = [
-    'tranquilo',
-    'menas',
-    'celeuma',
-    'medir',
-    'mecher'
+const array = [
+    {'nome': 'introducao', 'pergunta': 'O antônimo de agitado é...','alternativas':  ['afobado', 'atrasado', 'elefante'], 'respostaCertas':  'tranquilo'},
+    {'nome': 'pg1', 'pergunta': 'Qual dos advérbios abaixo não existe?','alternativas': ['bastante', 'quanto', 'tanto'], 'respostaCertas': 'menas'},
+    {'nome': 'pg2', 'pergunta': 'Uma agitação barulhenta, tumulto ou alvoroço é chamada de:', 'alternativas': ['dilema', 'discernimento', 'atrasamento'], 'respostaCertas': 'celeuma'},
+    {'nome': 'pg3', 'pergunta': 'O verbo "aferir" está relacionado a:', 'alternativas': ['machucar', 'localizar', 'capacitar'], 'respostaCertas': 'medir',},
+    {'nome': 'pg4', 'pergunta': 'Qual das palavras abaixo apresenta erro de grafia?', 'alternativas': ['bruxa', 'xingar', 'encher'], 'respostaCertas': 'mecher'}
 ]
 
 const callback = (req, res) => {
@@ -32,8 +18,17 @@ const callback = (req, res) => {
     let param = url.parse(req.url, true).query
     if(rota.pathname == '/atividades') {
         res.end(JSON.stringify(
-            {'id': param.id, 'pergunta': perguntas[param.id-1], 'alternativa1': alternativas[param.id-1][0], 'alternativa2': alternativas[param.id-1][1], 'alternativa3': alternativas[param.id-1][2], 'certa': respostasCerta[param.id-1]})
+            {'id': param.id, 'pergunta': array[param.id-1].pergunta, 'alternativa1': array[param.id-1].alternativas[0], 'alternativa2': array[param.id-1].alternativas[1], 'alternativa3': array[param.id-1].alternativas[2], 'certa': array[param.id-1].respostaCertas})
         )
+    }
+    if(rota.pathname == '/nome') {
+        res.end(JSON.stringify(
+            array.map(item => ({'nome': item.nome}))
+        ))
+    }
+    if(rota.pathname == '/adicionar') {
+        let novaAtividade = new Atividades(param.nome, param.enunciado, param.alternativa1, param.alternativa2, param.alternativa3, param.resposta)
+        array.push(novaAtividade)
     }
 }
 

@@ -1,11 +1,3 @@
-const atividades = [
-    'introducao',
-    'pg1',
-    'pg2',
-    'pg3',
-    'pg4'
-]
-
 const trilha = document.querySelector('.trilha')
 const telaAtividade = document.querySelector('.atividade')
 const enunciado = document.querySelector('.enunciado')
@@ -15,13 +7,22 @@ const alternativa1 = document.querySelector('.alternativa1')
 const alternativa2 = document.querySelector('.alternativa2')
 const alternativa3 = document.querySelector('.alternativa3')
 const alternativa4 = document.querySelector('.alternativa4')
+const atividadesConcluidas = [];
+const botoes = []
+let atvAtual = 1
 let respostaCerta
 let embaralhado
+let atividadeAtual
 
-for(let i=0; i < atividades.length; i++){
+function criarTrilha() {
+fetch(`http://localhost:3000/nome`)
+.then(data => data.json())
+.then(resp => {
+    console.log(resp)
+    for(let i=0; i < resp.length; i++){
     const botao = document.createElement('button')
     botao.className = 'botaoAtividade'
-    botao.textContent = atividades[i]
+    botao.textContent = resp[i].nome
     botao.id = i+1
     if(i % 2 == 0) {
         botao.classList.add('impar')
@@ -30,10 +31,23 @@ for(let i=0; i < atividades.length; i++){
         botao.classList.add('par')
     }
     botao.addEventListener('click', () => entrarAtividade(botao.id))
+    console.log(atvAtual)   
+    if(i+1 > atvAtual) {
+        botao.style.filter = 'grayscale(100%)'
+    } else if (i+1 == atvAtual){
+        botao.style.filter = 'grayscale(50%)'
+    }
     trilha.appendChild(botao)
+    botoes.push(botao)
 }
+}
+)
+}
+criarTrilha()
 
 function entrarAtividade(id) {
+    if(atvAtual == id) {
+    atividadeAtual = id;
     trilha.style.opacity = '0'
     telaAtividade.style.transform = 'translateX(0)'
     fetch(`http://localhost:3000/atividades?id=${id}`)
@@ -47,9 +61,18 @@ function entrarAtividade(id) {
             alternativa3.innerHTML = embaralhado[2]
             alternativa4.innerHTML = embaralhado[3]
     })
+    } else if(atvAtual > id) {
+        alert('Atividade já concluida')
+    } else {
+        alert('Atividade bloqueada')
+    }
 }
 
 function sairAtividade() {
+    document.querySelectorAll('.botaoAtividade').forEach(elemento => {
+        elemento.remove()
+    })
+    criarTrilha()
     telaAtividade.style.transform = 'translateX(100%)'
     trilha.style.opacity = '1'
 }
@@ -71,10 +94,53 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
     return arr
 }
 
+function fecharParabens(){
+
+    document.querySelector(".parabens").style.display = "none";
+
+    const botao = document.getElementById(atividadeAtual);
+
+    botao.style.background = "green";
+    botao.innerHTML = "✔";
+
+    sairAtividade();
+}
 function verificar(id){
     if(embaralhado[id] == respostaCerta) {
         console.log('concluido')
+        document.querySelector(".parabens").style.display = "flex";
+        atividadesConcluidas.push(id);
+        atvAtual += 1
+        const botao = document.getElementById(id);
     } else {
+
         console.log('errado')
     }
+
+        //pra que serve
+        //tantos códigos?
+        //se a vida
+        //não é programada
+        //e as melhores coisas
+        //não tem lógica
+
+}
+function AbrirAdicionarAtividade(){
+    document.querySelector('.menuAdicionarAtividade').classList.toggle('ativo')
+}
+
+function adicionarAtividade(){
+    event.preventDefault()
+    let nome = document.getElementById('novoNome').value
+    let enunciado = document.getElementById('novoEnunciado').value
+    let resposta = document.getElementById('novaResposta').value
+    let alternativa1 = document.getElementById('novaAlternativa1').value
+    let alternativa2 = document.getElementById('novaAlternativa2').value
+    let alternativa3 = document.getElementById('novaAlternativa3').value
+    document.querySelectorAll('.botaoAtividade').forEach(elemento => {
+        elemento.remove()
+    })
+    fetch(`http://localhost:3000/adicionar?nome=${nome}&enunciado=${enunciado}&resposta=${resposta}&alternativa1=${alternativa1}&alternativa2=${alternativa2}&alternativa3=${alternativa3}`)
+    criarTrilha()
+    document.querySelector('.menuAdicionarAtividade').classList.toggle('ativo')
 }
