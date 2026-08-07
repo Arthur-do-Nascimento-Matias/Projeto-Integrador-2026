@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png">
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="atividades.css">
+</head>
+<body>
+    <form class="menuAdicionarAtividade" onsubmit="adicionarAtividade()">
+        <p>Nome: <input type="text" name="" id="novoNome"></p>
+        <p>Enunciado: <input type="text" name="" id="novoEnunciado" required></p>
+        <p>Resposta: <input type="text" id="novaResposta" required></p>
+        <p>alternativa 1 <input type="text" name="" id="novaAlternativa1" required></p>
+        <p>alternativa 2 <input type="text" name="" id="novaAlternativa2" required></p>
+        <p>alternativa 3 <input type="text" name="" id="novaAlternativa3" required></p>
+        <button type="submit">Adicionar atividade</button>
+    </form>
+    <div class="menuLateralEsquerda">
+        <div class="burger-icon">
+         <label class="burger" for="burger">
+         <input class="line" type="checkbox" id="burger" />
+         </label>
+        </div>
+
+        <div class="options">
+            <p>Aprender</p>
+            <p>Simulados</p>
+            <p>Ranking</p>
+            <p>Biblioteca</p>
+            <p>IA para estudos</p>
+        </div>
+        <div class="adicionarAtividade">
+            <button onclick="AbrirAdicionarAtividade()">Adicione uma atividade na trilha</button>
+        </div>
+    </div>
+    <div class="trilha"></div>
+        <div class="atividade">
+            <button onclick="sairAtividade()">Sair</button>
+            <h1 class="enunciado"></h1>
+            <button class="alternativa1" onclick="verificar(0, this)"></button>
+            <button class="alternativa2" onclick="verificar(1, this)"></button>
+            <button class="alternativa3" onclick="verificar(2, this)"></button>
+            <button class="alternativa4" onclick="verificar(3, this)"></button>
+            </div>
+            
+            <div class="parabens">
+            <h1>🎉 Parabéns!</h1>
+            <p>Você concluiu esta atividade.</p>
+            <button onclick="fecharParabens()">Continuar</button>
+</div>
+
+    </div>
+          <div class="MenuLateraldireita">
+
+            <div class="cards">
+
+           <div class="league-card">
+    <div class="card-header">
+        <h3>Divisão Ouro</h3>
+        <a href="#">VER DIVISÃO</a>
+    </div>
+
+    <div class="card-body">
+        <img src="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png" alt="Dormindo">
+        <p>
+            Faça uma lição pra entrar no ranking dessa semana e competir com as outras pessoas.
+        </p>
+     </div>
+    </div>
+    </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
