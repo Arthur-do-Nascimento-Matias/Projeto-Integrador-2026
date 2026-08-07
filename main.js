@@ -13,6 +13,7 @@ let atvAtual = 1
 let respostaCerta
 let embaralhado
 let atividadeAtual
+let indiceAtv = 0
 
 function criarTrilha() {
 fetch(`http://localhost:3000/nome`)
@@ -35,7 +36,7 @@ fetch(`http://localhost:3000/nome`)
     if(i+1 > atvAtual) {
         botao.style.filter = 'grayscale(100%)'
     } else if (i+1 == atvAtual){
-        botao.style.filter = 'grayscale(50%)'
+        botao.style.filter = 'grayscale(40%)'
     }
     trilha.appendChild(botao)
     botoes.push(botao)
@@ -50,17 +51,7 @@ function entrarAtividade(id) {
     atividadeAtual = id;
     trilha.style.opacity = '0'
     telaAtividade.style.transform = 'translateX(0)'
-    fetch(`http://localhost:3000/atividades?id=${id}`)
-    .then(resp => resp.json())
-    .then(data => {
-        enunciado.innerHTML = data.pergunta
-        respostaCerta = data.certa
-        embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.certa, data.alternativa3)
-            alternativa1.innerHTML = embaralhado[0]
-            alternativa2.innerHTML = embaralhado[1]
-            alternativa3.innerHTML = embaralhado[2]
-            alternativa4.innerHTML = embaralhado[3]
-    })
+    criarAtividade(atividadeAtual)
     } else if(atvAtual > id) {
         alert('Atividade já concluida')
     } else {
@@ -69,6 +60,7 @@ function entrarAtividade(id) {
 }
 
 function sairAtividade() {
+    indiceAtv = 0
     document.querySelectorAll('.botaoAtividade').forEach(elemento => {
         elemento.remove()
     })
@@ -105,16 +97,28 @@ function fecharParabens(){
 
     sairAtividade();
 }
-function verificar(id){
+function verificar(id, resp){
     if(embaralhado[id] == respostaCerta) {
-        console.log('concluido')
-        document.querySelector(".parabens").style.display = "flex";
-        atividadesConcluidas.push(id);
-        atvAtual += 1
-        const botao = document.getElementById(id);
+        console.log('i', indiceAtv)
+        if(indiceAtv < 2){
+            criarAtividade('aleatorio')
+            indiceAtv += 1
+        }
+        else{
+            indiceAtv = 0
+            console.log('concluido')
+            document.querySelector(".parabens").style.display = "flex";
+            atividadesConcluidas.push(id);
+            atvAtual += 1
+            const botao = document.getElementById(id);
+        }
     } else {
-
         console.log('errado')
+        console.log(resp.className)
+        resp.style.animation = 'chacualhar 200ms ease-in-out alternate'
+        setTimeout(() => {
+            resp.style.animation = ''}, 200)
+        console.log(resp.className);
     }
 
         //pra que serve
@@ -143,4 +147,18 @@ function adicionarAtividade(){
     fetch(`http://localhost:3000/adicionar?nome=${nome}&enunciado=${enunciado}&resposta=${resposta}&alternativa1=${alternativa1}&alternativa2=${alternativa2}&alternativa3=${alternativa3}`)
     criarTrilha()
     document.querySelector('.menuAdicionarAtividade').classList.toggle('ativo')
+}
+
+function criarAtividade(id) {
+    fetch(`http://localhost:3000/atividades?id=${id}`)
+    .then(resp => resp.json())
+    .then(data => {
+        enunciado.innerHTML = data.pergunta
+        respostaCerta = data.certa
+        embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.certa, data.alternativa3)
+            alternativa1.innerHTML = embaralhado[0]
+            alternativa2.innerHTML = embaralhado[1]
+            alternativa3.innerHTML = embaralhado[2]
+            alternativa4.innerHTML = embaralhado[3]
+    })
 }

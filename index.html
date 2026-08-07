@@ -6,11 +6,7 @@
     <title>Document</title>
     <link rel="icon" type="image/x-icon" href="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png">
     <link rel="stylesheet" href="app.css">
-     <link rel="stylesheet" href="atividades.css">
-     
-
-     
-    
+    <link rel="stylesheet" href="atividades.css">
 </head>
 <body>
     <form class="menuAdicionarAtividade" onsubmit="adicionarAtividade()">
@@ -41,14 +37,13 @@
         </div>
     </div>
     <div class="trilha"></div>
-
         <div class="atividade">
             <button onclick="sairAtividade()">Sair</button>
             <h1 class="enunciado"></h1>
-            <button class="alternativa1" onclick="verificar(0)"></button>
-            <button class="alternativa2" onclick="verificar(1)"></button>
-            <button class="alternativa3" onclick="verificar(2)"></button>
-            <button class="alternativa4" onclick="verificar(3)"></button>
+            <button class="alternativa1" onclick="verificar(0, this)"></button>
+            <button class="alternativa2" onclick="verificar(1, this)"></button>
+            <button class="alternativa3" onclick="verificar(2, this)"></button>
+            <button class="alternativa4" onclick="verificar(3, this)"></button>
             </div>
             
             <div class="parabens">

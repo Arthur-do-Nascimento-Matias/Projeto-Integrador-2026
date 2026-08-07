@@ -197,7 +197,7 @@ Menu hamburguer*/
     border-radius: 50px;
     transition: all 300ms ease;
     background: #2A7B9B;
-    background: radial-gradient(circle, rgba(42, 123, 155, 1) 0%, rgba(176, 73, 73, 1) 35%, rgba(87, 199, 133, 1) 50%, rgba(128, 205, 119, 1) 64%, rgba(18, 0, 0, 1) 81%, rgba(237, 221, 83, 1) 100%);
+    background:rgb(0, 185, 99) 35%;
 }
 .botaoAtividade:hover{
   cursor: pointer;
@@ -239,4 +239,12 @@ Menu hamburguer*/
 .menuAdicionarAtividade.ativo{
   opacity: 1;
   pointer-events: all;
+}
+@keyframes chacualhar{
+  0%{
+    transform: rotate(-5deg)
+  }
+  50%{
+    transform: rotate(5deg)
+  }
 }

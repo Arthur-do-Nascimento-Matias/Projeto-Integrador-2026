@@ -17,9 +17,17 @@ const callback = (req, res) => {
     let rota = url.parse(req.url, true)
     let param = url.parse(req.url, true).query
     if(rota.pathname == '/atividades') {
+        if(param.id == 'aleatorio'){
+            const numAleatorio = Math.floor(Math.random() * array.length)
+            console.log(numAleatorio)
+            res.end(JSON.stringify(
+                {'id': numAleatorio, 'pergunta': array[numAleatorio].pergunta, 'alternativa1': array[numAleatorio].alternativas[0], 'alternativa2': array[numAleatorio].alternativas[1], 'alternativa3': array[numAleatorio].alternativas[2], 'certa': array[numAleatorio].respostaCertas}
+            ))
+        } else {
         res.end(JSON.stringify(
             {'id': param.id, 'pergunta': array[param.id-1].pergunta, 'alternativa1': array[param.id-1].alternativas[0], 'alternativa2': array[param.id-1].alternativas[1], 'alternativa3': array[param.id-1].alternativas[2], 'certa': array[param.id-1].respostaCertas})
         )
+    }
     }
     if(rota.pathname == '/nome') {
         res.end(JSON.stringify(
