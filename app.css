@@ -1,9 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
 
+:root{
+    /* Paleta baseada no mascote (macaco laranja) */
+    --cor-creme: #FFF8ED;
+    --cor-laranja-claro: #FFB238;
+    --cor-laranja: #FF9E1F;
+    --cor-laranja-escuro: #E07A00;
+    --cor-marrom: #6B4630;
+    --cor-marrom-escuro: #4A3020;
+    --cor-coral: #F2545B;
+    --cor-coral-escuro: #D63E45;
+    --cor-branco: #FFFFFF;
+}
+
 body{
     overflow-x: hidden;
     height: fit-content;
+    background-color: var(--cor-creme);
 }
+
+/* ===== Menu lateral esquerdo ===== */
 .menuLateralEsquerda{
     z-index: 5;
     transition: all 300ms ease;
@@ -13,13 +29,12 @@ body{
     left: 0;
     top: 0;
     margin-left: -47vw;
-    background-color: gray;
+    background-color: var(--cor-marrom);
 }
 .menuLateralEsquerda.ativo{
     transform: translateX(50%);
 }
-/* From Uiverse.io by 3bdel3ziz-T 
-Menu hamburguer*/ 
+/* Menu hamburguer (Uiverse.io by 3bdel3ziz-T) */
 .burger {
   z-index: 10;
   position: absolute;
@@ -41,147 +56,156 @@ Menu hamburguer*/
   transition: 300ms;
 }
 
-.league-card {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-
-    width: 340px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 18px;
-    padding: 18px;
-
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    z-index: 5;
-}
-
-.card-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-}
-
-.card-header h3{
-    margin:0;
-    font-size:22px;
-}
-
-.card-header a{
-    color:#1cb0f6;
-    font-weight:bold;
-    text-decoration:none;
-}
-
-.card-body{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
-
-.card-body img{
-    width:60px;
-}
-
-.card-body p{
-    margin:0;
-    color:#777;
-    line-height:1.4;
-}
-
 .burger::before,
 .burger::after {
   content: "";
   transition: 300ms;
   transform-origin: center center;
 }
-
-.burger::before {
-  transform: translateY(8px);
-}
-.burger::after {
-  transform: translateY(-8px);
-}
+.burger::before { transform: translateY(8px); }
+.burger::after { transform: translateY(-8px); }
 .burger .line,
 .burger::before,
 .burger::after {
   width: 25px;
   height: 2.1px;
   display: block;
-  background-color: black;
+  background-color: var(--cor-creme);
   border-radius: 5px;
   position: absolute;
 }
-
 .burger .line:checked {
   width: 0;
   transition-delay: 100ms;
 }
-.burger:has(.line:checked)::before {
-  animation: animation1 400ms ease-out 0s 1 both;
-}
-.burger:has(.line:checked)::after {
-  animation: animation2 400ms ease-out 0s 1 both;
-}
-
+.burger:has(.line:checked)::before { animation: animation1 400ms ease-out 0s 1 both; }
+.burger:has(.line:checked)::after { animation: animation2 400ms ease-out 0s 1 both; }
 .burger:hover {
-  background: #aeaeae;
+  background: var(--cor-laranja-escuro);
   border-radius: 50%;
 }
-
 .burger:hover .line,
 .burger:hover::before,
 .burger:hover::after {
-  background: #e8e8e8;
+  background: var(--cor-creme);
 }
-.secao1{
-    border-radius: 1px;
-    color: black;
-}
+.burger:active { scale: 0.95; }
 
-.burger:active {
-  scale: 0.95;
-}
 @keyframes animation1 {
-  0% {
-    transform: translateY(8px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(45deg);
-  }
+  0% { transform: translateY(8px) rotate(0deg); }
+  50% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(0px) rotate(45deg); }
 }
 @keyframes animation2 {
-  0% {
-    transform: translateY(-8px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(-45deg);
-  }
+  0% { transform: translateY(-8px) rotate(0deg); }
+  50% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(0px) rotate(-45deg); }
 }
+
+.secao1{
+    border-radius: 1px;
+    color: var(--cor-marrom-escuro);
+}
+
+/* ===== Card de liga (lateral direita) ===== */
+.league-card {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 340px;
+    background: var(--cor-branco);
+    border: 1px solid #f1e2cc;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 4px 14px rgba(107,70,48,.12);
+    z-index: 5;
+}
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+.card-header h3{
+    margin:0;
+    font-size:22px;
+    color: var(--cor-marrom-escuro);
+}
+.card-header a{
+    color: var(--cor-coral);
+    font-weight:bold;
+    text-decoration:none;
+}
+.card-body{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+.card-body img{ width:60px; }
+.card-body p{
+    margin:0;
+    color: var(--cor-marrom);
+    line-height:1.4;
+}
+
+/* ===== Menu de opções ===== */
 .options{
-    margin-left: 65%;
+    margin-left: 60%;
     margin-top: 20%;
-    color: white;
+    color: var(--cor-creme);
     font-size: x-large;
+    opacity: 0;
+    transition: all 300ms ease;
+}
+.options.ativo {
+  opacity: 1;
 }
 .options p:hover{
     text-decoration: underline;
-    color: rgb(207, 207, 207);
+    color: var(--cor-laranja-claro);
     cursor: pointer;
 }
-.adicionarAtividade{
-    margin-left: 65%;
+.menuAdicionarAtividade{
+  width: fit-content;
+  position: fixed;
+  right: -50%;
+  transform: translateX(50%);
+  top: 25%;
+  opacity: 0;
+  transition: all 300ms ease;
+  background-color: #4A3020;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: medium;
+}
+.menuAdicionarAtividade button:hover,
+.menuAdicionarAtividade p:hover{
+  text-decoration: none;
+  cursor: pointer;
+}
+.menuAdicionarAtividade.ativo{
+  opacity: 1;
+}
+.adicionarAtividade button{
+    background: var(--cor-laranja);
+    color: var(--cor-branco);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    box-shadow: 0 4px 0 var(--cor-laranja-escuro);
+    transition: all 200ms ease;
 }
 .adicionarAtividade:hover button{
     cursor: pointer;
+    filter: brightness(105%);
 }
+.adicionarAtividade button:active{
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--cor-laranja-escuro);
+}
+
+/* ===== Trilha de atividades ===== */
 .trilha{
     display: flex;
     flex-direction: column;
@@ -190,28 +214,63 @@ Menu hamburguer*/
     gap: 30px;
     margin-top: 5vh;
     transition: all 200ms ease;
+    z-index: 5;
 }
+
+/* Botão padrão = atividade a fazer (paleta do mascote) */
 .botaoAtividade{
     width: 80px;
     height: 80px;
     border-radius: 50px;
-    transition: all 300ms ease;
-    background: #2A7B9B;
-    background:rgb(0, 185, 99) 35%;
+    border: none;
+    transition: all 200ms ease;
+    background: var(--cor-laranja-claro);
+    box-shadow: 0 6px 0 var(--cor-laranja-escuro), 0 8px 14px rgba(0,0,0,.12);
+    position: relative;
 }
 .botaoAtividade:hover{
   cursor: pointer;
-  filter: brightness(96%);
+  filter: brightness(103%);
+  transform: translateY(-2px);
 }
-.botaoAtividade.par{
-    margin-left: 3vw;
+.botaoAtividade:active{
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 var(--cor-laranja-escuro);
 }
-.botaoAtividade.impar{
-    margin-right: 3vw;
+.botaoAtividade.par{ margin-left: 3vw; }
+.botaoAtividade.impar{ margin-right: 3vw; }
+
+/* Atividade já concluída: cor distinta (marrom do mascote) */
+.botaoAtividade.concluida{
+    background: var(--cor-marrom);
+    box-shadow: 0 6px 0 var(--cor-marrom-escuro), 0 8px 14px rgba(0,0,0,.12);
 }
+.botaoAtividade.concluida::after{
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--cor-creme);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Atividade atual: cor de destaque (coral), com pulso */
+.botaoAtividade.atual{
+    background: var(--cor-coral);
+    box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 8px rgba(242,84,91,.25);
+    animation: pulsarAtual 1.6s ease-in-out infinite;
+}
+@keyframes pulsarAtual{
+    0%, 100% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 8px rgba(242,84,91,.25); }
+    50% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 14px rgba(242,84,91,.1); }
+}
+
+/* ===== Tela de atividade em tela cheia ===== */
 .atividade{
-    z-index: 999;
-    background-color: black;
+    z-index: 7;
+    background-color: var(--cor-marrom-escuro);
     width: 100vw;
     height: 100vh;
     top: 0;
@@ -221,24 +280,7 @@ Menu hamburguer*/
     transition: all 300ms ease;
 }
 .enunciado{
-    color: white;
-    
-}
-.menuAdicionarAtividade{
-  position: fixed;
-  opacity: 0;
-  z-index: 999;
-  margin-left: 50%;
-  transform: translateX(-50%) translateY(-70%);
-  background-color: gray;
-  padding: 20px;
-  border-radius: 10px;
-  transition: all 300ms ease;
-  pointer-events: none;
-}
-.menuAdicionarAtividade.ativo{
-  opacity: 1;
-  pointer-events: all;
+    color: var(--cor-creme);
 }
 @keyframes chacualhar{
   0%{

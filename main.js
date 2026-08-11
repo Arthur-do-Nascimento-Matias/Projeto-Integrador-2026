@@ -70,10 +70,13 @@ function sairAtividade() {
 }
 
 burguer.addEventListener('change', () => {
+    document.querySelector('.menuAdicionarAtividade').classList.remove('ativo')
     if(burguer.checked) {
     menu.classList.add('ativo')
+    document.querySelector('.options').classList.add('ativo')
     } else {
     menu.classList.remove('ativo')
+    document.querySelector('.options').classList.remove('ativo')
     }   
 })
 
