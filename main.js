@@ -1,18 +1,22 @@
-const trilha = document.querySelector('.trilha')
-const telaAtividade = document.querySelector('.atividade')
-const enunciado = document.querySelector('.enunciado')
-const burguer = document.querySelector('#burger')
-const menu = document.querySelector('.menuLateralEsquerda')
-const menuAprender = document.querySelector('#aprender')
-const menuIA = document.querySelector('#iaEstudos')
-const alternativa1 = document.getElementsByClassName('alternativa1')
-const alternativa2 = document.getElementsByClassName('alternativa2')
-const alternativa3 = document.getElementsByClassName('alternativa3')
-const alternativa4 = document.getElementsByClassName('alternativa4')
+const trilha = document.getElementById('trilha')
+const telaAtividade = document.getElementById('atividade')
+const enunciado = document.getElementById('enunciado')
+const burguer = document.getElementById('burger')
+const menu = document.getElementById('menuLateralEsquerda')
+const menuAprender = document.getElementById('aprender')
+const menuIA = document.getElementById('iaEstudos')
+const alternativa1 = document.getElementById('alternativa1')
+const alternativa2 = document.getElementById('alternativa2')
+const alternativa3 = document.getElementById('alternativa3')
+const alternativa4 = document.getElementById('alternativa4')
 const atividadesConcluidas = [];
 const botoes = []
 const telas = [
-    'trilha', 'telaSimulados', 'telaRanking', 'telaBiblioteca', 'chatIA'
+    document.getElementById('trilha'),
+    document.getElementById('telaSimulados'),
+    document.getElementById('telaRanking'),
+    document.getElementById('telaBiblioteca'),
+    document.getElementById('chatIA')
 ]
 let atvAtual = 1
 let respostaCerta
@@ -75,13 +79,13 @@ function sairAtividade() {
 }
 
 burguer.addEventListener('change', () => {
-    document.getElementsByClassName('.menuAdicionarAtividade').classList.remove('ativo')
+    document.getElementById('menuAdicionarAtividade').classList.remove('ativo')
     if(burguer.checked) {
     menu.classList.add('ativo')
-    document.getElementsByClassName('.options').classList.add('ativo')
+    document.getElementById('options').classList.add('ativo')
     } else {
     menu.classList.remove('ativo')
-    document.getElementsByClassName('.options').classList.remove('ativo')
+    document.getElementById('options').classList.remove('ativo')
     }   
 })
 
@@ -95,11 +99,11 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
 }
 
 function fecharParabens(){
+    ganharXp('xpBonus', 10)
 
-    document.getElementsByClassName(".parabens").style.display = "none";
+    document.getElementById("parabens").style.display = "none";
 
     const botao = document.getElementById(atividadeAtual);
-
     botao.style.background = "green";
     botao.innerHTML = "✔";
 
@@ -115,7 +119,7 @@ function verificar(id, resp){
         else{
             indiceAtv = 0
             console.log('concluido')
-            document.getElementsByClassName(".parabens").style.display = "flex";
+            document.getElementById("parabens").style.display = "flex";
             atividadesConcluidas.push(id);
             atvAtual += 1
             const botao = document.getElementById(id);
@@ -135,7 +139,7 @@ function verificar(id, resp){
 
 }
 function AbrirAdicionarAtividade(){
-    document.getElementsByClassName('.menuAdicionarAtividade').classList.toggle('ativo')
+    document.getElementById('menuAdicionarAtividade').classList.toggle('ativo')
 }
 
 function adicionarAtividade(){
@@ -151,7 +155,7 @@ function adicionarAtividade(){
     })
     fetch(`http://localhost:3000/adicionar?nome=${nome}&enunciado=${enunciado}&resposta=${resposta}&alternativa1=${alternativa1}&alternativa2=${alternativa2}&alternativa3=${alternativa3}`)
     criarTrilha()
-    document.getElementsByClassName('menuAdicionarAtividade').classList.toggle('ativo')
+    document.getElementById('menuAdicionarAtividade').classList.toggle('ativo')
 }
 
 function criarAtividade(id) {
@@ -169,7 +173,51 @@ function criarAtividade(id) {
 }
 
 function trocarTela(indice) {
-    for(let i=0; i<=telas.length; i++){
-        telas[indice].classList.remove('ativo')
+    for(let i=0; i < telas.length; i++){
+        telas[i].classList.remove('ativo')
+        console.log(telas[i])
     }
+    telas[indice].classList.add('ativo')
+    console.log(telas[indice])
 }
+
+
+
+const missaoLista = document.getElementById('missaoLista')
+
+const missoes = [
+    { id: 'xp',        titulo: 'Ganhe 10 XP',              icone: '⚡', atual: 0, meta: 10 },
+    { id: 'xpBonus',   titulo: 'Ganhe 10 XP de superbônus', icone: '⚡', atual: 0, meta: 10 },
+    { id: 'exercicios',titulo: 'Faça 7 exercícios',         icone: '📘', atual: 0, meta: 7  }
+]
+
+function renderMissoes(){
+    missaoLista.innerHTML = ''
+    missoes.forEach(missao => {
+        const concluida = missao.atual >= missao.meta
+        const porcentagem = Math.min(100, Math.round((missao.atual / missao.meta) * 100))
+
+        const item = document.createElement('div')
+        item.className = 'missao-item' + (concluida ? ' concluida' : '')
+        item.innerHTML = `
+            <div class="missao-icone">${missao.icone}</div>
+            <div class="missao-info">
+                <p class="missao-titulo">${missao.titulo}</p>
+                <div class="barra-progresso">
+                    <div class="barra-progresso-preenchimento" style="width:${porcentagem}%"></div>
+                </div>
+                <p class="missao-progresso-texto">${Math.min(missao.atual, missao.meta)} / ${missao.meta}</p>
+            </div>
+        `
+        missaoLista.appendChild(item)
+    })
+}
+
+function ganharXp(id, quantidade){
+    const missao = missoes.find(m => m.id === id)
+    if(!missao || missao.atual >= missao.meta) return
+    missao.atual += quantidade
+    renderMissoes()
+}
+
+renderMissoes()
