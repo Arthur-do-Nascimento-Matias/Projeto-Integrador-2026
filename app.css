@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
 :root{
     /* Paleta baseada no mascote (macaco laranja) */
     --cor-creme: #FFF8ED;
@@ -12,6 +12,177 @@
     --cor-coral-escuro: #D63E45;
     --cor-branco: #FFFFFF;
 }
+ /* titulo lab */
+.cabecalho{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: var(--cor-creme);
+    box-shadow: 0 2px 6px rgba(74,48,32,.08);
+    z-index: 6;
+    box-sizing: border-box;
+}
+ 
+/* ===== Botão hambúrguer (Uiverse.io by 3bdel3ziz-T) ===== */
+.burger-icon{
+    position: relative;
+}
+.burger {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  transition: 300ms;
+  border-radius: 10px;
+}
+.burger input[type="checkbox"] {
+  appearance: none;
+  transition: 300ms;
+}
+.burger::before,
+.burger::after {
+  content: "";
+  transition: 300ms;
+  transform-origin: center center;
+}
+.burger::before { transform: translateY(8px); }
+.burger::after { transform: translateY(-8px); }
+.burger .line,
+.burger::before,
+.burger::after {
+  width: 25px;
+  height: 2.1px;
+  display: block;
+  background-color: var(--cor-marrom-escuro);
+  border-radius: 5px;
+  position: absolute;
+}
+.burger .line:checked { width: 0; transition-delay: 100ms; }
+.burger:has(.line:checked)::before { animation: animation1 400ms ease-out 0s 1 both; }
+.burger:has(.line:checked)::after { animation: animation2 400ms ease-out 0s 1 both; }
+.burger:hover {
+  background: var(--cor-laranja-claro);
+  border-radius: 50%;
+}
+.burger:hover .line,
+.burger:hover::before,
+.burger:hover::after {
+  background: var(--cor-marrom-escuro);
+}
+.burger:active { scale: 0.95; }
+ 
+@keyframes animation1 {
+  0% { transform: translateY(8px) rotate(0deg); }
+  50% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(0px) rotate(45deg); }
+}
+@keyframes animation2 {
+  0% { transform: translateY(-8px) rotate(0deg); }
+  50% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(0px) rotate(-45deg); }
+}
+ 
+/* ===== Logo SimioLab ===== */
+.logo-simiolab{
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 12px;
+    cursor: default;
+    margin-left: 70px;
+}
+.logo-simio{
+    display: inline-flex;
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+}
+.logo-simio span{
+    font-size: 44px;
+    line-height: 1;
+    color: var(--cor-laranja);
+    text-shadow: 3px 3px 0 var(--cor-marrom);
+    display: inline-block;
+    transform-origin: bottom center;
+    animation:
+        cair 700ms cubic-bezier(.34,1.56,.64,1) both,
+        balancar 2.6s ease-in-out 700ms infinite;
+}
+.logo-simio span:nth-child(1){ animation-delay: 0ms, 700ms; }
+.logo-simio span:nth-child(2){ animation-delay: 90ms, 790ms; }
+.logo-simio span:nth-child(3){ animation-delay: 180ms, 880ms; }
+.logo-simio span:nth-child(4){ animation-delay: 270ms, 970ms; }
+.logo-simio span:nth-child(5){ animation-delay: 360ms, 1060ms; }
+ 
+@keyframes cair{
+    0%{ transform: translateY(-40px) rotate(-8deg); opacity: 0; }
+    60%{ transform: translateY(4px) rotate(3deg); opacity: 1; }
+    100%{ transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+@keyframes balancar{
+    0%, 100%{ transform: rotate(-4deg); }
+    50%{ transform: rotate(4deg); }
+}
+ 
+.logo-lab{
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--cor-creme);
+    background: var(--cor-coral);
+    border: 2px dashed var(--cor-coral-escuro);
+    border-radius: 8px;
+    padding: 3px 9px 4px;
+    transform: rotate(-6deg);
+    position: relative;
+    margin-bottom: 10px;
+    animation: entrarSelo 500ms ease-out 900ms both;
+}
+.logo-lab::after{
+    content: "";
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cor-laranja-claro);
+    animation: borbulhar 1.6s ease-in-out 1.4s infinite;
+}
+@keyframes entrarSelo{
+    0%{ transform: rotate(-6deg) scale(0); opacity: 0; }
+    70%{ transform: rotate(-6deg) scale(1.15); opacity: 1; }
+    100%{ transform: rotate(-6deg) scale(1); opacity: 1; }
+}
+@keyframes borbulhar{
+    0%, 100%{ transform: translateY(0); opacity: .6; }
+    50%{ transform: translateY(-4px); opacity: 1; }
+}
+ 
+.logo-simiolab:hover .logo-simio span{
+    animation:
+        cair 700ms cubic-bezier(.34,1.56,.64,1) both,
+        balancar 700ms ease-in-out infinite;
+}
+ 
+@media (prefers-reduced-motion: reduce){
+    .logo-simio span, .logo-lab, .logo-lab::after{
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
 
 body{
     overflow-x: hidden;
@@ -21,7 +192,7 @@ body{
 
 /* ===== Menu lateral esquerdo ===== */
 .menuLateralEsquerda{
-    z-index: 5;
+    z-index: 999;
     transition: all 300ms ease;
     position: fixed;
     width: 50vw;
@@ -30,6 +201,11 @@ body{
     top: 0;
     margin-left: -47vw;
     background-color: var(--cor-marrom);
+}
+.
+.menuLateralEsquerda a:hover{
+  cursor: pointer;
+  text-decoration: underline;
 }
 .menuLateralEsquerda.ativo{
     transform: translateX(50%);
@@ -118,7 +294,7 @@ body{
     border-radius: 18px;
     padding: 18px;
     box-shadow: 0 4px 14px rgba(107,70,48,.12);
-    z-index: 5;
+    z-index: 9999;
 }
 .card-header{
     display:flex;
@@ -150,6 +326,9 @@ body{
 
 /* ===== Menu de opções ===== */
 .options{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     margin-left: 60%;
     margin-top: 20%;
     color: var(--cor-creme);
@@ -212,7 +391,7 @@ body{
     align-items: center;
     justify-content: center;
     gap: 30px;
-    margin-top: 5vh;
+    margin-top: 10vh;
     transition: all 200ms ease;
     z-index: 5;
 }

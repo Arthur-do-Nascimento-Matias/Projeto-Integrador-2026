@@ -3,12 +3,17 @@ const telaAtividade = document.querySelector('.atividade')
 const enunciado = document.querySelector('.enunciado')
 const burguer = document.querySelector('#burger')
 const menu = document.querySelector('.menuLateralEsquerda')
-const alternativa1 = document.querySelector('.alternativa1')
-const alternativa2 = document.querySelector('.alternativa2')
-const alternativa3 = document.querySelector('.alternativa3')
-const alternativa4 = document.querySelector('.alternativa4')
+const menuAprender = document.querySelector('#aprender')
+const menuIA = document.querySelector('#iaEstudos')
+const alternativa1 = document.getElementsByClassName('alternativa1')
+const alternativa2 = document.getElementsByClassName('alternativa2')
+const alternativa3 = document.getElementsByClassName('alternativa3')
+const alternativa4 = document.getElementsByClassName('alternativa4')
 const atividadesConcluidas = [];
 const botoes = []
+const telas = [
+    'trilha', 'telaSimulados', 'telaRanking', 'telaBiblioteca', 'chatIA'
+]
 let atvAtual = 1
 let respostaCerta
 let embaralhado
@@ -70,13 +75,13 @@ function sairAtividade() {
 }
 
 burguer.addEventListener('change', () => {
-    document.querySelector('.menuAdicionarAtividade').classList.remove('ativo')
+    document.getElementsByClassName('.menuAdicionarAtividade').classList.remove('ativo')
     if(burguer.checked) {
     menu.classList.add('ativo')
-    document.querySelector('.options').classList.add('ativo')
+    document.getElementsByClassName('.options').classList.add('ativo')
     } else {
     menu.classList.remove('ativo')
-    document.querySelector('.options').classList.remove('ativo')
+    document.getElementsByClassName('.options').classList.remove('ativo')
     }   
 })
 
@@ -91,7 +96,7 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
 
 function fecharParabens(){
 
-    document.querySelector(".parabens").style.display = "none";
+    document.getElementsByClassName(".parabens").style.display = "none";
 
     const botao = document.getElementById(atividadeAtual);
 
@@ -110,18 +115,15 @@ function verificar(id, resp){
         else{
             indiceAtv = 0
             console.log('concluido')
-            document.querySelector(".parabens").style.display = "flex";
+            document.getElementsByClassName(".parabens").style.display = "flex";
             atividadesConcluidas.push(id);
             atvAtual += 1
             const botao = document.getElementById(id);
         }
     } else {
-        console.log('errado')
-        console.log(resp.className)
         resp.style.animation = 'chacualhar 200ms ease-in-out alternate'
         setTimeout(() => {
             resp.style.animation = ''}, 200)
-        console.log(resp.className);
     }
 
         //pra que serve
@@ -133,7 +135,7 @@ function verificar(id, resp){
 
 }
 function AbrirAdicionarAtividade(){
-    document.querySelector('.menuAdicionarAtividade').classList.toggle('ativo')
+    document.getElementsByClassName('.menuAdicionarAtividade').classList.toggle('ativo')
 }
 
 function adicionarAtividade(){
@@ -149,7 +151,7 @@ function adicionarAtividade(){
     })
     fetch(`http://localhost:3000/adicionar?nome=${nome}&enunciado=${enunciado}&resposta=${resposta}&alternativa1=${alternativa1}&alternativa2=${alternativa2}&alternativa3=${alternativa3}`)
     criarTrilha()
-    document.querySelector('.menuAdicionarAtividade').classList.toggle('ativo')
+    document.getElementsByClassName('menuAdicionarAtividade').classList.toggle('ativo')
 }
 
 function criarAtividade(id) {
@@ -164,4 +166,10 @@ function criarAtividade(id) {
             alternativa3.innerHTML = embaralhado[2]
             alternativa4.innerHTML = embaralhado[3]
     })
+}
+
+function trocarTela(indice) {
+    for(let i=0; i<=telas.length; i++){
+        telas[indice].classList.remove('ativo')
+    }
 }

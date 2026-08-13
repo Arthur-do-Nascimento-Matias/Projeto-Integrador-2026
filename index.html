@@ -3,12 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SimioLab</title>
     <link rel="icon" type="image/x-icon" href="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png">
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="atividades.css">
 </head>
 <body>
+
+     <header class="cabecalho">
+        <div class="logo-simiolab">
+            <span class="logo-simio">
+                <span>S</span><span>i</span><span>m</span><span>i</span><span>o</span>
+            </span>
+            <span class="logo-lab">LAB</span>
+        </div>
+        <div class="burger-icon">
+         <label class="burger" for="burger">
+         <input class="line" type="checkbox" id="burger" />
+         </label>
+        </div>
+    </header>
+    
     <div class="menuLateralEsquerda">
         <div class="burger-icon">
          <label class="burger" for="burger">
@@ -17,11 +32,11 @@
         </div>
 
         <div class="options">
-            <p>Aprender</p>
-            <p>Simulados</p>
-            <p>Ranking</p>
-            <p>Biblioteca</p>
-            <p>IA para estudos</p>
+            <a id="aprender" class="linkTrocarTela" onclick="trocarTela(0)">Aprender</a>
+            <a id="simulados" class="linkTrocarTela" onclick="trocarTela(1)">Simulados</a>
+            <a id="ranking" class="linkTrocarTela" onclick="trocarTela(2)">Ranking</a>
+            <a id="biblioteca" class="linkTrocarTela" onclick="trocarTela(3)">Biblioteca</a>
+            <a id="iaEstudos" class="linkTrocarTela" onclick="trocarTela(4)">IA para estudos</a>
             <div class="adicionarAtividade">
                <button onclick="AbrirAdicionarAtividade()">Adicione uma atividade na trilha</button>
            </div>
@@ -36,7 +51,7 @@
     </form>
         </div>
     </div>
-    <div class="trilha"></div>
+    <div class="trilha ativo"></div>
         <div class="atividade">
             <button onclick="sairAtividade()">Sair</button>
             <h1 class="enunciado"></h1>
@@ -51,6 +66,8 @@
             <p>Você concluiu esta atividade.</p>
             <button onclick="fecharParabens()">Continuar</button>
 </div>
+
+<div class="chatIA"></div>
 
     </div>
           <div class="MenuLateraldireita">
