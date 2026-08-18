@@ -11,6 +11,7 @@ const alternativa3 = document.getElementById('alternativa3')
 const alternativa4 = document.getElementById('alternativa4')
 const atividadesConcluidas = [];
 const botoes = []
+
 const telas = [
     document.getElementById('trilha'),
     document.getElementById('telaSimulados'),
@@ -18,6 +19,11 @@ const telas = [
     document.getElementById('telaBiblioteca'),
     document.getElementById('chatIA')
 ]
+
+const chatMensagens = document.getElementById("chatMensagens");
+const chatInput = document.getElementById("chatInput");
+const botaoEnviar = document.getElementById("botaoEnviar");
+
 let atvAtual = 1
 let respostaCerta
 let embaralhado
@@ -88,6 +94,23 @@ burguer.addEventListener('change', () => {
     document.getElementById('options').classList.remove('ativo')
     }   
 })
+
+document.addEventListener('click', (event) => {
+
+    // Se o menu estiver aberto
+    if (menu.classList.contains('ativo')) {
+
+        // Verifica se o clique foi fora do menu
+        if (!menu.contains(event.target)) {
+
+            menu.classList.remove('ativo');
+            document.getElementById('options').classList.remove('ativo');
+
+            // Desmarca o checkbox do hamburguer
+            burguer.checked = false;
+        }
+    }
+});
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
       let arr = [alternativa1, alternativa2, certa, alternativa4]
@@ -221,3 +244,180 @@ function ganharXp(id, quantidade){
 }
 
 renderMissoes()
+
+function adicionarMensagem(texto, tipo) {
+
+    const mensagem = document.createElement("div");
+
+    mensagem.classList.add(
+        "mensagem",
+        tipo === "usuario"
+            ? "mensagem-usuario"
+            : "mensagem-ia"
+    );
+
+    const avatar = document.createElement("div");
+
+    avatar.className = "avatar-mensagem";
+
+    avatar.textContent =
+        tipo === "usuario"
+            ? "👤"
+            : "🐒";
+
+
+    const balao = document.createElement("div");
+
+    balao.className = "balao-mensagem";
+
+    balao.innerHTML = marked.parse(texto);
+
+
+    mensagem.appendChild(avatar);
+
+    mensagem.appendChild(balao);
+
+    chatMensagens.appendChild(mensagem);
+
+    chatMensagens.scrollTop =
+        chatMensagens.scrollHeight;
+
+    return mensagem;
+}
+
+
+async function enviarMensagem() {
+
+    const texto = chatInput.value.trim();
+
+    if (!texto) return;
+
+
+    // mensagem do usuário
+    adicionarMensagem(texto, "usuario");
+
+
+    chatInput.value = "";
+
+    botaoEnviar.disabled = true;
+
+
+    // mensagem temporária
+    const mensagemCarregando =
+        adicionarMensagem(
+            "🐒 Estou pensando...",
+            "ia"
+        );
+
+
+    try {
+
+        const resposta = await fetch(
+            "http://localhost:4000/api/chat",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    mensagem: texto
+                })
+            }
+        );
+
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                "Erro na comunicação com o servidor."
+            );
+
+        }
+
+
+        const dados = await resposta.json();
+
+
+    const balao = mensagemCarregando.querySelector(".balao-mensagem");
+
+    digitarResposta(
+        balao,
+        dados.resposta
+    );
+
+    } catch (erro) {
+
+        mensagemCarregando
+            .querySelector(".balao-mensagem")
+            .innerHTML =
+                "❌ Não consegui falar com o servidor. " +
+                "Verifique se o Ollama e o backend estão funcionando.";
+
+        console.error(erro);
+
+    } finally {
+
+        botaoEnviar.disabled = false;
+
+        chatInput.focus();
+
+    }
+
+}
+
+
+function enviarSugestao(texto) {
+
+    chatInput.value = texto;
+
+    enviarMensagem();
+
+}
+
+
+chatInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            enviarMensagem();
+
+        }
+
+    }
+);
+
+function digitarResposta(elemento, texto, velocidade = 1) {
+    let indice = 0;
+
+    elemento.innerHTML = "";
+
+    function digitar() {
+        if (indice < texto.length) {
+            elemento.textContent += texto.charAt(indice);
+            indice++;
+
+            elemento.scrollIntoView({
+                behavior: "smooth",
+                block: "end"
+            });
+
+            setTimeout(digitar, velocidade);
+        } else {
+            // Quando terminar, transforma Markdown em HTML
+            elemento.innerHTML = marked.parse(texto);
+
+            chatMensagens.scrollTop = chatMensagens.scrollHeight;
+        }
+    }
+
+    digitar();
+}

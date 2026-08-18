@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SimioLab</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <link rel="icon" type="image/x-icon" href="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png">
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="atividades.css">
+    <link rel="stylesheet" href="chatIA.css">
 </head>
 <body>
 
@@ -71,7 +74,112 @@
 
     <div class="telaBilbioteca" id="telaBiblioteca"></div>
 
-    <div class="chatIA" id="chatIA"></div>
+    <div class="chatIA" id="chatIA">
+
+    <div class="chat-container">
+
+        <!-- CABEÇALHO DO CHAT -->
+        <div class="chat-header">
+
+            <div class="chat-mascote">
+                <img 
+                    src="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png"
+                    alt="Mascote SimioLab"
+                >
+            </div>
+
+            <div class="chat-header-info">
+                <h1>Simio</h1>
+                <p>Seu tutor de estudos 🐒</p>
+            </div>
+
+            <div class="status-ia">
+                <span></span>
+                IA online
+            </div>
+
+        </div>
+
+
+        <!-- ÁREA DAS MENSAGENS -->
+        <div class="chat-mensagens" id="chatMensagens">
+
+            <div class="mensagem mensagem-ia">
+
+                <div class="avatar-mensagem">
+                    🐒
+                </div>
+
+                <div class="balao-mensagem">
+                    <strong>Oi! Eu sou o Simio! 🐒</strong>
+
+                    <p>
+                        Posso te ajudar a estudar, explicar conteúdos,
+                        criar exercícios ou tirar suas dúvidas.
+                    </p>
+
+                    <p>
+                        O que você quer aprender hoje?
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUGESTÕES -->
+        <div class="sugestoes-chat">
+
+            <button onclick="enviarSugestao('Explique Revolução Industrial')">
+                📚 Explique um conteúdo
+            </button>
+
+            <button onclick="enviarSugestao('Crie um exercício de matemática para mim')">
+                📝 Criar exercício
+            </button>
+
+            <button onclick="enviarSugestao('Me faça perguntas sobre história')">
+                🧠 Me faça perguntas
+            </button>
+
+        </div>
+
+
+        <!-- INPUT -->
+        <div class="chat-input-area">
+
+            <textarea
+                id="chatInput"
+                placeholder="Digite sua dúvida..."
+                rows="1"
+            ></textarea>
+
+            <button
+                class="botao-enviar"
+                onclick="enviarMensagem()"
+                id="botaoEnviar"
+            >
+                ➤
+            </button>
+
+        </div>
+
+        <div class="chat-aviso">
+            O Simio pode cometer erros. Sempre confira informações importantes.
+        </div>
+
+    </div>
+
+
+    <!-- ELEMENTOS DECORATIVOS -->
+
+    <div class="folha folha-1">🌿</div>
+    <div class="folha folha-2">🍃</div>
+    <div class="folha folha-3">🌿</div>
+
+</div>
+    </div>
 
     </div>
           <div class="MenuLateraldireita">
@@ -100,7 +208,6 @@
         <div class="missao-lista" id="missaoLista"></div>
      </div>
 
-    </div>
     </div>
     <script src="main.js"></script>
 </body>

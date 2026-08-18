@@ -1,0 +1,607 @@
+/* =========================================
+   CHAT IA - SIMIOLAB
+========================================= */
+
+.chatIA {
+    width: 100%;
+    min-height: 100vh;
+
+    box-sizing: border-box;
+
+    padding-top: 12vh;
+    padding-left: 80px;
+    padding-right: 400px;
+    padding-bottom: 40px;
+
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle at 15% 80%,
+            rgba(255,178,56,.18),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(242,84,91,.10),
+            transparent 25%
+        ),
+        var(--cor-creme);
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.chat-container {
+    width: min(850px, 100%);
+
+    height: 85vh;
+
+    background: var(--cor-branco);
+
+    border: 2px solid #f1e2cc;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 10px 30px rgba(107,70,48,.12),
+        0 3px 0 rgba(107,70,48,.08);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================================
+   CABEÇALHO
+========================================= */
+
+.chat-header {
+
+    min-height: 90px;
+
+    padding: 15px 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cor-laranja),
+            var(--cor-laranja-claro)
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    border-bottom: 4px solid var(--cor-laranja-escuro);
+}
+
+
+/* MASCOTE */
+
+.chat-mascote {
+
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    background: var(--cor-creme);
+
+    border: 4px solid var(--cor-marrom);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+.chat-mascote img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* INFORMAÇÕES */
+
+.chat-header-info {
+
+    flex: 1;
+}
+
+.chat-header-info h1 {
+
+    margin: 0;
+
+    font-family: 'Kalam', cursive;
+
+    color: var(--cor-marrom-escuro);
+
+    font-size: 32px;
+}
+
+.chat-header-info p {
+
+    margin: 2px 0 0;
+
+    color: var(--cor-marrom);
+
+    font-weight: bold;
+}
+
+
+/* STATUS */
+
+.status-ia {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    font-family: 'Space Mono', monospace;
+
+    font-size: 12px;
+
+    background: rgba(255,255,255,.6);
+
+    padding: 8px 12px;
+
+    border-radius: 20px;
+
+    color: var(--cor-marrom-escuro);
+}
+
+.status-ia span {
+
+    width: 9px;
+    height: 9px;
+
+    background: #45b649;
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 8px #45b649;
+}
+
+
+/* =========================================
+   MENSAGENS
+========================================= */
+
+.chat-mensagens {
+
+    flex: 1;
+
+    padding: 25px;
+
+    overflow-y: auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+    background:
+        linear-gradient(
+            rgba(255,248,237,.5),
+            rgba(255,255,255,.8)
+        );
+}
+
+
+/* MENSAGEM */
+
+.mensagem {
+
+    display: flex;
+
+    gap: 10px;
+
+    max-width: 80%;
+
+    animation: aparecerMensagem .25s ease-out;
+}
+
+
+@keyframes aparecerMensagem {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* IA */
+
+.mensagem-ia {
+
+    align-self: flex-start;
+}
+
+
+/* USUÁRIO */
+
+.mensagem-usuario {
+
+    align-self: flex-end;
+
+    flex-direction: row-reverse;
+}
+
+
+/* AVATAR */
+
+.avatar-mensagem {
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: var(--cor-laranja-claro);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    font-size: 20px;
+}
+
+
+/* BALÃO */
+
+.balao-mensagem {
+
+    padding: 13px 17px;
+
+    border-radius: 17px;
+
+    color: var(--cor-marrom-escuro);
+
+    line-height: 1.5;
+
+    box-shadow: 0 3px 8px rgba(107,70,48,.08);
+}
+
+
+/* BALÃO IA */
+
+.mensagem-ia .balao-mensagem {
+
+    background: var(--cor-branco);
+
+    border: 1px solid #eadbc6;
+
+    border-top-left-radius: 4px;
+}
+
+
+/* BALÃO USUÁRIO */
+
+.mensagem-usuario .balao-mensagem {
+
+    background: var(--cor-laranja);
+
+    color: white;
+
+    border-bottom-right-radius: 4px;
+}
+
+.balao-mensagem p {
+
+    margin: 6px 0;
+}
+
+.balao-mensagem strong {
+
+    color: inherit;
+}
+
+
+/* =========================================
+   SUGESTÕES
+========================================= */
+
+.sugestoes-chat {
+
+    display: flex;
+
+    gap: 8px;
+
+    padding: 10px 20px;
+
+    overflow-x: auto;
+
+    border-top: 1px solid #f1e2cc;
+
+    background: var(--cor-creme);
+}
+
+.sugestoes-chat button {
+
+    white-space: nowrap;
+
+    border: 1px solid #e5cfae;
+
+    background: var(--cor-branco);
+
+    color: var(--cor-marrom);
+
+    padding: 9px 13px;
+
+    border-radius: 20px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.sugestoes-chat button:hover {
+
+    background: var(--cor-laranja-claro);
+
+    color: var(--cor-marrom-escuro);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.chat-input-area {
+
+    display: flex;
+
+    gap: 10px;
+
+    padding: 15px 20px;
+
+    background: var(--cor-branco);
+
+    border-top: 1px solid #f1e2cc;
+}
+
+
+#chatInput {
+
+    flex: 1;
+
+    resize: none;
+
+    border: 2px solid #eadbc6;
+
+    border-radius: 15px;
+
+    padding: 13px 15px;
+
+    font-family: inherit;
+
+    color: var(--cor-marrom-escuro);
+
+    outline: none;
+
+    min-height: 20px;
+
+    max-height: 100px;
+
+    transition: .2s;
+}
+
+#chatInput:focus {
+
+    border-color: var(--cor-laranja);
+
+    box-shadow:
+        0 0 0 3px rgba(255,158,31,.12);
+}
+
+
+/* BOTÃO */
+
+.botao-enviar {
+
+    width: 50px;
+    height: 50px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: var(--cor-coral);
+
+    color: white;
+
+    font-size: 23px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 0 var(--cor-coral-escuro);
+
+    transition: .2s;
+}
+
+.botao-enviar:hover {
+
+    transform: translateY(-2px);
+}
+
+.botao-enviar:active {
+
+    transform: translateY(3px);
+
+    box-shadow:
+        0 2px 0 var(--cor-coral-escuro);
+}
+
+
+/* =========================================
+   AVISO
+========================================= */
+
+.chat-aviso {
+
+    text-align: center;
+
+    font-size: 10px;
+
+    color: #a89078;
+
+    padding: 5px 10px 10px;
+}
+
+
+/* =========================================
+   FOLHAS DECORATIVAS
+========================================= */
+
+.folha {
+
+    position: absolute;
+
+    font-size: 70px;
+
+    opacity: .25;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    animation: flutuar 4s ease-in-out infinite;
+}
+
+.folha-1 {
+
+    left: 8%;
+
+    bottom: 12%;
+}
+
+.folha-2 {
+
+    right: 10%;
+
+    top: 20%;
+
+    animation-delay: 1s;
+}
+
+.folha-3 {
+
+    left: 18%;
+
+    top: 25%;
+
+    animation-delay: 2s;
+}
+
+@keyframes flutuar {
+
+    0%, 100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(5deg);
+    }
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .chatIA {
+
+        padding-left: 30px;
+
+        padding-right: 30px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .chatIA {
+
+        padding: 12vh 10px 20px;
+    }
+
+    .chat-container {
+
+        height: 80vh;
+
+        border-radius: 18px;
+    }
+
+    .chat-header {
+
+        padding: 12px;
+
+    }
+
+    .chat-mascote {
+
+        width: 50px;
+        height: 50px;
+    }
+
+    .chat-header-info h1 {
+
+        font-size: 25px;
+    }
+
+    .status-ia {
+
+        display: none;
+    }
+
+    .mensagem {
+
+        max-width: 90%;
+    }
+
+    .sugestoes-chat {
+
+        padding: 8px;
+    }
+
+}
