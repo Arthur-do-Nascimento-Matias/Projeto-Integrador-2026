@@ -1,7 +1,6 @@
 const trilha = document.getElementById('trilha')
 const telaAtividade = document.getElementById('atividade')
 const enunciado = document.getElementById('enunciado')
-const burguer = document.getElementById('burger')
 const menu = document.getElementById('menuLateralEsquerda')
 const menuAprender = document.getElementById('aprender')
 const menuIA = document.getElementById('iaEstudos')
@@ -84,33 +83,6 @@ function sairAtividade() {
     trilha.style.opacity = '1'
 }
 
-burguer.addEventListener('change', () => {
-    document.getElementById('menuAdicionarAtividade').classList.remove('ativo')
-    if(burguer.checked) {
-    menu.classList.add('ativo')
-    document.getElementById('options').classList.add('ativo')
-    } else {
-    menu.classList.remove('ativo')
-    document.getElementById('options').classList.remove('ativo')
-    }   
-})
-
-document.addEventListener('click', (event) => {
-
-    // Se o menu estiver aberto
-    if (menu.classList.contains('ativo')) {
-
-        // Verifica se o clique foi fora do menu
-        if (!menu.contains(event.target)) {
-
-            menu.classList.remove('ativo');
-            document.getElementById('options').classList.remove('ativo');
-
-            // Desmarca o checkbox do hamburguer
-            burguer.checked = false;
-        }
-    }
-});
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
       let arr = [alternativa1, alternativa2, certa, alternativa4]

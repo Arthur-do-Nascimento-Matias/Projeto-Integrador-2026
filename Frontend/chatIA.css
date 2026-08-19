@@ -38,7 +38,7 @@
 ========================================= */
 
 .chat-container {
-    width: min(850px, 100%);
+    width: 90%;
 
     height: 85vh;
 
@@ -66,89 +66,6 @@
 /* =========================================
    CABEÇALHO
 ========================================= */
-
-.chat-header {
-
-    min-height: 90px;
-
-    padding: 15px 25px;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--cor-laranja),
-            var(--cor-laranja-claro)
-        );
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    border-bottom: 4px solid var(--cor-laranja-escuro);
-}
-
-
-/* MASCOTE */
-
-.chat-mascote {
-
-    width: 65px;
-    height: 65px;
-
-    border-radius: 50%;
-
-    background: var(--cor-creme);
-
-    border: 4px solid var(--cor-marrom);
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-
-    flex-shrink: 0;
-}
-
-.chat-mascote img {
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-}
-
-
-/* INFORMAÇÕES */
-
-.chat-header-info {
-
-    flex: 1;
-}
-
-.chat-header-info h1 {
-
-    margin: 0;
-
-    font-family: 'Kalam', cursive;
-
-    color: var(--cor-marrom-escuro);
-
-    font-size: 32px;
-}
-
-.chat-header-info p {
-
-    margin: 2px 0 0;
-
-    color: var(--cor-marrom);
-
-    font-weight: bold;
-}
-
 
 /* STATUS */
 
