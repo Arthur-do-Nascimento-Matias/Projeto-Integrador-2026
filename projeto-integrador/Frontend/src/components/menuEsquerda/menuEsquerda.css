@@ -1,0 +1,72 @@
+/* ===== Menu lateral esquerdo ===== */
+.menuLateralEsquerda{
+    z-index: 999;
+    transition: all 300ms ease;
+    position: fixed;
+    width: fit-content;
+    height: 100vh;
+    left: 0;
+    top: 0; 
+    padding-right: 10px;
+    background-color: var(--cor-marrom);
+}
+.menuLateralEsquerda a:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+/* ===== Menu de opções ===== */
+.options{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 20px;
+    margin-left: 10%;
+    margin-top: 20%;
+    color: var(--cor-creme);
+    font-size: x-large;
+    transition: all 300ms ease;
+}
+.options p:hover{
+    text-decoration: underline;
+    color: var(--cor-laranja-claro);
+    cursor: pointer;
+}
+.menuAdicionarAtividade{
+  width: fit-content;
+  position: fixed;
+  right: -50%;
+  transform: translateX(50%);
+  top: 25%;
+  opacity: 0;
+  transition: all 300ms ease;
+  background-color: #4A3020;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: medium;
+}
+.menuAdicionarAtividade button:hover,
+.menuAdicionarAtividade p:hover{
+  text-decoration: none;
+  cursor: pointer;
+}
+.menuAdicionarAtividade.ativo{
+  opacity: 1;
+}
+.adicionarAtividade button{
+    background: var(--cor-laranja);
+    color: var(--cor-branco);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    box-shadow: 0 4px 0 var(--cor-laranja-escuro);
+    transition: all 200ms ease;
+}
+.adicionarAtividade:hover button{
+    cursor: pointer;
+    filter: brightness(105%);
+}
+.adicionarAtividade button:active{
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--cor-laranja-escuro);
+}

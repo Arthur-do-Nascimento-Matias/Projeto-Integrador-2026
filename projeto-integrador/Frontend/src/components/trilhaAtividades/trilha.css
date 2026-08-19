@@ -1,0 +1,65 @@
+/* ===== Trilha de atividades ===== */
+.trilha{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 15vh;
+    transition: all 200ms ease;
+    z-index: 5;
+    padding-bottom: 15px;
+    display: none;
+}
+
+.trilha.ativo{
+  display: flex;
+}
+.botaoAtividade{
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    border: none;
+    transition: all 200ms ease;
+    background: var(--cor-laranja-claro);
+    box-shadow: 0 6px 0 var(--cor-laranja-escuro), 0 8px 14px rgba(0,0,0,.12);
+    position: relative;
+}
+.botaoAtividade:hover{
+  cursor: pointer;
+  filter: brightness(103%);
+  transform: translateY(-2px);
+}
+.botaoAtividade:active{
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 var(--cor-laranja-escuro);
+}
+.botaoAtividade.par{ margin-left: 3vw; }
+.botaoAtividade.impar{ margin-right: 3vw; }
+
+/* Atividade já concluída: cor distinta (marrom do mascote) */
+.botaoAtividade.concluida{
+    background: var(--cor-marrom);
+    box-shadow: 0 6px 0 var(--cor-marrom-escuro), 0 8px 14px rgba(0,0,0,.12);
+}
+.botaoAtividade.concluida::after{
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--cor-creme);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Atividade atual: cor de destaque (coral), com pulso */
+.botaoAtividade.atual{
+    background: var(--cor-coral);
+    box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 8px rgba(242,84,91,.25);
+    animation: pulsarAtual 1.6s ease-in-out infinite;
+}
+@keyframes pulsarAtual{
+    0%, 100% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 8px rgba(242,84,91,.25); }
+    50% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 14px rgba(242,84,91,.1); }
+}
