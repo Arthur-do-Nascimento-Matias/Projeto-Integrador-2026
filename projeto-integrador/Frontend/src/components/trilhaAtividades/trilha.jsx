@@ -3,6 +3,11 @@ import '../trilhaAtividades/trilha.css'
 
 function Trilha() {
     
+    let respostaCerta
+    let embaralhado
+    let atividadeAtual
+    let indiceAtv = 0
+
     const trilha = document.getElementById('trilha')
     let atvAtual = 1
     const botoes = []
