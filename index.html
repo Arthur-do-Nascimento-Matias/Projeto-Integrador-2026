@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimioLab</title>
+    <link rel="icon" type="image/x-icon" href="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png">
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="atividades.css">
+</head>
+<body>
+
+     <header class="cabecalho">
+        <div class="logo-simiolab">
+            <span class="logo-simio">
+                <span>S</span><span>i</span><span>m</span><span>i</span><span>o</span>
+            </span>
+            <span class="logo-lab">LAB</span>
+        </div>
+    </header>
+    
+    <div class="menuLateralEsquerda" id="menuLateralEsquerda">
+        <div class="burger-icon">
+         <label class="burger" for="burger">
+         <input class="line" type="checkbox" id="burger" />
+         </label>
+        </div>
+
+        <div class="options" id="options">
+            <a id="aprender" class="linkTrocarTela" onclick="trocarTela(0)">Aprender</a>
+            <a id="simulados" class="linkTrocarTela" onclick="trocarTela(1)">Simulados</a>
+            <a id="ranking" class="linkTrocarTela" onclick="trocarTela(2)">Ranking</a>
+            <a id="biblioteca" class="linkTrocarTela" onclick="trocarTela(3)">Biblioteca</a>
+            <a id="iaEstudos" class="linkTrocarTela" onclick="trocarTela(4)">IA para estudos</a>
+            <div class="adicionarAtividade">
+               <button onclick="AbrirAdicionarAtividade()">Adicione uma atividade na trilha</button>
+           </div>
+          <form class="menuAdicionarAtividade" id="menuAdicionarAtividade" onsubmit="adicionarAtividade()">
+            <p>Nome: <input type="text" name="" id="novoNome"></p>
+            <p>Enunciado: <input type="text" name="" id="novoEnunciado" required></p>
+            <p>Resposta: <input type="text" id="novaResposta" required></p>
+            <p>alternativa 1 <input type="text" name="" id="novaAlternativa1" required></p>
+            <p>alternativa 2 <input type="text" name="" id="novaAlternativa2" required></p>
+            <p>alternativa 3 <input type="text" name="" id="novaAlternativa3" required></p>
+            <button type="submit">Adicionar atividade</button>
+    </form>
+        </div>
+    </div>
+
+
+    <div class="trilha ativo" id="trilha"></div>
+
+            <div class="atividade" id="atividade">
+                <button onclick="sairAtividade()">Sair</button>
+                <h1 class="enunciado" id="enunciado"></h1>
+                <button class="alternativa1" id="alternativa1" onclick="verificar(0, this)"></button>
+                <button class="alternativa2" id="alternativa2" onclick="verificar(1, this)"></button>
+                <button class="alternativa3" id="alternativa3" onclick="verificar(2, this)"></button>
+                <button class="alternativa4" id="alternativa4" onclick="verificar(3, this)"></button>
+                </div>
+                
+                <div class="parabens" id="parabens">
+                <h1>🎉 Parabéns!</h1>
+                <p>Você concluiu esta atividade.</p>
+                <button onclick="fecharParabens()">Continuar</button>
+    </div>
+
+    <div class="telaSimulados" id="telaSimulados"></div>
+
+    <div class="telaRanking" id="telaRanking"></div>
+
+    <div class="telaBilbioteca" id="telaBiblioteca"></div>
+
+    <div class="chatIA" id="chatIA"></div>
+
+    </div>
+          <div class="MenuLateraldireita">
+
+            <div class="cards">
+
+           <div class="league-card">
+    <div class="card-header">
+        <h3>Divisão Ouro</h3>
+        <a href="#">VER DIVISÃO</a>
+    </div>
+
+    <div class="card-body">
+        <img src="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png" alt="Dormindo">
+        <p>
+            Faça uma lição pra entrar no ranking dessa semana e competir com as outras pessoas.
+        </p>
+     </div>
+     </div>
+
+     <div class="missoes-card">
+        <div class="card-header">
+            <h3>Missões do dia</h3>
+            <a href="#">VER TODAS</a>
+        </div>
+        <div class="missao-lista" id="missaoLista"></div>
+     </div>
+
+    </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
