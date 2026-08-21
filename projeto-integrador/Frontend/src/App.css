@@ -21,6 +21,7 @@ body,
     min-width: 100%;
     font-family: Kalam;
     overflow-x: hidden;
+    scrollbar-width: none;
 }
 
 #root {

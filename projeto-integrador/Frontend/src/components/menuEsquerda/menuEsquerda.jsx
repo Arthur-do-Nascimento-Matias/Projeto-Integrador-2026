@@ -8,6 +8,7 @@ function MenuEsquerda() {
     const refIaEstudos = useRef(null)
     const refSimulados = useRef(null)
     const refRanking = useRef(null)
+    const refFeed = useRef(null)
 
     const refNovoNome = useRef(null)
     const refNovoEnunciado = useRef(null)
@@ -52,6 +53,11 @@ function MenuEsquerda() {
         })
     }
 
+    function trocarTela(url){
+        window.location.href = url
+    }
+    
+
    /* function trocarTela(indice) {
         for(let i=0; i < telas.length; i++){
             telas[i].classList.remove('ativo')
@@ -67,11 +73,12 @@ function MenuEsquerda() {
         <div className="menuLateralEsquerda" id="menuLateralEsquerda">
 
             <div className="options" id="options">
-                <a id="aprender" className="linkTrocarTela" /*onclick={trocarTela(0)}*/ ref={refAprender}>Aprender</a>
+                <a id="aprender" className="linkTrocarTela" onClick={() => trocarTela('/')} ref={refAprender}>Aprender</a>
                 <a id="simulados" className="linkTrocarTela"/* onclick={trocarTela(1)}*/ ref={refSimulados}>Simulados</a>
                 <a id="ranking" className="linkTrocarTela" /*onclick={trocarTela(2)}*/ ref={refRanking}>Ranking</a>
                 <a id="biblioteca" className="linkTrocarTela" /*onclick={trocarTela(3)}*/ ref={refBiblioteca}>Biblioteca</a>
-                <a id="iaEstudos" className="linkTrocarTela" /*onclick={trocarTela(4)}*/ ref={refIaEstudos}>IA para estudos</a>
+                <a id="iaEstudos" className="linkTrocarTela" onClick={() => trocarTela('/chatBot')} ref={refIaEstudos}>IA para estudos</a>
+                <a id="fees" className="linkFeed" ref={refFeed}>Feed</a>
                 <div className="adicionarAtividade">
                 <button onClick={AbrirAdicionarAtividade}>Adicione uma atividade na trilha</button>
             </div>

@@ -3,7 +3,7 @@ import '../atividades/atividades.css'
 
 let embaralhado
 let respostaCerta
-let indiceAtv
+let indiceAtv = 0
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
       let arr = [alternativa1, alternativa2, certa, alternativa4]
@@ -52,30 +52,28 @@ function fecharParabens() {
 
     const botao = document.getElementById(atividadeAtual)
 
-    if (botao) {
-        botao.style.background = "green"
-        botao.innerHTML = "✔"
-    }
     sairAtividade()
 }
 
 function verificar(id, resp){
-    if(embaralhado[id] == respostaCerta) {
-        console.log('i', indiceAtv)
-        if(indiceAtv < 2){
-            criarAtividade(atividadeAtual)
-            indiceAtv += 1
-        }
-        else{
-            indiceAtv = 0
-            console.log('concluido')
-            refParabens.current.style.display = 'flex'
-            setAtvLiberada(prev => prev + 1)
-        }
+if (embaralhado[id] == respostaCerta) {
+
+    if (indiceAtv < 2) {
+        indiceAtv += 1
+        criarAtividade('aleatorio')
     } else {
-        resp.style.animation = 'chacualhar 200ms ease-in-out alternate'
-        setTimeout(() => {
-            resp.style.animation = ''}, 200)
+        indiceAtv = 0
+        console.log('concluido')
+        refParabens.current.style.display = 'flex'
+        setAtvLiberada(prev => prev + 1)
+    }
+
+} else {
+    resp.style.animation = 'chacualhar 200ms ease-in-out alternate'
+
+    setTimeout(() => {
+        resp.style.animation = ''
+    }, 200)
     }
 
         //pra que serve

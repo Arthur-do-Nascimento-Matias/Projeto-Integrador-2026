@@ -39,7 +39,6 @@
     box-shadow: 0 6px 0 var(--cor-marrom-escuro), 0 8px 14px rgba(0,0,0,.12);
 }
 .botaoAtividade.concluida::after{
-    content: "✓";
     position: absolute;
     top: 50%;
     left: 50%;

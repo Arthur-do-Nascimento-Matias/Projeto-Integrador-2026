@@ -34,6 +34,8 @@ function Trilha({ refAtividade, setAtividadeAtual, atvLiberada }) {
     botao.addEventListener('click', () => entrarAtividade(botao))
 
     if (i + 1 < atvLiberada) {
+        botao.style.background = "green"
+        botao.innerHTML = "✔"
         botao.classList.add('concluida')
     } 
     else if (i + 1 === atvLiberada) {

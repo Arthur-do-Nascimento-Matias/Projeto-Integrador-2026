@@ -1,8 +1,12 @@
 import '../chatBot/chatBot.css'
 
 function chatBot() {
+
     return(
          <>
+         <div className='chatIA'>
+            <div className="chat-container">
+
             <div className="chat-mensagens" id="chatMensagens">
 
                 <div className="mensagem mensagem-ia">
@@ -66,6 +70,8 @@ function chatBot() {
             <div className="chat-aviso">
                 O Simio pode cometer erros. Sempre confira informações importantes.
             </div>
+            </div>
+        </div>
     </>
     )
 }
