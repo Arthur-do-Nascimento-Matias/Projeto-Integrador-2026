@@ -1,28 +1,28 @@
 import { useEffect, useRef } from 'react'
 import '../trilhaAtividades/trilha.css'
 
-function Trilha() {
+function Trilha({ refAtividade, setAtividadeAtual, atvLiberada }) {
     
+    const refTrilha = useRef(null)
+
     let respostaCerta
-    let embaralhado
     let atividadeAtual
     let indiceAtv = 0
 
-    const trilha = document.getElementById('trilha')
-    let atvAtual = 1
     const botoes = []
 
-    useEffect(() => {
     function criarTrilha() {
+
+    refTrilha.current.innerHTML = ''
+
     fetch(`http://localhost:3000/nome`)
-    .then(data => data.json())
-    .then(resp => {
-    console.log(resp)
-    for(let i=0; i < resp.length; i++){
-    const botao = document.createElement('button')
-    botao.className = 'botaoAtividade'
-    botao.textContent = resp[i].nome
-    botao.id = i+1
+        .then(data => data.json())
+        .then(resp => {
+        console.log(resp)
+        for(let i=0; i < resp.length; i++){
+        const botao = document.createElement('button')
+        botao.className = 'botaoAtividade'
+        botao.id = i+1
 
     if(i % 2 == 0) {
         botao.classList.add('impar')
@@ -31,38 +31,43 @@ function Trilha() {
         botao.classList.add('par')
     }
 
-    botao.addEventListener('click', () => entrarAtividade(botao.id))
-    console.log(atvAtual)   
+    botao.addEventListener('click', () => entrarAtividade(botao))
 
-    if(i+1 > atvAtual) {
-        botao.style.filter = 'grayscale(100%)'
-    } else if (i+1 == atvAtual){
-        botao.style.filter = 'grayscale(40%)'
+    if (i + 1 < atvLiberada) {
+        botao.classList.add('concluida')
+    } 
+    else if (i + 1 === atvLiberada) {
+        botao.classList.add('atual')
     }
-
+    else {
+        botao.style.filter = 'grayscale(100%)'
+    }
     refTrilha.current.appendChild(botao)
     botoes.push(botao)
     }})}
 
-criarTrilha()
 
-}, [])
-    
+    function entrarAtividade(botao) {
 
-    function entrarAtividade(id) {
-        if(atvAtual == id) {
-        atividadeAtual = id;
-        trilha.style.opacity = '0'
-        telaAtividade.style.transform = 'translateX(0)'
-        criarAtividade(atividadeAtual)
-        } else if(atvAtual > id) {
-            alert('Atividade já concluida')
-        } else {
-            alert('Atividade bloqueada')
-        }
+    const id = Number(botao.id)
+
+    if (atvLiberada == id) {
+        setAtividadeAtual(id)
+        refTrilha.current.style.opacity = '0'
+        refAtividade.current.style.transform = 'translateX(0)'
+    } else if (atvLiberada > id) {
+        alert('Atividade já concluida')
+    } else {
+        alert('Atividade bloqueada')
     }
+}
 
-    const refTrilha = useRef(null)
+useEffect(() => {
+
+    criarTrilha()
+
+}, [atvLiberada])
+    
 
     return(
         <>

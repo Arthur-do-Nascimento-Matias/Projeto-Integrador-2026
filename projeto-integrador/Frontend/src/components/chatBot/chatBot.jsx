@@ -30,15 +30,15 @@ function chatBot() {
 
             <div className="sugestoes-chat">
 
-                <button onclick="enviarSugestao('Explique Revolução Industrial')">
+                <button onClick="enviarSugestao('Explique Revolução Industrial')">
                     📚 Explique um conteúdo
                 </button>
 
-                <button onclick="enviarSugestao('Crie um exercício de matemática para mim')">
+                <button onClick="enviarSugestao('Crie um exercício de matemática para mim')">
                     📝 Criar exercício
                 </button>
 
-                <button onclick="enviarSugestao('Me faça perguntas sobre história')">
+                <button onClick="enviarSugestao('Me faça perguntas sobre história')">
                     🧠 Me faça perguntas
                 </button>
 
@@ -54,8 +54,8 @@ function chatBot() {
                 ></textarea>
 
                 <button
-                    class="botao-enviar"
-                    onclick="enviarMensagem()"
+                    className="botao-enviar"
+                    onClick="enviarMensagem()"
                     id="botaoEnviar"
                 >
                     ➤

@@ -1,19 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import '../atividades/atividades.css'
 
-function atividades() {
-
-    
-function sairAtividade() {
-    indiceAtv = 0
-    document.querySelectorAll('.botaoAtividade').forEach(elemento => {
-        elemento.remove()
-    })
-    criarTrilha()
-    telaAtividade.style.transform = 'translateX(100%)'
-    trilha.style.opacity = '1'
-}
-
+let embaralhado
+let respostaCerta
+let indiceAtv
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
       let arr = [alternativa1, alternativa2, certa, alternativa4]
@@ -24,31 +14,63 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
     return arr
 }
 
-function fecharParabens(){
-    ganharXp('xpBonus', 10)
+function atividades({ refAtividade, atividadeAtual, setAtvLiberada }) {
 
-    document.getElementById("parabens").style.display = "none";
+    const atividadesConcluidas = [];
 
-    const botao = document.getElementById(atividadeAtual);
-    botao.style.background = "green";
-    botao.innerHTML = "✔";
+    const refParabens = useRef(null)
+    const refEnunciado = useRef(null)
+    const refAlternativa1 = useRef(null)
+    const refAlternativa2 = useRef(null)
+    const refAlternativa3 = useRef(null)
+    const refAlternativa4 = useRef(null)
+    
+function criarAtividade(id) {
 
-    sairAtividade();
+        fetch(`http://localhost:3000/atividades?id=${id}`)
+        .then(resp => resp.json())
+        .then(data => {
+            enunciado.innerHTML = data.pergunta
+            respostaCerta = data.certa
+            embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.certa, data.alternativa3)
+                alternativa1.innerHTML = embaralhado[0]
+                alternativa2.innerHTML = embaralhado[1]
+                alternativa3.innerHTML = embaralhado[2]
+                alternativa4.innerHTML = embaralhado[3]
+        })
+    }
+
+function sairAtividade() {
+    indiceAtv = 0
+    refAtividade.current.style.transform = 'translateX(100%)'
+    trilha.style.opacity = '1'
 }
+
+function fecharParabens() {
+
+    refParabens.current.style.display = "none"
+
+    const botao = document.getElementById(atividadeAtual)
+
+    if (botao) {
+        botao.style.background = "green"
+        botao.innerHTML = "✔"
+    }
+    sairAtividade()
+}
+
 function verificar(id, resp){
     if(embaralhado[id] == respostaCerta) {
         console.log('i', indiceAtv)
         if(indiceAtv < 2){
-            criarAtividade('aleatorio')
+            criarAtividade(atividadeAtual)
             indiceAtv += 1
         }
         else{
             indiceAtv = 0
             console.log('concluido')
-            document.getElementById("parabens").style.display = "flex";
-            atividadesConcluidas.push(id);
-            atvAtual += 1
-            const botao = document.getElementById(id);
+            refParabens.current.style.display = 'flex'
+            setAtvLiberada(prev => prev + 1)
         }
     } else {
         resp.style.animation = 'chacualhar 200ms ease-in-out alternate'
@@ -65,21 +87,25 @@ function verificar(id, resp){
 }
 
 useEffect(() => {
-    embaralhado()
-})
+
+    if (!atividadeAtual) return
+
+    criarAtividade(atividadeAtual)
+
+}, [atividadeAtual])
 
     return(
         <>
-            <div className="atividade" id="atividade">
+            <div className="atividade" id="atividade" ref={refAtividade}>
                     <button onClick={sairAtividade}>Sair</button>
-                    <h1 className="enunciado" id="enunciado"></h1>
-                    <button className="alternativa1" id="alternativa1" onClick={(e) => verificar(0, e.currentTarget)}></button>
-                    <button className="alternativa2" id="alternativa2" onClick={(e) => verificar(1, e.currentTarget)}></button>
-                    <button className="alternativa3" id="alternativa3" onClick={(e) => verificar(2, e.currentTarget)}></button>
-                    <button className="alternativa4" id="alternativa4" onClick={(e) => verificar(3, e.currentTarget)}></button>
+                     <h1 className="enunciado" id="enunciado" ref={refEnunciado}></h1>
+                        <button className="alternativa1" id="alternativa1" onClick={(e) => verificar(0, e.currentTarget)} ref={refAlternativa1}></button>
+                        <button className="alternativa2" id="alternativa2" onClick={(e) => verificar(1, e.currentTarget)} ref={refAlternativa2}></button>
+                        <button className="alternativa3" id="alternativa3" onClick={(e) => verificar(2, e.currentTarget)} ref={refAlternativa3}></button>
+                        <button className="alternativa4" id="alternativa4" onClick={(e) => verificar(3, e.currentTarget)} ref={refAlternativa4}></button>
                     </div>
                     
-                    <div className="parabens" id="parabens">
+                    <div className="parabens" id="parabens" ref={refParabens}>
                     <h1>🎉 Parabéns!</h1>
                     <p>Você concluiu esta atividade.</p>
                     <button onClick={fecharParabens}>Continuar</button>

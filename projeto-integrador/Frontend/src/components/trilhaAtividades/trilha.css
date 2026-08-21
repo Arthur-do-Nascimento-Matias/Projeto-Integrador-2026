@@ -9,12 +9,8 @@
     transition: all 200ms ease;
     z-index: 5;
     padding-bottom: 15px;
-    display: none;
 }
 
-.trilha.ativo{
-  display: flex;
-}
 .botaoAtividade{
     width: 80px;
     height: 80px;

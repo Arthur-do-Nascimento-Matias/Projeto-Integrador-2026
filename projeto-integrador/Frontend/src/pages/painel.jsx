@@ -3,16 +3,33 @@ import MenuEsquerda from "../components/menuEsquerda/menuEsquerda";
 import MenuDireita from "../components/menuDireita/menuDireita";
 import Header from "../components/header/header"
 import Atividades from "../components/atividades/atividades";
+import ChatBot from "../components/chatBot/chatBot"
+import { useRef, useState } from 'react'
 
 function Painel() {
-    return(
+
+    const refAtividade = useRef(null)
+
+    const [atividadeAtual, setAtividadeAtual] = useState(null)
+    const [atvLiberada, setAtvLiberada] = useState(1)
+
+        return(
         <>
             <Header />
             <MenuEsquerda />
-            <Trilha />
-          {/*  <Atividades /> */}
+
+            <Trilha 
+                refAtividade={refAtividade}
+                setAtividadeAtual={setAtividadeAtual}
+                atvLiberada={atvLiberada}
+            />
+            <Atividades 
+                refAtividade={refAtividade}
+                atividadeAtual={atividadeAtual}
+                setAtvLiberada={setAtvLiberada}
+            />
             <MenuDireita />
-            <chatBot/>
+          {/*  <ChatBot/>  */}
         </>
     )
 }
