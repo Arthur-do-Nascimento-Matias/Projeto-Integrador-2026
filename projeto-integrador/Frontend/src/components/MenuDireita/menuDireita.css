@@ -1,0 +1,141 @@
+/* ===== Card de liga (lateral direita) ===== */
+.league-card {
+    position: static;
+    width: 100%;
+    box-sizing: border-box;
+
+    background: var(--cor-branco);
+    border: 1px solid #f1e2cc;
+    border-radius: 18px;
+    padding: 18px;
+
+    box-shadow: 0 4px 14px rgba(107,70,48,.12);
+    z-index: 10;
+}
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+.card-header h3{
+    margin:0;
+    font-size:22px;
+    color: var(--cor-marrom-escuro);
+}
+.card-header a{
+    color: var(--cor-coral);
+    font-weight:bold;
+    text-decoration:none;
+}
+.card-body{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+.card-body img{ width:60px; }
+.card-body p{
+    margin:0;
+    color: var(--cor-marrom);
+    line-height:1.4;
+}
+.menuLateralDireita{
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    width: 380px;
+    height: 100vh;
+
+    background-color: transparent;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    padding: 30px;
+    box-sizing: border-box;
+
+    z-index: 10;
+}
+.cards{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+/* ===== Card de missões diárias ===== */
+.missoes-card{
+    position: static;
+    width: 100%;
+    box-sizing: border-box;
+
+    background: var(--cor-branco);
+    border: 1px solid #f1e2cc;
+    border-radius: 18px;
+    padding: 18px;
+
+    box-shadow: 0 4px 14px rgba(107,70,48,.12);
+}
+
+.missao-lista{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.missao-item{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.missao-icone{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--cor-laranja-claro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.missao-info{
+    flex: 1;
+}
+
+.missao-titulo{
+    margin: 0 0 6px;
+    font-weight: bold;
+    color: var(--cor-marrom-escuro);
+    font-size: 15px;
+}
+
+.barra-progresso{
+    width: 100%;
+    height: 10px;
+    background: #f1e2cc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.barra-progresso-preenchimento{
+    height: 100%;
+    background: var(--cor-laranja);
+    border-radius: 6px;
+    transition: width 300ms ease;
+}
+
+.missao-progresso-texto{
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: var(--cor-marrom);
+}
+
+.missao-item.concluida .barra-progresso-preenchimento{
+    background: var(--cor-coral);
+}
+.missao-item.concluida .missao-icone{
+    background: var(--cor-coral);
+}

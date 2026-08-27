@@ -12,13 +12,14 @@
     --cor-coral-escuro: #D63E45;
     --cor-branco: #FFFFFF;
 }
-
 html,
 body,
 #root {
     margin: 0;
     min-height: 100%;
     min-width: 100%;
+    font-family: Kalam;
+    overflow-x: hidden;
 }
 
 #root {
