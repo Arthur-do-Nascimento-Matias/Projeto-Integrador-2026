@@ -6,6 +6,7 @@ import Atividades from "../components/atividades/atividades";
 import ChatBot from "../components/chatBot/chatBot"
 import { useRef, useState } from 'react'
 
+
 function Painel() {
 
     const refAtividade = useRef(null)
@@ -29,6 +30,7 @@ function Painel() {
                 setAtvLiberada={setAtvLiberada}
             />
             <MenuDireita />
+          {/*  <ChatBot/>  */}
         </>
     )
 }
