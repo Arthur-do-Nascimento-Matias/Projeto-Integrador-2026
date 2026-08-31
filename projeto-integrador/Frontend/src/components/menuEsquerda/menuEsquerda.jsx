@@ -56,17 +56,6 @@ function MenuEsquerda() {
     function trocarTela(url){
         window.location.href = url
     }
-    
-
-   /* function trocarTela(indice) {
-        for(let i=0; i < telas.length; i++){
-            telas[i].classList.remove('ativo')
-            console.log(telas[i])
-        }
-        telas[indice].classList.add('ativo')
-        console.log(telas[indice])
-    } */
-
 
     return(
         <>
@@ -81,6 +70,9 @@ function MenuEsquerda() {
                 <a id="fees" className="linkFeed" ref={refFeed}>Feed</a>
                 <div className="adicionarAtividade">
                 <button onClick={AbrirAdicionarAtividade}>Adicione uma atividade na trilha</button>
+                <div className="login">
+                    <a href="/login">Faça login</a>
+                </div>
             </div>
             <form className="menuAdicionarAtividade" id="menuAdicionarAtividade" onSubmit={adicionarAtividade} ref={menuAdicionarAtividade}>
                 <p>Nome: <input type="text" name="" id="novoNome" ref={refNovoNome}/></p>
@@ -92,6 +84,7 @@ function MenuEsquerda() {
                 <button type="submit">Adicionar atividade</button>
         </form>
             </div>
+
         </div>
     </>
         )

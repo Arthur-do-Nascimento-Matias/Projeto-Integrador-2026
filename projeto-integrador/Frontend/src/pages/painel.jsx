@@ -30,7 +30,6 @@ function Painel() {
                 setAtvLiberada={setAtvLiberada}
             />
             <MenuDireita />
-          {/*  <ChatBot/>  */}
         </>
     )
 }
