@@ -4,6 +4,7 @@ import './App.css'
 import Painel from './pages/painel'
 import Login from './pages/Login'
 import ChatBot from './pages/painelChatBot';
+import PainelBiblioteca from './pages/PainelBiblioteca';
 
 function App() {
 
@@ -11,9 +12,12 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+
           <Route path="/chatBot" element={<ChatBot />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Painel />} />
+          <Route path='/biblioteca' element={<PainelBiblioteca />} />
+
         </Routes>
       </BrowserRouter>
     </>
