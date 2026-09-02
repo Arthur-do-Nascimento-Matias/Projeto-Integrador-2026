@@ -1,0 +1,6 @@
+.capas{
+    display: flex;
+    gap: 30px;
+    margin-left: 15vw;
+    margin-top: 15vh;
+}

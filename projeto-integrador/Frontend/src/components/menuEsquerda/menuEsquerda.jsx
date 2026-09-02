@@ -65,7 +65,7 @@ function MenuEsquerda() {
                 <a id="aprender" className="linkTrocarTela" onClick={() => trocarTela('/')} ref={refAprender}>Aprender</a>
                 <a id="simulados" className="linkTrocarTela"/* onclick={trocarTela(1)}*/ ref={refSimulados}>Simulados</a>
                 <a id="ranking" className="linkTrocarTela" /*onclick={trocarTela(2)}*/ ref={refRanking}>Ranking</a>
-                <a id="biblioteca" className="linkTrocarTela" /*onclick={trocarTela(3)}*/ ref={refBiblioteca}>Biblioteca</a>
+                <a id="biblioteca" className="linkTrocarTela" onClick={() => trocarTela('/biblioteca')} ref={refBiblioteca}>Biblioteca</a>
                 <a id="iaEstudos" className="linkTrocarTela" onClick={() => trocarTela('/chatBot')} ref={refIaEstudos}>IA para estudos</a>
                 <a id="fees" className="linkFeed" ref={refFeed}>Feed</a>
                 <div className="adicionarAtividade">

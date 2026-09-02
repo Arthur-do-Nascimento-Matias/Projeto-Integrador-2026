@@ -6,7 +6,7 @@ const Atividades = require('./Atividades')
 
 const callback = (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.writeHead(200, {'Content-Type':'image/jpeg; charset=utf-8'})
+    res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
     let rota = url.parse(req.url, true)
     let param = url.parse(req.url, true).query
 
@@ -21,14 +21,20 @@ const callback = (req, res) => {
             
             connection.connect()
             
-            var sql = 'select NomeLivro from livros where capaLivro'
+            var sql = 'select capaLivro from livros'
 
             var id = 13
             
             connection.query(sql, id, function(error, results){
                 if(error) throw error
 
-                res.end(JSON.stringify(results))
+                const capas = results.map(element => {
+                    return element.capaLivro.toString('base64')
+                });
+
+                console.log(capas)
+
+                res.end(JSON.stringify(capas))
 
             })
 
