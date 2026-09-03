@@ -4,3 +4,11 @@
     margin-left: 15vw;
     margin-top: 15vh;
 }
+
+.capa{
+    transition: all 300ms ease;
+}
+
+.capa:hover{
+    transform: scale(1.05);
+}

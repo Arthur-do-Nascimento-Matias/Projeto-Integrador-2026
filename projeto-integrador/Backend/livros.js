@@ -6,41 +6,65 @@ const Atividades = require('./Atividades')
 
 const callback = (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
     let rota = url.parse(req.url, true)
     let param = url.parse(req.url, true).query
 
-    if(rota.pathname == '/livros') {
- 
-            const connection = mysql.createConnection({
-                host: 'localhost',
-                user: 'root',
-                password: '',
-                database: 'integrador',
-            })
-            
-            connection.connect()
-            
-            var sql = 'select capaLivro from livros'
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'integrador',
+    })
 
-            var id = 13
+    connection.connect()
+
+    if(rota.pathname == '/livros') {
             
-            connection.query(sql, id, function(error, results){
+            res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
+            
+            var sql = 'select capaLivro, idLivro from livros'
+            
+            connection.query(sql, function(error, results){
                 if(error) throw error
 
                 const capas = results.map(element => {
-                    return element.capaLivro.toString('base64')
+                    return {'img': element.capaLivro.toString('base64'), 'id': element.idLivro}
                 });
 
-                console.log(capas)
+                console.log(results)
 
                 res.end(JSON.stringify(capas))
 
             })
 
-            connection.end()
             
     }
+
+    if(rota.pathname == '/abrirLivro') {
+
+        let idLivro = param.id
+
+        var sql = 'select pdfLivro from livros where idLivro=?'
+
+        connection.query(sql, idLivro, function(error, results) {
+            if(error) throw error
+
+        const pdf = results[0].pdfLivro;
+
+        res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'inline; filename="livro.pdf"',
+            'Content-Length': pdf.length
+        });
+
+        res.end(pdf);
+
+        })
+
+    }
+
+    connection.end()
+
 }
 
 let server = http.createServer(callback)
