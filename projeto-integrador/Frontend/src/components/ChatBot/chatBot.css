@@ -8,8 +8,6 @@ min-height: 100vh;
 
 box-sizing: border-box;
 
-    margin-left: 5vw;
-    margin-left: 10vw;
 
 padding-top: 12vh;
 padding-left: 80px;
@@ -41,6 +39,9 @@ justify-content: center;
 ========================================= */
 
 .chat-container {
+
+margin-left: 8vw;
+  
 width: 90%;
 
 height: 85vh;

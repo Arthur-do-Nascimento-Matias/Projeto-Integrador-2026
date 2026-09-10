@@ -1,0 +1,1559 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+
+
+.simio-sidebar-layer{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:900;
+}
+
+.simio-sidebar-layer .scene{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.simio-sidebar-layer .scene::before{display:none;}
+.simio-sidebar-layer .sidebar,
+.simio-sidebar-layer .simio-logo{pointer-events:auto;}
+.simio-sidebar-layer .hint{display:none;}
+
+.simio-sidebar-layer{
+    --bg:#1b140f;
+    --bg-2:#120d09;
+    --text:#f5eadb;
+    --muted:#d4c7b3;
+    --orange:#ff7a00;
+    --orange-2:#ff9018;
+    --orange-3:#ffb14f;
+    --panel:#24252d;
+    --lav:#6d647e;
+    --simio-green-dark: #19412c;
+    --simio-green: #2e5537;
+    --simio-orange: #e97818;
+    --simio-yellow: #f4b83f;
+    --simio-bg: #f1ebe0;
+    --simio-bg-light: #f7f3ec;
+    --simio-card: #fefcf9;
+    --simio-text: #30251e;
+    --simio-text-muted: #806f61;
+    --ease:cubic-bezier(.2,.8,.2,1);
+  }
+
+  .simio-sidebar-layer .space-mono-regular{
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .space-mono-bold{
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .space-mono-regular-italic{
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .space-mono-bold-italic{
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-thin{
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-extralight{
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-light{
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-regular{
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-medium{
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-semibold{
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-bold{
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-extrabold{
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-black{
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-thin-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-extralight-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-light-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-regular-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-medium-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-semibold-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-bold-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.simio-sidebar-layer .poppins-extrabold-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+
+.rubik {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+}
+
+.simio-sidebar-layer .poppins-black-italic{
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+
+
+
+  .simio-sidebar-layer *{box-sizing:border-box}
+  
+
+  
+
+  .simio-sidebar-layer .scene{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    min-height:660px;
+    overflow:hidden;
+  }
+
+  .simio-sidebar-layer .scene::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.10), transparent 23%, transparent 78%, rgba(0,0,0,.12)),
+      radial-gradient(circle at 50% 50%, transparent 38%, rgba(0,0,0,.14) 100%);
+  }
+
+  /* glow ambiente */
+  .simio-sidebar-layer .ambient{
+    position:absolute;
+    left:80px;
+    top:50%;
+    width:220px;
+    height:640px;
+    transform:translateY(-50%);
+    border-radius:999px;
+    background:linear-gradient(180deg, rgba(145,92,41,.16), rgba(255,122,0,.035) 42%, rgba(77,112,45,.14) 100%);
+    filter:blur(44px);
+    pointer-events:none;
+    animation:ambientBreath 5.5s ease-in-out infinite;
+  }
+
+  @keyframes ambientBreath{
+    0%,100%{opacity:.62; transform:translateY(-50%) scale(.96)}
+    50%{opacity:1; transform:translateY(-50%) scale(1.05)}
+  }
+
+.simio-sidebar-layer .sidebar{
+  font-family: "Rubik", sans-serif;
+  font-weight: 200;
+
+  --collapsed:106px;
+  --expanded:282px;
+
+  position:absolute;
+  left:58px;
+
+  /* CENTRO REAL DA VIEWPORT */
+  top:50%;
+
+  width:var(--collapsed);
+
+  transform:translateY(-50%);
+
+  transition:
+    width .52s cubic-bezier(.18,.88,.22,1),
+    transform .58s cubic-bezier(.18,.88,.22,1);
+
+  z-index:10;
+  isolation:isolate;
+}
+
+  .simio-sidebar-layer .sidebar:hover,
+.simio-sidebar-layer .sidebar.pin-open{
+    width:var(--expanded);
+  }
+
+  .simio-sidebar-layer .sidebar.more-open{
+    transform:translateY(calc(-50% - 34px));
+  }
+
+  /* halo externo */
+  .simio-sidebar-layer .sidebar::before{
+    content:"";
+    position:absolute;
+    inset:-13px;
+    border-radius:68px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.10), transparent 22%, transparent 72%, rgba(132,84,42,.18));
+    filter:blur(14px);
+    opacity:.75;
+    z-index:-2;
+    transition:opacity .35s ease, transform .5s var(--ease);
+  }
+
+  .simio-sidebar-layer .sidebar:hover::before,
+.simio-sidebar-layer .sidebar.pin-open::before{
+    opacity:1;
+    transform:scale(1.025);
+  }
+
+  .simio-sidebar-layer .shell{
+    position:relative;
+    width:100%;
+    height: 540px;
+    overflow:hidden;
+    border-radius:38px;
+    border:1px solid rgba(255,255,255,.54);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(74,52,38,.94) 0%,
+      rgba(66,45,33,.96) 30%,
+      rgba(57,48,27,.97) 65%,
+      rgba(45,67,26,.98) 100%
+    );
+
+  backdrop-filter:blur(12px) saturate(115%);
+  -webkit-backdrop-filter:blur(12px) saturate(115%);
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.40),
+      inset 1px 0 0 rgba(255,255,255,.12),
+      inset -1px 0 0 rgba(255,255,255,.05),
+      inset 0 -1px 0 rgba(197,220,151,.07),
+      inset 14px 0 24px rgba(255,255,255,.012),
+      inset -18px 0 28px rgba(20,14,8,.22),
+      0 28px 72px rgba(0,0,0,.48);
+
+    backdrop-filter:
+      blur(18px)
+      saturate(125%)
+      brightness(1.00);
+    -webkit-backdrop-filter:
+      blur(18px)
+      saturate(125%)
+      brightness(1.00);
+
+    transition:
+      height .6s var(--ease),
+      border-radius .44s var(--ease),
+      box-shadow .4s ease;
+
+      transition: height 0.45s cubic-bezier(.2, .8, .2, 1);
+  }
+
+  .simio-sidebar-layer .sidebar.more-open .shell{
+    height: 650px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.72),
+      inset 1px 0 0 rgba(255,255,255,.25),
+      inset -1px 0 0 rgba(255,255,255,.12),
+      inset 0 -1px 0 rgba(255,255,255,.18),
+      0 40px 96px rgba(0,0,0,.54);
+  }
+
+  /* Camada "líquida": manchas de luz se movem lentamente dentro do vidro. */
+  .simio-sidebar-layer .shell::before{
+    content:"";
+    position:absolute;
+    inset:-17%;
+    pointer-events:none;
+    z-index:1;
+    opacity:.92;
+
+    background:
+      radial-gradient(ellipse at 16% 14%, rgba(255,255,255,.16), transparent 21%),
+      radial-gradient(ellipse at 82% 29%, rgba(255,255,255,.035), transparent 28%),
+      radial-gradient(ellipse at 28% 72%, rgba(153,111,55,.13), transparent 31%),
+      radial-gradient(ellipse at 52% 94%, rgba(118,150,72,.15), transparent 35%);
+
+    filter:blur(8px);
+    transform:translate3d(-3%,-1%,0) scale(1.03);
+    animation:liquidGlassFlow 9s ease-in-out infinite alternate;
+  }
+
+  @keyframes liquidGlassFlow{
+    0%{
+      transform:translate3d(-3%,-1%,0) scale(1.03) rotate(-1deg);
+    }
+    50%{
+      transform:translate3d(2%,2%,0) scale(1.07) rotate(1deg);
+    }
+    100%{
+      transform:translate3d(4%,-2%,0) scale(1.04) rotate(0deg);
+    }
+  }
+
+
+
+  @keyframes glassSheen{
+    0%,63%{transform:translateX(-40%)}
+    84%,100%{transform:translateX(40%)}
+  }
+
+  .simio-sidebar-layer nav{
+    position:relative;
+    z-index:5;
+    box-shadow:
+      inset 8px 0 18px rgba(255,255,255,.02),
+      inset -10px 0 20px rgba(0,0,0,.035);
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding:15px 12px 14px;
+  }
+
+  .simio-sidebar-layer .main-menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .simio-sidebar-layer .nav-item,
+.simio-sidebar-layer .menu-toggle{
+    font-family: "Rubik", sans-serif;
+    position:relative;
+    width:100%;
+    min-height:64px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:7px;
+    border:0;
+    border-radius:18px;
+    overflow:hidden;
+    color:var(--text);
+    background:transparent;
+    text-decoration:none;
+    cursor:pointer;
+    outline:none;
+    -webkit-tap-highlight-color:transparent;
+    transform:translate3d(0,0,0);
+    transition:
+      transform .32s var(--ease),
+      color .25s ease,
+      filter .3s ease;
+  }
+
+  .simio-sidebar-layer .nav-item::before,
+.simio-sidebar-layer .menu-toggle::before{
+    content:"";
+    position:absolute;
+    top:7px;
+    left:50%;
+    width:50px;
+    height:50px;
+    border-radius:14px;
+
+    opacity:0;
+    transform:translateX(-50%) scale(.78);
+
+    background:
+      radial-gradient(circle at 30% 22%, rgba(255,255,255,.36), transparent 31%),
+      linear-gradient(145deg, var(--orange-2), var(--orange));
+
+    box-shadow:
+      0 9px 25px rgba(255,122,0,.30),
+      inset 0 1px 0 rgba(255,255,255,.36),
+      inset 0 -1px 0 rgba(140,58,0,.20);
+
+    transition:
+      opacity .24s ease,
+      transform .34s var(--ease);
+
+    z-index:-1;
+  }
+
+  /* Quando a sidebar está aberta, o centro do ícone fica em 32px. */
+  .simio-sidebar-layer .sidebar:hover .nav-item::before,
+.simio-sidebar-layer .sidebar.pin-open .nav-item::before,
+.simio-sidebar-layer .sidebar:hover .menu-toggle::before,
+.simio-sidebar-layer .sidebar.pin-open .menu-toggle::before{
+    left:32px;
+  }
+
+  .simio-sidebar-layer .nav-item:hover::before,
+.simio-sidebar-layer .menu-toggle:hover::before,
+.simio-sidebar-layer .nav-item.active::before{
+    opacity:1;
+    transform:translateX(-50%) scale(1);
+  }
+
+  /* Reflexo dentro do hover, também limitado ao mesmo quadrado. */
+  .simio-sidebar-layer .nav-item::after,
+.simio-sidebar-layer .menu-toggle::after{
+    content:"";
+    position:absolute;
+    top:8px;
+    left:50%;
+    width:48px;
+    height:48px;
+    border-radius:13px;
+    overflow:hidden;
+    pointer-events:none;
+
+    opacity:0;
+    transform:translateX(-50%);
+    background:
+      linear-gradient(
+        115deg,
+        transparent 30%,
+        rgba(255,255,255,.08) 44%,
+        rgba(255,255,255,.36) 50%,
+        transparent 61%
+      );
+
+    background-size:220% 100%;
+    background-position:180% 0;
+
+    transition:
+      opacity .22s ease,
+      background-position .55s var(--ease);
+  }
+
+  .simio-sidebar-layer .sidebar:hover .nav-item::after,
+.simio-sidebar-layer .sidebar.pin-open .nav-item::after,
+.simio-sidebar-layer .sidebar:hover .menu-toggle::after,
+.simio-sidebar-layer .sidebar.pin-open .menu-toggle::after{
+    left:32px;
+  }
+
+  .simio-sidebar-layer .nav-item:hover::after,
+.simio-sidebar-layer .menu-toggle:hover::after{
+    opacity:1;
+    background-position:-60% 0;
+  }
+
+  .simio-sidebar-layer .nav-item:hover,
+.simio-sidebar-layer .menu-toggle:hover{
+    transform:scale(1.018);
+  }
+
+  .simio-sidebar-layer .nav-item:active,
+.simio-sidebar-layer .menu-toggle:active{
+    transform:scale(.975);
+  }
+
+  .simio-sidebar-layer .nav-item.active{
+    filter:drop-shadow(0 8px 14px rgba(255,122,0,.10));
+  }
+
+  .simio-sidebar-layer .icon-wrap{
+    position:relative;
+    width:50px;
+    min-width:50px;
+    height:50px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    color:#fff7ed;
+    margin-left:9px;
+    transform:translate3d(var(--mx,0px),var(--my,0px),0);
+    transition:
+      margin-left .42s var(--ease),
+      transform .22s var(--ease),
+      filter .28s ease;
+    will-change:transform;
+  }
+
+  .simio-sidebar-layer .sidebar:hover .icon-wrap,
+.simio-sidebar-layer .sidebar.pin-open .icon-wrap{
+    margin-left:0;
+  }
+
+  .simio-sidebar-layer .nav-item:hover .icon-wrap,
+.simio-sidebar-layer .menu-toggle:hover .icon-wrap{
+    filter:drop-shadow(0 5px 9px rgba(0,0,0,.18));
+  }
+
+  /* pequeno brilho atrás do ícone */
+  .simio-sidebar-layer .icon-wrap::after{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border-radius:15px;
+    background:rgba(255,255,255,.12);
+    opacity:0;
+    transform:scale(.65);
+    filter:blur(7px);
+    transition:opacity .3s ease, transform .35s var(--ease);
+    z-index:-1;
+  }
+
+  .simio-sidebar-layer .nav-item:hover .icon-wrap::after,
+.simio-sidebar-layer .menu-toggle:hover .icon-wrap::after{
+    opacity:.75;
+    transform:scale(1.18);
+  }
+
+  .simio-sidebar-layer svg{
+    width:31px;
+    height:31px;
+    stroke:currentColor;
+    stroke-width:2.05;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .simio-sidebar-layer .lightning svg{
+    width:28px;
+    height:34px;
+    fill:currentColor;
+    stroke:none;
+  }
+
+
+  .simio-sidebar-layer .ia-badge{
+    position:absolute;
+    left:128px;
+    z-index:3;
+
+    min-width:34px;
+    height:30px;
+    padding:0 9px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+    background:
+      linear-gradient(145deg, #ff9418, #ff7600);
+
+    color:white;
+    font-size:13px;
+    font-weight:550;
+    letter-spacing:.02em;
+
+    box-shadow:
+      0 7px 18px rgba(255,122,0,.26),
+      inset 0 1px 0 rgba(255,255,255,.30);
+
+    opacity:0;
+    transform:translateX(-8px) scale(.82);
+    pointer-events:none;
+
+    transition:
+      opacity .22s ease .08s,
+      transform .34s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .simio-sidebar-layer .sidebar:hover .ia-badge,
+.simio-sidebar-layer .sidebar.pin-open .ia-badge{
+    opacity:1;
+    transform:translateX(0) scale(1);
+  }
+
+  .simio-sidebar-layer .nav-item[data-name="SimIA"]:hover .ia-badge{
+    transform:translateX(0) scale(1.08);
+    box-shadow:
+      0 0 18px rgba(255,122,0,.45),
+      0 8px 22px rgba(255,122,0,.25),
+      inset 0 1px 0 rgba(255,255,255,.34);
+  }
+
+  .simio-sidebar-layer .label{
+    position:absolute;
+    left:71px;
+    opacity:0;
+    transform:translateX(-12px);
+    white-space:nowrap;
+    pointer-events:none;
+    font-weight:450;
+    letter-spacing:.005em;
+    font-size:16px;
+    text-shadow:0 2px 7px rgba(0,0,0,.24);
+    transition:
+      opacity .22s ease .03s,
+      transform .38s var(--ease);
+  }
+
+  .simio-sidebar-layer .sidebar:hover .label,
+.simio-sidebar-layer .sidebar.pin-open .label{
+    opacity:1;
+    transform:translateX(0);
+  }
+
+  /* barra ativa na lateral */
+  .simio-sidebar-layer .active-rail{
+    position:absolute;
+    left:-2px;
+    top:31px;
+    width:6px;
+    height:40px;
+    border-radius:0 8px 8px 0;
+    background:linear-gradient(180deg,#ffad47,#ff7500);
+    box-shadow:
+      0 0 16px rgba(255,122,0,.72),
+      0 0 30px rgba(255,122,0,.22);
+    z-index:9;
+    pointer-events:none;
+    transition:
+      top .45s var(--ease),
+      height .35s var(--ease);
+  }
+
+  .simio-sidebar-layer .divider{
+    height:1px;
+    margin:10px 10px 8px;
+    background:linear-gradient(90deg, rgba(228,215,192,.08), rgba(228,215,192,.28), rgba(124,145,93,.12));
+    box-shadow:0 1px 0 rgba(0,0,0,.28);
+  }
+
+  .simio-sidebar-layer .lower{
+    margin-top:auto;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .simio-sidebar-layer .more-menu{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .55s var(--ease);
+  }
+
+  .simio-sidebar-layer .more-menu-inner{
+    min-height:0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+
+  .simio-sidebar-layer .sidebar.more-open .more-menu{
+    grid-template-rows:1fr;
+  }
+
+  .simio-sidebar-layer .more-menu .nav-item{
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(22px) scale(.95);
+    transition:
+      opacity .25s ease,
+      transform .45s var(--ease);
+  }
+
+  .simio-sidebar-layer .sidebar.more-open .more-menu .nav-item{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0) scale(1);
+  }
+
+  .simio-sidebar-layer .sidebar.more-open .more-menu .nav-item:nth-child(1){transition-delay:.09s}
+  .simio-sidebar-layer .sidebar.more-open .more-menu .nav-item:nth-child(2){transition-delay:.17s}
+  .simio-sidebar-layer .sidebar.more-open .more-menu .nav-item:nth-child(3){transition-delay:.25s}
+
+  .simio-sidebar-layer .menu-toggle{
+    min-height:60px;
+    margin-top:2px;
+  }
+
+  .simio-sidebar-layer .hamburger{
+    position:relative;
+    display:block;
+    width:27px;
+    height:21px;
+  }
+
+  .simio-sidebar-layer .hamburger span{
+    position:absolute;
+    left:0;
+    width:100%;
+    height:3px;
+    border-radius:999px;
+    background:currentColor;
+    transition:
+      top .35s var(--ease),
+      transform .35s var(--ease),
+      opacity .22s ease;
+  }
+
+  .simio-sidebar-layer .hamburger span:nth-child(1){top:0}
+  .simio-sidebar-layer .hamburger span:nth-child(2){top:9px}
+  .simio-sidebar-layer .hamburger span:nth-child(3){top:18px}
+
+  .simio-sidebar-layer .sidebar.more-open .hamburger span:nth-child(1){
+    top:9px;
+    transform:rotate(45deg);
+  }
+
+  .simio-sidebar-layer .sidebar.more-open .hamburger span:nth-child(2){
+    opacity:0;
+    transform:scaleX(.25);
+  }
+
+  .simio-sidebar-layer .sidebar.more-open .hamburger span:nth-child(3){
+    top:9px;
+    transform:rotate(-45deg);
+  }
+
+  /* ripple de clique */
+  .simio-sidebar-layer .ripple{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:999px;
+    background:rgba(255,255,255,.50);
+    pointer-events:none;
+    transform:translate(-50%,-50%) scale(0);
+    animation:ripple .62s ease-out forwards;
+    z-index:3;
+  }
+
+  @keyframes ripple{
+    to{
+      opacity:0;
+      transform:translate(-50%,-50%) scale(18);
+    }
+  }
+
+  /* pulse sutil no item ativo */
+  .simio-sidebar-layer .nav-item.active .icon-wrap{
+    animation:activePulse 2.8s ease-in-out infinite;
+  }
+
+  @keyframes activePulse{
+    0%,100%{filter:drop-shadow(0 0 0 rgba(255,122,0,0))}
+    50%{filter:drop-shadow(0 0 9px rgba(255,178,82,.38))}
+  }
+
+  .simio-sidebar-layer .nav-item .icon-wrap svg{
+    transform-box:fill-box;
+    transform-origin:center;
+    will-change:transform, filter, opacity;
+  }
+
+  /* Início */
+  .simio-sidebar-layer .nav-item.fx-home .icon-wrap svg{
+    animation:fxHome .72s cubic-bezier(.18,.9,.2,1) both;
+  }
+  @keyframes fxHome{
+    0%{transform:translateY(0) scale(1)}
+    32%{transform:translateY(-5px) scale(1.22)}
+    58%{transform:translateY(2px) scale(.96)}
+    78%{transform:translateY(-1px) scale(1.07)}
+    100%{transform:translateY(0) scale(1)}
+  }
+
+  /* Atividades */
+  .simio-sidebar-layer .nav-item.fx-activities .icon-wrap svg{
+    animation:fxActivities .78s cubic-bezier(.2,.9,.2,1) both;
+  }
+  @keyframes fxActivities{
+    0%{transform:rotate(0deg) scale(1)}
+    24%{transform:rotate(-12deg) scale(1.18)}
+    48%{transform:rotate(10deg) scale(1.20)}
+    72%{transform:rotate(-5deg) scale(1.08)}
+    100%{transform:rotate(0deg) scale(1)}
+  }
+
+  /* Ranking */
+  .simio-sidebar-layer .nav-item.fx-trophy .icon-wrap svg{
+    animation:fxTrophy .82s cubic-bezier(.15,.92,.2,1) both;
+  }
+  @keyframes fxTrophy{
+    0%{transform:translateY(0) rotate(0deg) scale(1);filter:none}
+    28%{transform:translateY(-8px) rotate(-6deg) scale(1.25);filter:drop-shadow(0 0 8px rgba(255,190,90,.7))}
+    50%{transform:translateY(0) rotate(5deg) scale(1.05);filter:drop-shadow(0 0 15px rgba(255,122,0,.48))}
+    72%{transform:translateY(-3px) rotate(-2deg) scale(1.12);filter:drop-shadow(0 0 8px rgba(255,170,70,.35))}
+    100%{transform:translateY(0) rotate(0deg) scale(1);filter:none}
+  }
+
+  /* Biblioteca */
+  .simio-sidebar-layer .nav-item.fx-book .icon-wrap svg{
+    animation:fxBook .80s cubic-bezier(.2,.9,.2,1) both;
+  }
+  @keyframes fxBook{
+    0%{transform:scaleX(1) scaleY(1)}
+    30%{transform:scaleX(.76) scaleY(1.13)}
+    55%{transform:scaleX(1.24) scaleY(1.08)}
+    76%{transform:scaleX(.95) scaleY(1.02)}
+    100%{transform:scaleX(1) scaleY(1)}
+  }
+
+  /* SimIA */
+  .simio-sidebar-layer .nav-item.fx-bolt .icon-wrap svg,
+.simio-sidebar-layer .nav-item.fx-simia .icon-wrap svg{
+    animation:fxBolt .68s cubic-bezier(.2,.9,.2,1) both;
+  }
+  @keyframes fxBolt{
+    0%{transform:translate(0,0) scale(1);filter:none}
+    18%{transform:translate(-2px,-4px) scale(1.28);filter:drop-shadow(0 0 12px rgba(255,211,91,.9))}
+    34%{transform:translate(3px,1px) scale(1.12);filter:drop-shadow(0 0 20px rgba(255,122,0,.78))}
+    50%{transform:translate(-2px,-1px) scale(1.22);filter:drop-shadow(0 0 10px rgba(255,190,70,.6))}
+    70%{transform:translate(1px,0) scale(1.07);filter:drop-shadow(0 0 5px rgba(255,122,0,.35))}
+    100%{transform:translate(0,0) scale(1);filter:none}
+  }
+
+
+  /* Feed */
+  .simio-sidebar-layer .nav-item.fx-feed .icon-wrap svg{
+    animation:fxFeed .72s cubic-bezier(.18,.9,.2,1) both;
+  }
+  @keyframes fxFeed{
+    0%{transform:translateX(0) scale(1)}
+    28%{transform:translateX(4px) scale(1.16)}
+    52%{transform:translateX(-2px) scale(1.08)}
+    76%{transform:translateX(1px) scale(1.04)}
+    100%{transform:translateX(0) scale(1)}
+  }
+
+  /* Perfil */
+  .simio-sidebar-layer .nav-item.fx-profile .icon-wrap svg{
+    animation:fxProfile .72s cubic-bezier(.18,.9,.2,1) both;
+  }
+  @keyframes fxProfile{
+    0%{transform:scale(1)}
+    36%{transform:scale(1.28)}
+    58%{transform:scale(.94)}
+    78%{transform:scale(1.10)}
+    100%{transform:scale(1)}
+  }
+
+  /* Ranking — */
+  .simio-sidebar-layer .nav-item.fx-ranking .icon-wrap svg{
+    animation:fxRanking .82s cubic-bezier(.2,.9,.2,1) both;
+  }
+  @keyframes fxRanking{
+    0%{transform:rotate(0deg) scale(1)}
+    23%{transform:rotate(-14deg) scale(1.20)}
+    48%{transform:rotate(12deg) scale(1.22)}
+    70%{transform:rotate(-6deg) scale(1.10)}
+    86%{transform:rotate(3deg) scale(1.04)}
+    100%{transform:rotate(0deg) scale(1)}
+  }
+
+  /* Configurações */
+  .simio-sidebar-layer .nav-item.fx-settings .icon-wrap svg{
+    animation:fxSettings .88s cubic-bezier(.18,.88,.22,1) both;
+  }
+  @keyframes fxSettings{
+    0%{
+      transform:rotate(0deg) scale(1);
+      filter:drop-shadow(0 0 0 rgba(255,122,0,0));
+    }
+    22%{
+      transform:rotate(75deg) scale(1.18);
+      filter:drop-shadow(0 0 7px rgba(255,185,80,.45));
+    }
+    52%{
+      transform:rotate(245deg) scale(1.38);
+      filter:drop-shadow(0 0 18px rgba(255,122,0,.72));
+    }
+    78%{
+      transform:rotate(375deg) scale(1.20);
+      filter:drop-shadow(0 0 9px rgba(255,160,55,.42));
+    }
+    100%{
+      transform:rotate(360deg) scale(1);
+      filter:drop-shadow(0 0 0 rgba(255,122,0,0));
+    }
+  }
+
+  /* Halo de foco no clique */
+  .simio-sidebar-layer .nav-item.fx-home::before,
+.simio-sidebar-layer .nav-item.fx-activities::before,
+.simio-sidebar-layer .nav-item.fx-trophy::before,
+.simio-sidebar-layer .nav-item.fx-book::before,
+.simio-sidebar-layer .nav-item.fx-bolt::before,
+.simio-sidebar-layer .nav-item.fx-feed::before,
+.simio-sidebar-layer .nav-item.fx-profile::before,
+.simio-sidebar-layer .nav-item.fx-ranking::before,
+.simio-sidebar-layer .nav-item.fx-settings::before{
+    animation:fxHalo .88s ease-out both !important;
+  }
+
+  @keyframes fxHalo{
+    0%{
+      box-shadow:
+        0 9px 25px rgba(255,122,0,.30),
+        inset 0 1px 0 rgba(255,255,255,.34);
+    }
+    46%{
+      box-shadow:
+        0 0 28px rgba(255,122,0,.75),
+        0 0 52px rgba(255,122,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.44);
+    }
+    100%{
+      box-shadow:
+        0 9px 25px rgba(255,122,0,.30),
+        inset 0 1px 0 rgba(255,255,255,.34);
+    }
+  }
+
+  .simio-sidebar-layer .nav-item:focus-visible,
+.simio-sidebar-layer .menu-toggle:focus-visible{
+    box-shadow:0 0 0 2px rgba(255,255,255,.88), 0 0 0 5px rgba(173,138,222,.22), 0 0 0 7px rgba(255,122,0,.45);
+  }
+
+  .simio-sidebar-layer .hint{
+    position:absolute;
+    right:28px;
+    bottom:22px;
+    opacity:.32;
+    color:white;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    user-select:none;
+  }
+
+  .simio-sidebar-layer .simio-logo{
+    position:absolute;
+    z-index:12;
+    left:1px;
+    top:-16px;
+  
+    width:220px;
+  
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  
+    user-select:none;
+    pointer-events:auto;
+  
+    transform-origin:center bottom;
+  
+    translate:0 0;
+    scale:1;
+  
+    transition:
+      translate .55s cubic-bezier(.2,.85,.25,1),
+      scale .55s cubic-bezier(.2,.85,.25,1);
+  
+    animation:
+      logoEntrada .85s
+      cubic-bezier(.18,.89,.32,1.18)
+      both;
+  }
+
+  /* 
+   CENTRALIZA A LOGO QUANDO A SIDEBAR ABRE */
+
+.simio-sidebar-layer .scene:has(.sidebar:hover) .simio-logo,
+.simio-sidebar-layer .scene:has(.sidebar.pin-open) .simio-logo{
+  left:89px;
+}
+
+@keyframes logoEntrada {
+    0% {
+      opacity: 0;
+      transform: translateY(35px) scale(.94);
+    }
+  
+    65% {
+      opacity: 1;
+      transform: translateY(-5px) scale(1.02);
+    }
+  
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+
+.simio-sidebar-layer .sidebar{
+    transition:
+      width .52s cubic-bezier(.18,.88,.22,1),
+      transform .58s cubic-bezier(.18,.88,.22,1);
+  }
+  
+  
+  /* 
+     LOGO
+     */
+  
+  .simio-sidebar-layer .simio-logo{
+    transform-origin:center bottom;
+  
+    transition:
+      left .52s cubic-bezier(.18,.88,.22,1),
+      translate .58s cubic-bezier(.18,.88,.22,1),
+      scale .58s cubic-bezier(.18,.88,.22,1),
+      filter .35s ease;
+  }
+  
+  
+  /* sidebar abriu para a direita */
+  .simio-sidebar-layer .scene:has(.sidebar:hover) .simio-logo,
+.simio-sidebar-layer .scene:has(.sidebar.pin-open) .simio-logo{
+    left:89px;
+  }
+
+
+.simio-sidebar-layer .simio-logo{
+  --logo-open-y: -58px;
+  --logo-open-scale: .60;
+}
+
+.simio-sidebar-layer .scene:has(.sidebar.more-open) .simio-logo{
+  translate: 0 var(--logo-open-y);
+  scale: var(--logo-open-scale);
+}
+
+@media (max-height: 700px) {
+
+  .simio-sidebar-layer .simio-logo{
+    --logo-open-y: -88px;
+    --logo-open-scale: .48;
+  }
+
+}
+
+@media (min-height: 701px) and (max-height: 800px) {
+
+  .simio-sidebar-layer .simio-logo{
+    --logo-open-y: -76px;
+    --logo-open-scale: .52;
+  }
+
+}
+
+@media (min-height: 801px) and (max-height: 900px) {
+
+  .simio-sidebar-layer .simio-logo{
+    --logo-open-y: -64px;
+    --logo-open-scale: .57;
+  }
+
+}
+
+@media (min-height: 901px) and (max-height: 1000px) {
+
+  .simio-sidebar-layer .simio-logo{
+    --logo-open-y: -52px;
+    --logo-open-scale: .61;
+  }
+
+}
+
+@media (min-height: 1001px) and (max-height: 1150px) {
+
+  .simio-sidebar-layer .simio-logo{
+    --logo-open-y: -40px;
+    --logo-open-scale: .65;
+  }
+
+}
+
+@media (min-height: 1151px) {
+
+  .simio-sidebar-layer .simio-logo{
+    --logo-open-y: -28px;
+    --logo-open-scale: .69;
+  }
+
+}
+  
+  
+  .simio-sidebar-layer .simio-logo .mascote{
+    transition:
+      transform .55s cubic-bezier(.18,.88,.22,1),
+      filter .35s ease;
+  }
+  
+  
+  .simio-sidebar-layer .scene:has(.sidebar.more-open) .simio-logo .mascote{
+    transform:
+      translateY(-5px)
+      scale(1.06);
+  }
+  
+  .simio-sidebar-layer .logo-box{
+    transition:
+      transform .55s cubic-bezier(.18,.88,.22,1),
+      box-shadow .35s ease;
+  }
+  
+  
+  .simio-sidebar-layer .scene:has(.sidebar.more-open) .logo-box{
+    transform:translateY(2px);
+  
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.28),
+      inset 0 -1px 0 rgba(0,0,0,.48),
+      0 12px 26px rgba(0,0,0,.28);
+  }
+  
+  .simio-sidebar-layer .scene:has(.sidebar.more-open) .lab{
+    transform:
+      rotate(4deg)
+      scale(.96);
+  }
+  
+  .simio-sidebar-layer .label{
+    transition:
+      opacity .20s ease,
+      transform .38s cubic-bezier(.18,.88,.22,1);
+  }
+  
+  
+  .simio-sidebar-layer .main-menu .nav-item:nth-child(1) .label{
+    transition-delay:.03s;
+  }
+  
+  .simio-sidebar-layer .main-menu .nav-item:nth-child(2) .label{
+    transition-delay:.06s;
+  }
+  
+  .simio-sidebar-layer .main-menu .nav-item:nth-child(3) .label{
+    transition-delay:.09s;
+  }
+  
+  .simio-sidebar-layer .main-menu .nav-item:nth-child(4) .label{
+    transition-delay:.12s;
+  }
+  
+  .simio-sidebar-layer .main-menu .nav-item:nth-child(5) .label{
+    transition-delay:.15s;
+  }
+
+  .simio-sidebar-layer .main-menu .nav-item:nth-child(6) .label{
+    transition-delay:.18s;
+  }
+  
+  
+  /* itens inferiores */
+  .simio-sidebar-layer .more-menu .nav-item:nth-child(1) .label{
+    transition-delay:.08s;
+  }
+  
+  .simio-sidebar-layer .more-menu .nav-item:nth-child(2) .label{
+    transition-delay:.13s;
+  }
+  
+  
+  
+  /* 
+     IA APARECE UM POUCO DEPOIS DO TEXTO
+*/
+  
+  .simio-sidebar-layer .ia-badge{
+    transition:
+      opacity .22s ease .29s,
+      transform .38s cubic-bezier(.18,.88,.22,1),
+      box-shadow .25s ease;
+  }
+  
+  
+  .simio-sidebar-layer .sidebar.more-open .more-menu .nav-item:nth-child(1){
+    transition-delay:.08s;
+  }
+  
+  .simio-sidebar-layer .sidebar.more-open .more-menu .nav-item:nth-child(2){
+    transition-delay:.14s;
+  }
+  
+  
+  .simio-sidebar-layer .hamburger span{
+    transition:
+      top .38s cubic-bezier(.18,.88,.22,1),
+      transform .38s cubic-bezier(.18,.88,.22,1),
+      opacity .20s ease;
+  }
+
+  .simio-sidebar-layer .simio-logo .mascote{
+    width:116px;
+    height:auto;
+    display:block;
+
+    position:relative;
+    z-index:2;
+
+    margin-bottom:-66px;
+
+    filter:
+      drop-shadow(0 8px 9px rgba(0,0,0,.27));
+
+    transition:
+      transform .38s cubic-bezier(.2,.8,.2,1),
+      filter .32s ease;
+  }
+
+  .simio-sidebar-layer .logo-box{
+    position:relative;
+    z-index:1;
+
+    width:86%;
+    height:68px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:15px 13px 8px 16px;
+
+    border-radius:22px;
+    overflow:hidden;
+
+    background:
+      linear-gradient(
+        125deg,
+        rgba(255,255,255,.14),
+        transparent 30%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(72,46,32,.97),
+        rgba(40,28,21,.98)
+      );
+
+    border:1px solid rgba(255,255,255,.38);
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.26),
+      inset 0 -1px 0 rgba(0,0,0,.48),
+      0 13px 28px rgba(0,0,0,.34);
+
+    transition:
+      transform .38s cubic-bezier(.2,.8,.2,1),
+      box-shadow .32s ease;
+  }
+
+  .simio-sidebar-layer .logo-box::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+      linear-gradient(
+        115deg,
+        transparent 12%,
+        rgba(255,255,255,.13) 30%,
+        rgba(255,255,255,.03) 43%,
+        transparent 56%
+      );
+  }
+
+  .simio-sidebar-layer .logo-box::after{
+    content:"";
+    position:absolute;
+    top:-30%;
+    left:-55px;
+    width:34px;
+    height:160%;
+
+    pointer-events:none;
+
+    transform:rotate(16deg);
+
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.28),
+        transparent
+      );
+
+    opacity:0;
+    transition:
+      left .62s cubic-bezier(.2,.8,.2,1),
+      opacity .24s ease;
+  }
+
+  .simio-sidebar-layer .simio{
+    position:relative;
+    z-index:2;
+
+    color:#ff9100;
+
+    font-family:"Kalam", "Segoe Print", cursive;
+    font-size:40px;
+    font-weight:700;
+    line-height:1;
+
+    letter-spacing:-3px;
+
+    transform:rotate(-2deg);
+
+    text-shadow:
+      0 3px 7px rgba(0,0,0,.30);
+  }
+
+  .simio-sidebar-layer .lab{
+    position:relative;
+    z-index:2;
+
+    width:60px;
+    height:40px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#f0545b;
+    border:1px solid rgba(255,255,255,.52);
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.48),
+      inset 0 -3px 5px rgba(120,40,0,.28),
+      0 6px 11px rgba(0,0,0,.28),
+      0 0 15px rgba(255,132,0,.12);
+
+    transform:rotate(-3deg);
+
+    transition:
+      transform .38s cubic-bezier(.2,.8,.2,1),
+      box-shadow .32s ease;
+  }
+
+  .simio-sidebar-layer .lab span{
+    color:white;
+
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:1.2px;
+
+    text-shadow:
+      0 2px 4px rgba(0,0,0,.24);
+  }
+
+  /* microinteração da marca */
+  .simio-sidebar-layer .simio-logo:hover .mascote{
+    transform:
+      translateY(-5px)
+      scale(1.11);
+
+    filter:
+      drop-shadow(0 11px 12px rgba(0,0,0,.31))
+      drop-shadow(0 0 13px rgba(255,145,0,.10));
+  }
+
+  .simio-sidebar-layer .simio-logo:hover .logo-box{
+    transform:translateY(1px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.30),
+      inset 0 -1px 0 rgba(0,0,0,.48),
+      0 16px 32px rgba(0,0,0,.38);
+  }
+
+  .simio-sidebar-layer .simio-logo:hover .logo-box::after{
+    left:calc(100% + 24px);
+    opacity:.75;
+  }
+
+  .simio-sidebar-layer .simio-logo:hover .lab{
+    transform:
+      rotate(8deg)
+      translateY(-2px)
+      scale(1.04);
+  }
+
+  @media (max-width:700px){
+    .simio-sidebar-layer .simio-logo{
+      left:-4px;
+      top:12px;
+      width:185px;
+    }
+
+    .simio-sidebar-layer .simio-logo .mascote{
+      width:98px;
+      margin-bottom:-56px;
+    }
+
+    .simio-sidebar-layer .logo-box{
+      height:59px;
+      border-radius:19px;
+      gap:8px;
+      padding:13px 10px 7px 13px;
+    }
+
+    .simio-sidebar-layer .simio{
+      font-size:34px;
+      letter-spacing:-2.5px;
+    }
+
+    .simio-sidebar-layer .lab{
+      width:52px;
+      height:35px;
+      border-radius:10px;
+    }
+
+    .simio-sidebar-layer .lab span{
+      font-size:14px;
+    }
+
+    .simio-sidebar-layer .sidebar{
+      top:calc(50% + 40px);
+    }
+  }
+
+  @media (max-height:720px) and (min-width:701px){
+    .simio-sidebar-layer .simio-logo{
+      top:8px;
+      transform:scale(.88);
+    }
+
+    .simio-sidebar-layer .sidebar{
+      top:calc(50% + 38px);
+    }
+  }
+
+  @media (max-width:700px){
+    .simio-sidebar-layer .sidebar{
+      left:16px;
+      --collapsed:88px;
+      --expanded:min(264px, calc(100vw - 32px));
+    }
+
+    .simio-sidebar-layer .shell{
+      height:490px;
+      border-radius:46px;
+    }
+
+    .simio-sidebar-layer .sidebar.more-open .shell{
+      height:min(650px, calc(100vh - 40px));
+    }
+
+    .simio-sidebar-layer .icon-wrap{
+      width:46px;
+      min-width:46px;
+      height:46px;
+    }
+
+    .simio-sidebar-layer .nav-item,
+.simio-sidebar-layer .menu-toggle{min-height:59px}
+
+    .simio-sidebar-layer .label{font-size:15px}
+
+    .simio-sidebar-layer .ia-badge{
+      left:116px;
+      height:28px;
+      min-width:32px;
+      padding:0 8px;
+      font-size:12px;
+    }
+
+    .simio-sidebar-layer .ambient{
+      left:10px;
+      width:210px;
+      height:570px;
+    }
+
+    .simio-sidebar-layer .hint{display:none}
+  }
+
+  @media (hover:none), (pointer:coarse){
+    .simio-sidebar-layer .sidebar:hover{
+      width:var(--collapsed);
+    }
+
+    .simio-sidebar-layer .sidebar.pin-open{
+      width:var(--expanded);
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .simio-sidebar-layer *,
+.simio-sidebar-layer *::before,
+.simio-sidebar-layer *::after{
+      animation-duration:.01ms!important;
+      animation-iteration-count:1!important;
+      transition-duration:.01ms!important;
+    }
+  }
+
+  

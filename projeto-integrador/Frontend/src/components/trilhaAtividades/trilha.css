@@ -58,3 +58,84 @@
     0%, 100% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 8px rgba(242,84,91,.25); }
     50% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 14px rgba(242,84,91,.1); }
 }
+
+/* Variáveis Iniciais e Estrutura - PALETA FLORESTA VIVA */
+.auth-page {
+  /* Tons de Vegetação */
+  --forest-light: #487e5c;
+  --forest: #225a3d;      
+  --forest-dark: #0f3521;  
+ 
+  /* Tons de Madeira/Terra */
+  --brown: #543b27;        
+  --brown-dark: #322114;  
+ 
+  /* Frutas Tropicais / Luz */
+  --orange: #f28b18;      
+  --orange-dark: #cc6d00;  
+ 
+  /* Fundo do ambiente */
+  --cream: #f7f5ee;        
+  --cream-dark: #e8e2d2;  
+ 
+  --transition-smooth: 0.85s cubic-bezier(0.68, -0.15, 0.265, 1.15);
+  --transition-fast: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+ 
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 30px;
+  color: var(--brown-dark);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(72, 126, 92, 0.25) 0 8%, transparent 8.3%),
+    radial-gradient(circle at 87% 80%, rgba(242, 139, 24, 0.15) 0 11%, transparent 11.3%),
+    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, #ded5c2);
+  font-family: 'Kalam', cursive;
+  animation: pageEnter 0.8s ease-out forwards;
+}
+ 
+.auth-page *, .auth-page *::before, .auth-page *::after { box-sizing: border-box; }
+
+ 
+/* Fundo Animado (Profundidade e Ambiente) */
+.ambient-elements {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+ 
+.particle {
+  position: absolute;
+  background: var(--forest);
+  border-radius: 50%;
+  opacity: 0.15;
+  filter: blur(1px);
+  animation: particleFloat 12s infinite ease-in-out alternate;
+}
+.p-1 { width: 12px; height: 12px; top: 20%; left: 15%; animation-duration: 15s; }
+.p-2 { width: 8px; height: 8px; top: 70%; left: 10%; animation-duration: 11s; animation-delay: -2s; }
+.p-3 { width: 18px; height: 18px; top: 15%; right: 12%; animation-duration: 18s; animation-delay: -5s; background: var(--orange); }
+.p-4 { width: 10px; height: 10px; top: 80%; right: 20%; animation-duration: 14s; }
+ 
+.forest-shape { position: absolute; pointer-events: none; opacity: .12; background: var(--forest); border-radius: 100% 0 100% 0; }
+.forest-shape-one { width: 340px; height: 180px; top: -55px; left: -90px; transform: rotate(32deg); animation: shapeSway 10s ease-in-out infinite alternate; }
+.forest-shape-two { width: 380px; height: 200px; right: -130px; bottom: -75px; transform: rotate(215deg); animation: shapeSway 12s ease-in-out infinite alternate-reverse; }
+ 
+/* Container Principal */
+.auth-container {
+  position: relative;
+  z-index: 10;
+  width: min(980px, 100%);
+  height: 620px;
+  overflow: hidden;
+  border: 1px solid rgba(84, 59, 39, .08);
+  border-radius: 34px;
+  background: #fffdfa;
+  box-shadow: 0 28px 70px rgba(50, 33, 20, .15), 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+ 
+ 

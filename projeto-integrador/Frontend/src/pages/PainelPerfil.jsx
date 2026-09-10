@@ -1,15 +1,13 @@
-import perfil from "../components/perfil/perfil"
 import MenuEsquerda from "../components/menuEsquerda/menuEsquerda"
-import Header from "../components/header/header"
+import Perfil from "../components/perfil/Perfil"
 
-function PainelBiblioteca() {
+function PainelPerfil() {
     return(
 
         <>
 
-            <Header />
             <MenuEsquerda />
-            <perfil />
+            <Perfil />
 
         </>
     )

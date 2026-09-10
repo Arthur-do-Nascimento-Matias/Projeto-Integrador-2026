@@ -5,7 +5,7 @@ import Painel from './pages/painel'
 import Login from './pages/Login'
 import ChatBot from './pages/painelChatBot';
 import PainelBiblioteca from './pages/PainelBiblioteca';
-import PainelPerfil from './pages/painel';
+import PainelPerfil from './pages/PainelPerfil';
 
 function App() {
 
@@ -18,7 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Painel />} />
           <Route path='/biblioteca' element={<PainelBiblioteca />} />
-         <Route path="/perfil" element={<PainelPerfil />} />
+          <Route path="/perfil" element={<PainelPerfil />} />
 
         </Routes>
       </BrowserRouter>
