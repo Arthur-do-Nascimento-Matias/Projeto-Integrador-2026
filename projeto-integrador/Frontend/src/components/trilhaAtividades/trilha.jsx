@@ -72,26 +72,8 @@ useEffect(() => {
     return(
         <>
 
-
- 
-  <main className="auth-page">
-      {/* Elementos ambientais para dar vida à floresta */}
-      <div className="ambient-elements" aria-hidden="true">
-        <div className="particle p-1" />
-        <div className="particle p-2" />
-        <div className="particle p-3" />
-        <div className="particle p-4" />
-      </div>
-        
-      
-
-      <div className="forest-shape forest-shape-one" />
-      <div className="forest-shape forest-shape-two" />
- 
- 
-
           <div className="trilha ativo" id="trilha" ref={refTrilha}></div>
-          </main>
+
         </>
     )
 
