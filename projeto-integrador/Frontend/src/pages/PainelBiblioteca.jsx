@@ -1,5 +1,5 @@
 import Biblioteca from "../components/Biblioteca/Biblioteca"
-import MenuEsquerda from "../components/menuEsquerda/menuEsquerda"
+import MenuEsquerda from "../components/MenuEsquerda/MenuEsquerda"
 
 function PainelBiblioteca() {
     return(

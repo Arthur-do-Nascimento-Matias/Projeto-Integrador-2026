@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import '../atividades/atividades.css'
+import './Atividades.css'
 
 let embaralhado
 let respostaCerta

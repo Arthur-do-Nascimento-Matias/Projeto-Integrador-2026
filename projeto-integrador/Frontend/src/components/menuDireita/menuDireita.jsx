@@ -1,4 +1,4 @@
-import './menuDireita.css'
+import './MenuDireita.css'
 import simio from '../../assets/simio.png'
 
 function MenuDireita() {

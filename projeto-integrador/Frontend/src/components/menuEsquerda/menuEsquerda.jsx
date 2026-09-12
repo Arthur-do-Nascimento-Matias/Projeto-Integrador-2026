@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import './menuEsquerda.css'
+import './MenuEsquerda.css'
 import Moki from '../../assets/MOKI.png'
 
 const itensPrincipais = [

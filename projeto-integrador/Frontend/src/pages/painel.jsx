@@ -1,8 +1,8 @@
 import Trilha from "../components/trilhaAtividades/trilha";
-import MenuEsquerda from "../components/menuEsquerda/menuEsquerda";
-import MenuDireita from "../components/menuDireita/menuDireita";
-import Atividades from "../components/atividades/atividades";
-import ChatBot from "../components/chatBot/chatBot"
+import MenuEsquerda from "../components/MenuEsquerda/MenuEsquerda";
+import MenuDireita from "../components/MenuDireita/MenuDireita";
+import Atividades from "../components/Atividades/Atividades";
+import Materias from "../components/SelecionarMateria/Materias";
 import { useRef, useState } from 'react'
 
 
@@ -15,6 +15,9 @@ function Painel() {
 
         return(
         <>
+
+            <Materias />
+
             <MenuEsquerda />
 
             <Trilha 

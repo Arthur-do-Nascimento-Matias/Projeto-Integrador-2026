@@ -16,10 +16,14 @@ const callback = (req, res) => {
     res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
     let rota = url.parse(req.url, true)
     let param = url.parse(req.url, true).query
+
     if(rota.pathname == '/atividades') {
         if(param.id == 'aleatorio'){
-            const numAleatorio = Math.floor(Math.random() * array.length)
+            const numAleatorio = Math.floor(Math.random())
             console.log(numAleatorio)
+
+            //tem que adicionar conexão com banco aqui
+
             res.end(JSON.stringify(
                 {'id': numAleatorio, 'pergunta': array[numAleatorio].pergunta, 'alternativa1': array[numAleatorio].alternativas[0], 'alternativa2': array[numAleatorio].alternativas[1], 'alternativa3': array[numAleatorio].alternativas[2], 'certa': array[numAleatorio].respostaCertas}
             ))

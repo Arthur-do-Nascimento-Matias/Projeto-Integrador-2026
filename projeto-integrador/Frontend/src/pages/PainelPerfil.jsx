@@ -1,5 +1,5 @@
-import MenuEsquerda from "../components/menuEsquerda/menuEsquerda"
-import Perfil from "../components/perfil/Perfil"
+import MenuEsquerda from "../components/MenuEsquerda/MenuEsquerda"
+import Perfil from "../components/Perfil/Perfil"
 
 function PainelPerfil() {
     return(

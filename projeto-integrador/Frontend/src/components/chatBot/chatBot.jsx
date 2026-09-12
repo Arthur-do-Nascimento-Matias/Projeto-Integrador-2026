@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 import DOMpurify from 'dompurify'
-import '../chatBot/chatBot.css'
+import './ChatBot.css'
 
 function ChatBot() {
 

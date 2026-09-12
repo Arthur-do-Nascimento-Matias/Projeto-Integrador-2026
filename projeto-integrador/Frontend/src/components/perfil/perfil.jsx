@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import MenuEsquerda from '../menuEsquerda/menuEsquerda'
-import './perfil.css'
+import MenuEsquerda from '../MenuEsquerda/MenuEsquerda'
+import './Perfil.css'
 
 const currentUser = {
   name: 'Arthur Matias',
@@ -135,7 +135,7 @@ function Perfil() {
 
   return (
     <>
-      <Header />
+
       <MenuEsquerda />
 
       <main className="profile-page">
