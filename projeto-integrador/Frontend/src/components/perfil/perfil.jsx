@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import MenuEsquerda from '../MenuEsquerda/MenuEsquerda'
 import './Perfil.css'
 
 const currentUser = {
@@ -135,8 +134,6 @@ function Perfil() {
 
   return (
     <>
-
-      <MenuEsquerda />
 
       <main className="profile-page">
         <div className="profile-ambient" aria-hidden="true">

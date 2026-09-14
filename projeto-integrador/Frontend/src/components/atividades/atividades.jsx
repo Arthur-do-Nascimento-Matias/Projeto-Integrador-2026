@@ -32,7 +32,7 @@ function criarAtividade(id) {
         .then(data => {
             enunciado.innerHTML = data.pergunta
             respostaCerta = data.certa
-            embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.certa, data.alternativa3)
+            embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.alternativa3, data.alternativa4)
                 alternativa1.innerHTML = embaralhado[0]
                 alternativa2.innerHTML = embaralhado[1]
                 alternativa3.innerHTML = embaralhado[2]

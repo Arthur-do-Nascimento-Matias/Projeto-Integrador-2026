@@ -2,6 +2,7 @@ const http = require('http')
 const url = require('url')
 const Tarefa = require('./Atividades')
 const Atividades = require('./Atividades')
+const Conexao = require('./Conexao')
 
 const array = [
     {'nome': 'introducao', 'pergunta': 'O antônimo de agitado é...','alternativas':  ['afobado', 'atrasado', 'elefante'], 'respostaCertas':  'tranquilo'},
@@ -11,27 +12,26 @@ const array = [
     {'nome': 'pg4', 'pergunta': 'Qual das palavras abaixo apresenta erro de grafia?', 'alternativas': ['bruxa', 'xingar', 'encher'], 'respostaCertas': 'mecher'}
 ]
 
+
+
+
 const callback = (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
     let rota = url.parse(req.url, true)
     let param = url.parse(req.url, true).query
+    console.log(param)
 
     if(rota.pathname == '/atividades') {
-        if(param.id == 'aleatorio'){
-            const numAleatorio = Math.floor(Math.random())
-            console.log(numAleatorio)
-
-            //tem que adicionar conexão com banco aqui
-
-            res.end(JSON.stringify(
-                {'id': numAleatorio, 'pergunta': array[numAleatorio].pergunta, 'alternativa1': array[numAleatorio].alternativas[0], 'alternativa2': array[numAleatorio].alternativas[1], 'alternativa3': array[numAleatorio].alternativas[2], 'certa': array[numAleatorio].respostaCertas}
-            ))
-        } else {
-        res.end(JSON.stringify(
-            {'id': param.id, 'pergunta': array[param.id-1].pergunta, 'alternativa1': array[param.id-1].alternativas[0], 'alternativa2': array[param.id-1].alternativas[1], 'alternativa3': array[param.id-1].alternativas[2], 'certa': array[param.id-1].respostaCertas})
+       
+        Conexao.getAlunosByAno()
+        .then(con => {
+            console.log("consulta" + con)
+            console.log(con.alternativas)
+            res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0].texto, 'alternativa2': con.alternativas[1].texto, 'alternativa3': con.alternativas[2].texto, 'alternativa4': con.alternativas[3].texto}))
+        }
         )
-    }
+
     }
     if(rota.pathname == '/nome') {
         res.end(JSON.stringify(
