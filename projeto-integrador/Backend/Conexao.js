@@ -15,14 +15,16 @@ static connect() {
     return connection
 }
 
-static getAlunosByAno() {
+static getAtividades(param) {
     return new Promise((resolve, reject) => {
+
+        console.log(param)
 
         const connection = Conexao.connect()
 
-        const sql = 'SELECT * FROM `perguntas` WHERE id_materia=1'
+        const sql = 'SELECT * FROM `perguntas` WHERE id_pergunta=?'
 
-        connection.query(sql, (error, perguntas) => {
+        connection.query(sql, param.id, (error, perguntas) => {
 
             if (error) {
                 reject(error)
@@ -30,9 +32,9 @@ static getAlunosByAno() {
             }
 
             const sqlAlternativas =
-                'SELECT * FROM `alternativas` WHERE id_pergunta=1'
+                'SELECT * FROM `alternativas` WHERE id_pergunta=?'
 
-            connection.query(sqlAlternativas, (error, alternativas) => {
+            connection.query(sqlAlternativas, param.id, (error, alternativas) => {
 
                 connection.end()
 

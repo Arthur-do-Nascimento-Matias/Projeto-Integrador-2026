@@ -3,7 +3,8 @@ import './Atividades.css'
 
 let embaralhado
 let respostaCerta
-let indiceAtv = 0
+let indiceAtv = 1
+let cliques = 0
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
       let arr = [alternativa1, alternativa2, certa, alternativa4]
@@ -30,18 +31,16 @@ function criarAtividade(id) {
         fetch(`http://localhost:3000/atividades?id=${id}`)
         .then(resp => resp.json())
         .then(data => {
-            enunciado.innerHTML = data.pergunta
-            respostaCerta = data.certa
+            refEnunciado.current.innerHTML = data.pergunta
             embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.alternativa3, data.alternativa4)
-                alternativa1.innerHTML = embaralhado[0]
-                alternativa2.innerHTML = embaralhado[1]
-                alternativa3.innerHTML = embaralhado[2]
-                alternativa4.innerHTML = embaralhado[3]
+                refAlternativa1.current.innerHTML = embaralhado[0].texto
+                refAlternativa2.current.innerHTML = embaralhado[1].texto
+                refAlternativa3.current.innerHTML = embaralhado[2].texto
+                refAlternativa4.current.innerHTML = embaralhado[3].texto
         })
     }
 
 function sairAtividade() {
-    indiceAtv = 0
     refAtividade.current.style.transform = 'translateX(100%)'
     trilha.style.opacity = '1'
 }
@@ -56,13 +55,17 @@ function fecharParabens() {
 }
 
 function verificar(id, resp){
-if (embaralhado[id] == respostaCerta) {
+    console.log(embaralhado[id].verdadeira)
+    console.log(embaralhado[id].verdadeira == 1)
+    if (embaralhado[id].verdadeira == 1) {
 
-    if (indiceAtv < 2) {
+    if (cliques < 2) {
+        cliques += 1
         indiceAtv += 1
-        criarAtividade('aleatorio')
+        console.log('indice' + indiceAtv)
+        criarAtividade(indiceAtv)
     } else {
-        indiceAtv = 0
+        cliques = 0
         console.log('concluido')
         refParabens.current.style.display = 'flex'
         setAtvLiberada(prev => prev + 1)

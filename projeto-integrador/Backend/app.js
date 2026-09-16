@@ -24,11 +24,11 @@ const callback = (req, res) => {
 
     if(rota.pathname == '/atividades') {
        
-        Conexao.getAlunosByAno()
+        Conexao.getAtividades(param)
         .then(con => {
             console.log("consulta" + con)
             console.log(con.alternativas)
-            res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0].texto, 'alternativa2': con.alternativas[1].texto, 'alternativa3': con.alternativas[2].texto, 'alternativa4': con.alternativas[3].texto}))
+            res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0], 'alternativa2': con.alternativas[1], 'alternativa3': con.alternativas[2], 'alternativa4': con.alternativas[3]}))
         }
         )
 
