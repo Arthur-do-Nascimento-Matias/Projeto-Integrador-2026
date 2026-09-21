@@ -139,7 +139,8 @@ function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
         .then(data => data.json())
         .then(resp => {
         console.log(resp)
-        for(let i=0; i < resp.length; i++){
+        console.log('tamanho'+resp.nome.length)
+        for(let i=0; i < ((resp.nome.length)/3).toFixed(); i++){
         const botao = document.createElement('button')
         botao.className = 'botaoAtividade'
         botao.id = i+1
@@ -185,7 +186,7 @@ function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
 
 useEffect(() => {
 
-    criarTrilha(3)
+    criarTrilha(2)
 
 }, [atvLiberada])
 

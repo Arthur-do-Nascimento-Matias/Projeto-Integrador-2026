@@ -34,11 +34,9 @@ const callback = (req, res) => {
         console.log('param:', param.id)
         Conexao.criarTrilha(param)
         .then(con => {
-            res.end(JSON.stringify({'nome': (con.indices/3).toFixed}))
+            console.log(con.indices)
+            res.end(JSON.stringify({'nome': con.indices}))
         })
-        res.end(JSON.stringify(
-            array.map(item => ({'nome': item.nome}))
-        ))
     }
     if(rota.pathname == '/adicionar') {
         let novaAtividade = new Atividades(param.nome, param.enunciado, param.alternativa1, param.alternativa2, param.alternativa3, param.resposta)
