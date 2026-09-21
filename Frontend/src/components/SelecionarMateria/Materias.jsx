@@ -1,51 +1,56 @@
 import { useState } from "react";
 import "./Materias.css";
+import brIcon from "../../assets/materias/brasil.svg";
+import enIcon from "../../assets/materias/ingles.svg";
+import cienciaIcon from "../../assets/materias/ciencia.svg";
+import geoIcon from "../../assets/materias/geografia.svg";
+import histIcon from "../../assets/materias/historia.svg";
+import matIcon from "../../assets/materias/matematica.svg";
 
 const materias = [
   {
     id: "portugues",
     nome: "Português",
-    icone: "Aa",
     descricao: "Língua Portuguesa",
-    cor: "#ff7a0b",
+    cor: "#ff8214",
+    icon: brIcon,
   },
   {
     id: "matematica",
     nome: "Matemática",
-    icone: "÷",
     descricao: "Números e lógica",
-    cor: "#9b724d",
+    cor: "#75543c",
+    icon: matIcon,
   },
   {
     id: "historia",
     nome: "História",
-    icone: "H",
     descricao: "História e sociedade",
-    cor: "#a85f43",
+    cor: "#684936",
+    icon: histIcon,
   },
   {
     id: "ciencias",
     nome: "Ciências",
-    icone: "⚗",
     descricao: "Natureza e ciência",
-    cor: "#66784d",
+    cor: "#52663c",
+    icon: cienciaIcon,
   },
   {
     id: "geografia",
     nome: "Geografia",
-    icone: "◎",
     descricao: "Espaço e território",
-    cor: "#868252",
+    cor: "#64724a",
+    icon: geoIcon,
   },
   {
     id: "ingles",
     nome: "Inglês",
-    icone: "EN",
     descricao: "Língua Inglesa",
-    cor: "#607250",
+    cor: "#465936",
+    icon: enIcon,
   },
 ];
-
 function pontoPolar(cx, cy, raio, angulo) {
   const radianos = ((angulo - 90) * Math.PI) / 180;
 
@@ -138,11 +143,17 @@ function Materias({ onChange }) {
         className={`materias-botao ${aberto ? "aberto" : ""}`}
         onClick={() => setAberto(!aberto)}
       >
-        <div className="materias-botao-icone">
-          {materiaAtiva.icone}
-        </div>
+      <div className="materias-botao-icone">
+         <img
+           src={materiaAtiva.icon}
+           alt={materiaAtiva.nome}
+           className="materias-botao-img"
+         />
+      </div>
 
-        <span>{materiaAtiva.nome}</span>
+        <span className="materias-botao-nome">
+            {materiaAtiva.nome}
+        </span>
 
         <span className="materias-seta">
           ▼     
@@ -209,13 +220,22 @@ function Materias({ onChange }) {
                     fill={materia.cor}
                   />
 
+                  <image
+                    href={materia.icon}
+                    x={posicaoTexto.x - 19}
+                    y={posicaoTexto.y - 32}
+                    width="38"
+                    height="38"
+                    className="materia-icone-img-svg"
+                 />
+
                   <text
                     x={posicaoTexto.x}
-                    y={posicaoTexto.y - 8}
-                    className="materia-icone-svg"
-                  >
-                    {materia.icone}
-                  </text>
+                    y={posicaoTexto.y + 17}
+                    className="materia-nome-svg"
+               >  
+                 {materia.nome}
+                 </text>
 
                   <text
                     x={posicaoTexto.x}
@@ -231,12 +251,13 @@ function Materias({ onChange }) {
 
           {/* CENTRO DA RODA */}
           <div className="materias-centro">
-            <div
-              className="materias-centro-icone"
-              key={materiaExibida.id}
-            >
-              {materiaExibida.icone}
-            </div>
+            <div className="materias-centro-icone" key={materiaExibida.id}>
+             <img
+               src={materiaExibida.icon}
+               alt={materiaExibida.nome}
+              className="materias-centro-img"
+           />
+           </div>
 
             <strong>
               {materiaExibida.nome}

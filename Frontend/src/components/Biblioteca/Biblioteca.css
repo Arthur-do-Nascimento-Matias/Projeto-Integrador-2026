@@ -1,6 +1,17 @@
+@import url(
+    "https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap"
+);
+
+
+/* =========================================================
+   CONTAINER PRINCIPAL
+========================================================= */
+
 .container {
-    z-index: 1;
+
     position: absolute;
+
+    z-index: 1;
 
     width: 75%;
     height: 700px;
@@ -10,84 +21,1241 @@
 
     scale: 1.12;
 
-    border-radius: 46px;
-    border: 3px solid #ff8000;
-
-    background: linear-gradient(
-        180deg,
-        #806e60 0%,
-        #766557 38%,
-        #62604a 68%,
-        #3e5529 100%
-    );
-
-    box-shadow:
-        0 28px 60px rgba(45, 33, 24, 0.38);
-
-    overflow: hidden;
-}
-
-/* Escurecimento suave de baixo para cima */
-.container::before {
-    content: "";
-
-    position: absolute;
-    inset: 0;
-
-    border-radius: inherit;
-
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.38) 0%,
-        rgba(0, 0, 0, 0.18) 28%,
-        transparent 62%
-    );
-
-    pointer-events: none;
-    z-index: 0;
-}
-
-
-/* Área onde os livros ficam */
-.capas {
-    position: relative;
-    z-index: 1;
-
-    width: 100%;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
 
     box-sizing: border-box;
 
-    padding: 70px 80px;
+    border-radius: 46px;
+
+    border:
+        3px solid
+        #8A7662;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #806e60 0%,
+            #766557 38%,
+            #62604a 68%,
+            #3e5529 100%
+        );
+
+    box-shadow:
+
+        0 28px 60px
+        rgba(45, 33, 24, 0.38);
+
+    overflow: hidden;
+
+    font-family:
+        "Rubik",
+        sans-serif;
+
+}
+
+
+/* =========================================================
+   ESCURECIMENTO INFERIOR
+========================================================= */
+
+.container::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 0;
+
+    border-radius: inherit;
+
+    background:
+
+        linear-gradient(
+            to top,
+
+            rgba(0, 0, 0, 0.40) 0%,
+
+            rgba(0, 0, 0, 0.18) 30%,
+
+            transparent 64%
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   ILUMINAÇÃO DE FUNDO
+========================================================= */
+
+.container::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 0;
+
+    background:
+
+        radial-gradient(
+            circle at 17% 7%,
+            rgba(255, 255, 255, 0.055),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 82% 23%,
+            rgba(255, 255, 255, 0.025),
+            transparent 28%
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.biblioteca-header {
+
+    position: relative;
+
+    z-index: 5;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding:
+
+        38px
+        54px
+        27px;
+
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.biblioteca-identidade {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.biblioteca-label {
+
+    color: #F5A035;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.2px;
+
+}
+
+
+.biblioteca-identidade h1 {
+
+    margin: 0;
+
+    color: #FFF8EF;
+
+    font-size: 30px;
+
+    line-height: 1;
+
+    font-weight: 700;
+
+    letter-spacing: -0.8px;
+
+}
+
+
+/* =========================================================
+   DIREITA DO HEADER
+========================================================= */
+
+.biblioteca-header-direita {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+}
+
+
+/* =========================================================
+   BUSCA
+========================================================= */
+
+.biblioteca-busca {
+
+    width: 250px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding:
+
+        0
+        15px;
+
+    box-sizing: border-box;
+
+    border-radius: 13px;
+
+    border:
+
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    background:
+
+        rgba(42, 34, 27, 0.19);
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.035);
+
+    backdrop-filter:
+
+        blur(8px);
+
+    transition:
+
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.biblioteca-busca:hover {
+
+    background:
+
+        rgba(42, 34, 27, 0.25);
+
+}
+
+
+.biblioteca-busca:focus-within {
+
+    border-color:
+
+        rgba(245, 160, 53, 0.50);
+
+    background:
+
+        rgba(42, 34, 27, 0.31);
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(245, 160, 53, 0.07);
+
+}
+
+
+.busca-icone {
+
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+
+    color:
+
+        rgba(255, 247, 235, 0.52);
+
+}
+
+
+.biblioteca-busca input {
+
+    width: 100%;
+
+    padding: 0;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #FFF7EC;
+
+    font-family:
+        "Rubik",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 400;
+
+}
+
+
+.biblioteca-busca input::placeholder {
+
+    color:
+
+        rgba(255, 247, 235, 0.42);
+
+}
+
+
+/* =========================================================
+   QUANTIDADE
+========================================================= */
+
+.biblioteca-quantidade {
+
+    color:
+
+        rgba(255, 247, 235, 0.48);
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================================================
+   ÁREA INTERNA
+========================================================= */
+
+.biblioteca-conteudo {
+
+    position: relative;
+
+    z-index: 3;
+
+    flex: 1;
+
+    min-height: 0;
+
+    box-sizing: border-box;
+
+    padding:
+
+        0
+        54px
+        42px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.biblioteca-conteudo::-webkit-scrollbar {
+
+    width: 7px;
+
+}
+
+
+.biblioteca-conteudo::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+
+.biblioteca-conteudo::-webkit-scrollbar-thumb {
+
+    border-radius: 20px;
+
+    background:
+
+        rgba(255, 255, 255, 0.13);
+
+}
+
+
+.biblioteca-conteudo::-webkit-scrollbar-thumb:hover {
+
+    background:
+
+        rgba(245, 160, 53, 0.40);
+
+}
+
+
+/* =========================================================
+   SEÇÃO
+========================================================= */
+
+.biblioteca-secao-topo {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-bottom: 28px;
+
+}
+
+
+.secao-identidade {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    white-space: nowrap;
+
+}
+
+
+.secao-marcador {
+
+    width: 4px;
+    height: 16px;
+
+    border-radius: 10px;
+
+    background: #F5A035;
+
+    box-shadow:
+
+        0 0 12px
+        rgba(245, 160, 53, 0.30);
+
+}
+
+
+.biblioteca-secao-topo h2 {
+
+    margin: 0;
+
+    color:
+
+        rgba(255, 248, 239, 0.88);
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+
+.biblioteca-linha {
+
+    height: 1px;
+
+    flex: 1;
+
+    background:
+
+        linear-gradient(
+            90deg,
+
+            rgba(255, 255, 255, 0.13),
+
+            rgba(255, 255, 255, 0)
+        );
+
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.capas {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
 
     display: grid;
 
-    grid-template-columns: repeat(
-        auto-fill,
-        180px
-    );
+    grid-template-columns:
 
-    gap: 45px 35px;
+        repeat(
+            auto-fill,
+            180px
+        );
+
+    column-gap: 48px;
+
+    row-gap: 58px;
 
     justify-content: start;
+
     align-content: start;
+
+    box-sizing: border-box;
+
+    padding:
+
+        8px
+        0
+        40px;
+
 }
 
 
+/* =========================================================
+   LIVRO
+========================================================= */
 
 .livro {
+
+    position: relative;
+
     width: 180px;
-    height: 290px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
 }
 
 
-/* Imagem*/
+/* =========================================================
+   CAPA DO LIVRO
+========================================================= */
+
+.livro-capa-wrap {
+
+    position: relative;
+
+    width: 180px;
+    height: 290px;
+
+    z-index: 2;
+
+    overflow: hidden;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    box-shadow:
+
+        0 13px 24px
+        rgba(0, 0, 0, 0.28);
+
+    transform:
+
+        translateY(0)
+        scale(1);
+
+    transition:
+
+        transform
+        .32s
+        cubic-bezier(.2, .8, .2, 1),
+
+        box-shadow
+        .32s ease,
+
+        filter
+        .32s ease;
+
+}
+
+
+/* =========================================================
+   ESCURECIMENTO DOS LIVROS NÃO SELECIONADOS
+========================================================= */
+
+.livro-capa-wrap::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 4;
+
+    background:
+
+        rgba(18, 15, 11, 0.46);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+
+        opacity .28s ease;
+
+}
+
+
+/* =========================================================
+   REFLEXO DA CAPA
+========================================================= */
+
+.livro-capa-wrap::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 2;
+
+    background:
+
+        linear-gradient(
+            115deg,
+
+            rgba(255, 255, 255, 0.09),
+
+            transparent 24%,
+
+            transparent 72%
+        );
+
+    opacity: .55;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   IMAGEM
+========================================================= */
+
 .capa {
+
     width: 100%;
     height: 100%;
-    
-    object-fit: cover;
-    
-    cursor: pointer;
+
     display: block;
+
+    object-fit: cover;
+
+    transition:
+
+        filter .30s ease,
+        transform .30s ease;
+
+}
+
+
+/* =========================================================
+   ABRIR LIVRO
+========================================================= */
+
+.livro-acao {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 5;
+
+    height: 76px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding-bottom: 17px;
+
+    background:
+
+        linear-gradient(
+            to top,
+
+            rgba(18, 13, 9, 0.88),
+
+            rgba(18, 13, 9, 0)
+        );
+
+    color: #FFF4E7;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    letter-spacing: .3px;
+
+    opacity: 0;
+
+    transform:
+
+        translateY(18px);
+
+    pointer-events: none;
+
+    transition:
+
+        opacity .28s ease,
+        transform .28s ease;
+
+}
+
+
+/* =========================================================
+   HOVER DO LIVRO
+========================================================= */
+
+.livro:hover
+.livro-capa-wrap {
+
+    transform:
+
+        translateY(-13px)
+        scale(1.04);
+
+    box-shadow:
+
+        0 27px 38px
+        rgba(0, 0, 0, 0.38),
+
+        0 7px 17px
+        rgba(255, 145, 20, 0.18);
+
+}
+
+
+.livro:hover
+.capa {
+
+    filter:
+
+        brightness(1.06)
+        saturate(1.04);
+
+}
+
+
+.livro:hover
+.livro-acao {
+
+    opacity: 1;
+
+    transform:
+
+        translateY(0);
+
+}
+
+
+/* =========================================================
+   QUANDO EXISTE HOVER EM ALGUM LIVRO
+
+   ESCURECE TODOS OS OUTROS
+========================================================= */
+
+.capas:has(.livro:hover)
+.livro:not(:hover)
+.livro-capa-wrap::before {
+
+    opacity: 1;
+
+}
+
+
+/* recuo sutil dos livros não selecionados */
+
+.capas:has(.livro:hover)
+.livro:not(:hover)
+.livro-capa-wrap {
+
+    transform:
+
+        scale(.985);
+
+    filter:
+
+        saturate(.82);
+
+}
+
+
+/* =========================================================
+   PRATELEIRA
+========================================================= */
+
+.livro-prateleira {
+
+    position: relative;
+
+    width: 206px;
+    height: 12px;
+
+    margin-top: 15px;
+
+    border-radius:
+
+        4px
+        4px
+        7px
+        7px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+
+            #815B40 0%,
+
+            #62412D 45%,
+
+            #442A1D 100%
+        );
+
+    box-shadow:
+
+        0 8px 13px
+        rgba(0, 0, 0, 0.31);
+
+    transition:
+
+        box-shadow .30s ease,
+        transform .30s ease;
+
+}
+
+
+/* brilho superior */
+
+.prateleira-luz {
+
+    position: absolute;
+
+    top: 1px;
+    left: 8px;
+    right: 8px;
+
+    height: 2px;
+
+    border-radius: 10px;
+
+    background:
+
+        rgba(255, 220, 180, 0.17);
+
+}
+
+
+/* parte frontal */
+
+.prateleira-frente {
+
+    position: absolute;
+
+    left: 4px;
+    right: 4px;
+
+    top: 5px;
+
+    height: 9px;
+
+    border-radius:
+
+        2px
+        2px
+        6px
+        6px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+
+            #5D3C2A,
+
+            #40281C
+        );
+
+    box-shadow:
+
+        inset
+        0
+        1px
+        rgba(255, 255, 255, 0.07);
+
+}
+
+
+/* sombra aumenta quando livro sobe */
+
+.livro:hover
+.livro-prateleira {
+
+    box-shadow:
+
+        0 12px 18px
+        rgba(0, 0, 0, 0.37);
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   1920x1080  ->  1600x900
+========================================================= */
+
+@media
+(max-width: 1600px)
+and
+(max-height: 900px) {
+
+
+    /* CONTAINER */
+
+    .container {
+
+        width: 75%;
+
+        height: 583.33px;
+
+        margin-top: 8.33px;
+
+        margin-left: 137.5px;
+
+        scale: 1.12;
+
+        border-radius: 38.33px;
+
+        border-width: 2.5px;
+
+        box-shadow:
+
+            0 23.33px 50px
+            rgba(45, 33, 24, 0.38);
+
+    }
+
+
+    /* HEADER */
+
+    .biblioteca-header {
+
+        padding:
+
+            31.67px
+            45px
+            22.5px;
+
+    }
+
+
+    /* TÍTULO */
+
+    .biblioteca-identidade {
+
+        gap: 3.33px;
+
+    }
+
+
+    .biblioteca-label {
+
+        font-size: 8.33px;
+
+        letter-spacing: 1.83px;
+
+    }
+
+
+    .biblioteca-identidade h1 {
+
+        font-size: 25px;
+
+        letter-spacing: -.67px;
+
+    }
+
+
+    /* HEADER DIREITO */
+
+    .biblioteca-header-direita {
+
+        gap: 14.17px;
+
+    }
+
+
+    /* BUSCA */
+
+    .biblioteca-busca {
+
+        width: 208.33px;
+
+        height: 35px;
+
+        gap: 8.33px;
+
+        padding:
+
+            0
+            12.5px;
+
+        border-radius: 10.83px;
+
+    }
+
+
+    .busca-icone {
+
+        width: 14.17px;
+
+        height: 14.17px;
+
+    }
+
+
+    .biblioteca-busca input {
+
+        font-size: 10px;
+
+    }
+
+
+    /* QUANTIDADE */
+
+    .biblioteca-quantidade {
+
+        font-size: 9.17px;
+
+    }
+
+
+    /* CONTEÚDO */
+
+    .biblioteca-conteudo {
+
+        padding:
+
+            0
+            45px
+            35px;
+
+    }
+
+
+    /* TÍTULO DA SEÇÃO */
+
+    .biblioteca-secao-topo {
+
+        gap: 15px;
+
+        margin-bottom: 23.33px;
+
+    }
+
+
+    .secao-identidade {
+
+        gap: 7.5px;
+
+    }
+
+
+    .secao-marcador {
+
+        width: 3.33px;
+
+        height: 13.33px;
+
+    }
+
+
+    .biblioteca-secao-topo h2 {
+
+        font-size: 11.67px;
+
+    }
+
+
+    /* GRID */
+
+    .capas {
+
+        grid-template-columns:
+
+            repeat(
+                auto-fill,
+                150px
+            );
+
+        column-gap: 40px;
+
+        row-gap: 48.33px;
+
+        padding:
+
+            6.67px
+            0
+            33.33px;
+
+    }
+
+
+    /* LIVRO */
+
+    .livro {
+
+        width: 150px;
+
+    }
+
+
+    /* CAPA */
+
+    .livro-capa-wrap {
+
+        width: 150px;
+
+        height: 241.67px;
+
+        border-radius: 5.83px;
+
+        box-shadow:
+
+            0 10.83px 20px
+            rgba(0, 0, 0, 0.28);
+
+    }
+
+
+    /* ABRIR */
+
+    .livro-acao {
+
+        height: 63.33px;
+
+        padding-bottom: 14.17px;
+
+        font-size: 10px;
+
+    }
+
+
+    /* HOVER */
+
+    .livro:hover
+    .livro-capa-wrap {
+
+        transform:
+
+            translateY(-10.83px)
+            scale(1.04);
+
+        box-shadow:
+
+            0 22.5px 31.67px
+            rgba(0, 0, 0, 0.38),
+
+            0 5.83px 14.17px
+            rgba(255, 145, 20, 0.18);
+
+    }
+
+
+    /* PRATELEIRA */
+
+    .livro-prateleira {
+
+        width: 171.67px;
+
+        height: 10px;
+
+        margin-top: 12.5px;
+
+        border-radius:
+
+            3.33px
+            3.33px
+            5.83px
+            5.83px;
+
+        box-shadow:
+
+            0 6.67px 10.83px
+            rgba(0, 0, 0, 0.31);
+
+    }
+
+
+    .prateleira-luz {
+
+        top: .83px;
+
+        left: 6.67px;
+        right: 6.67px;
+
+        height: 1.67px;
+
+    }
+
+
+    .prateleira-frente {
+
+        left: 3.33px;
+        right: 3.33px;
+
+        top: 4.17px;
+
+        height: 7.5px;
+
+    }
+
 }

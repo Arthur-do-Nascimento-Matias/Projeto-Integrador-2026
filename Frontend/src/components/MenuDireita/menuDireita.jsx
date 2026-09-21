@@ -1,39 +1,81 @@
 import './MenuDireita.css'
+
 import simio from '../../assets/simio.png'
 
+
 function MenuDireita() {
-    return(
-        <>
-        <div className="menuLateralDireita">
+  return (
+    <aside className="menuLateralDireita">
 
-            <div className="cards">
+      <div className="cards">
 
-           <div className="league-card">
-        <div className="card-header">
+
+        <section className="league-card">
+
+          <div className="league-top">
             <h3>Divisão Ouro</h3>
-            <a href="#">VER DIVISÃO</a>
-        </div>
+          </div>
 
-        <div className="card-body">
-            <img src={simio} alt="Dormindo" />
+
+          <div className="card-body">
+
+            <img
+              src={simio}
+              alt="Mascote Simio"
+            />
+
             <p>
-                Faça uma lição pra entrar no ranking dessa semana e competir com as outras pessoas.
+              Faça uma lição pra entrar no ranking dessa semana
+              e competir com as outras pessoas.
             </p>
-        </div>
-        </div>
 
-        <div className="missoes-card">
-            <div className="card-header">
-                <h3>Missões do dia</h3>
-                <a href="#">VER TODAS</a>
-            </div>
-            <div className="missao-lista" id="missaoLista"></div>
-        </div>
+          </div>
 
-    </div>
-    </div>
-    </>
-    )
+
+          <a
+            href="#"
+            className="league-button"
+          >
+            VER DIVISÃO
+          </a>
+
+        </section>
+
+
+        {/* ==================================================
+            MISSÕES DO DIA
+        ================================================== */}
+
+        <section className="missoes-card">
+
+          <div className="card-header">
+
+            <h3>
+              Missões do dia
+            </h3>
+
+            <a href="#">
+              VER TODAS
+            </a>
+
+          </div>
+
+
+          {/* As 3 missões serão inseridas aqui futuramente */}
+
+          <div
+            className="missao-lista"
+            id="missaoLista"
+          >
+          </div>
+
+        </section>
+
+      </div>
+
+    </aside>
+  )
 }
+
 
 export default MenuDireita

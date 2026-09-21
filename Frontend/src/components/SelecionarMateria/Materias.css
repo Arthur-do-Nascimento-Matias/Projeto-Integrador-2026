@@ -1,3 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.google-sans{
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.rubik {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.poppins-thin-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.poppins-extralight-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.poppins-light-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.poppins-regular-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.poppins-medium-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poppins-semibold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poppins-bold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poppins-extrabold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.poppins-black-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+
 .materias-container {
   position: relative;
 
@@ -7,7 +136,8 @@
 
   width: 100%;
 
-  position: relative;
+  top: 25px;
+
   z-index: 30;
 }
 
@@ -18,93 +148,179 @@
 
 .materias-botao {
   width: 460px;
-  height: 92px;
+  height: 84px;
 
   position: relative;
   z-index: 31;
 
-  border: 1px solid rgba(126, 66, 18, 0.7);
-  border-radius: 34px;
+  padding: 0 24px;
+
+  border: 1px solid rgba(108, 67, 40, 0.65);
+  border-radius: 28px;
 
   background:
     linear-gradient(
       180deg,
-      #ffa33a 0%,
-      #ff790b 100%
+      #f39a3f 0%,
+      #e77a24 100%
     );
 
   display: flex;
-  justify-content: center;
   align-items: center;
 
-  gap: 15px;
+  color: #fff8ef;
 
-  color: white;
-
-  font-family: "Rubik", sans-serif;
-  font-size: 17px;
-  font-weight: 700;
+  font-family: "Google Sans", sans-serif;
+  font-size: 23px;
+  font-weight: 600;
 
   cursor: pointer;
 
   box-shadow:
-    0 5px 0 rgba(193, 82, 7, 0.55),
-    0 10px 25px rgba(148, 82, 27, 0.22);
+    0 5px 0 #a95e2d,
+    0 12px 26px rgba(68, 47, 33, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-radius 0.3s ease;
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
 }
+
+
+/* HOVER */
 
 .materias-botao:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+
+  filter: brightness(1.025);
 
   box-shadow:
-    0 7px 0 rgba(193, 82, 7, 0.55),
-    0 14px 28px rgba(148, 82, 27, 0.25);
+    0 7px 0 #a95e2d,
+    0 16px 28px rgba(68, 47, 33, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
+
+
+/* CLIQUE */
 
 .materias-botao:active {
   transform: translateY(2px);
 
   box-shadow:
-    0 2px 0 rgba(193, 82, 7, 0.55),
-    0 6px 14px rgba(148, 82, 27, 0.2);
+    0 2px 0 #a95e2d,
+    0 7px 15px rgba(68, 47, 33, 0.14);
 }
 
 
-/* ícone no botão */
+/* =========================================
+   IMAGEM / ÍCONE DO BOTÃO
+========================================= */
 
 .materias-botao-icone {
+  width: 56px;
+  height: 56px;
+
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 38px;
-  height: 38px;
+  border-radius: 13px;
 
-  border-radius: 11px;
+  background: rgba(255, 243, 226, 0.20);
 
-  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 
-  font-size: 17px;
-  font-weight: 800;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 
-/* seta */
+.materias-botao-img {
+  width: 47px;
+  height: 47px;
+
+  object-fit: contain;
+}
+
+
+/* =========================================
+   NOME DA MATÉRIA
+========================================= */
+
+.materias-botao-nome {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   SETA
+========================================= */
 
 .materias-seta {
-  margin-left: 10px;
+  width: 40px;
+  height: 40px;
+
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(83, 51, 32, 0.10);
+
+  color: #fff8ef;
 
   font-size: 20px;
 
-  transition: transform 0.35s ease;
+  transition:
+    transform 0.3s ease,
+    background 0.2s ease;
 }
+
+
+.materias-botao:hover .materias-seta {
+  background: rgba(83, 51, 32, 0.16);
+}
+
 
 .materias-botao.aberto .materias-seta {
   transform: rotate(180deg);
+
+  background: rgba(83, 51, 32, 0.18);
+}
+
+
+/* =========================================
+   IMAGENS
+========================================= */
+
+.materias-centro-img {
+  width: 60px;
+  height: 60px;
+
+  object-fit: contain;
+}
+
+
+.materia-icone-img-svg {
+  pointer-events: none;
 }
 
 
@@ -114,9 +330,10 @@
 
 .materias-roda-container {
   position: absolute;
+
   z-index: 32;
 
-  top: 185px;
+  top: 160px;
   left: 50%;
 
   transform:
@@ -140,6 +357,7 @@
     ),
     visibility 0.25s ease;
 }
+
 
 .materias-roda-container.visivel {
   opacity: 1;
@@ -171,6 +389,7 @@
     );
 }
 
+
 .materias-svg {
   width: 100%;
   height: 100%;
@@ -194,8 +413,10 @@
     filter 0.2s ease;
 }
 
+
 .materia-fatia path {
   stroke: #f5eee4;
+
   stroke-width: 4px;
 
   transition:
@@ -222,7 +443,7 @@
 .materia-fatia.ativa path {
   stroke: #ff9b32;
 
-  stroke-width: 7px;
+  stroke-width: 6px;
 
   filter:
     brightness(1.08)
@@ -253,6 +474,7 @@
   text-shadow:
     0 2px 3px rgba(0, 0, 0, 0.15);
 }
+
 
 .materia-nome-svg {
   fill: white;
@@ -316,14 +538,14 @@
   justify-content: center;
   align-items: center;
 
-  width: 54px;
-  height: 54px;
+  width: 60px;
+  height: 60px;
 
   margin-bottom: 7px;
 
   border-radius: 15px;
 
-  background: #ff8415;
+  background: #e77a24;
 
   color: white;
 
@@ -331,7 +553,7 @@
   font-weight: 900;
 
   box-shadow:
-    0 5px 0 #d95e08;
+    0 5px 0 #a95e2d;
 
   animation:
     materiaCentroEntrar 0.25s ease;
@@ -376,29 +598,43 @@
   }
 }
 
+
+/* =========================================
+   OVERLAY
+========================================= */
+
 @keyframes overlayEntrar {
+
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
+
 .materias-overlay {
   position: fixed;
+
   inset: 0;
+
   background:
     radial-gradient(
       circle at center,
-      rgba(255,255,255,0.10) 0%,
+      rgba(255, 255, 255, 0.10) 0%,
       rgba(236, 228, 215, 0.24) 45%,
       rgba(220, 210, 195, 0.34) 100%
     );
+
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+
   z-index: 15;
-  animation: overlayEntrar 0.25s ease;
+
+  animation:
+    overlayEntrar 0.25s ease;
 }
 
 
@@ -421,4 +657,5 @@
     width: 155px;
     height: 155px;
   }
+
 }
