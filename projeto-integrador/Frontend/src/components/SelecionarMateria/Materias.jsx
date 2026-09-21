@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Materias.css";
 
 const materias = [
@@ -80,7 +80,7 @@ function criarFatia(
   ].join(" ");
 }
 
-function Materias({ onChange }) {
+function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
   const [aberto, setAberto] = useState(false);
   const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
   const [materiaHover, setMateriaHover] = useState(null);
@@ -123,7 +123,74 @@ function Materias({ onChange }) {
     return prioridade(a) - prioridade(b);
   });
 
+    const refTrilha = useRef(null)
+
+    let respostaCerta
+    let atividadeAtual
+    let indiceAtv = 0
+
+    const botoes = []
+
+    function criarTrilha(id) {
+
+    refTrilha.current.innerHTML = ''
+      console.log(id)
+    fetch(`http://localhost:3000/nome?id=${id}`)
+        .then(data => data.json())
+        .then(resp => {
+        console.log(resp)
+        for(let i=0; i < resp.length; i++){
+        const botao = document.createElement('button')
+        botao.className = 'botaoAtividade'
+        botao.id = i+1
+
+    if(i % 2 == 0) {
+        botao.classList.add('impar')
+    }
+    else{
+        botao.classList.add('par')
+    }
+
+    botao.addEventListener('click', () => entrarAtividade(botao))
+
+    if (i + 1 < atvLiberada) {
+        botao.classList.add('concluida')
+    } 
+    else if (i + 1 === atvLiberada) {
+        botao.classList.add('atual')
+    }
+    else {
+        botao.style.filter = 'grayscale(100%)'
+    }
+    refTrilha.current.appendChild(botao)
+    botoes.push(botao)
+    }})}
+
+
+    function entrarAtividade(botao) {
+
+    const id = Number(botao.id)
+
+    if (atvLiberada == id) {
+        setAtividadeAtual(id)
+        refTrilha.current.style.opacity = '0'
+        refAtividade.current.style.transform = 'translateX(0)'
+    } else if (atvLiberada > id) {
+        alert('Atividade já concluida')
+    } else {
+        alert('Atividade bloqueada')
+    }
+}
+
+
+useEffect(() => {
+
+    criarTrilha(3)
+
+}, [atvLiberada])
+
   return (
+    <>
     <div className="materias-container">
 
         {aberto && (
@@ -250,6 +317,9 @@ function Materias({ onChange }) {
         </div>
       </div>
     </div>
+
+    <div className="trilha ativo" id="trilha" ref={refTrilha}></div>
+  </>
   );
 }
 

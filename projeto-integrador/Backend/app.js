@@ -20,20 +20,22 @@ const callback = (req, res) => {
     res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
     let rota = url.parse(req.url, true)
     let param = url.parse(req.url, true).query
-    console.log(param)
 
     if(rota.pathname == '/atividades') {
        
         Conexao.getAtividades(param)
         .then(con => {
-            console.log("consulta" + con)
-            console.log(con.alternativas)
             res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0], 'alternativa2': con.alternativas[1], 'alternativa3': con.alternativas[2], 'alternativa4': con.alternativas[3]}))
         }
         )
 
     }
     if(rota.pathname == '/nome') {
+        console.log('param:', param.id)
+        Conexao.criarTrilha(param)
+        .then(con => {
+            res.end(JSON.stringify({'nome': (con.indices/3).toFixed}))
+        })
         res.end(JSON.stringify(
             array.map(item => ({'nome': item.nome}))
         ))

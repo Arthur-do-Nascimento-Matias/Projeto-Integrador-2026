@@ -20,6 +20,7 @@
   padding-right: calc(clamp(12px, 2.5vw, 32px) + var(--simia-espaco-direita));
   font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 1.6;
 }
+
 .chatIA, .chatIA * { box-sizing: border-box; }
 .chatIA button, .chatIA textarea { font: inherit; }
 .chatIA button { cursor: pointer; }
