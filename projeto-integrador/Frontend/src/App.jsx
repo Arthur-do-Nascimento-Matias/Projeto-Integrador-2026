@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import ChatBot from './pages/painelChatBot';
 import PainelBiblioteca from './pages/PainelBiblioteca';
 import PainelPerfil from './pages/PainelPerfil';
+import PainelRanking from "./pages/PainelRanking";
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/" element={<Painel />} />
           <Route path='/biblioteca' element={<PainelBiblioteca />} />
           <Route path="/perfil" element={<PainelPerfil />} />
+          <Route path="/ranking" element={<PainelRanking />} />
 
         </Routes>
       </BrowserRouter>
