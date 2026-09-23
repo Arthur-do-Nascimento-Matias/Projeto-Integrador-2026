@@ -288,7 +288,7 @@ body,
   background: #fffdfa;
   box-shadow: 0 28px 70px rgba(50, 33, 20, .15), 0 10px 20px rgba(0, 0, 0, 0.05);
 }
-/* suave */
+/* suave 
 ::view-transition-old(root) {
   animation: rota-sair 0.18s ease-in forwards;
 }
@@ -321,7 +321,7 @@ body,
     transform: translateX(0);
     clip-path: inset(0 0 0 0);
   }
-} 
+} */
 
 
 
@@ -423,8 +423,7 @@ body,
   }
 } */
 
-
-/* Fade — estilo aplicativo
+/*
 ::view-transition-old(root) {
   animation: shared-page-out 0.22s ease forwards;
 }
@@ -458,3 +457,41 @@ body,
     opacity: 1;
   }
 } */
+
+::view-transition-old(root) {
+  animation: shared-page-out 0.32s ease forwards;
+}
+
+::view-transition-new(root) {
+  animation: shared-page-in 0.38s ease forwards;
+}
+
+::view-transition-group(simio-logo) {
+  animation-duration: 0.65s;
+  animation-timing-function: cubic-bezier(.16, 1, .3, 1);
+}
+
+::view-transition-old(simio-logo),
+::view-transition-new(simio-logo) {
+  height: 100%;
+}
+
+@keyframes shared-page-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.35;
+  }
+}
+
+@keyframes shared-page-in {
+  from {
+    opacity: 0.35;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

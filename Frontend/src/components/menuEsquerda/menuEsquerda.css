@@ -89,8 +89,8 @@
   transform:translateY(-50%);
 
   transition:
-    width .52s cubic-bezier(.18,.88,.22,1),
-    transform .58s cubic-bezier(.18,.88,.22,1);
+    width 0.85s cubic-bezier(.18,.88,.22,1),
+    transform 0.85s cubic-bezier(.18,.88,.22,1);
 
   z-index:10;
   isolation:isolate;
@@ -514,8 +514,8 @@
     z-index:9;
     pointer-events:none;
     transition:
-      top .45s var(--ease),
-      height .35s var(--ease);
+    top 0.8s cubic-bezier(.22,1,.36,1),
+    height .8s cubic-bezier(.22,1,.36,1);
   }
 
   .simio-sidebar-layer .divider{
@@ -1362,4 +1362,32 @@
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* ==========================================================
+   ÍCONES + QUADRADO LARANJA — POSIÇÃO FIXA E ALINHADA
+========================================================== */
+
+.simio-sidebar-layer .nav-item::before,
+.simio-sidebar-layer .menu-toggle::before{
+  left:41px !important;
+}
+
+
+.simio-sidebar-layer .nav-item::after,
+.simio-sidebar-layer .menu-toggle::after{
+  left:41px !important;
+}
+
+
+/* mantém os ícones na posição ORIGINAL */
+.simio-sidebar-layer .icon-wrap{
+  margin-left:9px !important;
+}
+
+
+/* abrir a sidebar NÃO altera mais a posição */
+.simio-sidebar-layer .sidebar:hover .icon-wrap,
+.simio-sidebar-layer .sidebar.pin-open .icon-wrap{
+  margin-left:9px !important;
 }

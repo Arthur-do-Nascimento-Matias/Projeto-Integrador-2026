@@ -18,7 +18,6 @@ function Painel() {
 
             <Materias />
 
-            <MenuEsquerda />
 
             <Trilha 
                 refAtividade={refAtividade}
