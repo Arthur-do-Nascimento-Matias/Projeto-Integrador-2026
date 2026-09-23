@@ -51,9 +51,31 @@ static getAtividades(param) {
         })
     })
 }
+
+static criarTrilha(param){
+    return new Promise((resolve, reject) => {
+
+        const connection = Conexao.connect()
+
+        console.log('conexao param', param.id)
+
+        let sql = 'SELECT * FROM `perguntas` WHERE id_materia = ?'
+
+        connection.query(sql, param.id, (error, indices) => {
+        
+        connection.end()
+
+        if(error) {
+            reject(error)
+            return
+        }
+        resolve({
+            indices: indices
+        })
+
+        })
+    })
 }
-
-
-
+}
 
 module.exports = Conexao

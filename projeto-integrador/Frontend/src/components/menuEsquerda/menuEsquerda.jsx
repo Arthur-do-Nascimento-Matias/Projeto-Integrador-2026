@@ -14,7 +14,7 @@ const itensPrincipais = [
 
 const itensSecundarios = [
   { nome: 'Perfil', rota: '/perfil' },
-  { nome: 'Configurações', rota: null },
+  { nome: 'Configurações', rota: '/configuracoes' },
 ]
 
 const fxMap = {
@@ -226,16 +226,28 @@ function MenuEsquerda() {
     }, 980)
   }
 
-  function aoSelecionar(item, event) {
-    event.preventDefault()
-    criarRipple(event.currentTarget, event)
-    setItemAtivo(item.nome)
-    iniciarEfeito(item.nome)
+function aoSelecionar(item, event) {
+  event.preventDefault()
+  criarRipple(event.currentTarget, event)
+  setItemAtivo(item.nome)
+  iniciarEfeito(item.nome)
 
-    if (item.rota && location.pathname !== item.rota) {
+  if (item.rota && location.pathname !== item.rota) {
+
+    if (document.startViewTransition) {
+
+      document.startViewTransition(() => {
+        navigate(item.rota)
+      })
+
+    } else {
+
       navigate(item.rota)
+
     }
+
   }
+}
 
   function aoMoverPonteiro(event) {
     if (touchLike) return
@@ -352,6 +364,7 @@ function MenuEsquerda() {
         </aside>
       </div>
     </div>
+    
   )
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Materias.css";
 
 const materias = [
@@ -80,7 +80,7 @@ function criarFatia(
   ].join(" ");
 }
 
-function Materias({ onChange }) {
+function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
   const [aberto, setAberto] = useState(false);
   const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
   const [materiaHover, setMateriaHover] = useState(null);
@@ -123,6 +123,75 @@ function Materias({ onChange }) {
     return prioridade(a) - prioridade(b);
   });
 
+    const refTrilha = useRef(null)
+
+    let respostaCerta
+    let atividadeAtual
+    let indiceAtv = 0
+
+    const botoes = []
+
+    function criarTrilha(id) {
+
+    refTrilha.current.innerHTML = ''
+      console.log(id)
+    fetch(`http://localhost:3000/nome?id=${id}`)
+        .then(data => data.json())
+        .then(resp => {
+        console.log(resp)
+        console.log('tamanho'+resp.nome.length)
+        for(let i=0; i < ((resp.nome.length)/3).toFixed(); i++){
+        const botao = document.createElement('button')
+        botao.className = 'botaoAtividade'
+        botao.id = i+1
+
+    if(i % 2 == 0) {
+        botao.classList.add('impar')
+    }
+    else{
+        botao.classList.add('par')
+    }
+
+    botao.addEventListener('click', () => entrarAtividade(botao))
+
+    if (i + 1 < atvLiberada) {
+        botao.classList.add('concluida')
+    } 
+    else if (i + 1 === atvLiberada) {
+        botao.classList.add('atual')
+    }
+    else {
+        botao.style.filter = 'grayscale(100%)'
+    }
+    refTrilha.current.appendChild(botao)
+    botoes.push(botao)
+    }})}
+
+
+    function entrarAtividade(botao) {
+
+    const id = Number(botao.id)
+
+    if (atvLiberada == id) {
+        setAtividadeAtual(id)
+        refTrilha.current.style.opacity = '0'
+        refAtividade.current.style.transform = 'translateX(0)'
+    } else if (atvLiberada > id) {
+        alert('Atividade já concluida')
+    } else {
+        alert('Atividade bloqueada')
+    }
+}
+
+
+useEffect(() => {
+
+    criarTrilha(1)
+
+}, [atvLiberada])
+
+  return (
+    <>
   return (
     <div className="materias-container">
 
@@ -138,11 +207,17 @@ function Materias({ onChange }) {
         className={`materias-botao ${aberto ? "aberto" : ""}`}
         onClick={() => setAberto(!aberto)}
       >
-        <div className="materias-botao-icone">
-          {materiaAtiva.icone}
-        </div>
+      <div className="materias-botao-icone">
+         <img
+           src={materiaAtiva.icon}
+           alt={materiaAtiva.nome}
+           className="materias-botao-img"
+         />
+      </div>
 
-        <span>{materiaAtiva.nome}</span>
+        <span className="materias-botao-nome">
+            {materiaAtiva.nome}
+        </span>
 
         <span className="materias-seta">
           ▼     
@@ -209,13 +284,22 @@ function Materias({ onChange }) {
                     fill={materia.cor}
                   />
 
+                  <image
+                    href={materia.icon}
+                    x={posicaoTexto.x - 19}
+                    y={posicaoTexto.y - 32}
+                    width="38"
+                    height="38"
+                    className="materia-icone-img-svg"
+                 />
+
                   <text
                     x={posicaoTexto.x}
-                    y={posicaoTexto.y - 8}
-                    className="materia-icone-svg"
-                  >
-                    {materia.icone}
-                  </text>
+                    y={posicaoTexto.y + 17}
+                    className="materia-nome-svg"
+               >  
+                 {materia.nome}
+                 </text>
 
                   <text
                     x={posicaoTexto.x}
@@ -231,12 +315,13 @@ function Materias({ onChange }) {
 
           {/* CENTRO DA RODA */}
           <div className="materias-centro">
-            <div
-              className="materias-centro-icone"
-              key={materiaExibida.id}
-            >
-              {materiaExibida.icone}
-            </div>
+            <div className="materias-centro-icone" key={materiaExibida.id}>
+             <img
+               src={materiaExibida.icon}
+               alt={materiaExibida.nome}
+              className="materias-centro-img"
+           />
+           </div>
 
             <strong>
               {materiaExibida.nome}
@@ -250,6 +335,9 @@ function Materias({ onChange }) {
         </div>
       </div>
     </div>
+
+    <div className="trilha ativo" id="trilha" ref={refTrilha}></div>
+  </>
   );
 }
 
