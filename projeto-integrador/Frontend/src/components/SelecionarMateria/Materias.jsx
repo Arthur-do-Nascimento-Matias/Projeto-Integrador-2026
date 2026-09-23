@@ -186,7 +186,7 @@ function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
 
 useEffect(() => {
 
-    criarTrilha(2)
+    criarTrilha(1)
 
 }, [atvLiberada])
 
