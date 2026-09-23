@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation
+} from "react-router-dom";
 
 import "./App.css";
 
@@ -18,7 +23,81 @@ import Configuracoes from "./components/Configuracoes/Configuracoes";
 
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
 
-import PainelRanking from "./pages/PainelRanking";
+import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
+
+
+function ConteudoApp({
+  folhasAtivas,
+  alterarFolhas
+}) {
+
+  const location = useLocation();
+
+  return (
+    <>
+
+      {/* SIDEBAR FIXA ENTRE AS ROTAS */}
+      {location.pathname !== "/login" && <MenuEsquerda />}
+
+      <Routes>
+
+        {/* INÍCIO */}
+        <Route
+          path="/"
+          element={
+            <>
+              {folhasAtivas && <FolhasCaindo />}
+              <Painel />
+            </>
+          }
+        />
+
+
+        {/* CHATBOT */}
+        <Route
+          path="/chatBot"
+          element={<ChatBot />}
+        />
+
+
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+
+        {/* BIBLIOTECA */}
+        <Route
+          path="/biblioteca"
+          element={<PainelBiblioteca />}
+        />
+
+
+        {/* PERFIL */}
+        <Route
+          path="/perfil"
+          element={<PainelPerfil />}
+        />
+
+
+        {/* CONFIGURAÇÕES */}
+        <Route
+          path="/configuracoes"
+          element={
+            <Configuracoes
+              folhasAtivas={folhasAtivas}
+              alterarFolhas={alterarFolhas}
+            />
+          }
+        />
+
+      </Routes>
+
+    </>
+  );
+}
+
 
 function App() {
 
@@ -27,9 +106,7 @@ function App() {
     const valorSalvo = localStorage.getItem("folhasAtivas");
 
     if (valorSalvo === null) {
-
       return true;
-
     }
 
     return valorSalvo === "true";
@@ -74,90 +151,10 @@ function App() {
 
         <BrowserRouter>
 
-          <Routes>
-
-
-            {/* INÍCIO */}
-
-            <Route
-              path="/"
-              element={
-                <>
-
-                  {folhasAtivas && <FolhasCaindo />}
-
-                  <Painel />
-
-                </>
-              }
-            />
-
-
-            {/* CHATBOT */}
-
-            <Route
-              path="/chatBot"
-              element={<ChatBot />}
-            />
-
-
-            {/* LOGIN */}
-
-            <Route
-              path="/login"
-              element={<Login />}
-            />
-
-
-            {/* BIBLIOTECA */}
-
-            <Route
-              path="/biblioteca"
-              element={<PainelBiblioteca />}
-            />
-
-
-            {/* PERFIL */}
-
-            <Route
-              path="/perfil"
-              element={<PainelPerfil />}
-            />
-
-
-            {/* CONFIGURAÇÕES */}
-
-            <Route
-              path="/configuracoes"
-              element={
-
-                <Configuracoes
-
-                  folhasAtivas={folhasAtivas}
-
-                  alterarFolhas={alterarFolhas}
-
-                />
-
-              }
-            />
-
-          <Route 
-
-            path="/perfil" 
-            element={<PainelPerfil />} 
-          
+          <ConteudoApp
+            folhasAtivas={folhasAtivas}
+            alterarFolhas={alterarFolhas}
           />
-
-          <Route 
-          
-            path="/ranking"
-            element={<PainelRanking />} 
-            
-          />
-
-
-          </Routes>
 
         </BrowserRouter>
 

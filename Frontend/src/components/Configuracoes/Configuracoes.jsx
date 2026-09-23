@@ -7,7 +7,6 @@ function Configuracoes({
 }) {
   return (
     <>
-      <MenuEsquerda />
 
       <div className="configuracoes">
 

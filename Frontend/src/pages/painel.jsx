@@ -16,7 +16,10 @@ function Painel() {
         return(
         <>
 
-            <Materias 
+            <Materias />
+
+
+            <Trilha 
                 refAtividade={refAtividade}
                 setAtividadeAtual={setAtividadeAtual}
                 atvLiberada={atvLiberada}

@@ -6,7 +6,7 @@ function PainelPerfil() {
 
         <>
 
-            <MenuEsquerda />
+
             <Perfil />
 
         </>

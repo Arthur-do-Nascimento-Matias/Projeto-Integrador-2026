@@ -6,7 +6,7 @@ function PainelBiblioteca() {
 
         <>
 
-            <MenuEsquerda />
+
             <Biblioteca />
 
         </>

@@ -125,15 +125,30 @@ function MenuEsquerda() {
   const fxTimerRef = useRef(null)
 
   const ativoDaRota = nomePelaRota(location.pathname)
+
+    const itemMenuInferior =
+    ativoDaRota === 'Perfil' ||
+    ativoDaRota === 'Configurações'
+
   const [itemAtivo, setItemAtivo] = useState(ativoDaRota)
-  const [menuAberto, setMenuAberto] = useState(ativoDaRota === 'Perfil')
+
+  const [menuAberto, setMenuAberto] = useState(itemMenuInferior)
+
   const [efeitoAtivo, setEfeitoAtivo] = useState('')
   const [itemComEfeito, setItemComEfeito] = useState('')
   const [touchLike, setTouchLike] = useState(false)
 
   useEffect(() => {
+    
     setItemAtivo(ativoDaRota)
-    if (ativoDaRota === 'Perfil') setMenuAberto(true)
+    
+    if (
+      ativoDaRota === 'Perfil' ||
+      ativoDaRota === 'Configurações'
+    ) {
+      setMenuAberto(true)
+    }
+
   }, [ativoDaRota])
 
   useEffect(() => {

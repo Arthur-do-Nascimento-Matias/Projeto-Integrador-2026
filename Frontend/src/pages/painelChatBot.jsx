@@ -7,7 +7,7 @@ function Painel() {
 
         return(
         <>
-            <MenuEsquerda />
+
             <MenuDireita />
             <ChatBot/>
             
