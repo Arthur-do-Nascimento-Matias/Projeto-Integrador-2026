@@ -18,8 +18,6 @@ import Configuracoes from "./components/Configuracoes/Configuracoes";
 
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
 
-import PainelPerfil from './pages/PainelPerfil';
-
 import PainelRanking from "./pages/PainelRanking";
 
 function App() {

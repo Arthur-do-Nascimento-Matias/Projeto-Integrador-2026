@@ -1,48 +1,54 @@
 import { useState, useEffect, useRef } from "react";
 import "./Materias.css";
+import brIcon from "../../assets/materias/brasil.svg";
+import enIcon from "../../assets/materias/ingles.svg";
+import cienciaIcon from "../../assets/materias/ciencia.svg";
+import geoIcon from "../../assets/materias/geografia.svg";
+import histIcon from "../../assets/materias/historia.svg";
+import matIcon from "../../assets/materias/matematica.svg";
 
 const materias = [
   {
     id: "portugues",
     nome: "Português",
-    icone: "Aa",
     descricao: "Língua Portuguesa",
-    cor: "#ff7a0b",
+    cor: "#ff8214",
+    icon: brIcon,
   },
   {
     id: "matematica",
     nome: "Matemática",
-    icone: "÷",
     descricao: "Números e lógica",
-    cor: "#9b724d",
+    cor: "#75543c",
+    icon: matIcon,
   },
   {
     id: "historia",
     nome: "História",
-    icone: "H",
     descricao: "História e sociedade",
-    cor: "#a85f43",
+    cor: "#684936",
+    icon: histIcon,
   },
   {
     id: "ciencias",
     nome: "Ciências",
-    icone: "⚗",
     descricao: "Natureza e ciência",
-    cor: "#66784d",
+    cor: "#52663c",
+    icon: cienciaIcon,
   },
   {
     id: "geografia",
     nome: "Geografia",
-    icone: "◎",
     descricao: "Espaço e território",
-    cor: "#868252",
+    cor: "#64724a",
+    icon: geoIcon,
   },
   {
     id: "ingles",
     nome: "Inglês",
-    icone: "EN",
     descricao: "Língua Inglesa",
-    cor: "#607250",
+    cor: "#465936",
+    icon: enIcon,
   },
 ];
 
@@ -192,7 +198,6 @@ useEffect(() => {
 
   return (
     <>
-  return (
     <div className="materias-container">
 
         {aberto && (
