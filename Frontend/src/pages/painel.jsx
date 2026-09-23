@@ -1,4 +1,3 @@
-import MenuEsquerda from "../components/MenuEsquerda/MenuEsquerda";
 import MenuDireita from "../components/MenuDireita/MenuDireita";
 import Atividades from "../components/Atividades/Atividades";
 import Materias from "../components/SelecionarMateria/Materias";
@@ -17,15 +16,6 @@ function Painel() {
         <>
 
             <Materias />
-
-
-            <Trilha 
-                refAtividade={refAtividade}
-                setAtividadeAtual={setAtividadeAtual}
-                atvLiberada={atvLiberada}
-            />
-
-            <MenuEsquerda />
 
             <Atividades 
                 refAtividade={refAtividade}

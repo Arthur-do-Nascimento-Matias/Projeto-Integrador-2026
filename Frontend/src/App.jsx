@@ -25,6 +25,7 @@ import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
 
 import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 
+import Ranking from "./components/ranking/ranking"
 
 function ConteudoApp({
   folhasAtivas,
@@ -50,6 +51,13 @@ function ConteudoApp({
               <Painel />
             </>
           }
+        />
+
+        
+        {/* Ranking */}
+        <Route
+          path="/Ranking"
+          element={<Ranking />}
         />
 
 

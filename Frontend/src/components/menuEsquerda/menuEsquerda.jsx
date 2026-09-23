@@ -6,7 +6,7 @@ import Moki from '../../assets/MOKI.png'
 const itensPrincipais = [
   { nome: 'Aprender', rota: '/' },
   { nome: 'Simulados', rota: null },
-  { nome: 'Ranking', rota: null },
+  { nome: 'Ranking', rota: '/ranking' },
   { nome: 'Biblioteca', rota: '/biblioteca' },
   { nome: 'SimIA', rota: '/chatBot', lightning: true },
   { nome: 'Feed', rota: null },
