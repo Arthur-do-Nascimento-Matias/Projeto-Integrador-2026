@@ -20,23 +20,23 @@ const callback = (req, res) => {
     res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
     let rota = url.parse(req.url, true)
     let param = url.parse(req.url, true).query
-    console.log(param)
 
     if(rota.pathname == '/atividades') {
        
-        Conexao.getAlunosByAno()
+        Conexao.getAtividades(param)
         .then(con => {
-            console.log("consulta" + con)
-            console.log(con.alternativas)
-            res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0].texto, 'alternativa2': con.alternativas[1].texto, 'alternativa3': con.alternativas[2].texto, 'alternativa4': con.alternativas[3].texto}))
+            res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0], 'alternativa2': con.alternativas[1], 'alternativa3': con.alternativas[2], 'alternativa4': con.alternativas[3]}))
         }
         )
 
     }
     if(rota.pathname == '/nome') {
-        res.end(JSON.stringify(
-            array.map(item => ({'nome': item.nome}))
-        ))
+        console.log('param:', param.id)
+        Conexao.criarTrilha(param)
+        .then(con => {
+            console.log(con.indices)
+            res.end(JSON.stringify({'nome': con.indices}))
+        })
     }
     if(rota.pathname == '/adicionar') {
         let novaAtividade = new Atividades(param.nome, param.enunciado, param.alternativa1, param.alternativa2, param.alternativa3, param.resposta)

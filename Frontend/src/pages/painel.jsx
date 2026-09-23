@@ -1,4 +1,3 @@
-import Trilha from "../components/trilhaAtividades/trilha";
 import MenuEsquerda from "../components/MenuEsquerda/MenuEsquerda";
 import MenuDireita from "../components/MenuDireita/MenuDireita";
 import Atividades from "../components/Atividades/Atividades";
@@ -7,6 +6,7 @@ import { useRef, useState } from 'react'
 
 
 function Painel() {
+
 
     const refAtividade = useRef(null)
 
@@ -24,6 +24,9 @@ function Painel() {
                 setAtividadeAtual={setAtividadeAtual}
                 atvLiberada={atvLiberada}
             />
+
+            <MenuEsquerda />
+
             <Atividades 
                 refAtividade={refAtividade}
                 atividadeAtual={atividadeAtual}

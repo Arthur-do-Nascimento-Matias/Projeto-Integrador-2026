@@ -1366,28 +1366,4 @@
 
 /* ==========================================================
    ÍCONES + QUADRADO LARANJA — POSIÇÃO FIXA E ALINHADA
-========================================================== */
-
-.simio-sidebar-layer .nav-item::before,
-.simio-sidebar-layer .menu-toggle::before{
-  left:41px !important;
-}
-
-
-.simio-sidebar-layer .nav-item::after,
-.simio-sidebar-layer .menu-toggle::after{
-  left:41px !important;
-}
-
-
-/* mantém os ícones na posição ORIGINAL */
-.simio-sidebar-layer .icon-wrap{
-  margin-left:9px !important;
-}
-
-
-/* abrir a sidebar NÃO altera mais a posição */
-.simio-sidebar-layer .sidebar:hover .icon-wrap,
-.simio-sidebar-layer .sidebar.pin-open .icon-wrap{
-  margin-left:9px !important;
 }
