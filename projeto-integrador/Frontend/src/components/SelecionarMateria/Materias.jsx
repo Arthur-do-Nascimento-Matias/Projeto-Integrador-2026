@@ -192,6 +192,7 @@ useEffect(() => {
 
   return (
     <>
+  return (
     <div className="materias-container">
 
         {aberto && (
@@ -206,11 +207,17 @@ useEffect(() => {
         className={`materias-botao ${aberto ? "aberto" : ""}`}
         onClick={() => setAberto(!aberto)}
       >
-        <div className="materias-botao-icone">
-          {materiaAtiva.icone}
-        </div>
+      <div className="materias-botao-icone">
+         <img
+           src={materiaAtiva.icon}
+           alt={materiaAtiva.nome}
+           className="materias-botao-img"
+         />
+      </div>
 
-        <span>{materiaAtiva.nome}</span>
+        <span className="materias-botao-nome">
+            {materiaAtiva.nome}
+        </span>
 
         <span className="materias-seta">
           ▼     
@@ -277,13 +284,22 @@ useEffect(() => {
                     fill={materia.cor}
                   />
 
+                  <image
+                    href={materia.icon}
+                    x={posicaoTexto.x - 19}
+                    y={posicaoTexto.y - 32}
+                    width="38"
+                    height="38"
+                    className="materia-icone-img-svg"
+                 />
+
                   <text
                     x={posicaoTexto.x}
-                    y={posicaoTexto.y - 8}
-                    className="materia-icone-svg"
-                  >
-                    {materia.icone}
-                  </text>
+                    y={posicaoTexto.y + 17}
+                    className="materia-nome-svg"
+               >  
+                 {materia.nome}
+                 </text>
 
                   <text
                     x={posicaoTexto.x}
@@ -299,12 +315,13 @@ useEffect(() => {
 
           {/* CENTRO DA RODA */}
           <div className="materias-centro">
-            <div
-              className="materias-centro-icone"
-              key={materiaExibida.id}
-            >
-              {materiaExibida.icone}
-            </div>
+            <div className="materias-centro-icone" key={materiaExibida.id}>
+             <img
+               src={materiaExibida.icon}
+               alt={materiaExibida.nome}
+              className="materias-centro-img"
+           />
+           </div>
 
             <strong>
               {materiaExibida.nome}
