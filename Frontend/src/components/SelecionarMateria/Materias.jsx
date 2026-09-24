@@ -9,42 +9,42 @@ import matIcon from "../../assets/materias/matematica.svg";
 
 const materias = [
   {
-    id: "portugues",
+    id: "2",
     nome: "Português",
     descricao: "Língua Portuguesa",
     cor: "#ff8214",
     icon: brIcon,
   },
   {
-    id: "matematica",
+    id: "1",
     nome: "Matemática",
     descricao: "Números e lógica",
     cor: "#75543c",
     icon: matIcon,
   },
   {
-    id: "historia",
+    id: "3",
     nome: "História",
     descricao: "História e sociedade",
     cor: "#684936",
     icon: histIcon,
   },
   {
-    id: "ciencias",
+    id: "5",
     nome: "Ciências",
     descricao: "Natureza e ciência",
     cor: "#52663c",
     icon: cienciaIcon,
   },
   {
-    id: "geografia",
+    id: "4",
     nome: "Geografia",
     descricao: "Espaço e território",
     cor: "#64724a",
     icon: geoIcon,
   },
   {
-    id: "ingles",
+    id: "6",
     nome: "Inglês",
     descricao: "Língua Inglesa",
     cor: "#465936",
@@ -86,7 +86,7 @@ function criarFatia(
   ].join(" ");
 }
 
-function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
+function Materias({  onChange, refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada }) {
   const [aberto, setAberto] = useState(false);
   const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
   const [materiaHover, setMateriaHover] = useState(null);
@@ -132,7 +132,7 @@ function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
     const refTrilha = useRef(null)
 
     let respostaCerta
-    let atividadeAtual
+
     let indiceAtv = 0
 
     const botoes = []
@@ -159,15 +159,18 @@ function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
     }
 
     botao.addEventListener('click', () => entrarAtividade(botao))
-
-    if (i + 1 < atvLiberada) {
+    console.log('contador: '+i)
+    console.log('atividade atual: '+ atividadeAtual)
+    if (i < atividadeAtual) {
         botao.classList.add('concluida')
     } 
-    else if (i + 1 === atvLiberada) {
+    else if (i === atividadeAtual) {
+      console.log('aqui')
         botao.classList.add('atual')
     }
     else {
         botao.style.filter = 'grayscale(100%)'
+        console.log('aqui')
     }
     refTrilha.current.appendChild(botao)
     botoes.push(botao)
@@ -192,7 +195,7 @@ function Materias({ onChange, refAtividade, setAtividadeAtual, atvLiberada }) {
 
 useEffect(() => {
 
-    criarTrilha(1)
+    criarTrilha(2)
 
 }, [atvLiberada])
 
@@ -274,11 +277,14 @@ useEffect(() => {
                   className={`materia-fatia ${
                     ativa ? "ativa" : ""
                   }`}
-                  onClick={() =>
+                  onClick={() => {
                     selecionarMateria(materia)
+                    criarTrilha(materia.id)
+                    }
                   }
-                  onMouseEnter={() =>
+                  onMouseEnter={() => {
                     setMateriaHover(materia)
+                    }
                   }
                   onMouseLeave={() =>
                     setMateriaHover(null)

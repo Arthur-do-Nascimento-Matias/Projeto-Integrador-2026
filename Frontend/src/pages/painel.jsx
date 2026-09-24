@@ -9,20 +9,27 @@ function Painel() {
 
     const refAtividade = useRef(null)
 
-    const [atividadeAtual, setAtividadeAtual] = useState(null)
+    const [atividadeAtual, setAtividadeAtual] = useState(0)
     const [atvLiberada, setAtvLiberada] = useState(1)
 
         return(
         <>
 
-            <Materias />
+            <Materias 
+                refAtividade={refAtividade}
+                atividadeAtual={atividadeAtual}
+                setAtividadeAtual={setAtividadeAtual}
+                atvLiberada={atvLiberada}
+            />
 
             <Atividades 
                 refAtividade={refAtividade}
                 atividadeAtual={atividadeAtual}
                 setAtvLiberada={setAtvLiberada}
             />
+
             <MenuDireita />
+
         </>
     )
 }
