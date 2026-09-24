@@ -6,6 +6,7 @@ import { useRef, useState } from 'react'
 
 function Painel() {
 
+    const [materiaAtual, setMateriaAtual] = useState(1)
 
     const refAtividade = useRef(null)
 
@@ -20,12 +21,14 @@ function Painel() {
                 atividadeAtual={atividadeAtual}
                 setAtividadeAtual={setAtividadeAtual}
                 atvLiberada={atvLiberada}
+                setMateriaAtual={setMateriaAtual}
             />
 
             <Atividades 
                 refAtividade={refAtividade}
                 atividadeAtual={atividadeAtual}
                 setAtvLiberada={setAtvLiberada}
+                materiaAtual={materiaAtual}
             />
 
             <MenuDireita />

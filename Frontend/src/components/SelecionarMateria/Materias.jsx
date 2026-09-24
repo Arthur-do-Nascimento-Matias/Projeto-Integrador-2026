@@ -86,7 +86,7 @@ function criarFatia(
   ].join(" ");
 }
 
-function Materias({  onChange, refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada }) {
+function Materias({  onChange, refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada, setMateriaAtual }) {
   const [aberto, setAberto] = useState(false);
   const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
   const [materiaHover, setMateriaHover] = useState(null);
@@ -280,6 +280,7 @@ useEffect(() => {
                   onClick={() => {
                     selecionarMateria(materia)
                     criarTrilha(materia.id)
+                    setMateriaAtual(materia.id)
                     }
                   }
                   onMouseEnter={() => {

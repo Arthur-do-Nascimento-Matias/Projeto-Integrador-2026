@@ -22,9 +22,9 @@ static getAtividades(param) {
 
         const connection = Conexao.connect()
 
-        const sql = 'SELECT * FROM `perguntas` WHERE id_pergunta=?'
+        const sql = 'SELECT * FROM `perguntas` WHERE id_materia=? AND id_pergunta=?'
 
-        connection.query(sql, param.id, (error, perguntas) => {
+        connection.query(sql, [param.materia, param.atividadeAtual], (error, perguntas) => {
 
             if (error) {
                 reject(error)
@@ -34,7 +34,7 @@ static getAtividades(param) {
             const sqlAlternativas =
                 'SELECT * FROM `alternativas` WHERE id_pergunta=?'
 
-            connection.query(sqlAlternativas, param.id, (error, alternativas) => {
+            connection.query(sqlAlternativas, param.atividadeAtual, (error, alternativas) => {
 
                 connection.end()
 

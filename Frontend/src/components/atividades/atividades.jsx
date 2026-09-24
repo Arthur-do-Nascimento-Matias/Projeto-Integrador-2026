@@ -15,7 +15,7 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
     return arr
 }
 
-function atividades({ refAtividade, atividadeAtual, setAtvLiberada }) {
+function atividades({ refAtividade, atividadeAtual, setAtvLiberada, materiaAtual }) {
 
     const atividadesConcluidas = [];
 
@@ -28,7 +28,7 @@ function atividades({ refAtividade, atividadeAtual, setAtvLiberada }) {
     
 function criarAtividade(id) {
 
-        fetch(`http://localhost:3000/atividades?id=${id}`)
+        fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&id=${id}&atividadeAtual=${atividadeAtual}`)
         .then(resp => resp.json())
         .then(data => {
             refEnunciado.current.innerHTML = data.pergunta
