@@ -6,6 +6,7 @@ import cienciaIcon from "../../assets/materias/ciencia.svg";
 import geoIcon from "../../assets/materias/geografia.svg";
 import histIcon from "../../assets/materias/historia.svg";
 import matIcon from "../../assets/materias/matematica.svg";
+import { criarAtividade } from "../atividades/atividades";
 
 const materias = [
   {
@@ -86,7 +87,7 @@ function criarFatia(
   ].join(" ");
 }
 
-function Materias({  onChange, refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada, setMateriaAtual }) {
+function Materias({  onChange, refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada, setMateriaAtual, materiaAtual }) {
   const [aberto, setAberto] = useState(false);
   const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
   const [materiaHover, setMateriaHover] = useState(null);
@@ -140,12 +141,11 @@ function Materias({  onChange, refAtividade, atividadeAtual, setAtividadeAtual, 
     function criarTrilha(id) {
 
     refTrilha.current.innerHTML = ''
-      console.log(id)
+
     fetch(`http://localhost:3000/nome?id=${id}`)
         .then(data => data.json())
         .then(resp => {
-        console.log(resp)
-        console.log('tamanho'+resp.nome.length)
+
         for(let i=0; i < ((resp.nome.length)/3).toFixed(); i++){
         const botao = document.createElement('button')
         botao.className = 'botaoAtividade'
@@ -159,18 +159,14 @@ function Materias({  onChange, refAtividade, atividadeAtual, setAtividadeAtual, 
     }
 
     botao.addEventListener('click', () => entrarAtividade(botao))
-    console.log('contador: '+i)
-    console.log('atividade atual: '+ atividadeAtual)
     if (i < atividadeAtual) {
         botao.classList.add('concluida')
     } 
     else if (i === atividadeAtual) {
-      console.log('aqui')
         botao.classList.add('atual')
     }
     else {
         botao.style.filter = 'grayscale(100%)'
-        console.log('aqui')
     }
     refTrilha.current.appendChild(botao)
     botoes.push(botao)
@@ -280,7 +276,9 @@ useEffect(() => {
                   onClick={() => {
                     selecionarMateria(materia)
                     criarTrilha(materia.id)
+                    console.log("materia", materia.id)
                     setMateriaAtual(materia.id)
+                    criarAtividade(atividadeAtual, materiaAtual)
                     }
                   }
                   onMouseEnter={() => {

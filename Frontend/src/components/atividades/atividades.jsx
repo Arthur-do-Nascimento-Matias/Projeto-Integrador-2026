@@ -6,6 +6,21 @@ let respostaCerta
 let indiceAtv = 1
 let cliques = 0
 
+export function criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4) {
+
+        console.log("materias em atividades.jsx", materiaAtual)
+        fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&atividadeAtual=${atividadeAtual}`)
+        .then(resp => resp.json())
+        .then(data => {
+            refEnunciado.current.innerHTML = data.pergunta
+            embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.alternativa3, data.alternativa4)
+                refAlternativa1.current.innerHTML = embaralhado[0].texto
+                refAlternativa2.current.innerHTML = embaralhado[1].texto
+                refAlternativa3.current.innerHTML = embaralhado[2].texto
+                refAlternativa4.current.innerHTML = embaralhado[3].texto
+        })
+    }
+
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
       let arr = [alternativa1, alternativa2, certa, alternativa4]
       for (let i = arr.length - 1; i > 0; i--) {
@@ -25,20 +40,6 @@ function atividades({ refAtividade, atividadeAtual, setAtvLiberada, materiaAtual
     const refAlternativa2 = useRef(null)
     const refAlternativa3 = useRef(null)
     const refAlternativa4 = useRef(null)
-    
-function criarAtividade(id) {
-
-        fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&id=${id}&atividadeAtual=${atividadeAtual}`)
-        .then(resp => resp.json())
-        .then(data => {
-            refEnunciado.current.innerHTML = data.pergunta
-            embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.alternativa3, data.alternativa4)
-                refAlternativa1.current.innerHTML = embaralhado[0].texto
-                refAlternativa2.current.innerHTML = embaralhado[1].texto
-                refAlternativa3.current.innerHTML = embaralhado[2].texto
-                refAlternativa4.current.innerHTML = embaralhado[3].texto
-        })
-    }
 
 function sairAtividade() {
     refAtividade.current.style.transform = 'translateX(100%)'
@@ -91,7 +92,7 @@ useEffect(() => {
 
     if (!atividadeAtual) return
 
-    criarAtividade(atividadeAtual)
+    criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4)
 
 }, [atividadeAtual])
 

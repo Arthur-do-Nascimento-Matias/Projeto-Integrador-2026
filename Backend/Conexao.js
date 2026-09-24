@@ -18,11 +18,11 @@ static connect() {
 static getAtividades(param) {
     return new Promise((resolve, reject) => {
 
-        console.log(param)
-
         const connection = Conexao.connect()
 
-        const sql = 'SELECT * FROM `perguntas` WHERE id_materia=? AND id_pergunta=?'
+        console.log('param', param.materia, " ",param.atividadeAtual)
+
+        const sql = 'SELECT * FROM `perguntas` WHERE id_materia=? AND ordem=?'
 
         connection.query(sql, [param.materia, param.atividadeAtual], (error, perguntas) => {
 
@@ -56,8 +56,6 @@ static criarTrilha(param){
     return new Promise((resolve, reject) => {
 
         const connection = Conexao.connect()
-
-        console.log('conexao param', param.id)
 
         let sql = 'SELECT * FROM `perguntas` WHERE id_materia = ?'
 

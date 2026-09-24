@@ -22,19 +22,20 @@ const callback = (req, res) => {
     let param = url.parse(req.url, true).query
 
     if(rota.pathname == '/atividades') {
-       
+               console.log('numeros dessa krla', param)
         Conexao.getAtividades(param)
+
         .then(con => {
+
             res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0], 'alternativa2': con.alternativas[1], 'alternativa3': con.alternativas[2], 'alternativa4': con.alternativas[3]}))
         }
         )
 
     }
     if(rota.pathname == '/nome') {
-        console.log('param:', param.id)
+
         Conexao.criarTrilha(param)
         .then(con => {
-            console.log(con.indices)
             res.end(JSON.stringify({'nome': con.indices}))
         })
     }
