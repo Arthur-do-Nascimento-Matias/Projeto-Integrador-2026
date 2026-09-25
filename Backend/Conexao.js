@@ -29,6 +29,22 @@
                     return
                 }
 
+                console.log('tamanho: ', perguntas.length)
+                 if (!perguntas || perguntas.length === 0 || !perguntas[0]) {
+
+                    console.log("Nenhuma pergunta encontrada.");
+
+                    connection.end();
+
+                    resolve({
+                        concluido: true,
+                        perguntas: [],
+                        alternativas: []
+                    });
+
+                    return;
+                }
+
                 const sqlAlternativas =
                     'SELECT * FROM `alternativas` WHERE id_pergunta=?'
 

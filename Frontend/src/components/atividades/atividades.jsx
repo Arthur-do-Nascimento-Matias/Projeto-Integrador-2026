@@ -6,12 +6,23 @@ let respostaCerta
 let indiceAtv = 1
 let cliques = 0
 
-export function criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4) {
+function sairAtividade(refAtividade, trilha) {
+    refAtividade.current.style.transform = 'translateX(100%)'
+    trilha.style.opacity = '1'
+}
+
+export function criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
 
         console.log("materias em atividades.jsx", materiaAtual)
         fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&atividadeAtual=${atividadeAtual}`)
         .then(resp => resp.json())
         .then(data => {
+
+            if(data.concluido) {
+                sairAtividade(refAtividade, trilha)
+                refParabens.current.style.display = 'flex'
+            }
+
             refEnunciado.current.innerHTML = data.pergunta
             embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.alternativa3, data.alternativa4)
                 refAlternativa1.current.innerHTML = embaralhado[0].texto
@@ -36,18 +47,13 @@ function atividades({ refAtividade, atividadeAtual, setAtvLiberada, materiaAtual
 
     const refParabens = useRef(null)
 
-function sairAtividade() {
-    refAtividade.current.style.transform = 'translateX(100%)'
-    trilha.style.opacity = '1'
-}
-
 function fecharParabens() {
 
     refParabens.current.style.display = "none"
 
     const botao = document.getElementById(atividadeAtual)
 
-    sairAtividade()
+    sairAtividade(refAtividade, trilha)
 }
 
 function verificar(id, resp){
@@ -59,7 +65,7 @@ function verificar(id, resp){
         cliques += 1
         indiceAtv += 1
         console.log('indice' + indiceAtv)
-        criarAtividade(refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4)
+        criarAtividade(refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
     } else {
         cliques = 0
         console.log('concluido')
@@ -87,7 +93,7 @@ useEffect(() => {
 
     if (!atividadeAtual) return
 
-    criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4)
+    criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
 
 }, [atividadeAtual])
 
