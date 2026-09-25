@@ -30,16 +30,11 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
     return arr
 }
 
-function atividades({ refAtividade, atividadeAtual, setAtvLiberada, materiaAtual }) {
+function atividades({ refAtividade, atividadeAtual, setAtvLiberada, materiaAtual, refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4}) {
 
     const atividadesConcluidas = [];
 
     const refParabens = useRef(null)
-    const refEnunciado = useRef(null)
-    const refAlternativa1 = useRef(null)
-    const refAlternativa2 = useRef(null)
-    const refAlternativa3 = useRef(null)
-    const refAlternativa4 = useRef(null)
 
 function sairAtividade() {
     refAtividade.current.style.transform = 'translateX(100%)'
@@ -64,7 +59,7 @@ function verificar(id, resp){
         cliques += 1
         indiceAtv += 1
         console.log('indice' + indiceAtv)
-        criarAtividade(indiceAtv)
+        criarAtividade(refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4)
     } else {
         cliques = 0
         console.log('concluido')

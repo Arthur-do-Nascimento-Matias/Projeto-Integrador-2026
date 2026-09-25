@@ -1,79 +1,78 @@
-const mysql = require('mysql')
+    const mysql = require('mysql')
 
-class Conexao{
-    
-static connect() {
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'integrador'
-    })
+    class Conexao{
+        
+    static connect() {
+        var connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'integrador'
+        })
 
-    connection.connect()
+        connection.connect()
 
-    return connection
-}
+        return connection
+    }
 
-static getAtividades(param) {
-    return new Promise((resolve, reject) => {
+    static getAtividades(param) {
+        return new Promise((resolve, reject) => {
 
-        const connection = Conexao.connect()
+            const connection = Conexao.connect()
 
-        console.log('param', param.materia, " ",param.atividadeAtual)
+            const sql = 'SELECT * FROM `perguntas` WHERE id_materia=? AND ordem=?'
 
-        const sql = 'SELECT * FROM `perguntas` WHERE id_materia=? AND ordem=?'
-
-        connection.query(sql, [param.materia, param.atividadeAtual], (error, perguntas) => {
-
-            if (error) {
-                reject(error)
-                return
-            }
-
-            const sqlAlternativas =
-                'SELECT * FROM `alternativas` WHERE id_pergunta=?'
-
-            connection.query(sqlAlternativas, param.atividadeAtual, (error, alternativas) => {
-
-                connection.end()
+            connection.query(sql, [param.materia, param.atividadeAtual], (error, perguntas) => {
 
                 if (error) {
                     reject(error)
                     return
                 }
 
-                resolve({
-                    perguntas: perguntas,
-                    alternativas: alternativas
+                const sqlAlternativas =
+                    'SELECT * FROM `alternativas` WHERE id_pergunta=?'
+
+
+                connection.query(sqlAlternativas, [perguntas[0].id_pergunta], (error, alternativas) => {
+
+                    connection.end(alternativas)
+
+                    if (error) {
+                        reject(error)
+                        return
+                    }
+
+                    resolve({
+                        perguntas: perguntas,
+                        alternativas: alternativas
+                    })
                 })
             })
         })
-    })
-}
+    }
 
-static criarTrilha(param){
-    return new Promise((resolve, reject) => {
+    static criarTrilha(param){
+        return new Promise((resolve, reject) => {
 
-        const connection = Conexao.connect()
+            const connection = Conexao.connect()
 
-        let sql = 'SELECT * FROM `perguntas` WHERE id_materia = ?'
+            let sql = 'SELECT * FROM `perguntas` WHERE id_materia = ?'
 
-        connection.query(sql, param.id, (error, indices) => {
-        
-        connection.end()
+            connection.query(sql, param.id, (error, indices) => {
+            
+            connection.end()
 
-        if(error) {
-            reject(error)
-            return
-        }
-        resolve({
-            indices: indices
+            if(error) {
+                reject(error)
+                return
+            }
+            resolve({
+                indices: indices
+            })
+
+            })
         })
+    }
+    }
 
-        })
-    })
-}
-}
-
-module.exports = Conexao
+    module.exports = Conexao

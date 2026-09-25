@@ -26,7 +26,6 @@ const callback = (req, res) => {
         Conexao.getAtividades(param)
 
         .then(con => {
-
             res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0], 'alternativa2': con.alternativas[1], 'alternativa3': con.alternativas[2], 'alternativa4': con.alternativas[3]}))
         }
         )

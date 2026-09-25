@@ -25,7 +25,11 @@ function Biblioteca() {
     }
 
     const livrosFiltrados = capas.filter((capa) =>
-        String(capa.id)
+        String(capa.titulo || "")
+            .toLowerCase()
+            .includes(busca.toLowerCase()) ||
+
+        String(capa.autorLivro || "")
             .toLowerCase()
             .includes(busca.toLowerCase())
     );

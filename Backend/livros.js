@@ -22,13 +22,13 @@ const callback = (req, res) => {
             
             res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
             
-            var sql = 'select capaLivro, idLivro from livros'
+            var sql = 'select capaLivro, idLivro, NomeLivro, autorLivro from livros'
             
             connection.query(sql, function(error, results){
                 if(error) throw error
 
                 const capas = results.map(element => {
-                    return {'img': element.capaLivro.toString('base64'), 'id': element.idLivro}
+                    return {'img': element.capaLivro.toString('base64'), 'id': element.idLivro, 'titulo': element.NomeLivro, 'autorLivro': element.autorLivro}
                 });
 
                 console.log(results)
