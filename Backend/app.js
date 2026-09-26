@@ -1,57 +1,158 @@
-const http = require('http')
-const url = require('url')
-const Tarefa = require('./Atividades')
-const Atividades = require('./Atividades')
-const Conexao = require('./Conexao')
+import http from 'http'
+import url from 'url'
 
-const array = [
-    {'nome': 'introducao', 'pergunta': 'O antônimo de agitado é...','alternativas':  ['afobado', 'atrasado', 'elefante'], 'respostaCertas':  'tranquilo'},
-    {'nome': 'pg1', 'pergunta': 'Qual dos advérbios abaixo não existe?','alternativas': ['bastante', 'quanto', 'tanto'], 'respostaCertas': 'menas'},
-    {'nome': 'pg2', 'pergunta': 'Uma agitação barulhenta, tumulto ou alvoroço é chamada de:', 'alternativas': ['dilema', 'discernimento', 'atrasamento'], 'respostaCertas': 'celeuma'},
-    {'nome': 'pg3', 'pergunta': 'O verbo "aferir" está relacionado a:', 'alternativas': ['machucar', 'localizar', 'capacitar'], 'respostaCertas': 'medir',},
-    {'nome': 'pg4', 'pergunta': 'Qual das palavras abaixo apresenta erro de grafia?', 'alternativas': ['bruxa', 'xingar', 'encher'], 'respostaCertas': 'mecher'}
-]
-
-
+//import Atividades from './Atividades.js'
+import Conexao from './Conexao.js'
+import Livros from './Livros.js'
+import ChatBot from './ChatBot.js'
 
 
 const callback = (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
-    let rota = url.parse(req.url, true)
-    let param = url.parse(req.url, true).query
 
-    if(rota.pathname == '/atividades') {
-               console.log('numeros dessa krla', param)
+    res.setHeader('Access-Control-Allow-Origin', '*')
+
+    const rota = url.parse(req.url, true)
+    const param = rota.query
+
+
+    // =========================
+    // ATIVIDADES
+    // =========================
+
+    if (rota.pathname == '/atividades') {
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8'
+        })
+
         Conexao.getAtividades(param)
+            .then(con => {
 
-        .then(con => {
-            console.log(con)
+                if (con.concluido) {
 
-            if(con.concluido){
-                res.end(JSON.stringify({concluido: 'concluido'}))
-                return
-            }
+                    res.end(JSON.stringify({
+                        concluido: 'concluido'
+                    }))
 
-            res.end(JSON.stringify({'pergunta': con.perguntas[0].enunciado, 'alternativa1': con.alternativas[0], 'alternativa2': con.alternativas[1], 'alternativa3': con.alternativas[2], 'alternativa4': con.alternativas[3]}))
-        }
-        )
+                    return
+                }
 
+                res.end(JSON.stringify({
+                    pergunta: con.perguntas[0].enunciado,
+                    alternativa1: con.alternativas[0],
+                    alternativa2: con.alternativas[1],
+                    alternativa3: con.alternativas[2],
+                    alternativa4: con.alternativas[3]
+                }))
+            })
+
+        return
     }
-    if(rota.pathname == '/nome') {
+
+
+    // =========================
+    // NOME
+    // =========================
+
+    if (rota.pathname == '/nome') {
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8'
+        })
 
         Conexao.criarTrilha(param)
-        .then(con => {
-            res.end(JSON.stringify({'nome': con.indices}))
-        })
+            .then(con => {
+
+                res.end(JSON.stringify({
+                    nome: con.indices
+                }))
+            })
+
+        return
     }
-    if(rota.pathname == '/adicionar') {
-        let novaAtividade = new Atividades(param.nome, param.enunciado, param.alternativa1, param.alternativa2, param.alternativa3, param.resposta)
-        array.push(novaAtividade)
+
+
+    // =========================
+    // LIVROS
+    // =========================
+
+    if (rota.pathname == '/livros') {
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8'
+        })
+
+        Livros.booksSearch()
+            .then(resp => {
+
+                res.end(JSON.stringify(resp))
+            })
+
+        return
+    }
+
+
+    // =========================
+    // ABRIR LIVRO
+    // =========================
+
+    if (rota.pathname == '/abrirLivro') {
+
+        res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'inline; filename="livro.pdf"'
+        })
+
+        Livros.openBook(param)
+            .then(resp => {
+
+                res.end(resp)
+            })
+
+        return
+    }
+
+
+    // =========================
+    // CHATBOT
+    // =========================
+
+    if (rota.pathname == '/chatBot') {
+
+        ChatBot.resposta(param.mensagem)
+
+            .then(resp => {
+
+                res.writeHead(200, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    resposta: resp
+                }))
+            })
+
+            .catch(error => {
+
+                res.writeHead(500, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    erro: error.message
+                }))
+            })
+
+        return
     }
 }
 
-let server = http.createServer(callback)
+
+const server = http.createServer(callback)
 
 server.listen(3000)
-console.log('Server iniciado \nPorta 3000')
+
+console.log('Server iniciado')
+console.log('Porta 3000')

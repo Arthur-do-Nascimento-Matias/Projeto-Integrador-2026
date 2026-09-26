@@ -1,4 +1,4 @@
-    const mysql = require('mysql')
+import mysql from 'mysql'
 
     class Conexao{
         
@@ -91,4 +91,4 @@
     }
     }
 
-    module.exports = Conexao
+export default Conexao

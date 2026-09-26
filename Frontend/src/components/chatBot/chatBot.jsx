@@ -25,7 +25,7 @@ function Avatar({ src, grande = false }) {
   </span>
 }
 
-export default function ChatBot({ mascoteSrc = mascotePadrao, endpoint = 'http://localhost:4000/api/chat' }) {
+export default function ChatBot({ mascoteSrc = mascotePadrao, endpoint = 'http://localhost:3000/chatBot' }) {
   const [mensagens, setMensagens] = useState([])
   const [texto, setTexto] = useState('')
   const [carregando, setCarregando] = useState(false)
@@ -47,40 +47,79 @@ export default function ChatBot({ mascoteSrc = mascotePadrao, endpoint = 'http:/
     if (historico && pertoDoFim.current) historico.scrollTop = historico.scrollHeight
   }, [mensagens, carregando, erro])
 
-  async function enviarMensagem(mensagemBruta = texto, repetir = false) {
+async function enviarMensagem(mensagemBruta = texto, repetir = false) {
+
     const mensagem = mensagemBruta.trim()
+
     if (!mensagem || ocupado.current) return
+
     ocupado.current = true
-    const controller = new AbortController()
-    requisicao.current = controller
-    const timeout = setTimeout(() => controller.abort(), 120000)
-    pertoDoFim.current = true
     setErro('')
     setUltimaMensagem(mensagem)
+
     if (!repetir) {
-      setMensagens(prev => [...prev, { tipo: 'usuario', texto: mensagem }])
-      setTexto('')
+        setMensagens(prev => [
+            ...prev,
+            {
+                tipo: 'usuario',
+                texto: mensagem
+            }
+        ])
+
+        setTexto('')
     }
+
     setCarregando(true)
+
     try {
-      const resposta = await fetch(endpoint, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mensagem }), signal: controller.signal,
-      })
-      if (!resposta.ok) throw new Error('Falha na resposta')
-      const dados = await resposta.json()
-      if (typeof dados.resposta !== 'string' || !dados.resposta.trim()) throw new Error('Resposta vazia')
-      const html = DOMPurify.sanitize(marked.parse(dados.resposta))
-      setMensagens(prev => [...prev, { tipo: 'ia', texto: html }])
-    } catch {
-      setErro('Não consegui responder agora. Tente novamente em instantes.')
+
+        const resposta = await fetch(
+            `http://localhost:3000/chatBot?mensagem=${encodeURIComponent(mensagem)}`
+        )
+
+        console.log('Status:', resposta.status)
+
+        const dados = await resposta.json()
+
+        console.log('Resposta do backend:', dados)
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.erro || 'Erro no servidor'
+            )
+        }
+
+        if (!dados.resposta) {
+            throw new Error('Resposta vazia')
+        }
+
+        const html = DOMPurify.sanitize(
+            marked.parse(dados.resposta)
+        )
+
+        setMensagens(prev => [
+            ...prev,
+            {
+                tipo: 'ia',
+                texto: html
+            }
+        ])
+
+    } catch (error) {
+
+        console.error('Erro ao enviar mensagem:', error)
+
+        setErro(
+            'Não consegui responder agora. Tente novamente.'
+        )
+
     } finally {
-      clearTimeout(timeout)
-      ocupado.current = false
-      requisicao.current = null
-      setCarregando(false)
+
+        ocupado.current = false
+        setCarregando(false)
     }
-  }
+}
+
 
   return <section className="chatIA" aria-label="Chat de estudos da SimIA">
     <div className="simia-container">

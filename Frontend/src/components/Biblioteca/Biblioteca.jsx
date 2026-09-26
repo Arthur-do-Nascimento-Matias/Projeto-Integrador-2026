@@ -6,10 +6,9 @@ function Biblioteca() {
     const [busca, setBusca] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:5000/livros")
+        fetch("http://localhost:3000/livros")
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(data);
                 setCapas(data);
             })
             .catch((erro) => {
@@ -19,7 +18,7 @@ function Biblioteca() {
 
     function abrirLivro(id) {
         window.open(
-            `http://localhost:5000/abrirLivro?id=${id}`,
+            `http://localhost:3000/abrirLivro?id=${id}`,
             "_blank"
         );
     }

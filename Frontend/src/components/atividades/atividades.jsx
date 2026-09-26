@@ -11,7 +11,7 @@ function sairAtividade(refAtividade, trilha) {
     trilha.style.opacity = '1'
 }
 
-export function criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
+export function criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
 
         console.log("materias em atividades.jsx", materiaAtual)
         fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&atividadeAtual=${atividadeAtual}`)
@@ -65,7 +65,7 @@ function verificar(id, resp){
         cliques += 1
         indiceAtv += 1
         console.log('indice' + indiceAtv)
-        criarAtividade(refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
+        criarAtividade(refAtividade, refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
     } else {
         cliques = 0
         console.log('concluido')
@@ -93,14 +93,14 @@ useEffect(() => {
 
     if (!atividadeAtual) return
 
-    criarAtividade(refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
+    criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
 
 }, [atividadeAtual])
 
     return(
         <>
             <div className="atividade" id="atividade" ref={refAtividade}>
-                    <button onClick={sairAtividade}>Sair</button>
+                    <button onClick={(e) => sairAtividade(refAtividade, trilha)}>Sair</button>
                      <h1 className="enunciado" id="enunciado" ref={refEnunciado}></h1>
                         <button className="alternativa1" id="alternativa1" onClick={(e) => verificar(0, e.currentTarget)} ref={refAlternativa1}></button>
                         <button className="alternativa2" id="alternativa2" onClick={(e) => verificar(1, e.currentTarget)} ref={refAlternativa2}></button>
