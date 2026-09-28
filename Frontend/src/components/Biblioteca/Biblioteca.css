@@ -435,7 +435,7 @@
 
     gap: 18px;
 
-    margin-bottom: 28px;
+    margin-bottom: 34px;
 
 }
 
@@ -516,7 +516,10 @@
 
     width: 100%;
 
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
 
     grid-template-columns:
 
@@ -529,7 +532,7 @@
 
     row-gap: 58px;
 
-    justify-content: start;
+    
 
     align-content: start;
 

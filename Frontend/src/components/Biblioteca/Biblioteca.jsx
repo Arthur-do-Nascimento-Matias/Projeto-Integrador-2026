@@ -140,10 +140,11 @@ function Biblioteca() {
 
 
                                 <div className="livro-acao">
+                                        <strong>{capa.titulo}</strong>
+                                            <span>{capa.autor}</span>
+                                                <small>Abrir livro</small>
 
-                                    <span>
-                                        Abrir livro
-                                    </span>
+
 
                                 </div>
 
