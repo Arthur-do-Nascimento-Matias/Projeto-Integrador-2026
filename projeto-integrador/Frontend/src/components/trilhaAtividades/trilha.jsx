@@ -71,12 +71,9 @@ useEffect(() => {
 
     return(
         <>
-
           <div className="trilha ativo" id="trilha" ref={refTrilha}></div>
-
         </>
     )
-
 }
 
 export default Trilha
