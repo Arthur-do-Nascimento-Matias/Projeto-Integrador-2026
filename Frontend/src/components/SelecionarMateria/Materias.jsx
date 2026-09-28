@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Materias.css";
 import brIcon from "../../assets/materias/brasil.svg";
 import enIcon from "../../assets/materias/ingles.svg";
@@ -6,51 +6,53 @@ import cienciaIcon from "../../assets/materias/ciencia.svg";
 import geoIcon from "../../assets/materias/geografia.svg";
 import histIcon from "../../assets/materias/historia.svg";
 import matIcon from "../../assets/materias/matematica.svg";
+import { criarAtividade } from "../atividades/atividades";
 
 const materias = [
   {
-    id: "portugues",
+    id: 2,
     nome: "Português",
     descricao: "Língua Portuguesa",
     cor: "#ff8214",
     icon: brIcon,
   },
   {
-    id: "matematica",
+    id: 1,
     nome: "Matemática",
     descricao: "Números e lógica",
     cor: "#75543c",
     icon: matIcon,
   },
   {
-    id: "historia",
+    id: 3,
     nome: "História",
     descricao: "História e sociedade",
     cor: "#684936",
     icon: histIcon,
   },
   {
-    id: "ciencias",
+    id: 5,
     nome: "Ciências",
     descricao: "Natureza e ciência",
     cor: "#52663c",
     icon: cienciaIcon,
   },
   {
-    id: "geografia",
+    id: 4,
     nome: "Geografia",
     descricao: "Espaço e território",
     cor: "#64724a",
     icon: geoIcon,
   },
   {
-    id: "ingles",
+    id: 6,
     nome: "Inglês",
     descricao: "Língua Inglesa",
     cor: "#465936",
     icon: enIcon,
   },
 ];
+
 function pontoPolar(cx, cy, raio, angulo) {
   const radianos = ((angulo - 90) * Math.PI) / 180;
 
@@ -85,7 +87,7 @@ function criarFatia(
   ].join(" ");
 }
 
-function Materias({ onChange }) {
+function Materias({ refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada, setMateriaAtual, materiaAtual, onChange, refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4 }) {
   const [aberto, setAberto] = useState(false);
   const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
   const [materiaHover, setMateriaHover] = useState(null);
@@ -128,7 +130,73 @@ function Materias({ onChange }) {
     return prioridade(a) - prioridade(b);
   });
 
+    const refTrilha = useRef(null)
+
+    let respostaCerta
+
+    let indiceAtv = 0
+
+    const botoes = []
+
+    function criarTrilha(id) {
+
+    refTrilha.current.innerHTML = ''
+
+    fetch(`http://localhost:3000/nome?id=${id}`)
+        .then(data => data.json())
+        .then(resp => {
+
+        for(let i=0; i < ((resp.nome.length)/3).toFixed(); i++){
+        const botao = document.createElement('button')
+        botao.className = 'botaoAtividade'
+        botao.id = i+1
+
+    if(i % 2 == 0) {
+        botao.classList.add('impar')
+    }
+    else{
+        botao.classList.add('par')
+    }
+
+    botao.addEventListener('click', () => entrarAtividade(botao))
+    if (i < atividadeAtual) {
+        botao.classList.add('concluida')
+    } 
+    else if (i === atividadeAtual) {
+        botao.classList.add('atual')
+    }
+    else {
+        botao.style.filter = 'grayscale(100%)'
+    }
+    refTrilha.current.appendChild(botao)
+    botoes.push(botao)
+    }})}
+
+
+    function entrarAtividade(botao) {
+
+    const id = Number(botao.id)
+
+    if (atvLiberada == id) {
+        setAtividadeAtual(id)
+        refTrilha.current.style.opacity = '0'
+        refAtividade.current.style.transform = 'translateX(0)'
+    } else if (atvLiberada > id) {
+        alert('Atividade já concluida')
+    } else {
+        alert('Atividade bloqueada')
+    }
+}
+
+
+useEffect(() => {
+
+    criarTrilha(2)
+
+}, [atvLiberada])
+
   return (
+    <>
     <div className="materias-container">
 
         {aberto && (
@@ -205,11 +273,18 @@ function Materias({ onChange }) {
                   className={`materia-fatia ${
                     ativa ? "ativa" : ""
                   }`}
-                  onClick={() =>
+                  onClick={() => {
                     selecionarMateria(materia)
+                    criarTrilha(materia.id)
+                    console.log("materia", materia.id)
+                    setMateriaAtual(materia.id)
+                    criarAtividade(refAtividade, refEnunciado, atividadeAtual, materia.id, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4)
+                    atividadeAtual = 0
+                    }
                   }
-                  onMouseEnter={() =>
+                  onMouseEnter={() => {
                     setMateriaHover(materia)
+                    }
                   }
                   onMouseLeave={() =>
                     setMateriaHover(null)
@@ -271,6 +346,9 @@ function Materias({ onChange }) {
         </div>
       </div>
     </div>
+
+    <div className="trilha ativo" id="trilha" ref={refTrilha}></div>
+  </>
   );
 }
 

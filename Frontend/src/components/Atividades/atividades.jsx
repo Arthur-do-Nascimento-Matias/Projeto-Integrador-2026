@@ -3,7 +3,34 @@ import './Atividades.css'
 
 let embaralhado
 let respostaCerta
-let indiceAtv = 0
+let indiceAtv = 1
+let cliques = 0
+
+function sairAtividade(refAtividade, trilha) {
+    refAtividade.current.style.transform = 'translateX(100%)'
+    trilha.style.opacity = '1'
+}
+
+export function criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
+
+        console.log("materias em atividades.jsx", materiaAtual)
+        fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&atividadeAtual=${atividadeAtual}`)
+        .then(resp => resp.json())
+        .then(data => {
+
+            if(data.concluido) {
+                sairAtividade(refAtividade, trilha)
+                refParabens.current.style.display = 'flex'
+            }
+
+            refEnunciado.current.innerHTML = data.pergunta
+            embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.alternativa3, data.alternativa4)
+                refAlternativa1.current.innerHTML = embaralhado[0].texto
+                refAlternativa2.current.innerHTML = embaralhado[1].texto
+                refAlternativa3.current.innerHTML = embaralhado[2].texto
+                refAlternativa4.current.innerHTML = embaralhado[3].texto
+        })
+    }
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
       let arr = [alternativa1, alternativa2, certa, alternativa4]
@@ -14,37 +41,11 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
     return arr
 }
 
-function atividades({ refAtividade, atividadeAtual, setAtvLiberada }) {
+function atividades({ refAtividade, atividadeAtual, setAtvLiberada, materiaAtual, refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4}) {
 
     const atividadesConcluidas = [];
 
     const refParabens = useRef(null)
-    const refEnunciado = useRef(null)
-    const refAlternativa1 = useRef(null)
-    const refAlternativa2 = useRef(null)
-    const refAlternativa3 = useRef(null)
-    const refAlternativa4 = useRef(null)
-    
-function criarAtividade(id) {
-
-        fetch(`http://localhost:3000/atividades?id=${id}`)
-        .then(resp => resp.json())
-        .then(data => {
-            enunciado.innerHTML = data.pergunta
-            respostaCerta = data.certa
-            embaralhado = aleatorio(data.alternativa1, data.alternativa2, data.alternativa3, data.alternativa4)
-                alternativa1.innerHTML = embaralhado[0]
-                alternativa2.innerHTML = embaralhado[1]
-                alternativa3.innerHTML = embaralhado[2]
-                alternativa4.innerHTML = embaralhado[3]
-        })
-    }
-
-function sairAtividade() {
-    indiceAtv = 0
-    refAtividade.current.style.transform = 'translateX(100%)'
-    trilha.style.opacity = '1'
-}
 
 function fecharParabens() {
 
@@ -52,17 +53,21 @@ function fecharParabens() {
 
     const botao = document.getElementById(atividadeAtual)
 
-    sairAtividade()
+    sairAtividade(refAtividade, trilha)
 }
 
 function verificar(id, resp){
-if (embaralhado[id] == respostaCerta) {
+    console.log(embaralhado[id].verdadeira)
+    console.log(embaralhado[id].verdadeira == 1)
+    if (embaralhado[id].verdadeira == 1) {
 
-    if (indiceAtv < 2) {
+    if (cliques < 2) {
+        cliques += 1
         indiceAtv += 1
-        criarAtividade('aleatorio')
+        console.log('indice' + indiceAtv)
+        criarAtividade(refAtividade, refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
     } else {
-        indiceAtv = 0
+        cliques = 0
         console.log('concluido')
         refParabens.current.style.display = 'flex'
         setAtvLiberada(prev => prev + 1)
@@ -88,14 +93,14 @@ useEffect(() => {
 
     if (!atividadeAtual) return
 
-    criarAtividade(atividadeAtual)
+    criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
 
 }, [atividadeAtual])
 
     return(
         <>
             <div className="atividade" id="atividade" ref={refAtividade}>
-                    <button onClick={sairAtividade}>Sair</button>
+                    <button onClick={(e) => sairAtividade(refAtividade, trilha)}>Sair</button>
                      <h1 className="enunciado" id="enunciado" ref={refEnunciado}></h1>
                         <button className="alternativa1" id="alternativa1" onClick={(e) => verificar(0, e.currentTarget)} ref={refAlternativa1}></button>
                         <button className="alternativa2" id="alternativa2" onClick={(e) => verificar(1, e.currentTarget)} ref={refAlternativa2}></button>

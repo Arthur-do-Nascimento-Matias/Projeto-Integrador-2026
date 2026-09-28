@@ -6,10 +6,9 @@ function Biblioteca() {
     const [busca, setBusca] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:5000/livros")
+        fetch("http://localhost:3000/livros")
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(data);
                 setCapas(data);
             })
             .catch((erro) => {
@@ -19,13 +18,17 @@ function Biblioteca() {
 
     function abrirLivro(id) {
         window.open(
-            `http://localhost:5000/abrirLivro?id=${id}`,
+            `http://localhost:3000/abrirLivro?id=${id}`,
             "_blank"
         );
     }
 
     const livrosFiltrados = capas.filter((capa) =>
-        String(capa.id)
+        String(capa.titulo || "")
+            .toLowerCase()
+            .includes(busca.toLowerCase()) ||
+
+        String(capa.autorLivro || "")
             .toLowerCase()
             .includes(busca.toLowerCase())
     );
@@ -140,11 +143,10 @@ function Biblioteca() {
 
 
                                 <div className="livro-acao">
-                                        <strong>{capa.titulo}</strong>
-                                            <span>{capa.autor}</span>
-                                                <small>Abrir livro</small>
 
-
+                                    <span>
+                                        Abrir livro
+                                    </span>
 
                                 </div>
 
