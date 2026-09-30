@@ -9,7 +9,20 @@ import ChatBot from './ChatBot.js'
 
 const callback = (req, res) => {
 
+ console.log('REQUISIÇÃO:', req.method, req.url)
+
     res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
+    if (req.method === 'OPTIONS') {
+        console.log('Respondendo OPTIONS')
+
+        res.writeHead(204)
+        res.end()
+
+        return
+    }
 
     const rota = url.parse(req.url, true)
     const param = rota.query
@@ -105,7 +118,6 @@ const callback = (req, res) => {
 
         Livros.openBook(param)
             .then(resp => {
-
                 res.end(resp)
             })
 
@@ -116,39 +128,56 @@ const callback = (req, res) => {
     // =========================
     // CHATBOT
     // =========================
+if (rota.pathname == '/chatBot' && req.method == 'POST') {
+    
+    let body = ''
 
-    if (rota.pathname == '/chatBot') {
+    req.on('data', chunk => {
+        body += chunk
+    })
 
-        ChatBot.resposta(param.mensagem)
+    req.on('end', async () => {
 
-            .then(resp => {
+        console.log('END DA REQUISIÇÃO')
+        console.log('BODY RECEBIDO:', body)
 
-                res.writeHead(200, {
-                    'Content-Type':
-                        'application/json; charset=utf-8'
-                })
+        try {
 
-                res.end(JSON.stringify({
-                    resposta: resp
-                }))
+            const dados = JSON.parse(body)
+
+            console.log('DADOS:', dados)
+            console.log('MENSAGEM:', dados.mensagem)
+            console.log('Chamando ollama')
+
+            const resposta = await ChatBot.resposta(dados.mensagem)
+
+            console.log('Ollama respondeu')
+
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
             })
 
-            .catch(error => {
+            res.end(JSON.stringify({
+                resposta: resposta
+            }))
 
-                res.writeHead(500, {
-                    'Content-Type':
-                        'application/json; charset=utf-8'
-                })
+        } catch (error) {
 
-                res.end(JSON.stringify({
-                    erro: error.message
-                }))
+            console.error('ERRO NO CHATBOT:', error)
+
+            res.writeHead(500, {
+                'Content-Type': 'application/json; charset=utf-8'
             })
 
-        return
-    }
+            res.end(JSON.stringify({
+                erro: error.message
+            }))
+        }
+    })
+
+    return
 }
-
+}
 
 const server = http.createServer(callback)
 
