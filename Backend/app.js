@@ -31,7 +31,7 @@ const callback = (req, res) => {
     // =========================
     // ATIVIDADES
     // =========================
-
+if(req.method == 'GET') {
     if (rota.pathname == '/atividades') {
 
         res.writeHead(200, {
@@ -128,56 +128,58 @@ const callback = (req, res) => {
     // =========================
     // CHATBOT
     // =========================
-if (rota.pathname == '/chatBot' && req.method == 'POST') {
-    
-    let body = ''
-
-    req.on('data', chunk => {
-        body += chunk
-    })
-
-    req.on('end', async () => {
-
-        console.log('END DA REQUISIÇÃO')
-        console.log('BODY RECEBIDO:', body)
-
-        try {
-
-            const dados = JSON.parse(body)
-
-            console.log('DADOS:', dados)
-            console.log('MENSAGEM:', dados.mensagem)
-            console.log('Chamando ollama')
-
-            const resposta = await ChatBot.resposta(dados.mensagem)
-
-            console.log('Ollama respondeu')
-
-            res.writeHead(200, {
-                'Content-Type': 'application/json; charset=utf-8'
-            })
-
-            res.end(JSON.stringify({
-                resposta: resposta
-            }))
-
-        } catch (error) {
-
-            console.error('ERRO NO CHATBOT:', error)
-
-            res.writeHead(500, {
-                'Content-Type': 'application/json; charset=utf-8'
-            })
-
-            res.end(JSON.stringify({
-                erro: error.message
-            }))
-        }
-    })
-
-    return
 }
-}
+else if (req.method == 'POST') {   
+    if (rota.pathname == '/chatBot' && req.method == 'POST') {
+        
+        let body = ''
+
+        req.on('data', chunk => {
+            body += chunk
+        })
+
+        req.on('end', async () => {
+
+            console.log('END DA REQUISIÇÃO')
+            console.log('BODY RECEBIDO:', body)
+
+            try {
+
+                const dados = JSON.parse(body)
+
+                console.log('DADOS:', dados)
+                console.log('MENSAGEM:', dados.mensagem)
+                console.log('Chamando ollama')
+
+                const resposta = await ChatBot.resposta(dados.mensagem)
+
+                console.log('Ollama respondeu')
+
+                res.writeHead(200, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    resposta: resposta
+                }))
+
+            } catch (error) {
+
+                console.error('ERRO NO CHATBOT:', error)
+
+                res.writeHead(500, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    erro: error.message
+                }))
+            }
+        })
+
+        return
+    }
+}}
 
 const server = http.createServer(callback)
 

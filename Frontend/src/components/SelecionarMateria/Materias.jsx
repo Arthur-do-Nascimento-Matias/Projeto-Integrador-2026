@@ -146,7 +146,10 @@ function Materias({ refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada
         .then(data => data.json())
         .then(resp => {
 
-        for(let i=0; i < ((resp.nome.length)/3).toFixed(); i++){
+          const quantidadeAtividades = Math.ceil(resp.nome.length / 3)
+
+        for(let i=0; i < quantidadeAtividades; i++){
+
         const botao = document.createElement('button')
         botao.className = 'botaoAtividade'
         botao.id = i+1
