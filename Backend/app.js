@@ -5,6 +5,7 @@ import url from 'url'
 import Conexao from './Conexao.js'
 import Livros from './Livros.js'
 import ChatBot from './ChatBot.js'
+import Cadastro from './Cadastro.js'
 
 
 const callback = (req, res) => {
@@ -130,7 +131,24 @@ if(req.method == 'GET') {
     // =========================
 }
 else if (req.method == 'POST') {   
-    if (rota.pathname == '/chatBot' && req.method == 'POST') {
+
+    if(rota.pathname == '/cadastro') {
+
+        let body = ''
+
+        req.on('data', chunk => {
+            body += chunk
+        })
+
+        req.on('end', async () => {
+            try{}
+            catch{}
+        })
+
+    }
+
+
+    if (rota.pathname == '/chatBot') {
         
         let body = ''
 
