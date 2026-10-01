@@ -141,7 +141,10 @@ else if (req.method == 'POST') {
         })
 
         req.on('end', async () => {
-            try{}
+            try{
+                const dados = JSON.parse(body)
+                Cadastro.cadastrar(dados)
+            }
             catch{}
         })
 
