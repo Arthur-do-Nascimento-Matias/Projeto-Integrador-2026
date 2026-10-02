@@ -6,6 +6,7 @@ import Conexao from './Conexao.js'
 import Livros from './Livros.js'
 import ChatBot from './ChatBot.js'
 import Cadastro from './Cadastro.js'
+import Login from './Login.js'
 
 
 const callback = (req, res) => {
@@ -132,33 +133,47 @@ if(req.method == 'GET') {
 }
 else if (req.method == 'POST') {   
 
+    let body = ''
+
+    req.on('data', chunk => {
+        body += chunk
+    })
+
     if(rota.pathname == '/cadastro') {
-
-        let body = ''
-
-        req.on('data', chunk => {
-            body += chunk
-        })
 
         req.on('end', async () => {
             try{
+                console.log("BODY:", JSON.stringify(body))
+                console.log("entrou na rota cadastro")
                 const dados = JSON.parse(body)
-                Cadastro.cadastrar(dados)
+                console.log(dados)
+                await Cadastro.cadastrar(dados)
+                res.end(JSON.stringify({ok: true}))
             }
-            catch{}
+            catch(erro){
+                console.error(erro)
+                res.end(JSON.stringify({ok: false}))
+            }
         })
 
     }
 
+    if(rota.pathname == '/login') {
+        req.on('end', async () => {
+            try{
+                const dados = JSON.parse(body)
+                await Login.login(dados)
+                res.end(JSON.stringify({ok: true}))
+            }
+            catch(erro) {
+                console.error(erro)
+                res.end(JSON.stringify({ok: false}))
+            }
+        })
+    }
 
     if (rota.pathname == '/chatBot') {
         
-        let body = ''
-
-        req.on('data', chunk => {
-            body += chunk
-        })
-
         req.on('end', async () => {
 
             console.log('END DA REQUISIÇÃO')

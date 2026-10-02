@@ -1,9 +1,9 @@
 import mysql from 'mysql'
 import bcrypt from 'bcrypt'
 
-class Cadastro {
+class Login {
 
-    static cadastrar(dados) {
+    static login(dados) {
 
     const saltRounds = 10;
     const myPlaintextPassword = dados.senha;
@@ -16,19 +16,25 @@ class Cadastro {
                 password: '',
                 database: 'integrador',
             })
-    
+
             connection.connect()
 
             bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+        
+                    if(err){
+                        reject(err)
+                        return
+                    }
 
-            if(err){
-                reject(err)
-                return
-            }
-            
-            const sql = 'INSERT INTO `usuarios`(`nome_de_exibicao`, `nome_de_usuario`, `email`, `senha`, `vidas`, `streak`, `xp`, `xp_semanal`, `atvidades_concluidas_portugues`, `atvidades_concluidas_matematica`, `atvidades_concluidas_ciencias`, `atvidades_concluidas_geografia`, `atvidades_concluidas_ingles`, `atvidades_concluidas_historia`, `atvidades_concluidas_geral`) VALUES (?, ?, ?, ?,5,0,0,0,0,0,0,0,0,0,0)'
+            const sql = `SELECT email, senha, nome_de_usuario
+                        FROM usuarios
+                        WHERE senha = ?
+                        AND (
+                            nome_de_usuario = ?
+                            OR email = ?
+                        );`
 
-            connection.query(sql, [dados.nomeExibição, dados.nomeUsuario, dados.email, hash], function(error, results) {
+            connection.query(sql, [hash, dados.usuarioOuEmail, dados.usuarioOuEmail],function(error, results) {
 
             if (error) {
                 connection.end()
@@ -43,4 +49,4 @@ class Cadastro {
     }
 )}}
 
-export default Cadastro
+export default Login
