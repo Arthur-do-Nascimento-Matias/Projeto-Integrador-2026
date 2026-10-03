@@ -1,5 +1,7 @@
 import { useState } from 'react'
+
 import './Login.css'
+
 import simio from '../../assets/simio.png'
 
 const emptyRegister = {
@@ -69,7 +71,23 @@ function Login() {
   const [recoverEmail, setRecoverEmail] = useState('')
   const [recoverSent, setRecoverSent] = useState(false)
 
-  // Estado para controlar a microinteração de erro
+  // =========================
+  // VERIFICAÇÃO DE E-MAIL
+  // =========================
+
+  const [verificationOpen, setVerificationOpen] = useState(false)
+  const [verificationCode, setVerificationCode] = useState('')
+
+  // =========================
+  // CARREGAMENTO DO CADASTRO
+  // =========================
+
+  const [registerLoading, setRegisterLoading] = useState(false)
+
+  // =========================
+  // MICROINTERAÇÃO DE ERRO
+  // =========================
+
   const [isShaking, setIsShaking] = useState(false)
 
   const triggerShake = () => {
@@ -92,7 +110,15 @@ function Login() {
       type: '',
       text: '',
     })
+
+    // Ao trocar de tela, fecha a verificação
+    setVerificationOpen(false)
+    setVerificationCode('')
   }
+
+  // =========================
+  // LOGIN
+  // =========================
 
   function handleLogin(event) {
     event.preventDefault()
@@ -117,24 +143,38 @@ function Login() {
         senha: loginData.password
       })
     })
-    .then(resp => resp.json())
-    .then(dados => {
-      if(dados.message) {
+      .then(resp => resp.json())
+      .then(dados => {
+
+        if (dados.message) {
           setLoginMessage({
             type: 'error',
             text: dados.message,
           })
+
           return
-      }
-      if(dados.ok) {
-         setLoginMessage({
+        }
+
+        if (dados.ok) {
+          setLoginMessage({
             type: 'success',
             text: 'Tudo certo! A aventura vai começar.',
           })
-        window.location.href = '/'
-      }
-    })
+
+          window.location.href = '/'
+        }
+      })
+      .catch(() => {
+        setLoginMessage({
+          type: 'error',
+          text: 'Não foi possível conectar ao servidor.',
+        })
+      })
   }
+
+  // =========================
+  // ENVIA CADASTRO
+  // =========================
 
   function handleRegister(event) {
     event.preventDefault()
@@ -185,6 +225,12 @@ function Login() {
       return
     }
 
+    // Começa o carregamento
+    setRegisterLoading(true)
+
+    // NÃO cadastra no banco ainda.
+    // Apenas pede ao backend para enviar o código.
+
     fetch('http://localhost:3000/cadastro', {
       method: 'POST',
       headers: {
@@ -197,30 +243,115 @@ function Login() {
         senha: registerData.password
       })
     })
-    .then(resp => resp.json())
-    .then(dados => {
-      if(dados.message) {
-        setRegisterMessage({
-          type: 'error',
-          text: dados.message
-        })
-        return
-      }
-      if(!dados.ok) {
-        setRegisterMessage({
-          type: 'error',
-          text: 'Algo deu errado, tente novamente mais tarde',
-        })
-      }
-      setRegisterData(emptyRegister)
-      changeMode('login')
-    })
+      .then(resp => resp.json())
+      .then(dados => {
 
-    setRegisterMessage({
-      type: 'success',
-      text: 'Sua mochila está pronta! Conectando...',
-    })
+        if (!dados.ok) {
+          setRegisterMessage({
+            type: 'error',
+            text: dados.message || 'Não foi possível enviar o código.',
+          })
+
+          triggerShake()
+          return
+        }
+
+        // Código foi enviado.
+        setVerificationOpen(true)
+        setVerificationCode('')
+
+        setRegisterMessage({
+          type: 'success',
+          text: 'Código enviado! Verifique seu e-mail.',
+        })
+      })
+      .catch(() => {
+
+        setRegisterMessage({
+          type: 'error',
+          text: 'Não foi possível conectar ao servidor.',
+        })
+
+        triggerShake()
+
+      })
+      .finally(() => {
+
+        // Finaliza o carregamento
+        setRegisterLoading(false)
+
+      })
   }
+
+  // =========================
+  // VERIFICA CÓDIGO
+  // =========================
+
+  function handleVerification(event) {
+    event.preventDefault()
+
+    if (verificationCode.length !== 6) {
+      setRegisterMessage({
+        type: 'error',
+        text: 'Digite o código de 6 dígitos enviado para seu e-mail.',
+      })
+
+      triggerShake()
+      return
+    }
+
+    fetch('http://localhost:3000/cadastro/verificar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: registerData.email,
+        codigo: verificationCode
+      })
+    })
+      .then(resp => resp.json())
+      .then(dados => {
+
+        if (!dados.ok) {
+          setRegisterMessage({
+            type: 'error',
+            text: dados.message || 'Código incorreto.',
+          })
+
+          triggerShake()
+          return
+        }
+
+        // O backend confirmou o código
+        // e cadastrou os dados no banco.
+
+        setVerificationOpen(false)
+        setVerificationCode('')
+        setRegisterData(emptyRegister)
+
+        setRegisterMessage({
+          type: 'success',
+          text: 'Conta criada com sucesso! Agora você pode entrar.',
+        })
+
+        changeMode('login')
+      })
+      .catch(() => {
+
+        setRegisterMessage({
+          type: 'error',
+          text: 'Não foi possível conectar ao servidor.',
+        })
+
+        triggerShake()
+
+      })
+  }
+
+  // =========================
+  // RECUPERAÇÃO
+  // =========================
 
   function handleRecover(event) {
     event.preventDefault()
@@ -242,6 +373,7 @@ function Login() {
   return (
     <>
       {/* Elementos ambientais para dar vida à floresta */}
+
       <div className="ambient-elements" aria-hidden="true">
         <div className="particle p-1" />
         <div className="particle p-2" />
@@ -260,6 +392,7 @@ function Login() {
       >
 
         {/* O MACACO VIAJANTE */}
+
         <div
           className={`transition-simio ${
             mode === 'register' ? 'to-right' : 'to-left'
@@ -269,9 +402,6 @@ function Login() {
           <img src={simio} alt="Simio" />
         </div>
 
-        {/* =========================
-            LOGIN
-        ========================= */}
         <div
           className={`form-box login-form ${
             mode === 'login' ? 'active-form' : ''
@@ -279,6 +409,7 @@ function Login() {
           aria-hidden={mode !== 'login'}
           inert={mode !== 'login'}
         >
+
           <form onSubmit={handleLogin} noValidate>
 
             <p className="form-eyebrow stagger-1">
@@ -294,6 +425,7 @@ function Login() {
             </p>
 
             <div className="auth-field stagger-4">
+
               <label htmlFor="login-user">
                 E-mail ou usuário
               </label>
@@ -312,9 +444,11 @@ function Login() {
                 }
                 aria-invalid={loginMessage.type === 'error'}
               />
+
             </div>
 
             <div className="stagger-5">
+
               <PasswordField
                 id="login-password"
                 label="Senha"
@@ -327,6 +461,7 @@ function Login() {
                 }
                 invalid={loginMessage.type === 'error'}
               />
+
             </div>
 
             <button
@@ -355,6 +490,7 @@ function Login() {
 
             <p className="mobile-switch stagger-8">
               Ainda não tem uma conta?{' '}
+
               <button
                 type="button"
                 onClick={() => changeMode('register')}
@@ -364,11 +500,13 @@ function Login() {
             </p>
 
           </form>
+
         </div>
 
         {/* =========================
             CADASTRO
         ========================= */}
+
         <div
           className={`form-box register-form ${
             mode === 'register' ? 'active-form' : ''
@@ -376,6 +514,7 @@ function Login() {
           aria-hidden={mode !== 'register'}
           inert={mode !== 'register'}
         >
+
           <form onSubmit={handleRegister} noValidate>
 
             <p className="form-eyebrow stagger-1">
@@ -393,7 +532,9 @@ function Login() {
             <div className="register-grid stagger-4">
 
               {/* Nome de exibição */}
+
               <div className="auth-field">
+
                 <label htmlFor="register-display-name">
                   Nome de exibição
                 </label>
@@ -412,10 +553,13 @@ function Login() {
                   }
                   aria-invalid={registerMessage.type === 'error'}
                 />
+
               </div>
 
               {/* Nome de usuário */}
+
               <div className="auth-field">
+
                 <label htmlFor="register-username">
                   Nome de usuário
                 </label>
@@ -434,10 +578,13 @@ function Login() {
                   }
                   aria-invalid={registerMessage.type === 'error'}
                 />
+
               </div>
 
               {/* E-mail */}
+
               <div className="auth-field full-field">
+
                 <label htmlFor="register-email">
                   E-mail
                 </label>
@@ -456,9 +603,11 @@ function Login() {
                   }
                   aria-invalid={registerMessage.type === 'error'}
                 />
+
               </div>
 
               {/* Senha */}
+
               <PasswordField
                 id="register-password"
                 label="Senha"
@@ -473,6 +622,7 @@ function Login() {
               />
 
               {/* Confirmar senha */}
+
               <PasswordField
                 id="register-confirm"
                 label="Confirmar senha"
@@ -488,7 +638,7 @@ function Login() {
 
             </div>
 
-            {registerMessage.text && (
+            {registerMessage.text && !verificationOpen && (
               <p
                 className={`form-message ${registerMessage.type} stagger-5`}
                 role="status"
@@ -500,26 +650,29 @@ function Login() {
             <button
               type="submit"
               className="primary-button stagger-6"
+              disabled={registerLoading}
             >
-              Criar minha conta
+              {registerLoading
+                ? 'Enviando código para seu e-mail...'
+                : 'Criar minha conta'}
             </button>
 
             <p className="mobile-switch stagger-7">
               Já possui uma conta?{' '}
+
               <button
                 type="button"
                 onClick={() => changeMode('login')}
+                disabled={registerLoading}
               >
                 Entrar
               </button>
             </p>
 
           </form>
+
         </div>
 
-        {/* =========================
-            PAINEL DESLIZANTE
-        ========================= */}
         <div className="toggle-box">
 
           <div className="toggle-panel toggle-left">
@@ -583,12 +736,11 @@ function Login() {
           </div>
 
         </div>
+
       </section>
 
-      {/* =========================
-          MODAL DE RECUPERAÇÃO
-      ========================= */}
       {recoverOpen && (
+
         <div
           className="modal-backdrop"
           role="presentation"
@@ -596,6 +748,7 @@ function Login() {
             event.target === event.currentTarget && closeRecover()
           }
         >
+
           <section
             className={`recover-modal ${
               isShaking ? 'is-shaking' : ''
@@ -615,6 +768,7 @@ function Login() {
             </button>
 
             {recoverSent ? (
+
               <div className="recover-success animate-success">
 
                 <div
@@ -645,7 +799,9 @@ function Login() {
                 </button>
 
               </div>
+
             ) : (
+
               <form
                 onSubmit={handleRecover}
                 noValidate
@@ -669,6 +825,7 @@ function Login() {
                 </p>
 
                 <div className="auth-field">
+
                   <label htmlFor="recover-email">
                     E-mail
                   </label>
@@ -683,6 +840,7 @@ function Login() {
                       setRecoverEmail(event.target.value)
                     }
                   />
+
                 </div>
 
                 <button
@@ -693,11 +851,129 @@ function Login() {
                 </button>
 
               </form>
+
             )}
 
           </section>
+
         </div>
+
       )}
+
+      {verificationOpen && (
+
+        <div
+          className="modal-backdrop"
+          role="presentation"
+        >
+
+          <section
+            className={`recover-modal ${
+              isShaking ? 'is-shaking' : ''
+            }`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="verification-title"
+          >
+
+            <button
+              type="button"
+              className="modal-close"
+              onClick={() => {
+                setVerificationOpen(false)
+                setVerificationCode('')
+              }}
+              aria-label="Fechar"
+            >
+              ×
+            </button>
+
+            <div
+              className="modal-icon"
+              aria-hidden="true"
+            >
+              ✉
+            </div>
+
+            <h2 id="verification-title">
+              Verifique seu e-mail
+            </h2>
+
+            <p>
+              Enviamos um código de 6 dígitos para:
+            </p>
+
+            <strong>
+              {registerData.email}
+            </strong>
+
+            <form
+              onSubmit={handleVerification}
+              noValidate
+              className="animate-fade-up"
+            >
+
+              <div className="auth-field">
+
+                <label htmlFor="verification-code">
+                  Código de verificação
+                </label>
+
+                <input
+                  id="verification-code"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={6}
+                  autoFocus
+                  placeholder="000000"
+                  value={verificationCode}
+                  onChange={(event) => {
+                    const valor = event.target.value
+                      .replace(/\D/g, '')
+                      .slice(0, 6)
+
+                    setVerificationCode(valor)
+                  }}
+                />
+
+              </div>
+
+              {registerMessage.text && (
+                <p
+                  className={`form-message ${registerMessage.type}`}
+                  role="status"
+                >
+                  {registerMessage.text}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className="primary-button"
+              >
+                Verificar e criar conta
+              </button>
+
+              <button
+                type="button"
+                className="forgot-button"
+                onClick={() => {
+                  setVerificationOpen(false)
+                  setVerificationCode('')
+                }}
+              >
+                Voltar
+              </button>
+
+            </form>
+
+          </section>
+
+        </div>
+
+      )}
+
     </>
   )
 }

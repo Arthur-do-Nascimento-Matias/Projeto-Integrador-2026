@@ -139,6 +139,36 @@ else if (req.method == 'POST') {
         body += chunk
     })
 
+if (rota.pathname == '/cadastro/verificar') { 
+    req.on('end', async () => {
+
+        try {
+
+            const dados = JSON.parse(body)
+
+            const resposta = await Cadastro.verificarCodigo(dados)
+
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+
+            res.end(JSON.stringify(resposta))
+
+        } catch (erro) {
+
+            console.error(erro)
+
+            res.writeHead(500, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+
+            res.end(JSON.stringify({
+                ok: false,
+                message: 'Erro ao verificar código'
+            }))
+        }
+    })}
+
     if(rota.pathname == '/cadastro') {
 
         req.on('end', async () => {
