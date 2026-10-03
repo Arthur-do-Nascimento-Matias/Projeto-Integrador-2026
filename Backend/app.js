@@ -147,8 +147,8 @@ else if (req.method == 'POST') {
                 console.log("entrou na rota cadastro")
                 const dados = JSON.parse(body)
                 console.log(dados)
-                await Cadastro.cadastrar(dados)
-                res.end(JSON.stringify({ok: true}))
+                let resposta = await Cadastro.cadastrar(dados)
+                res.end(JSON.stringify(resposta))
             }
             catch(erro){
                 console.error(erro)
@@ -162,8 +162,8 @@ else if (req.method == 'POST') {
         req.on('end', async () => {
             try{
                 const dados = JSON.parse(body)
-                await Login.login(dados)
-                res.end(JSON.stringify({ok: true}))
+                let resposta = await Login.login(dados)
+                res.end(JSON.stringify(resposta))
             }
             catch(erro) {
                 console.error(erro)

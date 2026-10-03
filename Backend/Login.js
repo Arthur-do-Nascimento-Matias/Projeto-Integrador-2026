@@ -5,11 +5,8 @@ class Login {
 
     static login(dados) {
 
-    const saltRounds = 10;
-    const myPlaintextPassword = dados.senha;
-
         return new Promise((resolve, reject) => {
-            
+
             const connection = mysql.createConnection({
                 host: 'localhost',
                 user: 'root',
@@ -19,34 +16,59 @@ class Login {
 
             connection.connect()
 
-            bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-        
-                    if(err){
-                        reject(err)
+            const sql = `
+                SELECT email, senha, nome_de_usuario
+                FROM usuarios
+                WHERE nome_de_usuario = ?
+                OR email = ?
+            `
+
+            connection.query(sql, [dados.emailOuUsuario, dados.emailOuUsuario], function(error, results) {
+
+                    if (error) {
+                        connection.end()
+                        reject(error)
                         return
                     }
 
-            const sql = `SELECT email, senha, nome_de_usuario
-                        FROM usuarios
-                        WHERE senha = ?
-                        AND (
-                            nome_de_usuario = ?
-                            OR email = ?
-                        );`
+                    if (results.length === 0) {
+                        connection.end()
+                        resolve({
+                            message: 'Login ou senha incorretos'
+                        })
+                        return
+                    }
 
-            connection.query(sql, [hash, dados.usuarioOuEmail, dados.usuarioOuEmail],function(error, results) {
+                    bcrypt.compare(
+                        dados.senha,
+                        results[0].senha,
+                        function(err, senhaCorreta) {
 
-            if (error) {
-                connection.end()
-                reject(error)
-                return
-            }
+                            if (err) {
+                                connection.end()
+                                reject(err)
+                                return
+                            }
 
-            connection.end()
-            resolve()
-            })
+                            if (!senhaCorreta) {
+                                connection.end()
+                                resolve({
+                                    message: 'Login ou senha incorretos'
+                                })
+                                return
+                            }
+
+                            connection.end()
+
+                            resolve({
+                                ok: true
+                            })
+                        }
+                    )
+                }
+            )
         })
     }
-)}}
+}
 
 export default Login

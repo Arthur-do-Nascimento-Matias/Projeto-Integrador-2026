@@ -107,9 +107,32 @@ function Login() {
       return
     }
 
-    setLoginMessage({
-      type: 'success',
-      text: 'Tudo certo! A aventura vai começar.',
+    fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        emailOuUsuario: loginData.user.trim(),
+        senha: loginData.password
+      })
+    })
+    .then(resp => resp.json())
+    .then(dados => {
+      if(dados.message) {
+          setLoginMessage({
+            type: 'error',
+            text: dados.message,
+          })
+          return
+      }
+      if(dados.ok) {
+         setLoginMessage({
+            type: 'success',
+            text: 'Tudo certo! A aventura vai começar.',
+          })
+        window.location.href = '/'
+      }
     })
   }
 
@@ -167,14 +190,31 @@ function Login() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: {
+      body: JSON.stringify({
         nomeExibição: registerData.displayName,
         nomeUsuario: registerData.username,
         email: registerData.email,
         senha: registerData.password
-      }
+      })
     })
     .then(resp => resp.json())
+    .then(dados => {
+      if(dados.message) {
+        setRegisterMessage({
+          type: 'error',
+          text: dados.message
+        })
+        return
+      }
+      if(!dados.ok) {
+        setRegisterMessage({
+          type: 'error',
+          text: 'Algo deu errado, tente novamente mais tarde',
+        })
+      }
+      setRegisterData(emptyRegister)
+      changeMode('login')
+    })
 
     setRegisterMessage({
       type: 'success',

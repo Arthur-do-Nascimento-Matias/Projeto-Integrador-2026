@@ -19,6 +19,28 @@ class Cadastro {
     
             connection.connect()
 
+            const sqlVerificador = 'SELECT nome_de_usuario, email from usuarios WHERE email = ? or nome_de_usuario = ?'
+
+            connection.query(sqlVerificador, [dados.email, dados.nomeUsuario], function(error, results) {
+                if(error) {
+                    connection.end()
+                    reject(error)
+                    return
+                }
+                if(results.length > 0){
+
+                    if(results[0].email === dados.email) {
+                        connection.end()
+                        resolve({message: 'Email já cadastrado'})
+                        return
+                    }
+                    if(results[0].nome_de_usuario === dados.nomeUsuario){
+                        connection.end()
+                        resolve({message: 'Nome de usuário já cadastrado'})
+                        return
+                    }
+                }
+
             bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
 
             if(err){
@@ -37,10 +59,12 @@ class Cadastro {
             }
 
             connection.end()
-            resolve()
+            resolve({ok: true})
+            return
             })
-        })
-    }
+        })}
+    )}
 )}}
+
 
 export default Cadastro
