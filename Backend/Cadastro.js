@@ -162,6 +162,7 @@ class Cadastro {
                 (
                     nome_de_exibicao,
                     nome_de_usuario,
+                    bio,
                     email,
                     senha,
                     vidas,
@@ -176,7 +177,7 @@ class Cadastro {
                     atvidades_concluidas_historia,
                     atvidades_concluidas_geral
                 )
-                VALUES (?, ?, ?, ?, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                VALUES (?, ?, 'Este aluno ainda não adicionou uma bio.', ?, ?, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
             `
 
             connection.query(

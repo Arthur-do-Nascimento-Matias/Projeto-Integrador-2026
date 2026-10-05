@@ -155,13 +155,17 @@ function Login() {
           return
         }
 
-        if (dados.ok) {
-          setLoginMessage({
+      if (dados.ok) {
+
+        localStorage.setItem('token', dados.token)
+
+        setLoginMessage({
             type: 'success',
             text: 'Tudo certo! A aventura vai começar.',
-          })
+        })
 
-          window.location.href = '/'
+        window.location.href = '/'
+
         }
       })
       .catch(() => {

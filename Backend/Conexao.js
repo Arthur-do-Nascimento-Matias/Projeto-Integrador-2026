@@ -89,6 +89,81 @@ import mysql from 'mysql'
             })
         })
     }
+
+    static getPerfil(idUsuario) {
+
+        return new Promise((resolve, reject) => {
+
+            const connection = mysql.createConnection({
+                host: 'localhost',
+                user: 'root',
+                password: '',
+                database: 'integrador',
+            })
+
+            connection.connect()
+
+            const sql = `
+                SELECT
+                    id_usuario,
+                    nome_de_exibicao,
+                    nome_de_usuario,
+                    email,
+                    foto_perfil,
+                    vidas,
+                    streak,
+                    xp,
+                    xp_semanal,
+                    posicao_ranking,
+                    divisao,
+                    atvidades_concluidas_portugues,
+                    atvidades_concluidas_matematica,
+                    atvidades_concluidas_ciencias,
+                    atvidades_concluidas_geografia,
+                    atvidades_concluidas_ingles,
+                    atvidades_concluidas_historia,
+                    atvidades_concluidas_geral
+                FROM usuarios
+                WHERE id_usuario = ?
+            `
+
+            connection.query(
+                sql,
+                [idUsuario],
+                (error, results) => {
+
+                    connection.end()
+
+                    if (error) {
+                        reject(error)
+                        return
+                    }
+
+                    if (results.length === 0) {
+                        resolve(null)
+                        return
+                    }
+
+                    const usuario = results[0]
+
+                    // Converte o BLOB da foto para uma imagem utilizável pelo React
+                    if (usuario.foto_perfil) {
+
+                        usuario.foto_perfil =
+                            `data:image/jpeg;base64,${usuario.foto_perfil.toString('base64')}`
+
+                    } else {
+
+                        usuario.foto_perfil = ''
+
+                    }
+
+                    resolve(usuario)
+                }
+            )
+        })
+    }
+
     }
 
 export default Conexao

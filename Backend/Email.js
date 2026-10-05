@@ -3,14 +3,16 @@ import nodemailer from 'nodemailer'
 class Email {
 
     static transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
 
-        service: 'gmail',
+        family: 4,
 
         auth: {
             user: 'projetointegradoratgk@gmail.com',
-            pass: ''
+            pass: 'cxvv ewhx ebak zutx'
         }
-
     })
 
     static async enviarCodigo(email, codigo) {

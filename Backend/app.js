@@ -15,7 +15,7 @@ const callback = (req, res) => {
 
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    res.setHeader('Access-Control-Allow-Headers', '*')
 
     if (req.method === 'OPTIONS') {
         console.log('Respondendo OPTIONS')
@@ -34,6 +34,86 @@ const callback = (req, res) => {
     // ATIVIDADES
     // =========================
 if(req.method == 'GET') {
+
+    if (rota.pathname == '/perfil') {
+
+        const autorizacao = req.headers.authorization
+
+        if (!autorizacao) {
+
+            res.writeHead(401, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+
+            res.end(JSON.stringify({
+                ok: false,
+                message: 'Usuário não autenticado'
+            }))
+
+            return
+        }
+
+        const token = autorizacao.replace('Bearer ', '')
+
+        const idUsuario = Login.autenticar(token)
+
+        if (!idUsuario) {
+
+            res.writeHead(401, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+
+            res.end(JSON.stringify({
+                ok: false,
+                message: 'Sessão inválida ou expirada'
+            }))
+
+            return
+        }
+
+        Conexao.getPerfil(idUsuario)
+            .then(usuario => {
+
+                if (!usuario) {
+
+                    res.writeHead(404, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: 'Usuário não encontrado'
+                    }))
+
+                    return
+                }
+
+                res.writeHead(200, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    ok: true,
+                    usuario
+                }))
+            })
+            .catch(error => {
+
+                console.error('ERRO AO BUSCAR PERFIL:', error)
+
+                res.writeHead(500, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    ok: false,
+                    message: 'Erro ao buscar perfil'
+                }))
+            })
+
+        return
+    }
+
     if (rota.pathname == '/atividades') {
 
         res.writeHead(200, {

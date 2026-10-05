@@ -1,7 +1,10 @@
 import mysql from 'mysql'
 import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 
 class Login {
+
+    static sessoes = new Map()
 
     static login(dados) {
 
@@ -17,13 +20,35 @@ class Login {
             connection.connect()
 
             const sql = `
-                SELECT email, senha, nome_de_usuario
+                SELECT
+                    id_usuario,
+                    nome_de_exibicao,
+                    nome_de_usuario,
+                    email,
+                    senha,
+                    foto_perfil,
+                    vidas,
+                    streak,
+                    xp,
+                    xp_semanal,
+                    posicao_ranking,
+                    divisao,
+                    atvidades_concluidas_portugues,
+                    atvidades_concluidas_matematica,
+                    atvidades_concluidas_ciencias,
+                    atvidades_concluidas_geografia,
+                    atvidades_concluidas_ingles,
+                    atvidades_concluidas_historia,
+                    atvidades_concluidas_geral
                 FROM usuarios
                 WHERE nome_de_usuario = ?
                 OR email = ?
             `
 
-            connection.query(sql, [dados.emailOuUsuario, dados.emailOuUsuario], function(error, results) {
+            connection.query(
+                sql,
+                [dados.emailOuUsuario, dados.emailOuUsuario],
+                function (error, results) {
 
                     if (error) {
                         connection.end()
@@ -33,16 +58,20 @@ class Login {
 
                     if (results.length === 0) {
                         connection.end()
+
                         resolve({
                             message: 'Login ou senha incorretos'
                         })
+
                         return
                     }
 
+                    const usuario = results[0]
+
                     bcrypt.compare(
                         dados.senha,
-                        results[0].senha,
-                        function(err, senhaCorreta) {
+                        usuario.senha,
+                        function (err, senhaCorreta) {
 
                             if (err) {
                                 connection.end()
@@ -52,22 +81,47 @@ class Login {
 
                             if (!senhaCorreta) {
                                 connection.end()
+
                                 resolve({
                                     message: 'Login ou senha incorretos'
                                 })
+
                                 return
                             }
+
+                            // =========================
+                            // GERA TOKEN DA SESSÃO
+                            // =========================
+
+                            const token = crypto.randomBytes(32).toString('hex')
+
+                            Login.sessoes.set(token, usuario.id_usuario)
 
                             connection.end()
 
                             resolve({
-                                ok: true
+                                ok: true,
+                                token
                             })
                         }
                     )
                 }
             )
         })
+    }
+
+    static autenticar(token) {
+
+        if (!token) {
+            return null
+        }
+
+        return Login.sessoes.get(token) || null
+    }
+
+    static encerrarSessao(token) {
+
+        Login.sessoes.delete(token)
     }
 }
 
