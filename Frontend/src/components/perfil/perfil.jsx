@@ -695,11 +695,23 @@ function Perfil() {
                   rows="4"
                   placeholder="Conte um pouco sobre você..."
                   value={draft.bio}
-                  onChange={(event) =>
+                  onChange={(event) => {
+                    const novaBio = event.target.value
                     setDraft({
                       ...draft,
-                      bio: event.target.value,
+                      bio: novaBio,
                     })
+                    fetch('http://localhost:3000/mudarBio', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                        id: user.id,
+                        bio: novaBio
+                      })
+                    })
+                    }
                   }
                 />
 

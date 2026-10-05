@@ -7,7 +7,6 @@ import ChatBot from './ChatBot.js'
 import Cadastro from './Cadastro.js'
 import Login from './Login.js'
 
-
 const callback = (req, res) => {
 
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -308,6 +307,18 @@ if (rota.pathname == '/cadastro/verificar') {
         })
 
         return
+    }
+
+    if(rota.pathname == '/mudarBio') {
+        req.on('end', async () => {
+            try{
+                const dados = JSON.parse(body)
+                Conexao.mudarBio(dados)
+            }
+            catch(error){
+                console.error(error)
+            }
+        })
     }
 }}
 

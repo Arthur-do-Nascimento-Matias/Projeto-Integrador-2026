@@ -105,6 +105,7 @@ import mysql from 'mysql'
                     id_usuario,
                     nome_de_exibicao,
                     nome_de_usuario,
+                    bio,
                     email,
                     foto_perfil,
                     vidas,
@@ -161,6 +162,36 @@ import mysql from 'mysql'
         })
     }
 
+    static mudarBio(bio) {
+         return new Promise((resolve, reject) => {
+
+            const connection = mysql.createConnection({
+                host: 'localhost',
+                user: 'root',
+                password: '',
+                database: 'integrador',
+            })
+
+            connection.connect()
+
+            const sql = `UPDATE usuarios
+                    SET bio = ?
+                    WHERE id_usuario = ?;`
+
+            connection.query(sql, [bio.bio, bio.id], (error, results) => {
+
+                connection.end()
+
+                if (error) {
+                    reject(error)
+                    return
+                }
+
+                resolve()
+        })
+
     }
+    )}
+}
 
 export default Conexao
