@@ -1,7 +1,6 @@
 import http from 'http'
 import url from 'url'
 
-//import Atividades from './Atividades.js'
 import Conexao from './Conexao.js'
 import Livros from './Livros.js'
 import ChatBot from './ChatBot.js'
@@ -11,14 +10,11 @@ import Login from './Login.js'
 
 const callback = (req, res) => {
 
- console.log('REQUISIÇÃO:', req.method, req.url)
-
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     res.setHeader('Access-Control-Allow-Headers', '*')
 
     if (req.method === 'OPTIONS') {
-        console.log('Respondendo OPTIONS')
 
         res.writeHead(204)
         res.end()
@@ -29,10 +25,6 @@ const callback = (req, res) => {
     const rota = url.parse(req.url, true)
     const param = rota.query
 
-
-    // =========================
-    // ATIVIDADES
-    // =========================
 if(req.method == 'GET') {
 
     if (rota.pathname == '/perfil') {
@@ -253,10 +245,9 @@ if (rota.pathname == '/cadastro/verificar') {
 
         req.on('end', async () => {
             try{
-                console.log("BODY:", JSON.stringify(body))
-                console.log("entrou na rota cadastro")
+
                 const dados = JSON.parse(body)
-                console.log(dados)
+
                 let resposta = await Cadastro.cadastrar(dados)
                 res.end(JSON.stringify(resposta))
             }
@@ -286,16 +277,9 @@ if (rota.pathname == '/cadastro/verificar') {
         
         req.on('end', async () => {
 
-            console.log('END DA REQUISIÇÃO')
-            console.log('BODY RECEBIDO:', body)
-
             try {
 
                 const dados = JSON.parse(body)
-
-                console.log('DADOS:', dados)
-                console.log('MENSAGEM:', dados.mensagem)
-                console.log('Chamando ollama')
 
                 const resposta = await ChatBot.resposta(dados.mensagem)
 

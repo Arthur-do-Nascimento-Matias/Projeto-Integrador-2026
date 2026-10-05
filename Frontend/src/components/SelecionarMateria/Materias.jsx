@@ -276,7 +276,6 @@ useEffect(() => {
                   onClick={() => {
                     selecionarMateria(materia)
                     criarTrilha(materia.id)
-                    console.log("materia", materia.id)
                     setMateriaAtual(materia.id)
                     criarAtividade(refAtividade, refEnunciado, atividadeAtual, materia.id, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4)
                     atividadeAtual = 0

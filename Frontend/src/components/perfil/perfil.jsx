@@ -39,7 +39,7 @@ function Avatar({ photo, name, className = '' }) {
         />
       ) : (
         <span>{initials || 'SL'}</span>
-      )}
+      )}ed
     </div>
   )
 }

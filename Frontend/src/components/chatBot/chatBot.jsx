@@ -73,8 +73,6 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
 
     try {
 
-console.log('1 - Vou enviar para o backend')
-
         const resposta = await fetch(
             `http://localhost:3000/chatBot`, {
               method: 'POST',
@@ -87,12 +85,7 @@ console.log('1 - Vou enviar para o backend')
             }
         )
 
-console.log('2 - Backend respondeu:', resposta.status)
-        console.log('Status:', resposta.status)
-
         const dados = await resposta.json()
-
-        console.log('Resposta do backend:', dados)
 
         if (!resposta.ok) {
             throw new Error(

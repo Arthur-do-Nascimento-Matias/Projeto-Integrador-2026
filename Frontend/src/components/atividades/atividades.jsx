@@ -13,7 +13,6 @@ function sairAtividade(refAtividade, trilha) {
 
 export function criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
 
-        console.log("materias em atividades.jsx", materiaAtual)
         fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&atividadeAtual=${atividadeAtual}`)
         .then(resp => resp.json())
         .then(data => {
@@ -57,18 +56,15 @@ function fecharParabens() {
 }
 
 function verificar(id, resp){
-    console.log(embaralhado[id].verdadeira)
-    console.log(embaralhado[id].verdadeira == 1)
+
     if (embaralhado[id].verdadeira == 1) {
 
     if (cliques < 2) {
         cliques += 1
         indiceAtv += 1
-        console.log('indice' + indiceAtv)
         criarAtividade(refAtividade, refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
     } else {
         cliques = 0
-        console.log('concluido')
         refParabens.current.style.display = 'flex'
         setAtvLiberada(prev => prev + 1)
     }

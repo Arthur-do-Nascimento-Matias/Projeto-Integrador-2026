@@ -29,10 +29,7 @@ import mysql from 'mysql'
                     return
                 }
 
-                console.log('tamanho: ', perguntas.length)
                  if (!perguntas || perguntas.length === 0 || !perguntas[0]) {
-
-                    console.log("Nenhuma pergunta encontrada.");
 
                     connection.end();
 

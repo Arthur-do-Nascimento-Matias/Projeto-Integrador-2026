@@ -17,10 +17,6 @@ class Email {
 
     static async enviarCodigo(email, codigo) {
 
-        console.log('========== EMAIL ==========')
-        console.log('Destinatário:', email)
-        console.log('Código:', codigo)
-
         try {
 
             const resultado = await this.transporter.sendMail({
@@ -41,9 +37,6 @@ class Email {
                     <p>Esse código expira em 10 minutos.</p>
                 `
             })
-
-            console.log('EMAIL ENVIADO!')
-            console.log('Message ID:', resultado.messageId)
 
             return resultado
 
