@@ -39,7 +39,7 @@ function Avatar({ photo, name, className = '' }) {
         />
       ) : (
         <span>{initials || 'SL'}</span>
-      )}ed
+      )}
     </div>
   )
 }
@@ -51,12 +51,15 @@ function Perfil() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [editOpen, setEditOpen] = useState(false)
+  const [novaBio, setNovaBio] = useState('')
+  const [savingProfile, setSavingProfile] = useState(false)
 
   const [draft, setDraft] = useState({
+    id: '',
     name: '',
     username: '',
     bio: '',
-    photo: '',
+    photoFile: null,
   })
 
   /*
@@ -98,11 +101,14 @@ function Perfil() {
 
         setUser(usuario)
 
+        console.log('id', usuario.id_usuario)
+
       setDraft({
+        id: usuario.id_usuario || '',
         name: usuario.nome_de_exibicao || '',
         username: usuario.nome_de_usuario || '',
         bio: usuario.bio || '',
-        photo: usuario.foto_perfil || '',
+        photoFile: usuario.foto_perfil || '',
       })
       } catch (erro) {
         console.error(erro)
@@ -120,10 +126,11 @@ function Perfil() {
 
   function openEdit() {
     setDraft({
+      id: user.id_usuario || '',
       name: user.nome_de_exibicao || '',
       username: user.nome_de_usuario || '',
       bio: user.bio || '',
-      photo: user.foto_perfil || '',
+      photoFile: user.foto_perfil || '',
     })
 
     setEditOpen(true)
@@ -139,31 +146,88 @@ function Perfil() {
     setDraft((previous) => ({
       ...previous,
       photo: objectUrl,
+      photoFile: file,
     }))
   }
 
-  function saveProfile(event) {
+async function saveProfile(event) {
     event.preventDefault()
 
+    // Evita vários envios enquanto o anterior está processando
+    if (savingProfile) return
+
+    setSavingProfile(true)
+
     const cleanUsername = draft.username
-      .trim()
-      .replace(/^@+/, '')
-      .replace(/\s+/g, '')
+        .trim()
+        .replace(/^@+/, '')
+        .replace(/\s+/g, '')
 
-      setUser((previous) => ({
-        ...previous,
-        nome_de_exibicao:
-          draft.name.trim() || previous.nome_de_exibicao,
-        nome_de_usuario:
-          cleanUsername || previous.nome_de_usuario,
-        bio:
-          draft.bio.trim(),
-        foto_perfil:
-          draft.photo || previous.foto_perfil,
-      }))
+    const formData = new FormData()
 
-    setEditOpen(false)
-  }
+    formData.append('id', String(user.id_usuario))
+    formData.append('bio', draft.bio.trim())
+
+    if (draft.photoFile instanceof File) {
+        formData.append('foto', draft.photoFile)
+    }
+
+    try {
+
+        console.log('Enviando perfil...')
+        console.log('ID:', user.id_usuario)
+        console.log('Bio:', draft.bio)
+        console.log('Foto:', draft.photoFile)
+
+        const resposta = await fetch(
+            'http://localhost:3000/mudarPerfil',
+            {
+                method: 'POST',
+                body: formData
+            }
+        )
+
+        const dados = await resposta.json()
+
+        console.log('Resposta do servidor:', dados)
+
+        if (!resposta.ok || !dados.sucesso) {
+            console.error('Erro ao salvar perfil:', dados)
+            return
+        }
+
+        setUser((previous) => ({
+            ...previous,
+
+            nome_de_exibicao:
+                draft.name.trim() ||
+                previous.nome_de_exibicao,
+
+            nome_de_usuario:
+                cleanUsername ||
+                previous.nome_de_usuario,
+
+            bio: draft.bio.trim(),
+
+            foto_perfil:
+                draft.photo ||
+                previous.foto_perfil
+        }))
+
+        setEditOpen(false)
+
+    } catch (erro) {
+
+        console.error(
+            'Erro ao salvar perfil:',
+            erro
+        )
+
+    } finally {
+
+        setSavingProfile(false)
+    }
+}
 
   if (loading) {
     return (
@@ -338,7 +402,7 @@ function Perfil() {
               <StatCard
                 icon="✓"
                 value={atividadesConcluidas}
-                label="Atividades"
+                label="Atividades concluidas"
                 delay="280ms"
               />
 
@@ -696,22 +760,12 @@ function Perfil() {
                   placeholder="Conte um pouco sobre você..."
                   value={draft.bio}
                   onChange={(event) => {
-                    const novaBio = event.target.value
+                    const bioNova = event.target.value
+                    setNovaBio(bioNova)
                     setDraft({
                       ...draft,
-                      bio: novaBio,
-                    })
-                    fetch('http://localhost:3000/mudarBio', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify({
-                        id: user.id,
-                        bio: novaBio
-                      })
-                    })
-                    }
+                      bio: bioNova,
+                    })}
                   }
                 />
 
@@ -720,24 +774,29 @@ function Perfil() {
                 </small>
               </label>
 
-              <div className="edit-modal-actions">
+             <div className="edit-modal-actions">
 
                 <button
-                  className="profile-secondary-button"
-                  type="button"
-                  onClick={() => setEditOpen(false)}
+                    className="profile-secondary-button"
+                    type="button"
+                    onClick={() => setEditOpen(false)}
+                    disabled={savingProfile}
                 >
-                  Cancelar
+                    Cancelar
                 </button>
 
                 <button
-                  className="profile-primary-button"
-                  type="submit"
+                    className="profile-primary-button"
+                    type="submit"
+                    disabled={savingProfile}
                 >
-                  Salvar alterações
+                    {savingProfile
+                        ? 'Salvando...'
+                        : 'Salvar alterações'
+                    }
                 </button>
 
-              </div>
+            </div>
 
             </form>
 

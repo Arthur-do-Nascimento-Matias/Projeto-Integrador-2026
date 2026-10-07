@@ -162,36 +162,70 @@ import mysql from 'mysql'
         })
     }
 
-    static mudarBio(bio) {
-         return new Promise((resolve, reject) => {
+static mudarPerfil(dados) {
 
-            const connection = mysql.createConnection({
-                host: 'localhost',
-                user: 'root',
-                password: '',
-                database: 'integrador',
-            })
+    return new Promise((resolve, reject) => {
 
-            connection.connect()
+        const connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'integrador',
+        })
 
-            const sql = `UPDATE usuarios
-                    SET bio = ?
-                    WHERE id_usuario = ?;`
+        connection.connect()
 
-            connection.query(sql, [bio.bio, bio.id], (error, results) => {
+        let sql
+        let valores
+
+        if (dados.foto) {
+
+            sql = `
+                UPDATE usuarios
+                SET bio = ?, foto_perfil = ?
+                WHERE id_usuario = ?
+            `
+
+            valores = [
+                dados.bio,
+                dados.foto,
+                dados.id
+            ]
+
+        } else {
+
+            sql = `
+                UPDATE usuarios
+                SET bio = ?
+                WHERE id_usuario = ?
+            `
+
+            valores = [
+                dados.bio,
+                dados.id
+            ]
+        }
+
+        connection.query(
+            sql,
+            valores,
+            (error, results) => {
 
                 connection.end()
 
                 if (error) {
+                    console.error('Erro ao atualizar perfil:', error)
                     reject(error)
                     return
                 }
 
-                resolve()
-        })
+                console.log('Perfil atualizado:', results)
 
-    }
-    )}
+                resolve(results)
+            }
+        )
+    })
+}
 }
 
 export default Conexao
