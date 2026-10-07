@@ -2,6 +2,10 @@ import { useEffect, useRef } from 'react'
 import './Atividades.css'
 import {registrarAcerto,registrarAtividadeConcluida} from "../utils/missoes";
 
+
+    // =========================
+    // O futuro é glorioso irmoes
+    // =========================
 let embaralhado
 let respostaCerta
 let questaoAtualMissao = null;

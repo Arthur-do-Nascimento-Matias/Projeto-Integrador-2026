@@ -220,6 +220,7 @@ import mysql from 'mysql'
                                     connection.end()
 
                                     if (error) {
+                                        
                                         reject(error)
                                         return
                                     }

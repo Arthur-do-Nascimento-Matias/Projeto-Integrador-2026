@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import {
-  EVENTO_MISSOES,
-  obterMissoes,
-} from "../utils/missoes";
-
 import "./MenuDireitaInferior.css";
 
 function IconeMissao({ nome }) {
@@ -98,52 +93,91 @@ function ListaMissoes({ missoes }) {
   );
 }
 
+const ID_USUARIO_TESTE = 22;
+
+function descobrirIcone(tipo) {
+  const icones = {
+    concluir_atividade: "bandeira",
+    acertar_questao: "alvo",
+    tempo_leitura: "livro",
+    abrir_livros: "livro",
+    atividade_sem_erros: "check",
+    acertos_seguidos: "alvo",
+  };
+
+  return icones[tipo] || "bandeira";
+}
+
+function converterMissao(missaoBanco) {
+  return {
+    id: missaoBanco.id_usuario_missao,
+    titulo: missaoBanco.missao,
+    descricao:
+      missaoBanco.descricao ||
+      "Complete esta missão para ganhar XP.",
+    icone: descobrirIcone(missaoBanco.tipo),
+    progresso: Number(missaoBanco.progresso),
+    meta: Number(missaoBanco.meta),
+    concluida: Number(missaoBanco.concluida) === 1,
+  };
+}
+
 function MenuDireitaInferior() {
   const [missoes, setMissoes] = useState([]);
 
   const modalRef = useRef(null);
   const botaoRef = useRef(null);
 
-  useEffect(() => {
-    function atualizar() {
-      const novas = obterMissoes();
+    useEffect(() => {
+    let componenteAtivo = true;
 
-      setMissoes((anteriores) => {
-        if (
-          JSON.stringify(anteriores) === JSON.stringify(novas)
-        ) {
-          return anteriores;
+    async function carregarMissoes() {
+      try {
+        const resposta = await fetch(
+          `http://localhost:3000/missoes/hoje?id_usuario=${ID_USUARIO_TESTE}`
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.erro || "Não foi possível carregar as missões."
+          );
         }
 
-        return novas;
-      });
+        const novasMissoes = (dados.missoes || []).map(
+          converterMissao
+        );
+
+        if (componenteAtivo) {
+          setMissoes(novasMissoes);
+        }
+      } catch (error) {
+        console.error(
+          "Erro ao carregar missões:",
+          error
+        );
+
+        if (componenteAtivo) {
+          setMissoes([]);
+        }
+      }
     }
 
-    atualizar();
+    carregarMissoes();
 
-    window.addEventListener(EVENTO_MISSOES, atualizar);
-    window.addEventListener("storage", atualizar);
-    window.addEventListener("focus", atualizar);
-
-    document.addEventListener(
-      "visibilitychange",
-      atualizar
+    window.addEventListener(
+      "focus",
+      carregarMissoes
     );
 
-    // Verifica a mudança do dia enquanto a tela está aberta.
-    const intervalo = window.setInterval(atualizar, 1000);
-
     return () => {
-      window.removeEventListener(EVENTO_MISSOES, atualizar);
-      window.removeEventListener("storage", atualizar);
-      window.removeEventListener("focus", atualizar);
+      componenteAtivo = false;
 
-      document.removeEventListener(
-        "visibilitychange",
-        atualizar
+      window.removeEventListener(
+        "focus",
+        carregarMissoes
       );
-
-      window.clearInterval(intervalo);
     };
   }, []);
 
@@ -231,7 +265,7 @@ function MenuDireitaInferior() {
               aria-label="Fechar missões"
               autoFocus
             >
-              ×
+              
             </button>
           </div>
 
