@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../Biblioteca/Biblioteca.css";
+import { registrarLivroAberto } from "../utils/missoes";
 
 function Biblioteca() {
     const [capas, setCapas] = useState([]);
@@ -21,6 +22,10 @@ function Biblioteca() {
             `http://localhost:3000/abrirLivro?id=${id}`,
             "_blank"
         );
+        if (novaAba) {
+            novaAba.opener = null;
+            registrarLivroAberto(id);
+        }
     }
 
     const livrosFiltrados = capas.filter((capa) =>
