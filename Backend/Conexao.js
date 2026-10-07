@@ -1,4 +1,5 @@
 import mysql from 'mysql'
+import { resolve } from 'nodemailer/lib/shared/url.js'
 
     class Conexao{
         
@@ -175,41 +176,9 @@ static mudarPerfil(dados) {
 
         connection.connect()
 
-        let sql
-        let valores
+        const sql = 'UPDATE usuarios SET bio = ? WHERE id_usuario = ?'
 
-        if (dados.foto) {
-
-            sql = `
-                UPDATE usuarios
-                SET bio = ?, foto_perfil = ?
-                WHERE id_usuario = ?
-            `
-
-            valores = [
-                dados.bio,
-                dados.foto,
-                dados.id
-            ]
-
-        } else {
-
-            sql = `
-                UPDATE usuarios
-                SET bio = ?
-                WHERE id_usuario = ?
-            `
-
-            valores = [
-                dados.bio,
-                dados.id
-            ]
-        }
-
-        connection.query(
-            sql,
-            valores,
-            (error, results) => {
+        connection.query(sql, [dados.bio, dados.id], (error, results) => {
 
                 connection.end()
 
@@ -226,6 +195,87 @@ static mudarPerfil(dados) {
         )
     })
 }
+static atualizarFoto(dados) {
+
+    return new Promise((resolve, reject) => {
+
+        const connection = Conexao.connect()
+
+        const fotoBuffer = Buffer.from(dados.foto)
+
+        const sql = `
+            UPDATE usuarios
+            SET foto_perfil = ?
+            WHERE id_usuario = ?
+        `
+
+        connection.query(
+            sql,
+            [fotoBuffer, dados.id],
+            (error, results) => {
+
+                connection.end()
+
+                if (error) {
+                    console.error('ERRO AO ATUALIZAR FOTO:', error)
+                    reject(error)
+                    return
+                }
+
+                console.log('FOTO SALVA:', results)
+
+                resolve(results)
+            }
+        )
+    })
 }
+
+static atualizarAtividade(dados) {
+      return new Promise((resolve, reject) => {
+
+        const connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'integrador',
+        })
+
+        connection.connect()
+
+        console.log(dados.materia)
+
+        const colunas = [
+            'atvidades_concluidas_geral',
+            'atvidades_concluidas_matematica',
+            'atvidades_concluidas_portugues',
+            'atvidades_concluidas_historia',
+            'atvidades_concluidas_geografia',
+            'atvidades_concluidas_ciencias',
+            'atvidades_concluidas_ingles'
+        ]
+
+        const coluna = colunas[dados.materia]
+
+        console.log('coluna', coluna)
+
+        const sql = `
+                UPDATE usuarios
+                SET ${coluna} = ${coluna} + 1
+                WHERE id_usuario = ?;
+        `
+
+        connection.query(sql, [dados.id], (error, results) => {
+
+            connection.end()
+            
+            if(error){
+                reject(error)
+                return
+            }
+
+        }) 
+      })
+
+}}
 
 export default Conexao

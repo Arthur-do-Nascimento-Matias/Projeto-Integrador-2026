@@ -212,6 +212,30 @@ else if (req.method == 'POST') {
         body += chunk
     })
 
+if(rota.pathname == '/concluirAtividade') {
+     req.on('end', async () => {
+
+        try {
+
+            const dados = JSON.parse(body)
+
+            await Conexao.atualizarAtividade(dados)
+           
+        } catch (erro) {
+
+            console.error(erro)
+
+            res.writeHead(500, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+
+            res.end(JSON.stringify({
+                ok: false,
+                message: 'Erro ao verificar código'
+            }))
+        }})
+}
+
 if (rota.pathname == '/cadastro/verificar') { 
     req.on('end', async () => {
 
@@ -311,129 +335,59 @@ if (rota.pathname == '/cadastro/verificar') {
         return
     }
 
- if (rota.pathname === '/mudarPerfil') {
+ if (rota.pathname === '/mudarBio') {
 
-    const form = formidable({
-        multiples: false
-    })
+        req.on('end', async () => {
 
-    form.parse(req, async (error, fields, files) => {
-
-        if (error) {
-
-            console.error('Erro ao receber formulário:', error)
-
-            res.writeHead(500, {
-                'Content-Type': 'application/json'
-            })
-
-            res.end(JSON.stringify({
-                sucesso: false,
-                erro: error.message
-            }))
-
-            return
-        }
-
-        console.log('Campos:', fields)
-        console.log('Arquivos:', files)
-
-        const id = fields.id?.[0]
-        const bio = fields.bio?.[0]
-        const fotoArquivo = files.foto?.[0]
-
-        console.log('ID:', id)
-        console.log('Bio:', bio)
-        console.log('Foto:', fotoArquivo)
-
-        if (!id) {
-
-            res.writeHead(400, {
-                'Content-Type': 'application/json'
-            })
-
-            res.end(JSON.stringify({
-                sucesso: false,
-                erro: 'ID do usuário não informado'
-            }))
-
-            return
-        }
-
-        let fotoBuffer = null
-
-        // Se uma nova foto foi enviada
-        if (fotoArquivo) {
-
-            try {
-
-                fotoBuffer = fs.readFileSync(fotoArquivo.filepath)
-
-                console.log(
-                    'Foto convertida para Buffer:',
-                    fotoBuffer.length,
-                    'bytes'
-                )
-
-            } catch (erro) {
-
-                console.error('Erro ao ler a foto:', erro)
-
-                res.writeHead(500, {
-                    'Content-Type': 'application/json'
-                })
-
-                res.end(JSON.stringify({
-                    sucesso: false,
-                    erro: 'Não foi possível ler a foto'
-                }))
-
-                return
+            try{
+                const dados = JSON.parse(body)
+                await Conexao.mudarPerfil(dados)
             }
-        }
 
-        const dados = {
-            id: id,
-            bio: bio || '',
-            foto: fotoBuffer
-        }
+            catch(erro) {
+                console.error(erro)
+                res.end(JSON.stringify({ok: false}))
+            }
 
-        console.log('Dados enviados para o banco:', {
-            id: dados.id,
-            bio: dados.bio,
-            tamanhoFoto: dados.foto?.length || 0
         })
+    }
+
+if (rota.pathname == '/mudarFoto') {
+
+    req.on('end', async () => {
 
         try {
 
-            await Conexao.mudarPerfil(dados)
+            const dados = JSON.parse(body)
+
+            await Conexao.atualizarFoto(dados)
 
             res.writeHead(200, {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json; charset=utf-8'
             })
 
             res.end(JSON.stringify({
-                sucesso: true,
-                mensagem: 'Perfil atualizado com sucesso'
+                ok: true
             }))
 
         } catch (erro) {
 
-            console.error('Erro ao salvar perfil no banco:', erro)
+            console.error('ERRO AO SALVAR FOTO:', erro)
 
             res.writeHead(500, {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json; charset=utf-8'
             })
 
             res.end(JSON.stringify({
-                sucesso: false,
-                erro: 'Erro ao salvar perfil no banco'
+                ok: false,
+                erro: erro.message
             }))
         }
     })
 
     return
-}}}
+}
+}}
 
 const server = http.createServer(callback)
 

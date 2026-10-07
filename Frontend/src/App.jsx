@@ -34,6 +34,15 @@ function ConteudoApp({
 
   const location = useLocation();
 
+  const [draft, setDraft] = useState({
+    id: '',
+    name: '',
+    username: '',
+    bio: '',
+    photoFile: null,
+    atividadesConcluidas: []
+  })
+
   return (
     <>
 
@@ -48,7 +57,10 @@ function ConteudoApp({
           element={
             <>
               {folhasAtivas && <FolhasCaindo />}
-              <Painel />
+              <Painel 
+                draft={draft}
+                setDraft={setDraft}
+              />
             </>
           }
         />
@@ -71,7 +83,10 @@ function ConteudoApp({
         {/* LOGIN */}
         <Route
           path="/login"
-          element={<Login />}
+          element={<Login 
+            draft={draft}
+            setDraft={setDraft}
+          />}
         />
 
 
@@ -85,7 +100,10 @@ function ConteudoApp({
         {/* PERFIL */}
         <Route
           path="/perfil"
-          element={<PainelPerfil />}
+          element={<PainelPerfil 
+            draft={draft}
+            setDraft={setDraft} 
+          />}
         />
 
 

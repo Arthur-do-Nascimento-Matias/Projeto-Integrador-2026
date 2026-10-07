@@ -44,7 +44,7 @@ function Avatar({ photo, name, className = '' }) {
   )
 }
 
-function Perfil() {
+function Perfil({ draft, setDraft }) {
   const { username } = useParams()
 
   const [user, setUser] = useState(null)
@@ -53,14 +53,6 @@ function Perfil() {
   const [editOpen, setEditOpen] = useState(false)
   const [novaBio, setNovaBio] = useState('')
   const [savingProfile, setSavingProfile] = useState(false)
-
-  const [draft, setDraft] = useState({
-    id: '',
-    name: '',
-    username: '',
-    bio: '',
-    photoFile: null,
-  })
 
   /*
    * Atualmente o /perfil retorna o usuário
@@ -108,7 +100,18 @@ function Perfil() {
         name: usuario.nome_de_exibicao || '',
         username: usuario.nome_de_usuario || '',
         bio: usuario.bio || '',
-        photoFile: usuario.foto_perfil || '',
+        photoFile: null,
+        atividadesConcluidas: [
+
+          usuario.atvidades_concluidas_geral,
+          usuario.atvidades_concluidas_matematica,
+          usuario.atvidades_concluidas_portugues,
+          usuario.atvidades_concluidas_historia,
+          usuario.atvidades_concluidas_geografia,
+          usuario.atvidades_concluidas_ciencias,
+          usuario.atvidades_concluidas_ingles
+
+        ]
       })
       } catch (erro) {
         console.error(erro)
@@ -126,11 +129,22 @@ function Perfil() {
 
   function openEdit() {
     setDraft({
-      id: user.id_usuario || '',
-      name: user.nome_de_exibicao || '',
-      username: user.nome_de_usuario || '',
-      bio: user.bio || '',
-      photoFile: user.foto_perfil || '',
+        id: usuario.id_usuario || '',
+        name: usuario.nome_de_exibicao || '',
+        username: usuario.nome_de_usuario || '',
+        bio: usuario.bio || '',
+        photoFile: null,
+        atividadesConcluidas: [
+
+          usuario.atvidades_concluidas_geral,
+          usuario.atvidades_concluidas_matematica,
+          usuario.atvidades_concluidas_portugues,
+          usuario.atvidades_concluidas_historia,
+          usuario.atvidades_concluidas_geografia,
+          usuario.atvidades_concluidas_ciencias,
+          usuario.atvidades_concluidas_ingles
+
+        ]
     })
 
     setEditOpen(true)
@@ -153,80 +167,62 @@ function Perfil() {
 async function saveProfile(event) {
     event.preventDefault()
 
-    // Evita vários envios enquanto o anterior está processando
-    if (savingProfile) return
-
-    setSavingProfile(true)
-
     const cleanUsername = draft.username
         .trim()
         .replace(/^@+/, '')
         .replace(/\s+/g, '')
 
-    const formData = new FormData()
+    setUser((previous) => ({
+        ...previous,
+        nome_de_exibicao:
+            draft.name.trim() ||
+            previous.nome_de_exibicao,
 
-    formData.append('id', String(user.id_usuario))
-    formData.append('bio', draft.bio.trim())
+        nome_de_usuario:
+            cleanUsername ||
+            previous.nome_de_usuario,
 
-    if (draft.photoFile instanceof File) {
-        formData.append('foto', draft.photoFile)
+        bio: draft.bio.trim(),
+
+        foto_perfil:
+            draft.photo ||
+            previous.foto_perfil,
+    }))
+
+    if (draft.photoFile !== null) {
+
+        const arrayBuffer =
+            await draft.photoFile.arrayBuffer()
+
+        const foto =
+            Array.from(new Uint8Array(arrayBuffer))
+
+        fetch('http://localhost:3000/mudarFoto', {
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                id: user.id_usuario,
+                foto: foto
+            })
+        })
     }
 
-    try {
-
-        console.log('Enviando perfil...')
-        console.log('ID:', user.id_usuario)
-        console.log('Bio:', draft.bio)
-        console.log('Foto:', draft.photoFile)
-
-        const resposta = await fetch(
-            'http://localhost:3000/mudarPerfil',
-            {
-                method: 'POST',
-                body: formData
-            }
-        )
-
-        const dados = await resposta.json()
-
-        console.log('Resposta do servidor:', dados)
-
-        if (!resposta.ok || !dados.sucesso) {
-            console.error('Erro ao salvar perfil:', dados)
-            return
-        }
-
-        setUser((previous) => ({
-            ...previous,
-
-            nome_de_exibicao:
-                draft.name.trim() ||
-                previous.nome_de_exibicao,
-
-            nome_de_usuario:
-                cleanUsername ||
-                previous.nome_de_usuario,
-
+    fetch('http://localhost:3000/mudarBio', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: user.id_usuario,
             bio: draft.bio.trim(),
+        }),
+    })
 
-            foto_perfil:
-                draft.photo ||
-                previous.foto_perfil
-        }))
-
-        setEditOpen(false)
-
-    } catch (erro) {
-
-        console.error(
-            'Erro ao salvar perfil:',
-            erro
-        )
-
-    } finally {
-
-        setSavingProfile(false)
-    }
+    setEditOpen(false)
 }
 
   if (loading) {

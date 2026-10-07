@@ -87,7 +87,7 @@ function criarFatia(
   ].join(" ");
 }
 
-function Materias({ refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada, setMateriaAtual, materiaAtual, onChange, refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4 }) {
+function Materias({ draft, setDraft, refAtividade, atividadeAtual, setAtividadeAtual, atvLiberada, setMateriaAtual, materiaAtual, onChange, refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4 }) {
   const [aberto, setAberto] = useState(false);
   const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
   const [materiaHover, setMateriaHover] = useState(null);
