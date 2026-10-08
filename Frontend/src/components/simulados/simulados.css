@@ -2,7 +2,7 @@
     width: 100%;
     min-height: 100vh;
 
-    padding: 55px 60px 100px;
+    padding: 55px 60px 110px;
 
     background: #f6f5ef;
 
@@ -10,9 +10,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    CABEÇALHO
-================================ */
+================================================== */
 
 .simuladosCabecalho {
     width: 100%;
@@ -48,7 +48,7 @@
 }
 
 .simuladosCabecalho p {
-    max-width: 600px;
+    max-width: 650px;
 
     margin: 20px 0 0;
 
@@ -60,9 +60,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    PESQUISA
-================================ */
+================================================== */
 
 .simuladosPesquisa {
     width: 100%;
@@ -116,9 +116,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    FILTROS
-================================ */
+================================================== */
 
 .simuladosFiltros {
     display: flex;
@@ -161,9 +161,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    CATÁLOGO
-================================ */
+================================================== */
 
 .simuladosCatalogo {
     width: 100%;
@@ -217,9 +217,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    GRADE
-================================ */
+================================================== */
 
 .simuladosGrade {
     display: grid;
@@ -231,9 +231,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    CARD
-================================ */
+================================================== */
 
 .simuladosCard {
     overflow: hidden;
@@ -256,9 +256,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    CAPA
-================================ */
+================================================== */
 
 .simuladosCardCapa {
     position: relative;
@@ -353,9 +353,9 @@
 }
 
 
-/* ================================
+/* ==================================================
    CONTEÚDO DO CARD
-================================ */
+================================================== */
 
 .simuladosCardConteudo {
     padding: 20px;
@@ -411,9 +411,15 @@
 }
 
 
-/* ================================
-   BOTÃO
-================================ */
+/* ==================================================
+   BOTÕES DO CARD
+================================================== */
+
+.simuladosCardAcoes {
+    display: flex;
+
+    gap: 8px;
+}
 
 .simuladosBotaoAbrir {
     width: 100%;
@@ -452,10 +458,43 @@
     color: #ffffff;
 }
 
+.simuladosBotaoBaixar {
+    width: 43px;
+    height: 43px;
 
-/* ================================
-   CARREGAMENTO / ERRO / VAZIO
-================================ */
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #e6e8e0;
+
+    color: #586153;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.simuladosBotaoBaixar svg {
+    width: 18px;
+    height: 18px;
+}
+
+.simuladosBotaoBaixar:hover {
+    background: #d7dcd1;
+
+    color: #293529;
+}
+
+
+/* ==================================================
+   ESTADOS
+================================================== */
 
 .simuladosEstado {
     min-height: 300px;
@@ -547,130 +586,434 @@
 }
 
 
-/* ================================
-   SIMULADOS INTERATIVOS
-================================ */
+/* ==================================================
+   REDAÇÕES
+================================================== */
 
-.simuladosEmBreve {
+.redacoes {
     width: 100%;
     max-width: 1400px;
 
-    margin: 100px auto 0;
-
-    padding: 65px 50px;
-
-    background: #293529;
-
-    border-radius: 30px;
-
-    color: #ffffff;
+    margin: 110px auto 0;
 }
 
-.simuladosEmBreve span {
-    color: #aebbaa;
+.redacoesCabecalho {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 
-    font-size: 10px;
+    gap: 30px;
+
+    margin-bottom: 28px;
+}
+
+.redacoesCabecalho > div > span {
+    color: #a56f4d;
+
+    font-size: 11px;
     font-weight: 800;
 
-    letter-spacing: 1.7px;
+    letter-spacing: 1.8px;
 }
 
-.simuladosEmBreve h2 {
-    margin: 12px 0 8px;
+.redacoesCabecalho h2 {
+    margin: 8px 0 7px;
 
-    font-size: 36px;
+    color: #292821;
+
+    font-size: 38px;
 
     letter-spacing: -1.5px;
 }
 
-.simuladosEmBreve p {
-    max-width: 570px;
+.redacoesCabecalho p {
+    max-width: 600px;
 
     margin: 0;
 
-    color: #bdc7ba;
+    color: #827e75;
 
     line-height: 1.6;
 }
 
+.redacoesVerTodas {
+    padding: 12px 19px;
 
-/* ================================
-   REDAÇÃO
-================================ */
+    border: 1px solid #d8d2c7;
+    border-radius: 100px;
 
-.simuladosRedacao {
-    width: 100%;
-    max-width: 1400px;
+    background: transparent;
 
+    color: #685b4e;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.redacoesVerTodas:hover {
+    background: #e9e1d6;
+}
+
+
+/* ==================================================
+   CONTEÚDO REDAÇÕES
+================================================== */
+
+.redacoesConteudo {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.45fr)
+        minmax(320px, 0.75fr);
+
+    gap: 20px;
+}
+
+
+/* ==================================================
+   REDAÇÃO DESTAQUE
+================================================== */
+
+.redacaoDestaque {
+    min-height: 420px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 35px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d9c9b7 0%,
+            #eadfd1 100%
+        );
+
+    border-radius: 28px;
+}
+
+.redacaoDestaqueTopo {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    gap: 40px;
-
-    margin: 25px auto 0;
-
-    padding: 50px;
-
-    background: #e6ded1;
-
-    border-radius: 30px;
+    gap: 20px;
 }
 
-.simuladosRedacao span {
-    color: #8c775f;
+.redacaoDestaqueTopo > span {
+    color: #805f46;
 
     font-size: 10px;
-    font-weight: 800;
+    font-weight: 900;
 
     letter-spacing: 1.7px;
 }
 
-.simuladosRedacao h2 {
-    margin: 10px 0 8px;
+.redacaoNivel {
+    padding: 7px 11px;
 
-    color: #453c34;
+    background: rgba(255, 255, 255, 0.45);
 
-    font-size: 32px;
+    border-radius: 100px;
 
-    letter-spacing: -1.2px;
+    color: #745c48;
+
+    font-size: 11px;
+    font-weight: 700;
 }
 
-.simuladosRedacao p {
-    max-width: 570px;
+.redacaoDestaqueConteudo {
+    max-width: 650px;
+
+    margin: 50px 0;
+}
+
+.redacaoTipo {
+    color: #8a6c53;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.redacaoDestaqueConteudo h3 {
+    max-width: 620px;
+
+    margin: 12px 0 15px;
+
+    color: #3e342b;
+
+    font-size: clamp(30px, 4vw, 48px);
+
+    line-height: 1.05;
+
+    letter-spacing: -2px;
+}
+
+.redacaoDestaqueConteudo p {
+    max-width: 590px;
 
     margin: 0;
 
-    color: #82776b;
+    color: #756659;
 
-    line-height: 1.6;
+    line-height: 1.65;
 }
 
-.simuladosRedacaoIcone {
-    width: 115px;
-    height: 115px;
+.redacaoDestaqueRodape {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 
-    flex-shrink: 0;
+    gap: 30px;
+}
+
+.redacaoDestaqueRodape > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.redacaoDestaqueRodape span {
+    color: #947961;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.redacaoDestaqueRodape strong {
+    color: #5d4938;
+
+    font-size: 18px;
+}
+
+.redacaoDestaqueRodape button {
+    padding: 13px 20px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #4c3d31;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.redacaoDestaqueRodape button:hover {
+    transform: translateY(-2px);
+
+    background: #382d25;
+}
+
+
+/* ==================================================
+   RESUMO REDAÇÕES
+================================================== */
+
+.redacoesResumo {
+    display: grid;
+
+    grid-template-rows: 1fr 1fr;
+
+    gap: 20px;
+}
+
+.redacaoResumoCard {
+    display: flex;
+    flex-direction: column;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2ded6;
+    border-radius: 25px;
+}
+
+.redacaoResumoIcone {
+    width: 48px;
+    height: 48px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: rgba(255, 255, 255, 0.4);
+    margin-bottom: 25px;
 
-    border-radius: 50%;
+    background: #efe8df;
 
-    color: #8a755e;
+    border-radius: 14px;
 
-    font-family: Georgia, serif;
-    font-size: 38px;
-    font-style: italic;
+    color: #795e48;
+}
+
+.redacaoResumoIcone svg {
+    width: 22px;
+    height: 22px;
+}
+
+.redacaoResumoCard span {
+    color: #9a765b;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+}
+
+.redacaoResumoCard h3 {
+    margin: 8px 0;
+
+    color: #3e3a34;
+
+    font-size: 20px;
+
+    letter-spacing: -0.5px;
+}
+
+.redacaoResumoCard p {
+    margin: 0;
+
+    color: #89847b;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+.redacaoResumoCard button {
+    width: fit-content;
+
+    margin-top: auto;
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #705847;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
 }
 
 
-/* ================================
+/* ==================================================
+   PASSOS
+================================================== */
+
+.redacoesPassos {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    margin-top: 20px;
+
+    overflow: hidden;
+
+    background: #2e342d;
+
+    border-radius: 24px;
+}
+
+.redacoesPasso {
+    display: flex;
+
+    gap: 18px;
+
+    padding: 30px;
+
+    border-right:
+        1px solid rgba(255, 255, 255, 0.08);
+}
+
+.redacoesPasso:last-child {
+    border-right: none;
+}
+
+.redacoesPasso > span {
+    color: #99a591;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.redacoesPasso strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #ffffff;
+
+    font-size: 15px;
+}
+
+.redacoesPasso p {
+    margin: 0;
+
+    color: #aeb5aa;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* ==================================================
    RESPONSIVO
-================================ */
+================================================== */
+
+@media (max-width: 950px) {
+
+    .redacoesConteudo {
+        grid-template-columns: 1fr;
+    }
+
+    .redacoesResumo {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+    .redacoesPassos {
+        grid-template-columns: 1fr;
+    }
+
+    .redacoesPasso {
+        border-right: none;
+
+        border-bottom:
+            1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .redacoesPasso:last-child {
+        border-bottom: none;
+    }
+
+}
+
 
 @media (max-width: 800px) {
 
@@ -683,12 +1026,31 @@
             repeat(2, minmax(0, 1fr));
     }
 
-    .simuladosRedacao {
+    .redacoesCabecalho {
         align-items: flex-start;
         flex-direction: column;
     }
 
 }
+
+
+@media (max-width: 600px) {
+
+    .redacoesResumo {
+        grid-template-columns: 1fr;
+    }
+
+    .redacaoDestaque {
+        padding: 27px;
+    }
+
+    .redacaoDestaqueRodape {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
 
 @media (max-width: 520px) {
 

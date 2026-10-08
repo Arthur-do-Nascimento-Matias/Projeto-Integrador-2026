@@ -1,9 +1,10 @@
 import http from 'http'
 import url from 'url'
-//import Atividades from './Atividades.js'
+//import um amor verdadeiro e reciproco'
 import Conexao from './Conexao.js'
 import Livros from './Livros.js'
 import ChatBot from './ChatBot.js'
+import Provas from './Provas.js'
 
 
 const callback = (req, res) => {
@@ -105,6 +106,43 @@ const callback = (req, res) => {
             .then(resp => {
 
                 res.end(resp)
+            })
+
+        return  // retorna pra minha, vda
+
+        
+    }
+      // =========================
+    // PROVAS
+    // =========================
+
+    if (rota.pathname == '/provas') {
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8'
+        })
+
+        Provas.provasSearch()
+            .then(resp => {
+
+                res.end(JSON.stringify(resp))
+            })
+
+            .catch(error => {
+
+                console.error(
+                    'ERRO AO BUSCAR PROVAS:',
+                    error
+                )
+
+                res.writeHead(500, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    erro: error.message
+                }))
             })
 
         return

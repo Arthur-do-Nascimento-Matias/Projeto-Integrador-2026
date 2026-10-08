@@ -62,7 +62,7 @@ function ListaMissoes({ missoes }) {
               nome={missao.concluida ? "check" : missao.icone}
             />
           </div>
-
+          
           <div className="menuDireitaInferior-texto">
             <div className="menuDireitaInferior-missao-topo">
               <h4>{missao.titulo}</h4>
