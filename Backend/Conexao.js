@@ -260,7 +260,7 @@ static atualizarAtividade(dados) {
 
         const sql = `
                 UPDATE usuarios
-                SET ${coluna} = ${coluna} + 1
+                SET atvidades_concluidas_geral = atvidades_concluidas_geral + 1, ${coluna} = ${coluna} + 1
                 WHERE id_usuario = ?;
         `
 
