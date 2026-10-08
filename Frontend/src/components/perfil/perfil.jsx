@@ -113,6 +113,7 @@ function Perfil({ draft, setDraft }) {
 
         ]
       })
+
       } catch (erro) {
         console.error(erro)
 
@@ -128,25 +129,6 @@ function Perfil({ draft, setDraft }) {
   }, [])
 
   function openEdit() {
-    setDraft({
-        id: usuario.id_usuario || '',
-        name: usuario.nome_de_exibicao || '',
-        username: usuario.nome_de_usuario || '',
-        bio: usuario.bio || '',
-        photoFile: null,
-        atividadesConcluidas: [
-
-          usuario.atvidades_concluidas_geral,
-          usuario.atvidades_concluidas_matematica,
-          usuario.atvidades_concluidas_portugues,
-          usuario.atvidades_concluidas_historia,
-          usuario.atvidades_concluidas_geografia,
-          usuario.atvidades_concluidas_ciencias,
-          usuario.atvidades_concluidas_ingles
-
-        ]
-    })
-
     setEditOpen(true)
   }
 

@@ -47,7 +47,7 @@ function PasswordField({ id, label, value, onChange, invalid }) {
   )
 }
 
-function Login() {
+function Login({ draft, setDraft }) {
   const [mode, setMode] = useState('login')
 
   const [loginData, setLoginData] = useState({
@@ -160,14 +160,12 @@ function Login() {
         localStorage.setItem('token', dados.token)
 
         setLoginMessage({
-            type: 'success',
-            text: 'Tudo certo! A aventura vai começar.',
+          type: 'success',
+          text: 'Tudo certo! A aventura vai começar.',
         })
 
-        window.location.href = '/'
-
-        }
-      })
+       window.location.href = '/'
+      }})
       .catch(() => {
         setLoginMessage({
           type: 'error',

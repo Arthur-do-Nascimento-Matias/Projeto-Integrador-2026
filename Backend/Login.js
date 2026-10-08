@@ -101,7 +101,8 @@ class Login {
 
                             resolve({
                                 ok: true,
-                                token
+                                token,
+                                usuario
                             })
                         }
                     )
