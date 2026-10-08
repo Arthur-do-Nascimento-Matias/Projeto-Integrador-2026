@@ -196,6 +196,43 @@ if(req.method == 'GET') {
                 res.end(resp)
             })
 
+        return  // retorna pra minha, vda
+
+        
+    }
+      // =========================
+    // PROVAS
+    // =========================
+
+    if (rota.pathname == '/provas') {
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8'
+        })
+
+        Provas.provasSearch()
+            .then(resp => {
+
+                res.end(JSON.stringify(resp))
+            })
+
+            .catch(error => {
+
+                console.error(
+                    'ERRO AO BUSCAR PROVAS:',
+                    error
+                )
+
+                res.writeHead(500, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    erro: error.message
+                }))
+            })
+
         return
     }
 
@@ -334,6 +371,64 @@ if (rota.pathname == '/cadastro/verificar') {
 
         return
     }
+<<<<<<< kauan
+    
+
+    // =========================
+    // MISSOES
+    // =========================
+
+    if (rota.pathname == '/missoes/hoje') {
+
+        const idUsuario = Number(param.id_usuario)
+
+        if (!idUsuario) {
+            res.writeHead(400, {
+                'Content-Type':
+                    'application/json; charset=utf-8'
+            })
+
+            res.end(JSON.stringify({
+                erro: 'Informe um id_usuario válido.'
+            }))
+
+            return
+        }
+
+        Conexao.buscarOuCriarMissoes(idUsuario)
+
+            .then(con => {
+
+                res.writeHead(200, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify(con))
+            })
+
+            .catch(error => {
+
+                console.error(
+                    'ERRO AO BUSCAR MISSÕES:',
+                    error
+                )
+
+                res.writeHead(500, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    erro: error.message
+                }))
+            })
+
+        return
+    }
+}
+=======
+>>>>>>> react
 
  if (rota.pathname === '/mudarBio') {
 

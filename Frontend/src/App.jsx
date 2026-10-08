@@ -27,6 +27,8 @@ import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 
 import Ranking from "./components/ranking/ranking"
 
+import PainelSimulados from "./pages/PainelSimulados";
+
 function ConteudoApp({
   folhasAtivas,
   alterarFolhas
@@ -158,6 +160,11 @@ function ConteudoApp({
             setDraft={setDraft} 
           />}
         />
+
+        <Route
+    path="/simulados"
+    element={<PainelSimulados />}
+/>
 
 
         {/* CONFIGURAÇÕES */}

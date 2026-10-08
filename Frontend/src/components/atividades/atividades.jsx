@@ -1,8 +1,15 @@
 import { useEffect, useRef } from 'react'
 import './Atividades.css'
+import {registrarAcerto,registrarAtividadeConcluida} from "../utils/missoes";
 
+
+    // =========================
+    // O futuro é glorioso irmoes
+    // =========================
 let embaralhado
 let respostaCerta
+let questaoAtualMissao = null;
+let respostaBloqueada = true;
 let indiceAtv = 1
 let cliques = 0
 
@@ -28,7 +35,8 @@ export function criarAtividade(refAtividade, refEnunciado, atividadeAtual, mater
                 refAlternativa2.current.innerHTML = embaralhado[1].texto
                 refAlternativa3.current.innerHTML = embaralhado[2].texto
                 refAlternativa4.current.innerHTML = embaralhado[3].texto
-        })
+        
+            })
     }
 
 function aleatorio(alternativa1, alternativa2, certa, alternativa4){
