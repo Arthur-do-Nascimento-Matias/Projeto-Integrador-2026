@@ -4,7 +4,8 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  useLocation
+  useLocation,
+  useNavigate
 } from "react-router-dom";
 
 import "./App.css";
@@ -27,10 +28,24 @@ import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 
 import Ranking from "./components/ranking/ranking"
 
+import { Navigate } from "react-router-dom";
+
+function RotaPrivada({ children }) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
+
 function ConteudoApp({
   folhasAtivas,
   alterarFolhas
 }) {
+
+  const navigate = useNavigate();
 
   const location = useLocation();
 
@@ -65,6 +80,7 @@ function ConteudoApp({
 
         if (!resposta.ok || !dados.ok) {
           localStorage.removeItem('token')
+          navigate('/login', { replace: true })
           return
         }
 
@@ -104,72 +120,82 @@ function ConteudoApp({
 
       <Routes>
 
-        {/* INÍCIO */}
-        <Route
-          path="/"
-          element={
-            <>
-              {folhasAtivas && <FolhasCaindo />}
-              <Painel 
+          <Route
+            path="/"
+            element={
+              <RotaPrivada>
+                <>
+                  {folhasAtivas && <FolhasCaindo />}
+
+                  <Painel
+                    draft={draft}
+                    setDraft={setDraft}
+                  />
+                </>
+              </RotaPrivada>
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              <Login
                 draft={draft}
                 setDraft={setDraft}
               />
-            </>
-          }
-        />
+            }
+          />
 
-        
-        {/* Ranking */}
-        <Route
-          path="/Ranking"
-          element={<Ranking />}
-        />
+          <Route
+            path="/Ranking"
+            element={
+              <RotaPrivada>
+                <Ranking />
+              </RotaPrivada>
+            }
+          />
 
+          <Route
+            path="/chatBot"
+            element={
+              <RotaPrivada>
+                <ChatBot />
+              </RotaPrivada>
+            }
+          />
 
-        {/* CHATBOT */}
-        <Route
-          path="/chatBot"
-          element={<ChatBot />}
-        />
+          <Route
+            path="/biblioteca"
+            element={
+              <RotaPrivada>
+                <PainelBiblioteca />
+              </RotaPrivada>
+            }
+          />
 
+          <Route
+            path="/perfil"
+            element={
+              <RotaPrivada>
+                <PainelPerfil
+                  draft={draft}
+                  setDraft={setDraft}
+                />
+              </RotaPrivada>
+            }
+          />
 
-        {/* LOGIN */}
-        <Route
-          path="/login"
-          element={<Login 
-            draft={draft}
-            setDraft={setDraft}
-          />}
-        />
-
-
-        {/* BIBLIOTECA */}
-        <Route
-          path="/biblioteca"
-          element={<PainelBiblioteca />}
-        />
-
-
-        {/* PERFIL */}
-        <Route
-          path="/perfil"
-          element={<PainelPerfil 
-            draft={draft}
-            setDraft={setDraft} 
-          />}
-        />
-
-
-        {/* CONFIGURAÇÕES */}
-        <Route
-          path="/configuracoes"
-          element={
-            <Configuracoes
-              folhasAtivas={folhasAtivas}
-              alterarFolhas={alterarFolhas}
-            />
-          }
-        />
+          <Route
+            path="/configuracoes"
+            element={
+              <RotaPrivada>
+                <Configuracoes
+                  folhasAtivas={folhasAtivas}
+                  alterarFolhas={alterarFolhas}
+                />
+              </RotaPrivada>
+            }
+          />
 
       </Routes>
 
