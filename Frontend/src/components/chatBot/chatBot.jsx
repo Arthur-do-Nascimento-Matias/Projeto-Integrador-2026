@@ -74,14 +74,18 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
     try {
 
         const resposta = await fetch(
-            `http://localhost:3000/chatBot?mensagem=${encodeURIComponent(mensagem)}`
+            `http://localhost:3000/chatBot`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                mensagem: mensagem
+              })
+            }
         )
 
-        console.log('Status:', resposta.status)
-
         const dados = await resposta.json()
-
-        console.log('Resposta do backend:', dados)
 
         if (!resposta.ok) {
             throw new Error(

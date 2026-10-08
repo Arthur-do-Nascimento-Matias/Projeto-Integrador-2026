@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react'
 
 import {
   BrowserRouter,
@@ -36,6 +36,68 @@ function ConteudoApp({
 
   const location = useLocation();
 
+  const [draft, setDraft] = useState({
+    id: '',
+    name: '',
+    username: '',
+    bio: '',
+    photoFile: null,
+    atividadesConcluidas: []
+  })
+
+  useEffect(() => {
+    async function carregarUsuario() {
+      const token = localStorage.getItem('token')
+
+      if (!token) {
+        return
+      }
+
+      try {
+        const resposta = await fetch(
+          'http://localhost:3000/perfil',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+
+        const dados = await resposta.json()
+
+        if (!resposta.ok || !dados.ok) {
+          localStorage.removeItem('token')
+          return
+        }
+
+        const usuario = dados.usuario
+
+        setDraft({
+          id: usuario.id_usuario || '',
+          name: usuario.nome_de_exibicao || '',
+          username: usuario.nome_de_usuario || '',
+          bio: usuario.bio || '',
+          photoFile: null,
+
+          atividadesConcluidas: [
+            Number(usuario.atvidades_concluidas_geral) || 0,
+            Number(usuario.atvidades_concluidas_matematica) || 0,
+            Number(usuario.atvidades_concluidas_portugues) || 0,
+            Number(usuario.atvidades_concluidas_historia) || 0,
+            Number(usuario.atvidades_concluidas_geografia) || 0,
+            Number(usuario.atvidades_concluidas_ciencias) || 0,
+            Number(usuario.atvidades_concluidas_ingles) || 0,
+          ],
+        })
+
+      } catch (erro) {
+        console.error('Erro ao carregar usuário:', erro)
+      }
+    }
+
+    carregarUsuario()
+  }, [])
+
   return (
     <>
 
@@ -50,7 +112,10 @@ function ConteudoApp({
           element={
             <>
               {folhasAtivas && <FolhasCaindo />}
-              <Painel />
+              <Painel 
+                draft={draft}
+                setDraft={setDraft}
+              />
             </>
           }
         />
@@ -73,7 +138,10 @@ function ConteudoApp({
         {/* LOGIN */}
         <Route
           path="/login"
-          element={<Login />}
+          element={<Login 
+            draft={draft}
+            setDraft={setDraft}
+          />}
         />
 
 
@@ -87,7 +155,10 @@ function ConteudoApp({
         {/* PERFIL */}
         <Route
           path="/perfil"
-          element={<PainelPerfil />}
+          element={<PainelPerfil 
+            draft={draft}
+            setDraft={setDraft} 
+          />}
         />
 
         <Route

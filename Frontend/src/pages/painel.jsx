@@ -4,7 +4,7 @@ import Materias from "../components/SelecionarMateria/Materias";
 import { useRef, useState } from 'react'
 
 
-function Painel() {
+function Painel({ draft, setDraft }) {
 
     const refEnunciado = useRef(null)
     const refAlternativa1 = useRef(null)
@@ -22,7 +22,9 @@ function Painel() {
         return(
         <>
 
-            <Materias 
+            <Materias
+                draft={draft}
+                setDraft={setDraft} 
                 refEnunciado={refEnunciado}
                 refAlternativa1={refAlternativa1}
                 refAlternativa2={refAlternativa2}
@@ -37,6 +39,8 @@ function Painel() {
             />
 
             <Atividades 
+                draft={draft}
+                setDraft={setDraft} 
                 refEnunciado={refEnunciado}
                 refAlternativa1={refAlternativa1}
                 refAlternativa2={refAlternativa2}

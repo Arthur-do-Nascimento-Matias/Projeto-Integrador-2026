@@ -20,8 +20,6 @@ function sairAtividade(refAtividade, trilha) {
 
 export function criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
 
-        console.log("materias em atividades.jsx", materiaAtual)
-         respostaBloqueada = true;
         fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&atividadeAtual=${atividadeAtual}`)
         .then(resp => resp.json())
         .then(data => {
@@ -50,13 +48,28 @@ function aleatorio(alternativa1, alternativa2, certa, alternativa4){
     return arr
 }
 
-function atividades({ refAtividade, atividadeAtual, setAtvLiberada, materiaAtual, refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4}) {
+function atividades({ draft, setDraft, refAtividade, atividadeAtual, setAtvLiberada, materiaAtual, refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4}) {
 
     const atividadesConcluidas = [];
 
     const refParabens = useRef(null)
 
 function fecharParabens() {
+
+    console.log('draft', draft.atividadesConcluidas[1])
+    console.log(materiaAtual)
+
+    fetch('http://localhost:3000/concluirAtividade', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            materia: materiaAtual,
+            id: draft.id,
+            atividadesConcluidas: draft.atividadesConcluidas
+        })
+    })
 
     refParabens.current.style.display = "none"
 
@@ -66,18 +79,15 @@ function fecharParabens() {
 }
 
 function verificar(id, resp){
-    console.log(embaralhado[id].verdadeira)
-    console.log(embaralhado[id].verdadeira == 1)
+
     if (embaralhado[id].verdadeira == 1) {
 
     if (cliques < 2) {
         cliques += 1
         indiceAtv += 1
-        console.log('indice' + indiceAtv)
         criarAtividade(refAtividade, refEnunciado, indiceAtv, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
     } else {
         cliques = 0
-        console.log('concluido')
         refParabens.current.style.display = 'flex'
         setAtvLiberada(prev => prev + 1)
     }

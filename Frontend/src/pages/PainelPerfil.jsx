@@ -1,13 +1,16 @@
 import MenuEsquerda from "../components/MenuEsquerda/MenuEsquerda"
 import Perfil from "../components/Perfil/Perfil"
 
-function PainelPerfil() {
+function PainelPerfil({ draft, setDraft }) {
     return(
 
         <>
 
 
-            <Perfil />
+            <Perfil 
+                draft={draft}
+                setDraft={setDraft} 
+            />
 
         </>
     )
