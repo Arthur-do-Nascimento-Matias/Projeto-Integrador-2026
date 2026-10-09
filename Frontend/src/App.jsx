@@ -49,6 +49,8 @@ function ConteudoApp({
 
   const location = useLocation();
 
+  const estaNoLogin = location.pathname === '/login'
+
   const [draft, setDraft] = useState({
     id: '',
     name: '',
@@ -59,6 +61,9 @@ function ConteudoApp({
   })
 
   useEffect(() => {
+
+    if (estaNoLogin) return
+
     async function carregarUsuario() {
       const token = localStorage.getItem('token')
 
@@ -110,7 +115,7 @@ function ConteudoApp({
     }
 
     carregarUsuario()
-  }, [])
+  }, [estaNoLogin, navigate])
 
   return (
     <>

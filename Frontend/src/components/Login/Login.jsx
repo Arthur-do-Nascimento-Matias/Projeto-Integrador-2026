@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { executarTransicaoLogin } from '../TransicaoLogin/TransicaoLogin'
 
 import './Login.css'
 
@@ -48,6 +50,11 @@ function PasswordField({ id, label, value, onChange, invalid }) {
 }
 
 function Login({ draft, setDraft }) {
+
+  const navigate = useNavigate()
+  const loginEmAndamento = useRef(false)
+  const [loginLoading, setLoginLoading] = useState(false)
+
   const [mode, setMode] = useState('login')
 
   const [loginData, setLoginData] = useState({
@@ -120,59 +127,81 @@ function Login({ draft, setDraft }) {
   // LOGIN
   // =========================
 
-  function handleLogin(event) {
-    event.preventDefault()
+  async function handleLogin(event) {
+  event.preventDefault()
 
-    if (!loginData.user.trim() || !loginData.password) {
+  if (loginEmAndamento.current) return
+
+  if (!loginData.user.trim() || !loginData.password) {
+    setLoginMessage({
+      type: 'error',
+      text: 'Preencha o usuário e a senha.',
+    })
+
+    triggerShake()
+    return
+  }
+
+  loginEmAndamento.current = true
+  setLoginLoading(true)
+  setLoginMessage({ type: '', text: '' })
+
+  let loginConcluido = false
+
+  try {
+    const resposta = await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        emailOuUsuario: loginData.user.trim(),
+        senha: loginData.password,
+      }),
+    })
+
+    const dados = await resposta.json()
+
+    if (!resposta.ok || !dados.ok || !dados.token) {
       setLoginMessage({
         type: 'error',
-        text: 'Preencha o usuário e a senha.',
+        text: dados.message || 'Não foi possível entrar. Confira seus dados.',
       })
 
       triggerShake()
       return
     }
 
-    fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        emailOuUsuario: loginData.user.trim(),
-        senha: loginData.password
-      })
+    // A rota privada precisa encontrar o token antes da navegação.
+    localStorage.setItem('token', dados.token)
+
+    setLoginMessage({
+      type: 'success',
+      text: 'Tudo certo! A aventura vai começar.',
     })
-      .then(resp => resp.json())
-      .then(dados => {
 
-        if (dados.message) {
-          setLoginMessage({
-            type: 'error',
-            text: dados.message,
-          })
+    await executarTransicaoLogin(() => {
+      navigate('/', { replace: true })
+    })
 
-          return
-        }
+    loginConcluido = true
+  } catch (erro) {
+    console.error('Erro ao entrar:', erro)
 
-      if (dados.ok) {
+    setLoginMessage({
+      type: 'error',
+      text: 'Não foi possível concluir o login. Tente novamente.',
+    })
 
-        localStorage.setItem('token', dados.token)
+    triggerShake()
+  } finally {
+    loginEmAndamento.current = false
 
-        setLoginMessage({
-          type: 'success',
-          text: 'Tudo certo! A aventura vai começar.',
-        })
-
-       window.location.href = '/'
-      }})
-      .catch(() => {
-        setLoginMessage({
-          type: 'error',
-          text: 'Não foi possível conectar ao servidor.',
-        })
-      })
+    if (!loginConcluido) {
+      setLoginLoading(false)
+    }
   }
+}
 
   // =========================
   // ENVIA CADASTRO
@@ -483,12 +512,13 @@ function Login({ draft, setDraft }) {
               </p>
             )}
 
-            <button
-              type="submit"
-              className="primary-button stagger-7"
-            >
-              Entrar
-            </button>
+              <button
+                type="submit"
+                className="primary-button stagger-7"
+                disabled={loginLoading}
+              >
+                {loginLoading ? 'Entrando...' : 'Entrar'}
+              </button>
 
             <p className="mobile-switch stagger-8">
               Ainda não tem uma conta?{' '}
