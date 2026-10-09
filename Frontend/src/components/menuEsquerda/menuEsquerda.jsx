@@ -32,6 +32,8 @@ function nomePelaRota(pathname) {
   if (pathname === '/biblioteca') return 'Biblioteca'
   if (pathname === '/chatBot') return 'SimIA'
   if (pathname === '/perfil') return 'Perfil'
+  if (pathname === '/perfil') return 'Perfil'
+
   return 'Aprender'
 }
 

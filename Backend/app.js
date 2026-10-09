@@ -148,6 +148,57 @@ const callback = (req, res) => {
         return
     }
 
+    // =========================
+// ABRIR PROVA
+// =========================
+
+if (rota.pathname == '/abrirProva') {
+
+    Provas.abrirProva(param)
+        .then(resp => {
+
+            if (!resp) {
+
+                res.writeHead(404, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+
+                res.end(JSON.stringify({
+                    erro: 'Prova não encontrada.'
+                }))
+
+                return
+            }
+
+            res.writeHead(200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition':
+                    'inline; filename="prova.pdf"'
+            })
+
+            res.end(resp)
+        })
+
+        .catch(error => {
+
+            console.error(
+                'ERRO AO ABRIR PROVA:',
+                error
+            )
+
+            res.writeHead(500, {
+                'Content-Type':
+                    'application/json; charset=utf-8'
+            })
+
+            res.end(JSON.stringify({
+                erro: error.message
+            }))
+        })
+
+    return
+}
 
     // =========================
     // CHATBOT

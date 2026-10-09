@@ -23,11 +23,13 @@ import Configuracoes from "./components/Configuracoes/Configuracoes";
 
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
 
-import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
+import MenuEsquerda from "./components/menuEsquerda/menuEsquerda";
 
 import Ranking from "./components/ranking/ranking"
 
 import PainelSimulados from "./pages/PainelSimulados";
+
+import Simulados from "./components/simulados/simulados";
 
 function ConteudoApp({
   folhasAtivas,
@@ -53,6 +55,11 @@ function ConteudoApp({
               <Painel />
             </>
           }
+        />
+         {/* simulados */}
+        <Route
+          path="/simulados"
+          element={<Simulados />}
         />
 
         

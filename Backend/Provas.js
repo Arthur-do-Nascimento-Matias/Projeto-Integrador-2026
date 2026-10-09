@@ -23,8 +23,16 @@ class Provas {
                     materia,
                     tipoProva,
                     anoProva,
-                    capaProva
+
+                    CASE
+                        WHEN capaProva IS NOT NULL
+                        AND LENGTH(capaProva) > 0
+                        THEN 1
+                        ELSE 0
+                    END AS temCapa
+
                 FROM provas
+
                 ORDER BY idProva DESC
             `
 
@@ -48,14 +56,7 @@ class Provas {
                         materia: element.materia,
                         tipoProva: element.tipoProva,
                         anoProva: element.anoProva,
-
-                        temCapa: element.capaProva
-                            ? true
-                            : false,
-
-                        capa: element.capaProva
-                            ? element.capaProva.toString('base64')
-                            : null
+                        temCapa: Boolean(element.temCapa)
                     }
 
                 })
@@ -92,33 +93,41 @@ class Provas {
                 WHERE idProva = ?
             `
 
-            connection.query(sql, idProva, function(error, results) {
+            connection.query(
+                sql,
+                [idProva],
+                function(error, results) {
 
-                if (error) {
+                    if (error) {
+
+                        connection.end()
+
+                        reject(error)
+
+                        return
+                    }
+
+                    if (
+                        !results ||
+                        results.length === 0
+                    ) {
+
+                        connection.end()
+
+                        resolve(null)
+
+                        return
+                    }
+
+                    const pdf =
+                        results[0].pdfProva
 
                     connection.end()
 
-                    reject(error)
+                    resolve(pdf)
 
-                    return
                 }
-
-                if (!results || results.length === 0) {
-
-                    connection.end()
-
-                    resolve(null)
-
-                    return
-                }
-
-                const pdf = results[0].pdfProva
-
-                connection.end()
-
-                resolve(pdf)
-
-            })
+            )
 
         })
 
@@ -146,41 +155,47 @@ class Provas {
                 WHERE idProva = ?
             `
 
-            connection.query(sql, idProva, function(error, results) {
+            connection.query(
+                sql,
+                [idProva],
+                function(error, results) {
 
-                if (error) {
+                    if (error) {
+
+                        connection.end()
+
+                        reject(error)
+
+                        return
+                    }
+
+                    if (
+                        !results ||
+                        results.length === 0 ||
+                        !results[0].capaProva
+                    ) {
+
+                        connection.end()
+
+                        resolve(null)
+
+                        return
+                    }
+
+                    const capa =
+                        results[0].capaProva
 
                     connection.end()
 
-                    reject(error)
+                    resolve(capa)
 
-                    return
                 }
-
-                if (
-                    !results ||
-                    results.length === 0 ||
-                    !results[0].capaProva
-                ) {
-
-                    connection.end()
-
-                    resolve(null)
-
-                    return
-                }
-
-                const capa = results[0].capaProva
-
-                connection.end()
-
-                resolve(capa)
-
-            })
+            )
 
         })
 
     }
+
 }
 
 export default Provas

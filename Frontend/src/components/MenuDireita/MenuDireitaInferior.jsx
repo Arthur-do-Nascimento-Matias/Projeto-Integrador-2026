@@ -93,7 +93,7 @@ function ListaMissoes({ missoes }) {
   );
 }
 
-const ID_USUARIO_TESTE = 22;
+const ID_USUARIO_TESTE = 21;
 
 function descobrirIcone(tipo) {
   const icones = {
