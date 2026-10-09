@@ -10,6 +10,8 @@ import {
 
 import "./App.css";
 
+import PainelIndex from "./pages/Index"
+
 import Painel from "./pages/painel";
 
 import Login from "./pages/Login";
@@ -121,12 +123,17 @@ function ConteudoApp({
     <>
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
-      {location.pathname !== "/login" && <MenuEsquerda />}
+      {location.pathname !== "/login" && <MenuEsquerda /> && "/"}
 
       <Routes>
 
+          <Route 
+            path='/'
+            element={PainelIndex}
+          ></Route>
+
           <Route
-            path="/"
+            path="/painel"
             element={
               <RotaPrivada>
                 <>
