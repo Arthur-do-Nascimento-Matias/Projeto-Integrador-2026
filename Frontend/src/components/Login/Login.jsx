@@ -49,13 +49,11 @@ function PasswordField({ id, label, value, onChange, invalid }) {
   )
 }
 
-function Login({ draft, setDraft }) {
+function Login({ draft, setDraft, mode, setMode }) {
 
   const navigate = useNavigate()
   const loginEmAndamento = useRef(false)
   const [loginLoading, setLoginLoading] = useState(false)
-
-  const [mode, setMode] = useState('login')
 
   const [loginData, setLoginData] = useState({
     user: '',
@@ -181,7 +179,7 @@ function Login({ draft, setDraft }) {
     })
 
     await executarTransicaoLogin(() => {
-      navigate('/', { replace: true })
+      navigate('/painel', { replace: true })
     })
 
     loginConcluido = true

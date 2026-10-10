@@ -1,11 +1,12 @@
 import PainelIndex from "../components/Index/Index"
 
-function Index() {
+function Index({ mode, setMode }) {
   return (
     <>
 
-        <PainelIndex />
-
+        <PainelIndex 
+            mode={mode}
+            setMode={setMode}/>
     </>
 )
 }

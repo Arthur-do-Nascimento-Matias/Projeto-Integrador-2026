@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 
 import {
@@ -5,34 +6,26 @@ import {
   Routes,
   Route,
   useLocation,
-  useNavigate
+  useNavigate,
+  Navigate
 } from "react-router-dom";
 
 import "./App.css";
 
-import PainelIndex from "./pages/Index"
-
+import PainelIndex from "./pages/Index";
 import Painel from "./pages/painel";
-
 import Login from "./pages/Login";
-
 import ChatBot from "./pages/painelChatBot";
-
 import PainelBiblioteca from "./pages/PainelBiblioteca";
-
 import PainelPerfil from "./pages/PainelPerfil";
-
 import Configuracoes from "./components/Configuracoes/Configuracoes";
-
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
-
 import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
+import Ranking from "./components/ranking/ranking";
 
-import Ranking from "./components/ranking/ranking"
-
-import { Navigate } from "react-router-dom";
 
 function RotaPrivada({ children }) {
+
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -42,16 +35,17 @@ function RotaPrivada({ children }) {
   return children;
 }
 
+
 function ConteudoApp({
   folhasAtivas,
   alterarFolhas
 }) {
 
   const navigate = useNavigate();
-
   const location = useLocation();
 
-  const estaNoLogin = location.pathname === '/login'
+  const estaNoIndex = location.pathname === '/';
+  const estaNoLogin = location.pathname === '/login';
 
   const [draft, setDraft] = useState({
     id: '',
@@ -60,20 +54,23 @@ function ConteudoApp({
     bio: '',
     photoFile: null,
     atividadesConcluidas: []
-  })
+  });
+
 
   useEffect(() => {
 
-    if (estaNoLogin) return
+    if (estaNoLogin || estaNoIndex) return;
 
     async function carregarUsuario() {
-      const token = localStorage.getItem('token')
+
+      const token = localStorage.getItem('token');
 
       if (!token) {
-        return
+        return;
       }
 
       try {
+
         const resposta = await fetch(
           'http://localhost:3000/perfil',
           {
@@ -81,17 +78,19 @@ function ConteudoApp({
               Authorization: `Bearer ${token}`,
             },
           }
-        )
+        );
 
-        const dados = await resposta.json()
+        const dados = await resposta.json();
 
         if (!resposta.ok || !dados.ok) {
-          localStorage.removeItem('token')
-          navigate('/login', { replace: true })
-          return
+
+          localStorage.removeItem('token');
+          navigate('/login', { replace: true });
+
+          return;
         }
 
-        const usuario = dados.usuario
+        const usuario = dados.usuario;
 
         setDraft({
           id: usuario.id_usuario || '',
@@ -109,109 +108,166 @@ function ConteudoApp({
             Number(usuario.atvidades_concluidas_ciencias) || 0,
             Number(usuario.atvidades_concluidas_ingles) || 0,
           ],
-        })
+        });
 
       } catch (erro) {
-        console.error('Erro ao carregar usuário:', erro)
+
+        console.error('Erro ao carregar usuário:', erro);
+
       }
     }
 
-    carregarUsuario()
-  }, [estaNoLogin, navigate])
+    carregarUsuario();
+
+  }, [estaNoLogin, estaNoIndex, navigate]);
+
+  const [mode, setMode] = useState('login')
 
   return (
-    <>
+
+    <main className={estaNoIndex ? 'index-page' : 'auth-page'}>
+
+      {/* FUNDO DA FLORESTA - NÃO APARECE NO INDEX */}
+
+      {!estaNoIndex && (
+        <>
+          <div className="ambient-elements" aria-hidden="true">
+            <div className="particle p-1" />
+            <div className="particle p-2" />
+            <div className="particle p-3" />
+            <div className="particle p-4" />
+          </div>
+
+          <div className="forest-shape forest-shape-one" />
+          <div className="forest-shape forest-shape-two" />
+        </>
+      )}
+
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
-      {location.pathname !== "/login" && <MenuEsquerda /> && "/"}
+
+      {!estaNoLogin && !estaNoIndex && (
+        <MenuEsquerda />
+      )}
+
+
+      {/* ROTAS */}
 
       <Routes>
 
-          <Route 
-            path='/'
-            element={PainelIndex}
-          ></Route>
+        {/* PÁGINA INICIAL PÚBLICA */}
 
-          <Route
-            path="/painel"
-            element={
-              <RotaPrivada>
-                <>
-                  {folhasAtivas && <FolhasCaindo />}
+        <Route
+          path="/"
+          element={<PainelIndex 
+              mode={mode}
+              setMode={setMode}
+          />}
+        />
 
-                  <Painel
-                    draft={draft}
-                    setDraft={setDraft}
-                  />
-                </>
-              </RotaPrivada>
-            }
-          />
 
-          <Route
-            path="/login"
-            element={
-              <Login
-                draft={draft}
-                setDraft={setDraft}
-              />
-            }
-          />
+        {/* PAINEL PRINCIPAL */}
 
-          <Route
-            path="/Ranking"
-            element={
-              <RotaPrivada>
-                <Ranking />
-              </RotaPrivada>
-            }
-          />
+        <Route
+          path="/painel"
+          element={
+            <RotaPrivada>
+              <>
+                {folhasAtivas && <FolhasCaindo />}
 
-          <Route
-            path="/chatBot"
-            element={
-              <RotaPrivada>
-                <ChatBot />
-              </RotaPrivada>
-            }
-          />
-
-          <Route
-            path="/biblioteca"
-            element={
-              <RotaPrivada>
-                <PainelBiblioteca />
-              </RotaPrivada>
-            }
-          />
-
-          <Route
-            path="/perfil"
-            element={
-              <RotaPrivada>
-                <PainelPerfil
+                <Painel
                   draft={draft}
                   setDraft={setDraft}
                 />
-              </RotaPrivada>
-            }
-          />
+              </>
+            </RotaPrivada>
+          }
+        />
 
-          <Route
-            path="/configuracoes"
-            element={
-              <RotaPrivada>
-                <Configuracoes
-                  folhasAtivas={folhasAtivas}
-                  alterarFolhas={alterarFolhas}
-                />
-              </RotaPrivada>
-            }
-          />
+
+        {/* LOGIN */}
+
+        <Route
+          path="/login"
+          element={
+            <Login
+              draft={draft}
+              setDraft={setDraft}
+              mode={mode}
+              setMode={setMode}
+            />
+          }
+        />
+
+
+        {/* RANKING */}
+
+        <Route
+          path="/Ranking"
+          element={
+            <RotaPrivada>
+              <Ranking />
+            </RotaPrivada>
+          }
+        />
+
+
+        {/* CHATBOT */}
+
+        <Route
+          path="/chatBot"
+          element={
+            <RotaPrivada>
+              <ChatBot />
+            </RotaPrivada>
+          }
+        />
+
+
+        {/* BIBLIOTECA */}
+
+        <Route
+          path="/biblioteca"
+          element={
+            <RotaPrivada>
+              <PainelBiblioteca />
+            </RotaPrivada>
+          }
+        />
+
+
+        {/* PERFIL */}
+
+        <Route
+          path="/perfil"
+          element={
+            <RotaPrivada>
+              <PainelPerfil
+                draft={draft}
+                setDraft={setDraft}
+              />
+            </RotaPrivada>
+          }
+        />
+
+
+        {/* CONFIGURAÇÕES */}
+
+        <Route
+          path="/configuracoes"
+          element={
+            <RotaPrivada>
+              <Configuracoes
+                folhasAtivas={folhasAtivas}
+                alterarFolhas={alterarFolhas}
+              />
+            </RotaPrivada>
+          }
+        />
 
       </Routes>
 
-    </>
+    </main>
   );
 }
 
@@ -227,7 +283,6 @@ function App() {
     }
 
     return valorSalvo === "true";
-
   });
 
 
@@ -242,46 +297,16 @@ function App() {
 
   return (
 
-    <>
+    <BrowserRouter>
 
-      <main className="auth-page">
+      <ConteudoApp
+        folhasAtivas={folhasAtivas}
+        alterarFolhas={alterarFolhas}
+      />
 
-        {/* Elementos ambientais */}
-
-        <div className="ambient-elements" aria-hidden="true">
-
-          <div className="particle p-1" />
-
-          <div className="particle p-2" />
-
-          <div className="particle p-3" />
-
-          <div className="particle p-4" />
-
-        </div>
-
-
-        <div className="forest-shape forest-shape-one" />
-
-        <div className="forest-shape forest-shape-two" />
-
-
-        <BrowserRouter>
-
-          <ConteudoApp
-            folhasAtivas={folhasAtivas}
-            alterarFolhas={alterarFolhas}
-          />
-
-        </BrowserRouter>
-
-      </main>
-
-    </>
+    </BrowserRouter>
 
   );
-
 }
-
 
 export default App;

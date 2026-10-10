@@ -1,4 +1,32 @@
-function Index() {
+import './Index.css'
+
+import { Link } from 'react-router-dom';
+
+import {
+  ArteMoki,
+  useAnimacoesIndex
+} from './animacoes';
+
+import mokiAceno from '../../assets/mokiAceno.png'
+import mokiTrofeu from '../../assets/mokiTrofeu.png'
+import gamerAceno from '../../assets/gameraceno.png'
+import artista from '../../assets/familia SIMIO/artist.png'
+import moki from '../../assets/MOKI.png'
+import punk from '../../assets/familia SIMIO/punk.png'
+
+import familia from '../../assets/familia.png'
+
+import portugues from '../../assets/materias/brasil.svg'
+import matematica from '../../assets/materias/matematica.svg'
+import ciencias from '../../assets/materias/ciencia.svg'
+import geografia from '../../assets/materias/geografia.svg'
+import historia from '../../assets/materias/historia.svg'
+import ingles from '../../assets/materias/ingles.svg'
+
+function Index({ mode, setMode }) {
+
+    useAnimacoesIndex();
+
     return(
      
   <>
@@ -18,8 +46,8 @@ function Index() {
 
       <div className="inicio-mascote inicio-mascote--novo">
   <img
-    src="moki aceno.png"
-    alt=""
+    src={mokiAceno}
+    alt="Moki acenando"
     draggable="false"
   />
 </div>
@@ -41,13 +69,23 @@ function Index() {
       </p>
 
       <div className="inicio-acoes">
-        <a className="inicio-botao inicio-botao--principal" href="/cadastro">
-          COMEÇAR AGORA
-        </a>
 
-        <a className="inicio-botao inicio-botao--secundario" href="/login">
-          JÁ TENHO UMA CONTA
-        </a>
+      <Link
+        className="inicio-botao inicio-botao--principal"
+        to="/login"
+        onClick={() => setMode('register')}
+      >
+        COMEÇAR AGORA
+      </Link>
+
+      <Link
+        className="inicio-botao inicio-botao--secundario"
+        to="/login"
+        onClick={() => setMode('login')}
+      >
+        JÁ TENHO UMA CONTA
+      </Link>
+
       </div>
     </div>
   </div>
@@ -67,16 +105,16 @@ function Index() {
     d="M25 9V35H13L32 59L51 35H39V9"
     fill="none"
     stroke="#19683c"
-    stroke-width="4"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    strokeWidth="4"
+    strokeLinecap="round"
+    strokeLinejoin="round"
   />
 
   <path
     d="M30 14V29"
     stroke="#8bd878"
-    stroke-width="3"
-    stroke-linecap="round"
+    strokeWidth="3"
+    strokeLinecap="round"
   />
 </svg>
   </a>
@@ -84,39 +122,39 @@ function Index() {
   <div className="inicio-materias">
     <ul className="inicio-materias-lista" aria-label="Matérias disponíveis">
       <li>
-        <img className="materias" src="materias/brasil.svg" alt="" />
+        <img className="materias" src={portugues} alt="Português" />
         <span>Português</span>
       </li>
 
       <li>
-        <img className="materias" src="materias/matematica.svg" alt="" />
+        <img className="materias" src={matematica} alt="Matemática" />
         <span>Matemática</span>
       </li>
 
       <li>
-        <img className="materias" src="materias/historia.svg" alt="" />
+        <img className="materias" src={historia} alt="História" />
         <span>História</span>
       </li>
 
       <li>
-        <img className="materias" src="materias/geografia.svg" alt="" />
+        <img className="materias" src={geografia} alt="Geografia" />
         <span>Geografia</span>
       </li>
 
       <li>
-        <img className="materias" src="materias/ciencia.svg" alt="" />
+        <img className="materias" src={ciencias} alt="Ciências" />
         <span>Ciências</span>
       </li>
 
       <li>
-        <img className="materias" src="materias/ingles.svg" alt="" />
+        <img className="materias" src={ingles} alt="Inglês" />
         <span>Inglês</span>
       </li>
     </ul>
   </div>
 
 </div>
-
+</section>
     <section id="section-parallax">
 
       <main id="moki-parallax">
@@ -127,7 +165,10 @@ function Index() {
             className="art"
             id="art"
             aria-hidden="true"
-          ></div>
+          >
+            <ArteMoki />
+
+          </div>
 
           <div className="words">
 
@@ -209,7 +250,7 @@ function Index() {
 
   <img
     className="gamer-vinheta"
-    src="macacos/gameraceno.png"
+    src={gamerAceno}
     alt="Macaco Gamer do SimioLab"
   />
 
@@ -257,7 +298,7 @@ function Index() {
 
     <div className="moki-gamificacao">
       <img
-        src="macacos/sprites (1).png"
+        src={mokiTrofeu}
         alt="Moki comemorando uma conquista"
       />
     </div>
@@ -326,7 +367,7 @@ function Index() {
 
   <img
     className="biblioteca-home-mascote"
-    src="macacos/familia SIMIO/artist.png"
+    src={artista}
     alt="Mascote artista da biblioteca"
     loading="lazy"
     draggable="false"
@@ -380,7 +421,7 @@ function Index() {
 
       <div className="biblioteca-home-livro biblioteca-home-livro--verde">
         <span>IDEIAS</span>
-        <img className="capaMoki" src="MOKI.png" alt="" />
+        <img className="capaMoki" src={moki} alt="" />
       </div>
 
       <div className="biblioteca-home-livro biblioteca-home-livro--amarelo">
@@ -405,8 +446,8 @@ function Index() {
              V260Q132 218 40 239Z"
           fill="#FFFCED"
           stroke="#DBDCC0"
-          stroke-width="3"
-          stroke-linejoin="round"
+          strokeWidth="3"
+          strokeLinejoin="round"
         />
 
         <path
@@ -414,14 +455,14 @@ function Index() {
              V239Q308 218 220 260Z"
           fill="#FFF8DC"
           stroke="#DBDCC0"
-          stroke-width="3"
-          stroke-linejoin="round"
+          strokeWidth="3"
+          strokeLinejoin="round"
         />
 
         <g
           stroke="#C8CEAE"
-          stroke-width="7"
-          stroke-linecap="round"
+          strokeWidth="7"
+          strokeLinecap="round"
         >
           <path d="M72 111Q131 101 184 125"/>
           <path d="M72 138Q131 128 184 152"/>
@@ -440,7 +481,7 @@ function Index() {
         <path
           d="M220 92V254"
           stroke="#D3CEAB"
-          stroke-width="3"
+          strokeWidth="3"
         />
       </svg>
 
@@ -493,7 +534,7 @@ function Index() {
       <div className="simia-painel-resposta">
         <div className="simia-resposta-identidade">
           <span>
-            <img className="fotoIA" src="MOKI.png" alt="" />
+            <img className="fotoIA" src={moki} alt="" />
           </span>
           <strong>SimIA</strong>
         </div>
@@ -535,7 +576,7 @@ function Index() {
 
       <img
         className="simia-apresentacao-mascote"
-        src="macacos/familia SIMIO/punk (1).png"
+        src={punk}
         alt="Mascote sério representando a SimIA"
         loading="lazy"
         draggable="false"
@@ -574,9 +615,9 @@ function Index() {
           <path
             d="M12 19V5M5 12l7-7 7 7"
             stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </a>
@@ -605,7 +646,7 @@ function Index() {
 
       <figure className="familia-simio__cena">
         <img
-          src="macacos/familia.png"
+          src={familia}
           alt="A família Simio reunida com livros, pintura, ciência, jogos e música."
           width="1536"
           height="1024"
@@ -728,9 +769,9 @@ function Index() {
         <path
           d="M7 17 17 7M7 7h10v10"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </a>
@@ -747,7 +788,7 @@ function Index() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.8"
+          strokeWidth="1.8"
           aria-hidden="true"
         >
           <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -776,9 +817,9 @@ function Index() {
         <path
           d="M7 17 17 7M7 7h10v10"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </a>

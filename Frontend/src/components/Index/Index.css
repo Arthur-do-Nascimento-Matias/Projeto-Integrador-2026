@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap');
+
 .google-sans{
   font-family: "Google Sans", sans-serif;
   font-optical-sizing: auto;
@@ -117,7 +119,6 @@ section {
   inset: 0;
   pointer-events: none;
 }
-
 
 
 .object {
@@ -478,6 +479,7 @@ span.ponto {
   font-weight: 700;
   letter-spacing: 1.5px;
   color: #65816b;
+  font-family: "Rubik", sans-serif;
 }
 
 /* Conteúdo central */
@@ -590,6 +592,7 @@ span.ponto {
 .inicio-descricao {
   max-width: 390px;
   margin: 22px auto 30px;
+  font-family: "Rubik", sans-serif;
   font-size: 16px;
   line-height: 1.7;
   color: #5d7563;
@@ -670,6 +673,8 @@ span.ponto {
 /* Link para a apresentação com rolagem */
 
 .inicio-explorar {
+  font-family: "Rubik", sans-serif;
+
   align-self: center;
 
   display: flex;
@@ -1226,6 +1231,10 @@ span.ponto {
 /* CONTEÚDO */
 
 .gamificacao-conteudo {
+  font-family: "Rubik", sans-serif;
+
+  text-align: left;
+
   position: relative;
   z-index: 2;
 
@@ -3403,6 +3412,8 @@ html {
 /* RODAPÉ INTEGRADO À FAMÍLIA */
 
 .simio-rodape {
+  text-align: left;
+
   --rodape-transicao: #d5edcf;
   --rodape-fundo: #b5dba8;
   --rodape-titulo: #174d32;

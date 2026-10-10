@@ -1,12 +1,14 @@
 import LoginScreen from '../components/Login/Login'
 
-function Login({ draft, setDraft }) {
+function Login({ draft, setDraft, mode, setMode }) {
   return (
     <>
 
       <LoginScreen 
         draft={draft}
         setDraft={setDraft}
+        mode={mode}
+        setMode={setMode}
       />
 
     </>

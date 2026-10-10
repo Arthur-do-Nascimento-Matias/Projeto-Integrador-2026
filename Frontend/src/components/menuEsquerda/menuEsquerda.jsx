@@ -9,7 +9,7 @@ import Moki from '../../assets/MOKI.png'
 
 const itensPrincipais = [
 
-  { nome: 'Aprender', rota: '/' },
+  { nome: 'Aprender', rota: '/painel' },
 
   { nome: 'Simulados', rota: null },
 
