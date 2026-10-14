@@ -127,13 +127,6 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
 
   return <section className="chatIA" aria-label="Chat de estudos da SimIA">
     <div className="simia-container">
-      <header className="simia-header">
-        <div className="simia-identidade">
-          <Avatar src={mascoteSrc} />
-          <div><div className="simia-nome">SimIA <span className="simia-badge">IA</span></div><p>Seu apoio em Língua Portuguesa</p></div>
-        </div>
-        <span className="simia-etiqueta"><span />ESPAÇO DE ESTUDO</span>
-      </header>
 
       <div className="simia-conteudo" ref={historicoRef} onScroll={e => {
         const el = e.currentTarget

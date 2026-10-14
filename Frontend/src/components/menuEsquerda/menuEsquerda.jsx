@@ -52,15 +52,16 @@ const fxMap = {
 }
 
 function nomePelaRota(pathname) {
+    const rota = pathname.replace(/\/+$/, '') || '/'
 
-  if (pathname === '/biblioteca') return 'Biblioteca'
+    if (rota === '/painel') return 'Aprender'
+    if (rota === '/ranking') return 'Ranking'
+    if (rota === '/biblioteca') return 'Biblioteca'
+    if (rota === '/chatBot') return 'SimIA'
+    if (rota === '/perfil' || rota.startsWith('/perfil/')) return 'Perfil'
+    if (rota === '/configuracoes') return 'Configurações'
 
-  if (pathname === '/chatBot') return 'SimIA'
-
-  if (pathname === '/perfil') return 'Perfil'
-
-  return 'Aprender'
-
+    return 'Aprender'
 }
 
 function Icone({ nome }) {
