@@ -243,6 +243,50 @@ function MenuEsquerda() {
   const [touchLike, setTouchLike] = useState(false)
   const [mouseNaSidebar, setMouseNaSidebar] = useState(false)
 
+
+useEffect(() => {
+    const camada = document.querySelector('.simio-sidebar-layer');
+    if (!camada) return;
+
+    function atualizarScroll(event) {
+        const alvo = event?.target;
+
+        if (
+            alvo instanceof Element &&
+            alvo.closest('.simio-sidebar-layer')
+        ) return;
+
+        let deslocamento = window.scrollY;
+
+        if (
+            alvo instanceof Element &&
+            alvo.scrollHeight > alvo.clientHeight &&
+            alvo.clientWidth >= window.innerWidth * 0.45
+        ) {
+            deslocamento = alvo.scrollTop;
+        }
+
+        camada.style.setProperty(
+            '--page-scroll',
+            `${deslocamento}px`
+        );
+    }
+
+    window.addEventListener('scroll', atualizarScroll, {
+        passive: true
+    });
+
+    document.addEventListener('scroll', atualizarScroll, true);
+
+    atualizarScroll();
+
+    return () => {
+        window.removeEventListener('scroll', atualizarScroll);
+        document.removeEventListener('scroll', atualizarScroll, true);
+    };
+}, []);
+
+
   // A expansão acompanha o mouse, mesmo durante a transição de rotas.
   useEffect(() => {
     function acompanharMouse(event) {
