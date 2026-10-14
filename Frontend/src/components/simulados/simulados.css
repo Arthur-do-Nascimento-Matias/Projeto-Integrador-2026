@@ -1070,3 +1070,213 @@
     }
 
 }
+/* ==================================================
+   TOPO COM ABAS (PROVAS | REDAÇÕES)
+================================================== */
+
+.simuladosCabecalhoTopo {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.simuladosAbas {
+    display: inline-flex;
+    padding: 6px;
+    background: #e9e8e0;
+    border: 1px solid #dcdbd2;
+    border-radius: 18px;
+    gap: 6px;
+}
+
+.simuladosAbaBotao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 24px;
+    border: none;
+    border-radius: 13px;
+    background: transparent;
+    color: #656a61;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.22s ease;
+}
+
+.simuladosAbaBotao svg {
+    width: 18px;
+    height: 18px;
+}
+
+.simuladosAbaBotao:hover {
+    color: #252a24;
+}
+
+.simuladosAbaBotao.ativo {
+    background: #293529;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(41, 53, 41, 0.18);
+}
+
+.simuladosAbaBotao.ativoRedacao {
+    background: #4c3d31;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(76, 61, 49, 0.2);
+}
+
+/* Ajuste para a seção de redações ficar no topo quando a aba estiver ativa */
+.SejaBemVindoRedacoes {
+    margin-top: 10px !important;
+}
+
+/* ==================================================
+   GRADE DE TEMAS DE REDAÇÃO
+================================================== */
+
+.redacoesListaTemas {
+    margin-top: 55px;
+}
+
+.redacoesGradeTemas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+}
+
+.redacaoCardTema {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 26px;
+    background: #ffffff;
+    border: 1px solid #e2ded6;
+    border-radius: 22px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.redacaoCardTema:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(62, 52, 43, 0.08);
+}
+
+.redacaoCardTemaTopo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.redacaoTagBanca {
+    padding: 5px 11px;
+    background: #efe8df;
+    color: #795e48;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.redacaoTagAno {
+    color: #9c968d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.redacaoCardTema h3 {
+    margin: 0 0 10px;
+    color: #2e2924;
+    font-size: 20px;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+}
+
+.redacaoCardTema p {
+    margin: 0 0 22px;
+    color: #827c74;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.redacaoBotaoEscrever {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border: none;
+    border-radius: 12px;
+    background: #f3efe9;
+    color: #4c3d31;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.redacaoBotaoEscrever svg {
+    width: 17px;
+    height: 17px;
+}
+
+.redacaoBotaoEscrever:hover {
+    background: #4c3d31;
+    color: #ffffff;
+}
+
+/* Modal temporário de teste */
+.redacaoAvisoModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 33, 29, 0.55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+}
+
+.redacaoAvisoBox {
+    max-width: 440px;
+    width: 100%;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 24px;
+    text-align: center;
+}
+
+.redacaoAvisoBox span {
+    color: #9a765b;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+}
+
+.redacaoAvisoBox h3 {
+    margin: 10px 0 12px;
+    color: #2e2924;
+}
+
+.redacaoAvisoBox p {
+    color: #756f67;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.redacaoAvisoBox button {
+    padding: 11px 24px;
+    border: none;
+    border-radius: 11px;
+    background: #4c3d31;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
