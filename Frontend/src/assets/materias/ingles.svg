@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="ukClip">
+      <rect x="8" y="12" width="48" height="40" rx="10"></rect>
+    </clipPath>
+
+    <linearGradient id="ukBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#315FAE"></stop>
+      <stop offset="1" stop-color="#234784"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- base -->
+  <rect x="8" y="12" width="48" height="40" rx="10" fill="url(#ukBg)"></rect>
+
+  <g clip-path="url(#ukClip)">
+    <!-- diagonais brancas -->
+    <path d="M8 15 L14 12 L56 46 L56 52 L50 52 L8 18 Z" fill="#FFF8EE"></path>
+    <path d="M56 12 L56 18 L14 52 L8 52 L8 46 L50 12 Z" fill="#FFF8EE"></path>
+
+    <!-- diagonais vermelhas -->
+    <path d="M8 16.8 L10.8 15.2 L56 50.2 L56 52 L53.2 52 Z" fill="#D94B4B"></path>
+    <path d="M56 13.8 L56 16.4 L10.8 52 L8 52 L8 49.4 L53.2 12 Z" fill="#D94B4B"></path>
+
+    <!-- cruz branca -->
+    <rect x="27" y="12" width="10" height="40" fill="#FFF8EE"></rect>
+    <rect x="8" y="27" width="48" height="10" fill="#FFF8EE"></rect>
+
+    <!-- cruz vermelha -->
+    <rect x="29.5" y="12" width="5" height="40" fill="#D94B4B"></rect>
+    <rect x="8" y="29.5" width="48" height="5" fill="#D94B4B"></rect>
+  </g>
+
+  <!-- brilho leve -->
+  <path d="M17 18 H30" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.14"></path>
+
+  <!-- contorno suave -->
+  <rect x="8.5" y="12.5" width="47" height="39" rx="9.5" fill="none" stroke="#7D7286" stroke-width="1" opacity="0.22"></rect>
+</svg>

@@ -1,0 +1,398 @@
+/* CABEÇALHO */
+
+.menuDireitaInferior-verTodas {
+  padding: 8px 0;
+
+  border: 0;
+
+  background: transparent;
+  color: #ff969a;
+
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.menuDireitaInferior-verTodas:hover {
+  color: #ffc2c5;
+}
+
+/* RESUMO */
+
+.menuDireitaInferior-resumo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 13px 0;
+
+  color: #e0d4c2;
+
+  font-size: 11px;
+}
+
+.menuDireitaInferior-resumo strong {
+  padding: 4px 9px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 212, 122, 0.12);
+  color: #ffda8b;
+
+  font-size: 10px;
+}
+
+/* LISTA */
+
+.menuDireitaInferior-lista {
+  display: grid;
+  gap: 10px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.menuDireitaInferior-missao {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+  padding: 12px 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.menuDireitaInferior-missao--concluida {
+  border-color: rgba(173, 222, 126, 0.25);
+
+  background: rgba(153, 206, 103, 0.08);
+}
+
+/* ÍCONES */
+
+.menuDireitaInferior-icone {
+  display: grid;
+  place-items: center;
+
+  width: 36px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+}
+
+.menuDireitaInferior-icone svg {
+  width: 22px;
+  height: 22px;
+}
+
+.menuDireitaInferior-icone--bandeira {
+  background: rgba(170, 221, 125, 0.14);
+  color: #c5eda1;
+}
+
+.menuDireitaInferior-icone--alvo {
+  background: rgba(255, 185, 90, 0.14);
+  color: #ffcc80;
+}
+
+.menuDireitaInferior-icone--livro {
+  background: rgba(155, 197, 233, 0.14);
+  color: #b7d9f5;
+}
+
+/* CONTEÚDO */
+
+.menuDireitaInferior-texto {
+  flex: 1;
+  min-width: 0;
+}
+
+.menuDireitaInferior-missao-topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.menuDireitaInferior-missao-topo h4 {
+  margin: 0;
+
+  color: #fff7ec;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.menuDireitaInferior-missao-topo > span {
+  color: #f3d798;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.menuDireitaInferior-texto p {
+  margin: 4px 0 8px;
+
+  color: #dfd5c7;
+
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+/* PROGRESSO */
+
+.menuDireitaInferior-progresso {
+  display: block;
+
+  width: 100%;
+  height: 6px;
+
+  overflow: hidden;
+
+  appearance: none;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menuDireitaInferior-progresso::-webkit-progress-bar {
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menuDireitaInferior-progresso::-webkit-progress-value {
+  border-radius: 999px;
+
+  background: #ffc36b;
+}
+
+.menuDireitaInferior-progresso::-moz-progress-bar {
+  border-radius: 999px;
+
+  background: #ffc36b;
+}
+
+.menuDireitaInferior-missao--concluida
+.menuDireitaInferior-progresso::-webkit-progress-value {
+  background: #b8e58b;
+}
+
+.menuDireitaInferior-missao--concluida
+.menuDireitaInferior-progresso::-moz-progress-bar {
+  background: #b8e58b;
+}
+
+.menuDireitaInferior-status {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #d0efad;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* RODAPÉ */
+
+.menuDireitaInferior-rodape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+  margin-top: 15px;
+
+  color: #ded8c7;
+
+  font-size: 10px;
+}
+
+.menuDireitaInferior-rodape > span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #badc86;
+}
+
+/* MODAL */
+
+.menuDireitaInferior-modal {
+  position: fixed;
+  inset: 0;
+
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 40px);
+
+  margin: auto;
+  padding: 0;
+
+  box-sizing: border-box;
+  overflow-y: auto;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+
+  background: linear-gradient(
+    155deg,
+    #493629,
+    #293b23
+  );
+
+  color: #fff7ec;
+
+  font-family: "Rubik", sans-serif;
+
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
+}
+
+.menuDireitaInferior-modal::backdrop {
+  background: rgba(15, 23, 16, 0.72);
+
+  backdrop-filter: blur(5px);
+}
+
+.menuDireitaInferior-modal-conteudo {
+  padding: 26px;
+}
+
+.menuDireitaInferior-modal-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.menuDireitaInferior-etiqueta {
+  color: #e8ce95;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.menuDireitaInferior-fechar {
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff7ec;
+
+  font-size: 25px;
+
+  cursor: pointer;
+}
+
+.menuDireitaInferior-modal h2 {
+  margin: 18px 0 12px;
+
+  color: #fff7ec;
+
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.menuDireitaInferior-modal-descricao {
+  margin: 0 0 22px;
+
+  color: #e1d6c5;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.menuDireitaInferior-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+  margin-bottom: 12px;
+
+  color: #e4d9c7;
+
+  font-size: 12px;
+}
+
+.menuDireitaInferior-total strong {
+  color: #d3ecaa;
+}
+
+.menuDireitaInferior-modal .menuDireitaInferior-missao {
+  padding: 15px 12px;
+}
+
+.menuDireitaInferior-aviso {
+  margin: 17px 0;
+
+  color: #d8cebd;
+
+  font-size: 11px;
+  text-align: center;
+}
+
+.menuDireitaInferior-voltar {
+  width: 100%;
+  min-height: 44px;
+
+  border: 1px solid #d2eba1;
+  border-radius: 12px;
+
+  background: #c2e28d;
+  color: #293a20;
+
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.menuDireitaInferior-voltar:hover {
+  background: #d1eca5;
+}
+
+.menuDireitaInferior-modal button:focus-visible {
+  outline: 2px solid #ffe1a0;
+  outline-offset: 4px;
+}
+
+@media (max-width: 480px) {
+  .menuDireitaInferior-modal-conteudo {
+    padding: 20px;
+  }
+
+  .menuDireitaInferior-modal h2 {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,46 @@
+.login-transicao {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+.login-transicao-faixas {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.login-transicao-faixas > div {
+  flex: 1;
+  margin-right: -1px;
+  background: #f47616;
+  transform: translateY(101%);
+}
+
+.login-transicao-mascote {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: translateY(110%);
+}
+
+.login-transicao-enquadramento {
+  position: relative;
+  width: min(260px, 52vw, 45vh);
+  aspect-ratio: 791 / 763;
+  overflow: hidden;
+}
+
+.login-transicao-enquadramento img {
+  position: absolute;
+  display: block;
+  width: 178.761%;
+  max-width: none;
+  height: auto;
+  left: -39.444%;
+  top: -81.389%;
+}
