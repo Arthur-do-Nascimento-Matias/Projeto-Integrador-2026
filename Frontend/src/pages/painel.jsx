@@ -52,7 +52,9 @@ function Painel({ draft, setDraft }) {
                 materiaAtual={materiaAtual}
             />
 
-            <MenuDireita />
+            <MenuDireita 
+                draft={draft}
+            />
 
         </>
     )

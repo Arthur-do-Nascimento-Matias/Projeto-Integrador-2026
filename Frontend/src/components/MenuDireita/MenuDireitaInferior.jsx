@@ -43,7 +43,7 @@ function IconeMissao({ nome }) {
   );
 }
 
-function ListaMissoes({ missoes }) {
+function ListaMissoes({ missoes, draft }) {
   return (
     <ul className="menuDireitaInferior-lista">
       {missoes.map((missao) => (
@@ -93,7 +93,7 @@ function ListaMissoes({ missoes }) {
   );
 }
 
-const ID_USUARIO_TESTE = 22;
+
 
 function descobrirIcone(tipo) {
   const icones = {
@@ -122,64 +122,63 @@ function converterMissao(missaoBanco) {
   };
 }
 
-function MenuDireitaInferior() {
+function MenuDireitaInferior({ draft }) {
   const [missoes, setMissoes] = useState([]);
 
+  const idUsuario = draft?.id;
   const modalRef = useRef(null);
   const botaoRef = useRef(null);
 
-    useEffect(() => {
-    let componenteAtivo = true;
+useEffect(() => {
+  if (!idUsuario) {
+    setMissoes([]);
+    return;
+  }
 
-    async function carregarMissoes() {
-      try {
-        const resposta = await fetch(
-          `http://localhost:3000/missoes/hoje?id_usuario=${ID_USUARIO_TESTE}`
+  let componenteAtivo = true;
+
+  async function carregarMissoes() {
+    try {
+      const resposta = await fetch(
+        `http://localhost:3000/missoes/hoje?id_usuario=${encodeURIComponent(idUsuario)}`
+      );
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.erro || "Não foi possível carregar as missões."
         );
+      }
 
-        const dados = await resposta.json();
+      const novasMissoes = (dados.missoes || []).map(
+        converterMissao
+      );
 
-        if (!resposta.ok) {
-          throw new Error(
-            dados.erro || "Não foi possível carregar as missões."
-          );
-        }
+      if (componenteAtivo) {
+        setMissoes(novasMissoes);
+      }
 
-        const novasMissoes = (dados.missoes || []).map(
-          converterMissao
-        );
+    } catch (error) {
+      console.error("Erro ao carregar missões:", error);
 
-        if (componenteAtivo) {
-          setMissoes(novasMissoes);
-        }
-      } catch (error) {
-        console.error(
-          "Erro ao carregar missões:",
-          error
-        );
-
-        if (componenteAtivo) {
-          setMissoes([]);
-        }
+      if (componenteAtivo) {
+        setMissoes([]);
       }
     }
+  }
 
-    carregarMissoes();
+  carregarMissoes();
 
-    window.addEventListener(
-      "focus",
-      carregarMissoes
-    );
+  window.addEventListener("focus", carregarMissoes);
 
-    return () => {
-      componenteAtivo = false;
+  return () => {
+    componenteAtivo = false;
 
-      window.removeEventListener(
-        "focus",
-        carregarMissoes
-      );
-    };
-  }, []);
+    window.removeEventListener("focus", carregarMissoes);
+  };
+
+}, [idUsuario]);
 
   const concluidas = missoes.filter(
     (missao) => missao.concluida
@@ -232,7 +231,7 @@ function MenuDireitaInferior() {
           </strong>
         </div>
 
-        <ListaMissoes missoes={missoes} />
+        <ListaMissoes missoes={missoes} draft={draft}/>
 
         <div className="menuDireitaInferior-rodape">
           <span aria-hidden="true" />

@@ -3,13 +3,15 @@ import "./menuDireita.css";
 import MenuDireitaSuperior from "./MenuDireitaSuperior";
 import MenuDireitaInferior from "./MenuDireitaInferior";
 
-function MenuDireita() {
+function MenuDireita({ draft }) {
   return (
     <aside className="menuLateralDireita">
       <div className="menuDireita-cards">
         <MenuDireitaSuperior />
 
-        <MenuDireitaInferior />
+        <MenuDireitaInferior 
+            draft={draft}
+        />
       </div>
     </aside>
   );
