@@ -307,6 +307,55 @@ class Redacoes {
             )
         })
     }
+        static listarReferencias() {
+        return new Promise((resolve, reject) => {
+
+            const connection = Conexao.connect()
+
+            const sql = `
+                SELECT
+                    r.id_referencia,
+                    r.id_tema,
+                    r.titulo,
+                    r.autor,
+                    r.fonte,
+                    r.fonte_url,
+                    r.conteudo,
+                    r.nota_competencia_1,
+                    r.nota_competencia_2,
+                    r.nota_competencia_3,
+                    r.nota_competencia_4,
+                    r.nota_competencia_5,
+                    r.nota_total,
+                    r.analise_geral,
+                    r.anotacoes,
+                    r.destaque,
+                    r.criado_em,
+                    t.titulo AS tema
+
+                FROM redacoes_referencia AS r
+
+                INNER JOIN temas_redacao AS t
+                    ON t.id_tema = r.id_tema
+
+                WHERE r.ativo = 1
+
+                ORDER BY r.destaque DESC, r.criado_em DESC
+            `
+
+            connection.query(sql, (error, referencias) => {
+
+                connection.end()
+
+                if (error) {
+                    reject(error)
+                    return
+                }
+
+                resolve(referencias)
+            })
+        })
+    }
 }
 
 export default Redacoes

@@ -25,199 +25,214 @@ if (req.method === 'OPTIONS') {
     const param = rota.query
 
 
+
     // =========================
-    // REDAÇAO
+    // REDAÇÃO VV
     // =========================
+
     if (
-    rota.pathname === '/temasRedacao' &&
-    req.method === 'GET'
-) {
+        rota.pathname === '/temasRedacao' &&
+        req.method === 'GET'
+    ) {
+        Redacoes.listarTemas()
+            .then(temas => {
 
-    Redacoes.listarTemas()
-        .then(temas => {
-
-            Http.responderJson(res, 200, temas)
-        })
-        .catch(error => {
-
-            console.error('ERRO AO BUSCAR TEMAS:', error)
-
-            Http.responderJson(res, 500, {
-                erro: error.message
+                Http.responderJson(res, 200, temas)
             })
-        })
+            .catch(error => {
 
-    return
-}
+                console.error('ERRO AO BUSCAR TEMAS:', error)
 
-
-if (
-    rota.pathname === '/temaRedacao' &&
-    req.method === 'GET'
-) {
-
-    const idTema = Number(param.id_tema)
-
-    if (!idTema) {
-
-        Http.responderJson(res, 400, {
-            erro: 'Informe um id_tema válido.'
-        })
-
-        return
-    }
-    // =========================
-    // volta pra mim vida eu mudei
-    // =========================
-
-    Redacoes.buscarTema(idTema)
-        .then(tema => {
-
-            if (!tema) {
-
-                Http.responderJson(res, 404, {
-                    erro: 'Tema não encontrado.'
+                Http.responderJson(res, 500, {
+                    erro: error.message
                 })
-
-                return
-            }
-
-            Http.responderJson(res, 200, tema)
-        })
-        .catch(error => {
-
-            console.error('ERRO AO BUSCAR TEMA:', error)
-
-            Http.responderJson(res, 500, {
-                erro: error.message
             })
-        })
 
-    return
-}
+        return
+    }
 
 
-if (
-    rota.pathname === '/redacoes/rascunho' &&
-    req.method === 'POST'
-) {
+    if (
+        rota.pathname === '/temaRedacao' &&
+        req.method === 'GET'
+    ) {
+        const idTema = Number(param.id_tema)
 
-    Http.lerCorpo(req)
-        .then(dados => {
+        if (!idTema) {
+            Http.responderJson(res, 400, {
+                erro: 'Informe um id_tema válido.'
+            })
 
-            const idUsuario = Number(dados.id_usuario)
-            const idTema = Number(dados.id_tema)
+            return
+        }
 
-            if (!idUsuario || !idTema) {
+        Redacoes.buscarTema(idTema)
+            .then(tema => {
 
-                Http.responderJson(res, 400, {
-                    erro: 'Informe id_usuario e id_tema válidos.'
+                if (!tema) {
+                    Http.responderJson(res, 404, {
+                        erro: 'Tema não encontrado.'
+                    })
+
+                    return
+                }
+
+                Http.responderJson(res, 200, tema)
+            })
+            .catch(error => {
+
+                console.error('ERRO AO BUSCAR TEMA:', error)
+
+                Http.responderJson(res, 500, {
+                    erro: error.message
                 })
-
-                return null
-            }
-
-            return Redacoes.salvarRascunho(dados)
-        })
-        .then(resultado => {
-
-            if (!resultado) {
-                return
-            }
-
-            Http.responderJson(res, 200, {
-                mensagem: resultado.criado
-                    ? 'Rascunho criado.'
-                    : 'Rascunho atualizado.',
-
-                ...resultado
             })
-        })
-        .catch(error => {
-
-            console.error('ERRO AO SALVAR RASCUNHO:', error)
-
-            Http.responderJson(res, 500, {
-                erro: error.message
-            })
-        })
-
-    return
-}
-
-
-if (
-    rota.pathname === '/redacoes/rascunho' &&
-    req.method === 'GET'
-) {
-
-    const idUsuario = Number(param.id_usuario)
-    const idTema = Number(param.id_tema)
-
-    if (!idUsuario || !idTema) {
-
-        Http.responderJson(res, 400, {
-            erro: 'Informe id_usuario e id_tema válidos.'
-        })
 
         return
     }
 
-    Redacoes.buscarRascunho(idUsuario, idTema)
-        .then(rascunho => {
 
-            Http.responderJson(res, 200, {
-                rascunho
+    if (
+        rota.pathname === '/redacoes/referencias' &&
+        req.method === 'GET'
+    ) {
+        Redacoes.listarReferencias()
+            .then(referencias => {
+
+                Http.responderJson(res, 200, {
+                    referencias
+                })
             })
-        })
-        .catch(error => {
+            .catch(error => {
 
-            console.error('ERRO AO BUSCAR RASCUNHO:', error)
+                console.error(
+                    'ERRO AO BUSCAR REDAÇÕES DE REFERÊNCIA:',
+                    error
+                )
 
-            Http.responderJson(res, 500, {
-                erro: error.message
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
             })
-        })
-
-    return
-}
-
-
-if (
-    rota.pathname === '/redacoes/historico' &&
-    req.method === 'GET'
-) {
-
-    const idUsuario = Number(param.id_usuario)
-
-    if (!idUsuario) {
-
-        Http.responderJson(res, 400, {
-            erro: 'Informe um id_usuario válido.'
-        })
 
         return
     }
 
-    Redacoes.listarHistorico(idUsuario)
-        .then(historico => {
 
-            Http.responderJson(res, 200, {
-                historico
+    if (
+        rota.pathname === '/redacoes/rascunho' &&
+        req.method === 'POST'
+    ) {
+        Http.lerCorpo(req)
+            .then(dados => {
+
+                const idUsuario = Number(dados.id_usuario)
+                const idTema = Number(dados.id_tema)
+
+                if (!idUsuario || !idTema) {
+                    Http.responderJson(res, 400, {
+                        erro: 'Informe id_usuario e id_tema válidos.'
+                    })
+
+                    return null
+                }
+
+                return Redacoes.salvarRascunho(dados)
             })
-        })
-        .catch(error => {
+            .then(resultado => {
 
-            console.error('ERRO AO BUSCAR HISTÓRICO:', error)
+                if (!resultado) {
+                    return
+                }
 
-            Http.responderJson(res, 500, {
-                erro: error.message
+                Http.responderJson(res, 200, {
+                    mensagem: resultado.criado
+                        ? 'Rascunho criado.'
+                        : 'Rascunho atualizado.',
+
+                    ...resultado
+                })
             })
-        })
+            .catch(error => {
 
-    return
-}
+                console.error('ERRO AO SALVAR RASCUNHO:', error)
 
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+            })
+
+        return
+    }
+
+
+    if (
+        rota.pathname === '/redacoes/rascunho' &&
+        req.method === 'GET'
+    ) {
+        const idUsuario = Number(param.id_usuario)
+        const idTema = Number(param.id_tema)
+
+        if (!idUsuario || !idTema) {
+            Http.responderJson(res, 400, {
+                erro: 'Informe id_usuario e id_tema válidos.'
+            })
+
+            return
+        }
+
+        Redacoes.buscarRascunho(idUsuario, idTema)
+            .then(rascunho => {
+
+                Http.responderJson(res, 200, {
+                    rascunho
+                })
+            })
+            .catch(error => {
+
+                console.error('ERRO AO BUSCAR RASCUNHO:', error)
+
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+            })
+
+        return
+    }
+
+
+    if (
+        rota.pathname === '/redacoes/historico' &&
+        req.method === 'GET'
+    ) {
+        const idUsuario = Number(param.id_usuario)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 400, {
+                erro: 'Informe um id_usuario válido.'
+            })
+
+            return
+        }
+
+        Redacoes.listarHistorico(idUsuario)
+            .then(historico => {
+
+                Http.responderJson(res, 200, {
+                    historico
+                })
+            })
+            .catch(error => {
+
+                console.error('ERRO AO BUSCAR HISTÓRICO:', error)
+
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+            })
+
+        return
+    }
     // =========================
     // ATIVIDADES
     // =========================
@@ -441,7 +456,7 @@ if (rota.pathname == '/abrirProva') {
     
 
     // =========================
-    // MISSOES
+    // MISSOES #VV
     // =========================
 
     if (rota.pathname == '/missoes/hoje') {

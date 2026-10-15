@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./RedacaoEditor.css";
 
+// teste 
 const ID_USUARIO_ATUAL = 22;
 
 function RedacaoEditor({ tema, aoVoltar }) {
@@ -38,10 +39,10 @@ function RedacaoEditor({ tema, aoVoltar }) {
             const dados = await resposta.json();
             const rascunho = dados?.rascunho || dados;
 
-            if (rascunho && (rascunho.texto || rascunho.titulo)) {
+            if (rascunho && (rascunho.conteudo || rascunho.titulo)) {
                 setIdRedacao(rascunho.id_redacao || rascunho.id || null);
                 setTituloRedacao(rascunho.titulo || "");
-                setTextoRedacao(rascunho.texto || "");
+                setTextoRedacao(rascunho.conteudo || "");
                 setStatusSalvamento("Rascunho recuperado do banco");
             }
         } catch (err) {
@@ -65,13 +66,13 @@ function RedacaoEditor({ tema, aoVoltar }) {
             const resposta = await fetch(
                 "http://localhost:3000/redacoes/rascunho",
                 {
-                    method: "POST",
+                 method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         id_usuario: ID_USUARIO_ATUAL,
                         id_tema: idTema,
                         titulo: tituloRedacao,
-                        texto: textoRedacao
+                        conteudo: textoRedacao
                     })
                 }
             );
@@ -103,7 +104,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
         }
     }
 
-    // Parte que seu amigo vai conectar ao Ollama depois
+    // Parte q vai conectar ao Ollama depois
     async function enviarParaCorrecao() {
         const idAtual = await salvarRascunho();
         if (!idAtual) return;
