@@ -243,49 +243,59 @@ function MenuEsquerda() {
   const [touchLike, setTouchLike] = useState(false)
   const [mouseNaSidebar, setMouseNaSidebar] = useState(false)
 
-
 useEffect(() => {
-    const camada = document.querySelector('.simio-sidebar-layer');
-    if (!camada) return;
+  const camada = document.querySelector('.simio-sidebar-layer');
 
-    function atualizarScroll(event) {
-        const alvo = event?.target;
+  if (!camada) return;
 
-        if (
-            alvo instanceof Element &&
-            alvo.closest('.simio-sidebar-layer')
-        ) return;
+  function atualizarScroll(event) {
+    const alvo = event?.target;
 
-        let deslocamento = window.scrollY;
-
-        if (
-            alvo instanceof Element &&
-            alvo.scrollHeight > alvo.clientHeight &&
-            alvo.clientWidth >= window.innerWidth * 0.45
-        ) {
-            deslocamento = alvo.scrollTop;
-        }
-
-        camada.style.setProperty(
-            '--page-scroll',
-            `${deslocamento}px`
-        );
+    if (
+      alvo instanceof Element &&
+      alvo.closest('.simio-sidebar-layer')
+    ) {
+      return;
     }
 
-    window.addEventListener('scroll', atualizarScroll, {
-        passive: true
-    });
+    // Na Biblioteca, ignorar a rolagem da div central
+    if (
+      location.pathname === '/biblioteca' ||
+      location.pathname === '/chatBot'
+    )  {
+      camada.style.setProperty('--page-scroll', '0px');
+      return;
+    }
 
-    document.addEventListener('scroll', atualizarScroll, true);
+    let deslocamento = window.scrollY;
 
-    atualizarScroll();
+    if (
+      alvo instanceof Element &&
+      alvo.scrollHeight > alvo.clientHeight &&
+      alvo.clientWidth >= window.innerWidth * 0.45
+    ) {
+      deslocamento = alvo.scrollTop;
+    }
 
-    return () => {
-        window.removeEventListener('scroll', atualizarScroll);
-        document.removeEventListener('scroll', atualizarScroll, true);
-    };
-}, []);
+    camada.style.setProperty(
+      '--page-scroll',
+      `${deslocamento}px`
+    );
+  }
 
+  window.addEventListener('scroll', atualizarScroll, {
+    passive: true
+  });
+
+  document.addEventListener('scroll', atualizarScroll, true);
+
+  atualizarScroll();
+
+  return () => {
+    window.removeEventListener('scroll', atualizarScroll);
+    document.removeEventListener('scroll', atualizarScroll, true);
+  };
+}, [location.pathname]);
 
   // A expansão acompanha o mouse, mesmo durante a transição de rotas.
   useEffect(() => {
