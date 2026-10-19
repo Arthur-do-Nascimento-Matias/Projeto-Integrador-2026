@@ -22,6 +22,8 @@ import Configuracoes from "./components/Configuracoes/Configuracoes";
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
 import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 import Ranking from "./components/ranking/ranking";
+import Instagram from "./components/Instagram/instagram"
+import Github from './components/Git/git';
 
 
 function RotaPrivada({ children }) {
@@ -46,6 +48,8 @@ function ConteudoApp({
 
   const estaNoIndex = location.pathname === '/';
   const estaNoLogin = location.pathname === '/login';
+  const estaNoInstagram = location.pathname === "/instagram";
+  const estaNoGit = location.pathname === "/Git";
 
   const [draft, setDraft] = useState({
     id: '',
@@ -146,7 +150,7 @@ function ConteudoApp({
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
 
-      {!estaNoLogin && !estaNoIndex && (
+      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && estaNoGit && (
         <MenuEsquerda />
       )}
 
@@ -199,6 +203,19 @@ function ConteudoApp({
           }
         />
 
+        <Route
+          path="/instagram"
+          element={
+            <Instagram />
+          }
+        />
+      
+        <Route
+          path="/github"
+          element={
+            <Github />
+          }
+        />
 
         {/* RANKING */}
 

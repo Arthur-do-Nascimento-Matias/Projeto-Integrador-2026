@@ -1,5 +1,7 @@
 import './Index.css'
 
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 import {
@@ -24,8 +26,21 @@ import historia from '../../assets/materias/historia.svg'
 import ingles from '../../assets/materias/ingles.svg'
 
 function Index({ mode, setMode }) {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === "#rodape") {
+      requestAnimationFrame(() => {
+        document.getElementById("rodape")?.scrollIntoView({
+          behavior: "instant",
+          block: "end",
+        });
+      });
+    }
+  }, [location.hash]);
 
     useAnimacoesIndex();
+
 
     return(
      
@@ -658,7 +673,7 @@ function Index({ mode, setMode }) {
   </div>
 </section>
 
-<footer className="simio-rodape">
+<footer id="rodape" className="simio-rodape">
   <svg
     className="simio-rodape__onda"
     viewBox="0 0 1440 120"
@@ -741,8 +756,7 @@ function Index({ mode, setMode }) {
 
     <a
       className="simio-social simio-social--github"
-      href="nós/git.html"
-      target="_blank"
+      href="/github"
       rel="noopener noreferrer"
       aria-label="Conheça nosso projeto no GitHub (abre em nova aba)"
     >
@@ -776,53 +790,51 @@ function Index({ mode, setMode }) {
       </svg>
     </a>
 
-    <a
-      className="simio-social simio-social--instagram"
-      href="nós/instagram.html"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Acompanhe o SimioLab no Instagram (abre em nova aba)"
+<Link
+  className="simio-social simio-social--instagram"
+  to="/instagram"
+  aria-label="Acompanhe o SimioLab no Instagram"
+>
+  <span className="simio-social__icone">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
     >
-      <span className="simio-social__icone">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          aria-hidden="true"
-        >
-          <rect x="3" y="3" width="18" height="18" rx="5" />
-          <circle cx="12" cy="12" r="4" />
-          <circle
-            cx="17.5"
-            cy="6.5"
-            r="1.1"
-            fill="currentColor"
-            stroke="none"
-          />
-        </svg>
-      </span>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle
+        cx="17.5"
+        cy="6.5"
+        r="1.1"
+        fill="currentColor"
+        stroke="none"
+      />
+    </svg>
+  </span>
 
-      <span className="simio-social__texto">
-        <small>POR TRÁS DO PROJETO</small>
-        <strong>Instagram</strong>
-      </span>
+  <span className="simio-social__texto">
+    <small>POR TRÁS DO PROJETO</small>
+    <strong>Instagram</strong>
+  </span>
 
-      <svg
-        className="simio-social__seta"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M7 17 17 7M7 7h10v10"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </a>
+  <svg
+    className="simio-social__seta"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M7 17 17 7M7 7h10v10"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+</Link>
   </div>
 </div>
   </div>

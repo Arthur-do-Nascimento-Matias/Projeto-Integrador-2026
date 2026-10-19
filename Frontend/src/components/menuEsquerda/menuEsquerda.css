@@ -11,6 +11,7 @@
   --ease: cubic-bezier(.2, .8, .2, 1);
 
   position: absolute;
+  position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
@@ -80,6 +81,7 @@
   --expanded:282px;
 
   position:absolute;
+  position:fixed;
   left:58px;
 
   top:50vh;
@@ -1456,3 +1458,4 @@
         scale .58s cubic-bezier(.18,.88,.22,1),
         filter .35s ease;
 }
+

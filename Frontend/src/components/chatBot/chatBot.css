@@ -249,9 +249,61 @@
 @media (prefers-reduced-motion: reduce) {
   .chatIA *, .chatIA *::before, .chatIA *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+<<<<<<< HEAD
 /* Alinhamento horizontal com a Biblioteca */
 .chatIA {
     position: relative;
     left: 80px;
     top: 5px;
+=======
+
+/* Integração restrita à rota do chat; os outros painéis não são afetados. */
+.simia-page { position: fixed; inset: 0; z-index: 1; overflow-y: auto; background: var(--cor-creme, #FFF8ED); }
+.simia-page .chatIA { min-height: 100vh; min-height: 100dvh; padding: 24px 390px 24px 190px; }
+.simia-page .simia-container { height: calc(100vh - 48px); height: calc(100dvh - 48px); }
+@media (max-width: 1200px) {
+  .simia-page .chatIA { padding-right: 24px; }
+  .simia-page .menuLateralDireita { position: relative; width: auto; height: auto; margin: 0 24px 24px 190px; padding: 0; }
+}
+@media (max-width: 700px) {
+  .simia-page .chatIA { padding: 12px 10px 12px 116px; }
+  .simia-page .simia-container { height: calc(100vh - 24px); height: calc(100dvh - 24px); }
+  .simia-page .menuLateralDireita { margin: 0 10px 20px 116px; }
+  .simia-page .simia-header { padding: 12px; }
+  .simia-page .simia-identidade { gap: 8px; }
+  .simia-page .simia-identidade p { font-size: 10px; }
+  .simia-page .simia-nome { font-size: 18px; }
+  .simia-page .simia-conteudo { padding: 18px 12px; }
+  .simia-page .simia-boas-vindas h1 { font-size: 26px; }
+  .simia-page .simia-boas-vindas > p { font-size: 12px; }
+  .simia-page .simia-sugestoes button { padding: 10px 8px; column-gap: 7px; }
+  .simia-page .simia-sugestoes strong { font-size: 11px; }
+  .simia-page .simia-rodape { padding: 12px 8px; }
+  .simia-page .simia-compositor { gap: 4px; padding: 6px; }
+  .simia-page .simia-compositor textarea { font-size: 16px; }
+  .simia-page .simia-pensando { flex-wrap: wrap; }
+}
+.simia-page {
+  background:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(72, 126, 92, 0.25) 0 8%,
+      transparent 8.3%
+    ),
+    radial-gradient(
+      circle at 87% 80%,
+      rgba(242, 139, 24, 0.15) 0 11%,
+      transparent 11.3%
+    ),
+    linear-gradient(
+      135deg,
+      #e8e2d2,
+      #f7f5ee 45%,
+      #ded5c2
+    );
+}
+
+.simia-page .chatIA {
+  background: transparent;
+>>>>>>> origin/theo
 }
