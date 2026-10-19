@@ -20,11 +20,8 @@ function sairAtividade(refAtividade, trilha) {
 
 export function criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
 
-<<<<<<< HEAD
-=======
         console.log("materias em atividades.jsx", materiaAtual)
-         respostaBloqueada = true;
->>>>>>> origin/kauan
+        respostaBloqueada = true;
         fetch(`http://localhost:3000/atividades?materia=${materiaAtual}&atividadeAtual=${atividadeAtual}`)
         .then(resp => resp.json())
         .then(data => {

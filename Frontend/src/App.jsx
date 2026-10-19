@@ -20,7 +20,6 @@ import PainelBiblioteca from "./pages/PainelBiblioteca";
 import PainelPerfil from "./pages/PainelPerfil";
 import Configuracoes from "./components/Configuracoes/Configuracoes";
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
-<<<<<<< HEAD
 import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 import Ranking from "./components/ranking/ranking";
 import Instagram from "./components/Instagram/instagram"
@@ -37,10 +36,6 @@ function RotaPrivada({ children }) {
 
   return children;
 }
-=======
-
-import MenuEsquerda from "./components/menuEsquerda/menuEsquerda";
->>>>>>> origin/kauan
 
 
 import PainelSimulados from "./pages/PainelSimulados";
