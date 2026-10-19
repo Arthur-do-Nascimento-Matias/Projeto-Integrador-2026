@@ -150,7 +150,7 @@ function ConteudoApp({
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
 
-      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && estaNoGit && (
+      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && (
         <MenuEsquerda />
       )}
 
