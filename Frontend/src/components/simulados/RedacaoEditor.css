@@ -1,0 +1,334 @@
+.editorRedacaoAmbiente {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 10px;
+}
+
+.editorTopo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+}
+
+.editorBotaoVoltar {
+    padding: 11px 18px;
+    background: #ffffff;
+    border: 1px solid #dedcd3;
+    border-radius: 12px;
+    color: #3e3a34;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.editorBotaoVoltar:hover {
+    background: #293529;
+    color: #ffffff;
+}
+
+.editorStatusTopo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.editorBadgeSalvo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #e7efe4;
+    color: #365332;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.pontoVerde {
+    width: 8px;
+    height: 8px;
+    background: #3d8b37;
+    border-radius: 50%;
+}
+
+.editorBadgeXp {
+    padding: 8px 14px;
+    background: #efe8df;
+    color: #795e48;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.editorGrid {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.45fr);
+    gap: 28px;
+    align-items: start;
+}
+
+.editorColunaApoio {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.editorCardTema {
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e2ded6;
+    border-radius: 24px;
+}
+
+.editorSubtag {
+    color: #9a765b;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.6px;
+}
+
+.editorCardTema h2 {
+    margin: 10px 0 12px;
+    color: #2b2620;
+    font-size: 24px;
+    line-height: 1.2;
+}
+
+.editorDescricaoTema {
+    margin: 0 0 22px;
+    color: #736d65;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.editorTextosMotivadores {
+    border-top: 1px solid #ece9e1;
+    padding-top: 18px;
+}
+
+.editorTextosMotivadores h4 {
+    margin: 0 0 12px;
+    color: #3e3830;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.editorTextoBloco {
+    padding: 14px 16px;
+    background: #f8f6f1;
+    border-left: 3px solid #b89f86;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #5b554e;
+}
+
+.editorRegrasLista {
+    margin: 16px 0 0;
+    padding-left: 18px;
+    color: #6f6a61;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.editorMokiCard {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, #dfe6d9 0%, #eef2ea 100%);
+    border: 1px solid #cdd7c5;
+    border-radius: 22px;
+}
+
+.editorMokiAvatar {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #293529;
+    border-radius: 16px;
+    font-size: 30px;
+}
+
+.editorMokiFala strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #293529;
+    font-size: 14px;
+}
+
+.editorMokiFala p {
+    margin: 0;
+    color: #4b5748;
+    font-size: 13px;
+}
+
+.folhaRedacaoContainer {
+    background: #fffefb;
+    border: 1px solid #dfd9cd;
+    border-radius: 26px;
+    box-shadow: 0 22px 55px rgba(45, 39, 32, 0.08);
+    overflow: hidden;
+}
+
+.folhaCabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    background: #f5f1e8;
+    border-bottom: 1px solid #e4decb;
+}
+
+.folhaMarca {
+    display: block;
+    color: #7c6855;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.6px;
+}
+
+.folhaCabecalho small {
+    color: #93897d;
+    font-size: 12px;
+}
+
+.folhaContadores {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: #ffffff;
+    border: 1px solid #e2ddd2;
+    border-radius: 100px;
+    color: #6b645b;
+    font-size: 13px;
+}
+
+.folhaTituloWrapper {
+    padding: 22px 32px 14px;
+    border-bottom: 2px solid #e8dfd1;
+}
+
+.folhaInputTitulo {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: center;
+    color: #2b2620;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.folhaCorpoPautado {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    min-height: 680px;
+    background: #fffefb;
+}
+
+.folhaNumerosLinhas {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    background: #faf6ee;
+    border-right: 2px solid #e7c8c0;
+    user-select: none;
+}
+
+.folhaNumerosLinhas span {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b2a899;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.folhaTextarea {
+    width: 100%;
+    padding: 12px 26px;
+    border: none;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 32px;
+    color: #282420;
+    background-color: transparent;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 31px,
+        #ece6da 31px,
+        #ece6da 32px
+    );
+    background-attachment: local;
+}
+
+.folhaCarregando {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.folhaRodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    background: #f5f1e8;
+    border-top: 1px solid #e4decb;
+}
+
+.folhaMensagemErro span {
+    color: #b53d2e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.folhaBotoesAcao {
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.botaoSalvarRascunho {
+    padding: 13px 20px;
+    border: 1px solid #cbbba8;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #4c3d31;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.botaoEnviarCorrecao {
+    padding: 13px 22px;
+    border: none;
+    border-radius: 12px;
+    background: #293529;
+    color: #ffffff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .editorGrid {
+        grid-template-columns: 1fr;
+    }
+}
