@@ -43,11 +43,7 @@ function IconeMissao({ nome }) {
   );
 }
 
-<<<<<<< HEAD
 function ListaMissoes({ missoes, draft }) {
-=======
-function ListaMissoes({ missoes }) {
->>>>>>> origin/theo
   return (
     <ul className="menuDireitaInferior-lista">
       {missoes.map((missao) => (
