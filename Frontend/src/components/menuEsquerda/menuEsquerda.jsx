@@ -11,7 +11,7 @@ const itensPrincipais = [
 
   { nome: 'Aprender', rota: '/painel' },
 
-  { nome: 'Simulados', rota: null },
+  { nome: 'Simulados', rota: '/simulados' },
 
   { nome: 'Ranking', rota: '/ranking' },
 
@@ -55,6 +55,7 @@ function nomePelaRota(pathname) {
     const rota = pathname.replace(/\/+$/, '') || '/'
 
     if (rota === '/painel') return 'Aprender'
+    if (rota === '/simulados') return 'Simulados'
     if (rota === '/ranking') return 'Ranking'
     if (rota === '/biblioteca') return 'Biblioteca'
     if (rota === '/chatBot') return 'SimIA'
