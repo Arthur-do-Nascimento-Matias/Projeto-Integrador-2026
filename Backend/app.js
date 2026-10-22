@@ -6,7 +6,7 @@ import formidable from 'formidable'
 
 import fs from 'fs'
 
-
+import { buscarUsuarioAutenticado } from './utils/autenticacao.js'
 
 import Conexao from './Conexao.js'
 
@@ -23,6 +23,8 @@ import Provas from './Provas.js'
 import Redacoes from './Redacoes.js'
 
 import Http from './utils/http.js'
+
+import Feed from './Feed.js'
 
 
 
@@ -60,6 +62,340 @@ const callback = (req, res) => {
 
     const param = rota.query
 
+
+
+        if (req.method === 'GET' && rota.pathname === '/comunidades') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        Feed.listarComunidades()
+            .then(comunidades => {
+
+                Http.responderJson(res, 200, {
+                    comunidades
+                })
+
+            })
+            .catch(error => {
+
+                console.error(
+                    'ERRO AO BUSCAR COMUNIDADES:',
+                    error
+                )
+
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
+        if (req.method === 'GET' && rota.pathname === '/feed/post') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+        const idPost = Number(param.id_post)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        if (!idPost) {
+            Http.responderJson(res, 400, {
+                erro: 'Informe um id_post válido.'
+            })
+
+            return
+        }
+
+        Feed.buscarPost(idPost, idUsuario)
+            .then(resultado => {
+
+                if (!resultado) {
+                    Http.responderJson(res, 404, {
+                        erro: 'Post não encontrado.'
+                    })
+
+                    return
+                }
+
+                Http.responderJson(res, 200, resultado)
+
+            })
+            .catch(error => {
+
+                console.error(
+                    'ERRO AO BUSCAR POST:',
+                    error
+                )
+
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
+        if (req.method === 'GET' && rota.pathname === '/feed') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        Feed.listarPosts(idUsuario, {
+            comunidade: param.comunidade,
+            ordem: param.ordem
+        })
+            .then(posts => {
+
+                Http.responderJson(res, 200, {
+                    posts
+                })
+
+            })
+            .catch(error => {
+
+                console.error(
+                    'ERRO AO BUSCAR FEED:',
+                    error
+                )
+
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
+    if (req.method === 'POST' && rota.pathname === '/feed') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        Http.lerCorpo(req)
+            .then(dados => Feed.criarPost({
+                ...dados,
+                id_usuario: idUsuario,
+                id_comunidade: Number(dados.id_comunidade)
+            }))
+            .then(resultado => {
+
+                Http.responderJson(res, 201, {
+                    ok: true,
+                    ...resultado
+                })
+
+            })
+            .catch(error => {
+
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
+
+    if (req.method === 'POST' && rota.pathname === '/feed/voto') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        Http.lerCorpo(req)
+            .then(dados => Feed.votarPost(
+                Number(dados.id_post),
+                idUsuario,
+                dados.tipo
+            ))
+            .then(() => {
+
+                Http.responderJson(res, 200, {
+                    ok: true
+                })
+
+            })
+            .catch(error => {
+
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
+
+    if (req.method === 'POST' && rota.pathname === '/feed/comentarios') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        Http.lerCorpo(req)
+            .then(dados => Feed.criarComentario({
+                ...dados,
+                id_usuario: idUsuario,
+                id_post: Number(dados.id_post)
+            }))
+            .then(resultado => {
+
+                Http.responderJson(res, 201, {
+                    ok: true,
+                    ...resultado
+                })
+
+            })
+            .catch(error => {
+
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
+
+    if (req.method === 'POST' && rota.pathname === '/feed/denuncias') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        Http.lerCorpo(req)
+            .then(dados => Feed.denunciar({
+                ...dados,
+                id_usuario: idUsuario,
+                id_post: Number(dados.id_post) || null,
+                id_comentario: Number(dados.id_comentario) || null
+            }))
+            .then(() => {
+
+                Http.responderJson(res, 201, {
+                    ok: true
+                })
+
+            })
+            .catch(error => {
+
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
+
+    if (req.method === 'POST' && rota.pathname === '/feed/ocultar') {
+
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+
+            return
+        }
+
+        Http.lerCorpo(req)
+            .then(async dados => {
+
+                const ehAdmin = await Feed.usuarioEhAdmin(idUsuario)
+
+                if (!ehAdmin) {
+                    throw new Error(
+                        'Apenas administradores podem ocultar conteúdo.'
+                    )
+                }
+
+                if (!['post', 'comentario'].includes(dados.tipo)) {
+                    throw new Error('Tipo de conteúdo inválido.')
+                }
+
+                if (!Number(dados.id)) {
+                    throw new Error('Informe um id válido.')
+                }
+
+                return Feed.ocultarConteudo({
+                    tipo: dados.tipo,
+                    id: Number(dados.id)
+                })
+
+            })
+            .then(() => {
+
+                Http.responderJson(res, 200, {
+                    ok: true
+                })
+
+            })
+            .catch(error => {
+
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+
+            })
+
+        return
+    }
 
 
 if(req.method == 'GET') {
@@ -1594,6 +1930,8 @@ if (rota.pathname == '/mudarFoto') {
     }
 
 }
+
+
 
 }
 

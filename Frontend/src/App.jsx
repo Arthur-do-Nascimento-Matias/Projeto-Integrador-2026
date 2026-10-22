@@ -24,6 +24,8 @@ import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 import Ranking from "./components/ranking/ranking";
 import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
+import PainelFeed from './pages/PainelFeed'
+
 
 
 function RotaPrivada({ children }) {
@@ -209,6 +211,15 @@ function ConteudoApp({
               mode={mode}
               setMode={setMode}
             />
+          }
+        />
+
+         <Route
+          path="/feed"
+          element={
+            <RotaPrivada>
+              <PainelFeed />
+            </RotaPrivada>
           }
         />
 
