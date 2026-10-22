@@ -64,7 +64,52 @@ const callback = (req, res) => {
 
 if(req.method == 'GET') {
 
+    if (req.method === "GET" && url.pathname === "/ranking") {
+        try {
+            const [usuarios] = await conexao.execute(`
+                SELECT
+                    id_usuario,
+                    nome_de_exibicao,
+                    nome_de_usuario,
+                    xp_semanal
+                FROM usuarios
+                ORDER BY
+                    xp_semanal DESC,
+                    nome_de_exibicao ASC,
+                    id_usuario ASC
+            `);
 
+            const participantes = usuarios.map((usuario) => ({
+                id: usuario.id_usuario,
+                nome: usuario.nome_de_exibicao,
+                username: usuario.nome_de_usuario,
+                xp: Number(usuario.xp_semanal) || 0
+            }));
+
+            res.writeHead(200, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify({
+                ok: true,
+                participantes
+            }));
+
+        } catch (erro) {
+            console.error("Erro ao carregar ranking:", erro);
+
+            res.writeHead(500, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify({
+                ok: false,
+                message: "Erro ao carregar ranking."
+            }));
+        }
+
+        return;
+    }
 
     // =========================
 

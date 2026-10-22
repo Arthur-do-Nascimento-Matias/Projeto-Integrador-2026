@@ -1,5 +1,6 @@
 
 import mysql from 'mysql';
+import { resolve } from 'nodemailer/lib/shared/url.js';
 
 class Conexao {
     static connect() {
@@ -12,6 +13,22 @@ class Conexao {
 
         connection.connect();
         return connection;
+    }
+
+    static getRanking() {
+        return new Promise((resolve, reject) => {
+            
+            const sql = `SELECT
+                            id_usuario,
+                            nome_de_exibicao,
+                            nome_de_usuario,
+                            xp_semanal
+                        FROM usuarios
+                        ORDER BY
+                            xp_semanal DESC,
+                            nome_de_exibicao ASC,
+                            id_usuario ASC`
+        })
     }
 
     static getAtividades(param) {
