@@ -6,7 +6,7 @@ import formidable from 'formidable'
 
 import fs from 'fs'
 
-
+import Sequencia from './Sequencia.js'
 
 import Conexao from './Conexao.js'
 
@@ -1135,7 +1135,20 @@ else if (req.method == 'POST') {
 
     })
 
+if(rota.pathname == "/sequencia") {
+    req.on('end', () => {
+        try {
 
+            console.log('app')
+
+            const dados = JSON.parse(body)
+
+            Sequencia.streak(dados.idUser)
+
+        }
+        catch {}
+    })
+}
 
 if(rota.pathname == '/concluirAtividade') {
 
@@ -1586,10 +1599,11 @@ if (rota.pathname == '/mudarFoto') {
                 }))
 
             })
+        
+    
+    return
 
 
-
-        return
 
     }
 

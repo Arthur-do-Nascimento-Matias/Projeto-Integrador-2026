@@ -73,6 +73,16 @@ function fecharParabens() {
         })
     })
 
+    fetch('http://localhost:3000/sequencia', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            idUser: draft.id
+        })
+    })
+
     refParabens.current.style.display = "none"
 
     const botao = document.getElementById(atividadeAtual)
