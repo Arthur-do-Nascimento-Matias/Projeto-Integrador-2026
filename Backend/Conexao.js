@@ -359,13 +359,17 @@ class Conexao {
         return new Promise((resolve, reject) => {
             const connection = Conexao.connect();
 
+            console.log('atualizar')
+
             const sql = `
                 UPDATE usuarios
-                SET ${atualizacoes}
+                SET ${atualizacoes},
+                    xp = xp + ?,
+                    xp_semanal = xp_semanal + ?
                 WHERE id_usuario = ?
             `;
 
-            connection.query(sql, [dados.id], (error, results) => {
+            connection.query(sql, [dados.xp, dados.xp, dados.id], (error, results) => {
                 connection.end();
 
                 if (error) {

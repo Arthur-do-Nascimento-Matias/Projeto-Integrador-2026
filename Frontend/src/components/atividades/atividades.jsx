@@ -69,7 +69,8 @@ function fecharParabens() {
         body: JSON.stringify({
             materia: materiaAtual,
             id: draft.id,
-            atividadesConcluidas: draft.atividadesConcluidas
+            atividadesConcluidas: draft.atividadesConcluidas,
+            xp: 50
         })
     })
 
