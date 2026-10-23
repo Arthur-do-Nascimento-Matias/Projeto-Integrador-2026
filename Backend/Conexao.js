@@ -84,6 +84,7 @@ class Conexao {
                 SELECT
                     um.id_usuario_missao,
                     um.id_usuario,
+                    adm,
                     um.id_missao,
                     um.data_missao,
                     um.progresso,

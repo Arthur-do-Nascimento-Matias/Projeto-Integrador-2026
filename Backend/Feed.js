@@ -2,6 +2,149 @@ import Conexao from './Conexao.js'
 
 class Feed {
 
+
+    static listarDenuncias() {
+    const sql = `
+        SELECT
+            d.id_denuncia,
+            d.id_post,
+            d.id_comentario,
+            d.motivo,
+            d.descricao,
+            d.status,
+            d.criada_em,
+
+            denunciante.id_usuario AS id_denunciante,
+            denunciante.nome_de_exibicao AS denunciante_nome,
+            denunciante.nome_de_usuario AS denunciante_usuario,
+
+            CASE
+                WHEN d.id_post IS NOT NULL THEN 'post'
+                ELSE 'comentario'
+            END AS tipo_conteudo,
+
+            COALESCE(
+                p.titulo,
+                'Comentário'
+            ) AS titulo_conteudo,
+
+            COALESCE(
+                p.conteudo,
+                cp.conteudo
+            ) AS conteudo,
+
+            COALESCE(
+                autor_post.nome_de_exibicao,
+                autor_comentario.nome_de_exibicao
+            ) AS autor_nome,
+
+            COALESCE(
+                autor_post.nome_de_usuario,
+                autor_comentario.nome_de_usuario
+            ) AS autor_usuario
+
+        FROM denuncias_feed AS d
+
+        INNER JOIN usuarios AS denunciante
+            ON denunciante.id_usuario = d.id_usuario_denunciante
+
+        LEFT JOIN posts AS p
+            ON p.id_post = d.id_post
+
+        LEFT JOIN usuarios AS autor_post
+            ON autor_post.id_usuario = p.id_usuario
+
+        LEFT JOIN comentarios_posts AS cp
+            ON cp.id_comentario = d.id_comentario
+
+        LEFT JOIN usuarios AS autor_comentario
+            ON autor_comentario.id_usuario = cp.id_usuario
+
+        WHERE d.status = 'pendente'
+
+        ORDER BY d.criada_em DESC
+    `
+
+    return Feed.executar(sql)
+}
+
+static resolverDenuncia(idDenuncia, acao) {
+    if (!idDenuncia) {
+        return Promise.reject(
+            new Error('Informe uma denúncia válida.')
+        )
+    }
+
+    if (!['ocultar', 'ignorar'].includes(acao)) {
+        return Promise.reject(
+            new Error('Ação de moderação inválida.')
+        )
+    }
+
+    const sqlBuscar = `
+        SELECT
+            id_denuncia,
+            id_post,
+            id_comentario,
+            status
+        FROM denuncias_feed
+        WHERE id_denuncia = ?
+        LIMIT 1
+    `
+
+    return Feed.executar(sqlBuscar, [idDenuncia])
+        .then(resultado => {
+            const denuncia = resultado[0]
+
+            if (!denuncia) {
+                throw new Error('Denúncia não encontrada.')
+            }
+
+            if (denuncia.status !== 'pendente') {
+                throw new Error(
+                    'Esta denúncia já foi resolvida.'
+                )
+            }
+
+            if (acao === 'ignorar') {
+                const sqlResolver = `
+                    UPDATE denuncias_feed
+                    SET status = 'resolvida'
+                    WHERE id_denuncia = ?
+                `
+
+                return Feed.executar(sqlResolver, [idDenuncia])
+            }
+
+            const tipo = denuncia.id_post
+                ? 'post'
+                : 'comentario'
+
+            const idConteudo =
+                denuncia.id_post || denuncia.id_comentario
+
+            return Feed.ocultarConteudo({
+                tipo,
+                id: idConteudo
+            }).then(() => {
+                const coluna = denuncia.id_post
+                    ? 'id_post'
+                    : 'id_comentario'
+
+                const sqlResolverTodas = `
+                    UPDATE denuncias_feed
+                    SET status = 'resolvida'
+                    WHERE ${coluna} = ?
+                    AND status = 'pendente'
+                `
+
+                return Feed.executar(
+                    sqlResolverTodas,
+                    [idConteudo]
+                )
+            })
+        })
+}
     static executar(sql, valores = []) {
         return new Promise((resolve, reject) => {
             const connection = Conexao.connect()

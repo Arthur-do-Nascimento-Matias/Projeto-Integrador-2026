@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
 
+import FeedDetalhe from './FeedDetalhe'
+import FeedLateral from './FeedLateral'
+
 import './Feed.css'
 
 const API_URL = 'http://localhost:3000'
@@ -57,7 +60,8 @@ function Feed() {
     const [publicando, setPublicando] = useState(false)
     const [titulo, setTitulo] = useState('')
     const [conteudo, setConteudo] = useState('')
-    const [comunidadePost, setComunidadePost] = useState('')
+   const [comunidadePost, setComunidadePost] = useState('')
+const [postAberto, setPostAberto] = useState(null)
 
     function cabecalhos() {
         const token = localStorage.getItem('token')
@@ -223,6 +227,7 @@ function Feed() {
 
     return (
         <main className="feed-page">
+            <div className="feed-layout">
             <section className="feed-content">
                 <header className="feed-header">
                     <div>
@@ -421,10 +426,12 @@ function Feed() {
                                     </p>
 
                                     <div className="feed-post-actions">
-                                        <button type="button">
-                                            💬 {post.total_comentarios}{' '}
-                                            comentários
-                                        </button>
+                                                                    <button
+                                    type="button"
+                                    onClick={() => setPostAberto(post.id_post)}
+                                >
+                                    💬 {post.total_comentarios} comentários
+                                </button>
 
                                         <button type="button">
                                             ↗ Compartilhar
@@ -436,6 +443,8 @@ function Feed() {
                     </section>
                 )}
             </section>
+             <FeedLateral comunidades={comunidades} />
+    </div>
 
             {criandoPost && (
                 <div
@@ -525,6 +534,13 @@ function Feed() {
                         </div>
                     </form>
                 </div>
+            )}
+                {postAberto && (
+                <FeedDetalhe
+                    idPost={postAberto}
+                    aoFechar={() => setPostAberto(null)}
+                    aoAtualizar={carregarPosts}
+                />
             )}
         </main>
     )
