@@ -1,4 +1,5 @@
 
+import { error } from 'console';
 import mysql from 'mysql';
 import { resolve } from 'nodemailer/lib/shared/url.js';
 
@@ -15,9 +16,11 @@ class Conexao {
         return connection;
     }
 
-    static getRanking() {
+    static async getRanking() {
         return new Promise((resolve, reject) => {
             
+            const connection = Conexao.connect();
+
             const sql = `SELECT
                             id_usuario,
                             nome_de_exibicao,
@@ -28,6 +31,20 @@ class Conexao {
                             xp_semanal DESC,
                             nome_de_exibicao ASC,
                             id_usuario ASC`
+
+            connection.query(sql, (error, lista) => {
+
+                if (error) {
+                    connection.end()
+                    return reject(error)
+                }
+
+                connection.end()
+
+                resolve(lista)
+
+            })
+
         })
     }
 

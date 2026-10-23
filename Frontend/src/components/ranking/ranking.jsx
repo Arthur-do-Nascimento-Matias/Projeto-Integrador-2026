@@ -1,21 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+
 import Moki from "../../assets/MOKI.png";
 import "./Ranking.css";
 
-// DADOS DE EXEMPLO
-// Depois, estes participantes poderão vir do backend.
-export const amigosExemplo = [
-  { id: "ana", nome: "Ana", xp: 2480, cor: "menta" },
-  { id: "pedro", nome: "Pedro", xp: 2210, cor: "areia" },
-  { id: "bia", nome: "Bia", xp: 1960, cor: "rosa" },
-  { id: "voce", nome: "Você", xp: 1840, cor: "laranja" },
-  { id: "lucas", nome: "Lucas", xp: 1720, cor: "azul" },
-  { id: "julia", nome: "Júlia", xp: 1540, cor: "rosa" },
-  { id: "rafa", nome: "Rafa", xp: 1280, cor: "menta" },
-  { id: "leo", nome: "Léo", xp: 950, cor: "areia" },
-];
-
 const numero = new Intl.NumberFormat("pt-BR");
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
+const cores = ["menta", "areia", "rosa", "laranja", "azul"];
 
 // Próxima segunda-feira, às 00h, no horário do navegador.
 function proximaSegunda() {
@@ -29,11 +19,7 @@ function proximaSegunda() {
 }
 
 function tempoRestante(fim) {
-  const minutos = Math.max(
-    0,
-    Math.ceil((fim - Date.now()) / 60000)
-  );
-
+  const minutos = Math.max(0, Math.ceil((fim - Date.now()) / 60000));
   const dias = Math.floor(minutos / 1440);
   const horas = Math.floor(minutos / 60) % 24;
   const minutosRestantes = minutos % 60;
@@ -57,11 +43,7 @@ function Avatar({ amigo, grande = false }) {
 
 function Coroa() {
   return (
-    <svg
-      className="rk-coroa"
-      viewBox="0 0 64 48"
-      aria-hidden="true"
-    >
+    <svg className="rk-coroa" viewBox="0 0 64 48" aria-hidden="true">
       <path
         d="m8 12 14 10L32 5l10 17 14-10-6 29H14Z"
         fill="#ffb238"
@@ -69,7 +51,6 @@ function Coroa() {
         strokeWidth="3"
         strokeLinejoin="round"
       />
-
       <path
         d="M17 34h30"
         stroke="#fff0b8"
@@ -80,28 +61,96 @@ function Coroa() {
   );
 }
 
-export default function Ranking({
-  participantes = amigosExemplo,
-  usuarioId = "voce",
-}) {
+export default function Ranking({ usuarioId }) {
+  const [participantes, setParticipantes] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+  const [tentativa, setTentativa] = useState(0);
+
   const [prazo] = useState(proximaSegunda);
-
-  const [contador, setContador] = useState(() =>
-    tempoRestante(prazo)
-  );
-
+  const [contador, setContador] = useState(() => tempoRestante(prazo));
   const minhaLinha = useRef(null);
 
-  // Ordena por XP. Em caso de empate, usa nome e ID.
+  // Busca usuários reais e seus pontos semanais no backend.
+  useEffect(() => {
+    const controller = new AbortController();
+    let ativo = true;
+    let tempoEsgotado = false;
+
+    // Evita manter "Carregando ranking..." indefinidamente.
+    const temporizador = setTimeout(() => {
+      tempoEsgotado = true;
+      controller.abort();
+    }, 20000);
+
+    async function buscarRanking() {
+      setCarregando(true);
+      setErro("");
+
+      try {
+        const endpoint = `${API_URL}/ranking`;
+        console.log("[Ranking] Buscando:", endpoint);
+
+        const resposta = await fetch(endpoint, {
+          method: "GET",
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!resposta.ok) {
+          throw new Error(`Servidor retornou HTTP ${resposta.status}.`);
+        }
+
+        const dados = await resposta.json();
+
+        if (!dados.ok || !Array.isArray(dados.participantes)) {
+          throw new Error(dados.message || "Resposta inválida do servidor.");
+        }
+
+        const participantesFormatados = dados.participantes.map((usuario, indice) => ({
+          ...usuario,
+          id: Number(usuario.id),
+          nome: usuario.nome || usuario.username || "Explorador",
+          xp: Number(usuario.xp) || 0,
+          cor: cores[indice % cores.length],
+        }));
+
+        if (ativo) setParticipantes(participantesFormatados);
+      } catch (error) {
+        if (!ativo) return;
+
+        console.error("[Ranking] Erro ao carregar:", error);
+
+        if (tempoEsgotado) {
+          setErro("A API demorou demais para responder. Verifique o servidor e o banco MySQL.");
+        } else if (error.name !== "AbortError") {
+          setErro(`Não foi possível carregar o ranking: ${error.message}`);
+        }
+      } finally {
+        clearTimeout(temporizador);
+        if (ativo) setCarregando(false);
+      }
+    }
+
+    buscarRanking();
+
+    return () => {
+      ativo = false;
+      clearTimeout(temporizador);
+      controller.abort();
+    };
+  }, [tentativa]);
+
+  // Ordena por XP; em caso de empate, usa nome e ID.
   const ordenados = [...participantes].sort(
     (a, b) =>
       b.xp - a.xp ||
       a.nome.localeCompare(b.nome, "pt-BR") ||
-      String(a.id).localeCompare(String(b.id))
+      a.id - b.id
   );
 
   const minhaPosicao = ordenados.findIndex(
-    (amigo) => amigo.id === usuarioId
+    (amigo) => Number(amigo.id) === Number(usuarioId)
   );
 
   const eu = ordenados[minhaPosicao];
@@ -120,25 +169,22 @@ export default function Ranking({
   }, [prazo]);
 
   function encontrarPosicao() {
+    if (!minhaLinha.current) return;
+
     const reduzirMovimento = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    minhaLinha.current?.scrollIntoView({
-      behavior: reduzirMovimento ? "instant" : "smooth",
+    minhaLinha.current.scrollIntoView({
+      behavior: reduzirMovimento ? "auto" : "smooth",
       block: "center",
     });
 
-    minhaLinha.current?.focus({
-      preventScroll: true,
-    });
+    minhaLinha.current.focus({ preventScroll: true });
   }
 
   return (
-    <section
-      className="rk-pagina"
-      aria-labelledby="rk-titulo"
-    >
+    <section className="rk-pagina" aria-labelledby="rk-titulo">
       {/* CABEÇALHO */}
       <header className="rk-cabecalho">
         <div>
@@ -150,9 +196,7 @@ export default function Ranking({
             Ranking de <em>amigos</em>
           </h1>
 
-          <p>
-            Cada descoberta te leva um galho mais alto.
-          </p>
+          <p>Cada descoberta te leva um galho mais alto.</p>
         </div>
 
         <div className="rk-relogio">
@@ -164,43 +208,37 @@ export default function Ranking({
 
       {/* INFORMAÇÕES DA SEMANA */}
       <div className="rk-barra">
-        <span className="rk-tag">
-          ● &nbsp; Desafio semanal
-        </span>
-
-        <span>
-          {ordenados.length} participantes · Prévia com dados
-          de exemplo
-        </span>
+        <span className="rk-tag">● &nbsp; Desafio semanal</span>
+        <span>{ordenados.length} participantes · Ranking semanal</span>
       </div>
 
-      {ordenados.length === 0 ? (
+      {carregando ? (
+        <div className="rk-vazio" role="status">
+          <img src={Moki} alt="Moki" />
+          <h2>Carregando ranking...</h2>
+          <p>Buscando os exploradores da semana.</p>
+        </div>
+      ) : erro ? (
+        <div className="rk-vazio" role="alert">
+          <img src={Moki} alt="Moki" />
+          <h2>Ops! Algo deu errado.</h2>
+          <p>{erro}</p>
+          <button type="button" onClick={() => setTentativa((n) => n + 1)}>
+            Tentar novamente
+          </button>
+        </div>
+      ) : ordenados.length === 0 ? (
         <div className="rk-vazio">
           <img src={Moki} alt="Moki" />
-
           <h2>Uma turma, muitas conquistas!</h2>
-
-          <p>
-            Seus amigos aparecerão aqui quando a função de
-            adicionar amigos estiver disponível.
-          </p>
+          <p>Os participantes aparecerão aqui quando houver usuários cadastrados.</p>
         </div>
       ) : (
         <>
           {/* PÓDIO: SEGUNDO, PRIMEIRO, TERCEIRO */}
-          <section
-            className="rk-arena"
-            aria-label="Pódio dos três primeiros"
-          >
-            <span
-              className="rk-folha rk-folha--um"
-              aria-hidden="true"
-            />
-
-            <span
-              className="rk-folha rk-folha--dois"
-              aria-hidden="true"
-            />
+          <section className="rk-arena" aria-label="Pódio dos três primeiros">
+            <span className="rk-folha rk-folha--um" aria-hidden="true" />
+            <span className="rk-folha rk-folha--dois" aria-hidden="true" />
 
             <div className="rk-podio">
               {[1, 0, 2].map((indice) => {
@@ -208,10 +246,7 @@ export default function Ranking({
 
                 if (!amigo) {
                   return (
-                    <div
-                      key={indice}
-                      className="rk-lugar-vazio"
-                    />
+                    <div key={indice} className="rk-lugar-vazio" />
                   );
                 }
 
@@ -224,25 +259,17 @@ export default function Ranking({
                 return (
                   <article
                     key={amigo.id}
-                    className={`rk-finalista rk-finalista--${
-                      indice + 1
-                    }`}
-                    aria-label={`${
-                      indice + 1
-                    }º lugar: ${amigo.nome}, ${numero.format(
-                      amigo.xp
-                    )} XP`}
+                    className={`rk-finalista rk-finalista--${indice + 1}`}
+                    aria-label={`${indice + 1}º lugar: ${amigo.nome}, ${numero.format(amigo.xp)} XP`}
                   >
                     <div className="rk-personagem">
                       {indice === 0 && <Coroa />}
-
                       <Avatar amigo={amigo} grande />
                     </div>
 
                     <strong className="rk-nome-podio">
                       {amigo.nome}
-
-                      {amigo.id === usuarioId &&
+                      {Number(amigo.id) === Number(usuarioId) &&
                       amigo.nome !== "Você"
                         ? " (Você)"
                         : ""}
@@ -264,13 +291,8 @@ export default function Ranking({
 
           {/* RESUMO DO USUÁRIO */}
           {eu && (
-            <aside
-              className="rk-meu-resumo"
-              aria-label="Resumo da sua posição"
-            >
-              <span className="rk-minha-medalha">
-                {minhaPosicao + 1}º
-              </span>
+            <aside className="rk-meu-resumo" aria-label="Resumo da sua posição">
+              <span className="rk-minha-medalha">{minhaPosicao + 1}º</span>
 
               <div>
                 <strong>
@@ -282,117 +304,80 @@ export default function Ranking({
                 <p>
                   {minhaPosicao === 0
                     ? "Você está liderando o desafio desta semana."
-                    : `Mais ${numero.format(
-                        faltam
-                      )} XP para ultrapassar ${
-                        ordenados[minhaPosicao - 1].nome
-                      }.`}
+                    : `Mais ${numero.format(faltam)} XP para ultrapassar ${ordenados[minhaPosicao - 1].nome}.`}
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={encontrarPosicao}
-              >
-                Minha posição{" "}
-                <span aria-hidden="true">↓</span>
+              <button type="button" onClick={encontrarPosicao}>
+                Minha posição <span aria-hidden="true">↓</span>
               </button>
             </aside>
           )}
 
           {/* LISTA COMPLETA */}
-          <section
-            className="rk-classificacao"
-            aria-labelledby="rk-lista-titulo"
-          >
+          <section className="rk-classificacao" aria-labelledby="rk-lista-titulo">
             <header>
               <div>
                 <h2 id="rk-lista-titulo">A turma toda</h2>
-
-                <p>
-                  Um pouco de competição. Muito aprendizado.
-                </p>
+                <p>Um pouco de competição. Muito aprendizado.</p>
               </div>
 
               <span>XP DA SEMANA</span>
             </header>
 
             <ol className="rk-lista">
-              {ordenados.map((amigo, indice) => (
-                <li
-                  key={amigo.id}
-                  ref={
-                    amigo.id === usuarioId
-                      ? minhaLinha
-                      : undefined
-                  }
-                  tabIndex={
-                    amigo.id === usuarioId ? -1 : undefined
-                  }
-                  className={`rk-linha${
-                    amigo.id === usuarioId
-                      ? " rk-linha--eu"
-                      : ""
-                  }`}
-                  aria-current={
-                    amigo.id === usuarioId
-                      ? "true"
-                      : undefined
-                  }
-                >
-                  <span
-                    className={`rk-posicao${
-                      indice < 3
-                        ? ` rk-posicao--${indice + 1}`
-                        : ""
-                    }`}
+              {ordenados.map((amigo, indice) => {
+                const souEu = Number(amigo.id) === Number(usuarioId);
+
+                return (
+                  <li
+                    key={amigo.id}
+                    ref={souEu ? minhaLinha : undefined}
+                    tabIndex={souEu ? -1 : undefined}
+                    className={`rk-linha${souEu ? " rk-linha--eu" : ""}`}
+                    aria-current={souEu ? "true" : undefined}
                   >
-                    {indice + 1}
-                    <span className="rk-sr">º lugar</span>
-                  </span>
-
-                  <Avatar amigo={amigo} />
-
-                  <div className="rk-identidade">
-                    <strong>{amigo.nome}</strong>
-
-                    <span>
-                      {amigo.id === usuarioId
-                        ? "Esse é você!"
-                        : indice < 5
-                          ? "Entre os 5 primeiros"
-                          : "Na trilha do conhecimento"}
-                    </span>
-                  </div>
-
-                  {indice < 5 && (
                     <span
-                      className="rk-selo"
-                      title="Faixa de premiação prevista"
+                      className={`rk-posicao${
+                        indice < 3 ? ` rk-posicao--${indice + 1}` : ""
+                      }`}
                     >
-                      ★
-                      <span className="rk-sr">
-                        {" "}
-                        Entre os cinco primeiros
-                      </span>
+                      {indice + 1}
+                      <span className="rk-sr">º lugar</span>
                     </span>
-                  )}
 
-                  <span className="rk-pontos">
-                    <strong>
-                      {numero.format(amigo.xp)}
-                    </strong>
+                    <Avatar amigo={amigo} />
 
-                    <small>XP</small>
-                  </span>
-                </li>
-              ))}
+                    <div className="rk-identidade">
+                      <strong>{amigo.nome}</strong>
+                      <span>
+                        {souEu
+                          ? "Esse é você!"
+                          : indice < 5
+                            ? "Entre os 5 primeiros"
+                            : "Na trilha do conhecimento"}
+                      </span>
+                    </div>
+
+                    {indice < 5 && (
+                      <span className="rk-selo" title="Faixa de premiação prevista">
+                        ★
+                        <span className="rk-sr"> Entre os cinco primeiros</span>
+                      </span>
+                    )}
+
+                    <span className="rk-pontos">
+                      <strong>{numero.format(amigo.xp)}</strong>
+                      <small>XP</small>
+                    </span>
+                  </li>
+                );
+              })}
             </ol>
 
             <footer>
-              Atividades, missões e estudo vão somar XP.
-              Recompensas digitais previstas para os 5
-              primeiros.
+              Atividades, missões e estudo vão somar XP. Recompensas digitais
+              previstas para os 5 primeiros.
             </footer>
           </section>
         </>
