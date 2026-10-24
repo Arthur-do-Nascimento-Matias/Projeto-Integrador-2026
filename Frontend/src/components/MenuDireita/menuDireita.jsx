@@ -7,7 +7,9 @@ function MenuDireita({ draft }) {
   return (
     <aside className="menuLateralDireita">
       <div className="menuDireita-cards">
-        <MenuDireitaSuperior />
+        <MenuDireitaSuperior 
+            draft={draft}
+        />
 
         <MenuDireitaInferior 
             draft={draft}

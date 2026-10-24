@@ -28,7 +28,7 @@ import Http from './utils/http.js'
 
 
 
-const callback = (req, res) => {
+const callback = async (req, res) => {
 
 
 
@@ -64,7 +64,26 @@ const callback = (req, res) => {
 
 if(req.method == 'GET') {
 
-   
+    if(rota.pathname == "/posicao") {
+
+        try{
+            console.log('posicao')
+
+            let posicao = await Conexao.getPosicao(param.idUser)
+            
+            console.log(posicao)
+
+            res.writeHead(200, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify(posicao));
+        }
+        catch(error){
+            throw error
+        }
+    }
+
     if (rota.pathname === "/ranking") {
         console.log('ranking')
         Conexao.getRanking()
@@ -1181,7 +1200,9 @@ if(rota.pathname == "/sequencia") {
             Sequencia.streak(dados.idUser)
 
         }
-        catch {}
+        catch(error){
+            throw error
+        }
     })
 }
 
