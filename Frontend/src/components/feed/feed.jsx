@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import FeedDetalhe from './FeedDetalhe'
 import FeedLateral from './FeedLateral'
+import FeedModeracao from './FeedModeracao'
 
 import './Feed.css'
 
@@ -60,8 +61,10 @@ function Feed() {
     const [publicando, setPublicando] = useState(false)
     const [titulo, setTitulo] = useState('')
     const [conteudo, setConteudo] = useState('')
-   const [comunidadePost, setComunidadePost] = useState('')
-const [postAberto, setPostAberto] = useState(null)
+    const [comunidadePost, setComunidadePost] = useState('')
+    const [postAberto, setPostAberto] = useState(null)
+    const [ehAdmin, setEhAdmin] = useState(false)
+    const [moderacaoAberta, setModeracaoAberta] = useState(false)
 
     function cabecalhos() {
         const token = localStorage.getItem('token')
@@ -140,12 +143,40 @@ const [postAberto, setPostAberto] = useState(null)
         }
     }
 
-    useEffect(() => {
-        carregarComunidades()
-            .catch(erroAtual => {
-                setErro(erroAtual.message)
-            })
-    }, [])
+    async function carregarPermissao() {
+    try {
+        const resposta = await fetch(`${API_URL}/perfil`, {
+            headers: cabecalhos()
+        })
+
+        const dados = await resposta.json()
+
+        if (!resposta.ok || !dados.ok) {
+            throw new Error(
+                dados.erro ||
+                    dados.message ||
+                    'Não foi possível verificar a permissão.'
+            )
+        }
+
+        setEhAdmin(Number(dados.usuario?.adm) === 1)
+    } catch (erroAtual) {
+        console.error(
+            'Erro ao verificar administrador:',
+            erroAtual
+        )
+
+        setEhAdmin(false)
+    }
+}
+
+useEffect(() => {
+    carregarComunidades().catch(erroAtual => {
+        setErro(erroAtual.message)
+    })
+
+    carregarPermissao()
+}, [])
 
     useEffect(() => {
         carregarPosts()
@@ -244,14 +275,27 @@ const [postAberto, setPostAberto] = useState(null)
                         </p>
                     </div>
 
-                    <button
-                        className="feed-new-post"
-                        type="button"
-                        onClick={() => setCriandoPost(true)}
-                    >
-                        <span>＋</span>
-                        Criar publicação
-                    </button>
+                    <div className="feed-header-actions">
+    {ehAdmin && (
+        <button
+            className="feed-admin-button"
+            type="button"
+            onClick={() => setModeracaoAberta(true)}
+        >
+            <span>⚑</span>
+            Denúncias
+        </button>
+    )}
+
+    <button
+        className="feed-new-post"
+        type="button"
+        onClick={() => setCriandoPost(true)}
+    >
+        <span>＋</span>
+        Criar publicação
+    </button>
+</div>
                 </header>
 
                 <section className="feed-filters">
@@ -542,6 +586,14 @@ const [postAberto, setPostAberto] = useState(null)
                     aoAtualizar={carregarPosts}
                 />
             )}
+
+            {moderacaoAberta && (
+    <FeedModeracao
+        aoFechar={() => setModeracaoAberta(false)}
+        aoAtualizarFeed={carregarPosts}
+    />
+)}
+
         </main>
     )
 }

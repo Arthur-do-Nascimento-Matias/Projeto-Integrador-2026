@@ -84,7 +84,6 @@ class Conexao {
                 SELECT
                     um.id_usuario_missao,
                     um.id_usuario,
-                    adm,
                     um.id_missao,
                     um.data_missao,
                     um.progresso,
@@ -214,6 +213,7 @@ class Conexao {
             const sql = `
                 SELECT
                     id_usuario,
+                    adm,
                     nome_de_exibicao,
                     nome_de_usuario,
                     bio,
