@@ -1,23 +1,74 @@
+
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import simio from "../../assets/simio.png";
 
 import "./MenuDireitaSuperior.css";
 
 function MenuDireitaSuperior({ draft }) {
+    const [posicao, setPosicao] = useState(null);
 
-  const [posicao, setPosicao] = useState(null);
+    useEffect(() => {
+        if (!draft?.id) return;
 
-  useEffect(() => {
-      if (!draft?.id) return;
+        const controller = new AbortController();
 
-      fetch(`http://localhost:3000/posicao?idUser=${draft.id}`)
-          .then(resp => resp.json())
-          .then(data => setPosicao(data.posicao))
-          .catch(error => console.error(error));
+        async function buscarPosicao() {
+            try {
+                const resp = await fetch(
+                    "http://localhost:3000/ranking",
+                    { signal: controller.signal }
+                );
 
-  }, [draft?.id]);
+                if (!resp.ok) {
+                    throw new Error("Erro ao buscar ranking");
+                }
+
+                const data = await resp.json();
+
+                if (!data.ok || !Array.isArray(data.participantes)) {
+                    throw new Error("Ranking inválido");
+                }
+
+                // Mesma ordenação utilizada no ranking
+                const ordenados = [...data.participantes].sort((a, b) => {
+                    const diferencaXP = Number(b.xp) - Number(a.xp);
+
+                    if (diferencaXP !== 0) {
+                        return diferencaXP;
+                    }
+
+                    // Desempate por ordem alfabética
+                    const diferencaNome = String(a.nome ?? "")
+                        .localeCompare(String(b.nome ?? ""), "pt-BR");
+
+                    if (diferencaNome !== 0) {
+                        return diferencaNome;
+                    }
+
+                    // Último desempate pelo ID
+                    return Number(a.id) - Number(b.id);
+                });
+
+                const indice = ordenados.findIndex(
+                    usuario => Number(usuario.id) === Number(draft.id)
+                );
+
+                setPosicao(indice !== -1 ? indice + 1 : null);
+
+            } catch (error) {
+                if (error.name !== "AbortError") {
+                    console.error("Erro ao buscar posição:", error);
+                    setPosicao(null);
+                }
+            }
+        }
+
+        setPosicao(null);
+        buscarPosicao();
+
+        return () => controller.abort();
+
+    }, [draft?.id]);
 
     return (
         <section
@@ -31,8 +82,11 @@ function MenuDireitaSuperior({ draft }) {
             </div>
 
             <div className="menuDireitaSuperior-conteudo">
-
-                <h3>{posicao !== null ? `${posicao}º lugar` : "Carregando..."}</h3>
+                <h3>
+                    {posicao !== null
+                        ? `${posicao}º lugar`
+                        : "Carregando..."}
+                </h3>
 
                 <p>
                     Faça uma lição pra subir no ranking dessa semana

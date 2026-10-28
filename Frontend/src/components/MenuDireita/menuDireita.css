@@ -1,11 +1,11 @@
 .menuLateralDireita {
-  position: absolute;
+  position: fixed;
 
-  top: -50%;
-
+  top: 50%;
   right: 28px;
 
   width: 328px;
+  max-height: calc(100dvh - 40px);
 
   transform: translateY(-50%);
 
@@ -13,9 +13,12 @@
 
   z-index: 10;
 
-  max-height: 80%;
+  margin: 0;
 
-  margin: 0 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
 }
 
 .menuLateralDireita,
