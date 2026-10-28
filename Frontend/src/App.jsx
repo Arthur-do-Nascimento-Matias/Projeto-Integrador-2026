@@ -25,6 +25,11 @@ import Ranking from "./components/ranking/ranking";
 import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
 
+export function alternarTema(setTema) {
+    setTema(anterior =>
+        anterior === "claro" ? "escuro" : "claro"
+    );
+}
 
 function RotaPrivada({ children }) {
 
@@ -130,6 +135,16 @@ function ConteudoApp({
   }, [estaNoLogin, estaNoIndex, navigate]);
 
   const [mode, setMode] = useState('login')
+
+
+  const [tema, setTema] = useState(() => {
+      return localStorage.getItem("tema") || "claro";
+  });
+
+  useEffect(() => {
+      document.documentElement.setAttribute("data-tema", tema);
+      localStorage.setItem("tema", tema);
+  }, [tema]);
 
   return (
 
@@ -291,6 +306,8 @@ function ConteudoApp({
               <Configuracoes
                 folhasAtivas={folhasAtivas}
                 alterarFolhas={alterarFolhas}
+                tema={tema}
+                setTema={setTema}
               />
             </RotaPrivada>
           }

@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import {nomePelaRota} from "../menuEsquerda/menuEsquerda";
 
 import "./MenuDireitaSuperior.css";
 
@@ -97,6 +98,7 @@ function MenuDireitaSuperior({ draft }) {
             <Link
                 to="/Ranking"
                 className="menuDireitaSuperior-botao"
+                onClick={() => nomePelaRota('/ranking')}
             >
                 VER RANKING
             </Link>

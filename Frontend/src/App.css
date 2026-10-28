@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root[data-tema="escuro"]{
+    /* Paleta baseada no mascote (macaco laranja) */
+    --cor-creme: #000000;
+    --cor-laranja-claro: #000000;
+    --cor-laranja: #FF9E1F;
+    --cor-laranja-escuro: #E07A00;
+    --cor-marrom: #6B4630;
+    --cor-marrom-escuro: #4A3020;
+    --cor-coral: #F2545B;
+    --cor-coral-escuro: #D63E45;
+    --cor-branco: #FFFFFF;
+}
+
 :root{
     /* Paleta baseada no mascote (macaco laranja) */
     --cor-creme: #FFF8ED;
@@ -210,7 +224,30 @@ body,
   }
 }
 
+
+
+
 /* Variáveis Iniciais e Estrutura - PALETA FLORESTA VIVA */
+:root[data-tema="escuro"] .auth-page {
+  /* Tons de Vegetação */
+  --forest-light: #181713;
+  --forest: #181713;      
+  --forest-dark: #0f3521;  
+ 
+  /* Tons de Madeira/Terra */
+  --brown: #181713;        
+  --brown-dark: #322114;  
+ 
+  /* Frutas Tropicais / Luz */
+  --orange: #181713;      
+  --orange-dark: #181713;  
+ 
+  /* Fundo do ambiente */
+  --cream: #181713;        
+  --cream-dark: #181713;  
+  --cream-light: #181713;
+}
+
 .auth-page {
   /* Tons de Vegetação */
   --forest-light: #487e5c;
@@ -228,7 +265,8 @@ body,
   /* Fundo do ambiente */
   --cream: #f7f5ee;        
   --cream-dark: #e8e2d2;  
- 
+  --cream-light: #ded5c2;
+
   --transition-smooth: 0.85s cubic-bezier(0.68, -0.15, 0.265, 1.15);
   --transition-fast: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
  
@@ -243,11 +281,12 @@ body,
   background:
     radial-gradient(circle at 12% 18%, rgba(72, 126, 92, 0.25) 0 8%, transparent 8.3%),
     radial-gradient(circle at 87% 80%, rgba(242, 139, 24, 0.15) 0 11%, transparent 11.3%),
-    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, #ded5c2);
+    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, var(--cream-light));
   font-family: 'Kalam', cursive;
   animation: pageEnter 0.8s ease-out forwards;
 }
  
+
 .auth-page *, .auth-page *::before, .auth-page *::after { box-sizing: border-box; }
 
  
