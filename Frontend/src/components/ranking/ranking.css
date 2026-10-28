@@ -2,13 +2,6 @@
 
 /* BASE DA PÁGINA */
 
-.auth-page:has(.rk-layout) {
-  position: relative;
-  width: 100%;
-  padding: 0;
-  display: block;
-}
-
 .rk-layout {
   width: 100%;
   min-height: 100vh;

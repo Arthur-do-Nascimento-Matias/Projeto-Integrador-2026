@@ -12,7 +12,7 @@ function StatCard({ icon, value, label, delay }) {
         {icon}
       </div>
 
-      <div>
+      <div className='stats'>
         <strong>{value}</strong>
         <span>{label}</span>
       </div>
@@ -346,13 +346,7 @@ async function saveProfile(event) {
               className="profile-section-heading profile-reveal"
               style={{ '--reveal-delay': '110ms' }}
             >
-              <div>
-
-                <p className="profile-kicker">
-                  {isOwner
-                    ? 'SEU RITMO'
-                    : 'RITMO DO ALUNO'}
-                </p>
+              <div className='estatisticas'>
 
                 <h2 id="stats-title">
                   Estatísticas
@@ -399,7 +393,7 @@ async function saveProfile(event) {
 
               <div className="profile-panel-heading">
 
-                <div>
+                <div className='progresso'>
 
                   <p className="profile-kicker">
                     TRILHA ATUAL
@@ -433,10 +427,6 @@ async function saveProfile(event) {
                 <span>
                   {atividadesConcluidas} atividades concluídas
                 </span>
-
-                <strong>
-                  {atividadesConcluidas}
-                </strong>
 
               </div>
 
@@ -490,7 +480,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Português
                     </strong>
@@ -517,7 +507,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Matemática
                     </strong>
@@ -544,7 +534,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Ciências
                     </strong>
@@ -571,7 +561,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       História
                     </strong>
@@ -598,7 +588,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Geografia
                     </strong>
@@ -625,7 +615,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Inglês
                     </strong>
