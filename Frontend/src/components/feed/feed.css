@@ -1337,3 +1337,368 @@ body:has(.feed-page) #root {
         flex-direction: column;
     }
 }
+/* Feed inspirado em fóruns: leitura rápida e ações agrupadas. */
+.feed-layout {
+    gap: 28px;
+    grid-template-columns: minmax(0, 1fr) 292px;
+}
+
+.feed-header {
+    min-height: 116px;
+    margin-bottom: 22px;
+}
+
+.feed-header h1 {
+    font-size: clamp(30px, 3vw, 44px);
+    letter-spacing: -1.7px;
+}
+
+.feed-filters {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 12px;
+    border: 1px solid var(--feed-border);
+    border-radius: 16px;
+    background: #f9fcf7;
+    box-shadow: 0 8px 24px rgba(21, 66, 36, .05);
+}
+
+.feed-filter-scroll {
+    padding-bottom: 3px;
+}
+
+.feed-community {
+    min-height: 36px;
+    background: #fff;
+}
+
+.feed-posts {
+    gap: 11px;
+}
+
+.feed-post {
+    border-radius: 15px;
+    box-shadow: 0 3px 13px rgba(24, 77, 46, .045);
+}
+
+.feed-post:hover {
+    transform: none;
+    border-color: #9ccca7;
+    box-shadow: 0 7px 22px rgba(24, 77, 46, .09);
+}
+
+.feed-votes {
+    background: #f5faf3;
+}
+
+.feed-post-body {
+    padding: 16px 20px;
+}
+
+.feed-post h2 {
+    margin-top: 12px;
+    font-size: 19px;
+}
+
+.feed-post-text {
+    font-size: 13px;
+    -webkit-line-clamp: 3;
+}
+
+.feed-post-actions {
+    border-top: 1px solid #edf2ec;
+    padding-top: 10px;
+    margin-top: 14px;
+}
+
+.feed-post-actions button {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #f1f7ef;
+    font-size: 12px;
+}
+
+.feed-post-actions button:hover {
+    background: #dff0df;
+}
+
+.feed-page button:focus-visible,
+.feed-page input:focus-visible,
+.feed-page select:focus-visible,
+.feed-page textarea:focus-visible {
+    outline: 3px solid #f2ac36;
+    outline-offset: 2px;
+}
+
+@media (max-width: 980px) {
+    .feed-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+    .feed-filters {
+        position: static;
+    }
+}
+
+@media (max-width: 560px) {
+    .feed-post-community {
+        display: inline-flex;
+    }
+
+    .feed-post-meta {
+        flex-wrap: wrap;
+    }
+
+    .feed-post-meta time {
+        margin-left: 0;
+    }
+
+    .feed-post-body {
+        padding: 15px 13px;
+    }
+}/* Corrige a sobreposição do cabeçalho e da lateral */
+.feed-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.feed-header {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    min-height: 0;
+    margin-bottom: 24px;
+    gap: 20px;
+}
+
+.feed-header > div:first-child {
+    flex: 1 1 420px;
+}
+
+.feed-header-actions {
+    position: static;
+    flex: 0 0 auto;
+    align-self: flex-start;
+}
+
+/* Os filtros seguem abaixo do título, sem cobri-lo */
+.feed-filters {
+    position: relative;
+    top: auto;
+    z-index: 1;
+    margin-bottom: 20px;
+}
+
+.feed-sidebar {
+    align-content: start;
+}
+
+.feed-side-card {
+    height: auto;
+    min-height: 0;
+}
+
+.feed-side-card .feed-side-title {
+    position: static;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    margin-bottom: 16px;
+}
+
+.feed-side-card .feed-side-title > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.feed-side-card .feed-side-title h2 {
+    display: block;
+    position: static;
+    margin: 0;
+    line-height: 1.25;
+}
+
+.feed-side-card .feed-side-title > div > span {
+    display: block;
+    line-height: 1.25;
+}
+
+.feed-side-missions,
+.feed-side-communities {
+    position: static;
+}
+
+.feed-side-mission {
+    min-height: 64px;
+}
+
+.feed-side-communities article {
+    min-height: 54px;
+}
+
+.feed-user-card > header {
+    position: static;
+    min-height: 50px;
+}
+
+.feed-user-card > header > div:last-child {
+    min-width: 0;
+}
+
+@media (max-width: 760px) {
+    .feed-header-actions {
+        width: 100%;
+    }
+}.feed-votes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feed-votes button,
+.feed-votes strong {
+    box-sizing: border-box;
+    width: 34px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 29px;
+}
+
+.feed-votes button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 29px;
+    font-family: Arial, sans-serif;
+}/* Identidade visual do SimioLab no feed */
+.feed-page {
+    --feed-green-dark: #3e5529;
+    --feed-green: #62824b;
+    --feed-green-strong: #3e5529;
+    --feed-green-soft: #e9efdf;
+    --feed-cream: #f7f5ee;
+    --feed-orange: #f5a035;
+    --feed-border: #ded8cb;
+    --feed-muted: #766f63;
+
+    color: #3f4b32;
+    font-family: "Rubik", sans-serif;
+}
+
+.feed-header h1 {
+    color: #3e5529;
+    font-family: "Rubik", sans-serif;
+}
+
+.feed-header h1 em,
+.feed-kicker {
+    color: #e58a20;
+}
+
+.feed-header p {
+    color: #716e61;
+}
+
+.feed-filters {
+    position: relative;
+    top: auto;
+    border-color: #ded8cb;
+    background: #fffaf1;
+    box-shadow: 0 8px 24px rgba(62, 48, 32, .07);
+}
+
+.feed-community {
+    border-color: #e3ddcf;
+    background: #fffdf8;
+    color: #5b644b;
+}
+
+.feed-community:hover,
+.feed-community.active {
+    border-color: #a9c88b;
+    background: #e9efdf;
+    color: #3e5529;
+}
+
+.feed-new-post,
+.feed-publish {
+    background: #f5a035;
+    box-shadow: 0 5px 0 #b76b22;
+    color: #422d1d;
+}
+
+.feed-new-post:hover,
+.feed-publish:hover {
+    background: #ffb451;
+    box-shadow: 0 7px 0 #b76b22;
+}
+
+.feed-post,
+.feed-side-card {
+    border-color: #ded8cb;
+    background: #fffdf8;
+    box-shadow: 0 8px 22px rgba(62, 48, 32, .07);
+}
+
+.feed-post:hover {
+    border-color: #a9c88b;
+}
+
+.feed-votes {
+    background: #edf1e5;
+}
+
+.feed-votes button.positive,
+.feed-votes button:hover {
+    background: #dbeacb;
+    color: #3e5529;
+}
+
+.feed-post h2,
+.feed-side-title h2 {
+    color: #3e5529;
+    font-family: "Rubik", sans-serif;
+}
+
+.feed-post-text,
+.feed-post-meta {
+    color: #706f63;
+}
+
+.feed-post-actions {
+    border-top-color: #ebe5d9;
+}
+
+.feed-post-actions button {
+    background: #f2eee5;
+    color: #5b644b;
+}
+
+.feed-post-actions button:hover {
+    background: #e4ecd9;
+    color: #3e5529;
+}
+
+.feed-side-title > div > span {
+    color: #d98625;
+}
+
+.feed-user-stats div {
+    background: #edf1e5;
+}
+
+.feed-user-division {
+    background: #fff0d7;
+}
+
+.feed-side-tip {
+    border-color: #efd3a6;
+    background: #fff0d7;
+}

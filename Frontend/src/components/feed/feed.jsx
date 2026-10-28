@@ -62,7 +62,11 @@ function Feed() {
     const [titulo, setTitulo] = useState('')
     const [conteudo, setConteudo] = useState('')
     const [comunidadePost, setComunidadePost] = useState('')
-    const [postAberto, setPostAberto] = useState(null)
+   const [postAberto, setPostAberto] = useState(() => {
+    const id = Number(new URLSearchParams(window.location.search).get('post'))
+    return Number.isSafeInteger(id) && id > 0 ? id : null
+})
+
     const [ehAdmin, setEhAdmin] = useState(false)
     const [moderacaoAberta, setModeracaoAberta] = useState(false)
 
@@ -477,9 +481,18 @@ useEffect(() => {
                                     💬 {post.total_comentarios} comentários
                                 </button>
 
-                                        <button type="button">
-                                            ↗ Compartilhar
-                                        </button>
+                                       <button
+    type="button"
+    onClick={() => {
+        const url = `${window.location.origin}/feed?post=${post.id_post}`
+
+        navigator.clipboard.writeText(url)
+            .then(() => window.alert('Link copiado!'))
+            .catch(() => window.alert(url))
+    }}
+>
+    ↗ Compartilhar
+</button>
                                     </div>
                                 </div>
                             </article>
