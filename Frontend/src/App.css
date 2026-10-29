@@ -244,8 +244,8 @@ body,
  
   /* Fundo do ambiente */
   --cream: #181713;        
-  --cream-dark: #181713;  
-  --cream-light: #181713;
+  --cream-dark: #424242;  
+  --cream-light: #424242;
 }
 
 .auth-page {
@@ -356,6 +356,21 @@ body,
   }
 }
 
+:root[data-tema="escuro"] #inicio-titulo,
+:root[data-tema="escuro"] .inicio-descricao,
+:root[data-tema="escuro"] .titulo-gamificacao,
+:root[data-tema="escuro"] .gamificacao-descricao,
+:root[data-tema="escuro"] .recurso-gamificacao strong,
+:root[data-tema="escuro"] .recurso-gamificacao p,
+:root[data-tema="escuro"] #biblioteca-home-titulo,
+:root[data-tema="escuro"] .biblioteca-home-descricao,
+:root[data-tema="escuro"] .biblioteca-home-recursos li,
+:root[data-tema="escuro"] .simio-ai,
+:root[data-tema="escuro"] .simia-apresentacao-subtitulo,
+:root[data-tema="escuro"] .simia-apresentacao-descricao,
+:root[data-tema="escuro"] .inicio-explorar,
+:root[data-tema="escuro"] .familia-simio__descricao,
+:root[data-tema="escuro"] .familia-simio__nota,
 :root[data-tema="escuro"] .stats strong, 
 :root[data-tema="escuro"] .stats span,
 :root[data-tema="escuro"] .estatisticas h2,
@@ -375,7 +390,7 @@ body,
 :root[data-tema="escuro"] .profile-stat-card,
 :root[data-tema="escuro"] .profile-panel,
 :root[data-tema="escuro"] .auth-container {
-  background-color: #181713 !important;
+  background-color: #424242 !important;
 }
 
 :root[data-tema="escuro"] .inicio,
@@ -383,20 +398,23 @@ body,
 :root[data-tema="escuro"] .biblioteca-home,
 :root[data-tema="escuro"] .simia-apresentacao,
 :root[data-tema="escuro"] .familia-simio,
-:root[data-tema="escuro"] .simio-rodape,
-:root[data-tema="escuro"] .simio-rodape__corpo,
-:root[data-tema="escuro"] .simio-rodape__corpo {
-  background-color: #272323 !important;
+:root[data-tema="escuro"] .simio-rodape {
+  background-color: #424242 !important;
 }
 
 :root[data-tema="escuro"] .form-box {
-    background-color: #181713;
+    background-color: #424242;
 }
+
+:root[data-tema="escuro"] .simio-rodape__corpo {
+  background-color: black;
+}
+
 :root[data-tema="escuro"] section.familia-simio {
-    background: #272323 !important;
+    background: #424242 !important;
     background-image: none !important;
 }
 
 :root[data-tema="escuro"] .simio-rodape .simio-rodape__onda {
-    fill: #272323 !important;
+    fill: black !important;
 }

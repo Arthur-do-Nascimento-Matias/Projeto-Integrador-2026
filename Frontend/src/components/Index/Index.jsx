@@ -326,7 +326,7 @@ function Index({ mode, setMode }) {
       SUA JORNADA
     </p>
 
-    <h2>
+    <h2 className='titulo-gamificacao'>
       Cada conquista<br />
       faz você <em>evoluir.</em>
     </h2>
@@ -512,7 +512,7 @@ function Index({ mode, setMode }) {
         INTELIGÊNCIA ARTIFICIAL DO SIMIOLAB
       </p>
 
-      <h2>
+      <h2 className='simio-ai'>
         Aprenda com a<br />
         <strong>SimIA.</strong>
       </h2>
