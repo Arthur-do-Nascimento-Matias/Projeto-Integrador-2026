@@ -26,6 +26,8 @@ import Http from './utils/http.js'
 
 import Feed from './Feed.js'
 
+import Missoes from './Missoes.js'
+
 
 
 
@@ -61,6 +63,62 @@ const callback = (req, res) => {
     const rota = url.parse(req.url, true)
 
     const param = rota.query
+
+
+    if (
+    rota.pathname === '/missoes/hoje' ||
+    rota.pathname === '/missoes/evento'
+) {
+    const idUsuario = buscarUsuarioAutenticado(req)
+
+    if (!idUsuario) {
+        Http.responderJson(res, 401, {
+            erro: 'Faça login novamente.'
+        })
+        return
+    }
+
+    const consulta =
+        rota.pathname === '/missoes/hoje' &&
+        req.method === 'GET'
+
+    const registro =
+        rota.pathname === '/missoes/evento' &&
+        req.method === 'POST'
+
+    if (!consulta && !registro) {
+        Http.responderJson(res, 405, {
+            erro: 'Método não permitido.'
+        })
+        return
+    }
+
+    async function atenderMissoes() {
+        try {
+            const evento = registro
+                ? await Http.lerCorpo(req)
+                : null
+
+            const dados = await Missoes.processar(
+                idUsuario,
+                evento
+            )
+
+            Http.responderJson(res, 200, dados)
+        } catch (erro) {
+            console.error('Erro nas missões:', erro)
+
+            Http.responderJson(
+                res,
+                erro.status || 500,
+                { erro: erro.message }
+            )
+        }
+    }
+
+    atenderMissoes()
+    return
+}
 
 
 
@@ -1487,7 +1545,24 @@ if(rota.pathname == '/concluirAtividade') {
 
 
 
-            await Conexao.atualizarAtividade(dados)
+        const idUsuario = buscarUsuarioAutenticado(req)
+
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                message: 'Faça login novamente.'
+            })
+            return
+        }
+
+        await Conexao.atualizarAtividade({
+            ...dados,
+            id: idUsuario
+        })
+
+        Http.responderJson(res, 200, {
+            ok: true
+        })  
 
 
 
