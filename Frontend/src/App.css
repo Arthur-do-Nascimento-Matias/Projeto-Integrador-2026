@@ -375,9 +375,28 @@ body,
 :root[data-tema="escuro"] .profile-stat-card,
 :root[data-tema="escuro"] .profile-panel,
 :root[data-tema="escuro"] .auth-container {
-  background-color: #181713;
+  background-color: #181713 !important;
+}
+
+:root[data-tema="escuro"] .inicio,
+:root[data-tema="escuro"] .gamificacao,
+:root[data-tema="escuro"] .biblioteca-home,
+:root[data-tema="escuro"] .simia-apresentacao,
+:root[data-tema="escuro"] .familia-simio,
+:root[data-tema="escuro"] .simio-rodape,
+:root[data-tema="escuro"] .simio-rodape__corpo,
+:root[data-tema="escuro"] .simio-rodape__corpo {
+  background-color: #272323 !important;
 }
 
 :root[data-tema="escuro"] .form-box {
     background-color: #181713;
+}
+:root[data-tema="escuro"] section.familia-simio {
+    background: #272323 !important;
+    background-image: none !important;
+}
+
+:root[data-tema="escuro"] .simio-rodape .simio-rodape__onda {
+    fill: #272323 !important;
 }
