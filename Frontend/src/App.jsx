@@ -25,6 +25,7 @@ import Ranking from "./components/ranking/ranking";
 import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
+import NotFound from './pages/NotFound'
 
 
 
@@ -199,6 +200,7 @@ function ConteudoApp({
           element={<Simulados />}
         />
 
+<Route path="*" element={<NotFound />} />
 
         {/* LOGIN */}
 
