@@ -185,6 +185,9 @@ function ConteudoApp({
           element={<PainelIndex 
               mode={mode}
               setMode={setMode}
+              tema={tema}
+              setTema={setTema}
+              alternarTema={alternarTema}
           />}
         />
 
