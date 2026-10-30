@@ -1,0 +1,419 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap");
+
+.moki404,
+.moki404 *,
+.moki404 *::before,
+.moki404 *::after {
+    box-sizing: border-box;
+}
+
+.moki404 {
+    position: relative;
+    z-index: 3;
+
+    display: grid;
+    place-items: center;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 100svh;
+    padding: 40px 32px 40px 205px;
+
+    font-family: "Rubik", sans-serif;
+    text-align: center;
+}
+
+.moki404-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: min(100%, 520px);
+    min-width: 0;
+    margin: 0 auto;
+}
+
+/* Moki maior */
+.moki404-illustration {
+    position: relative;
+    isolation: isolate;
+
+    display: grid;
+    place-items: center;
+
+    width: 280px;
+    max-width: 100%;
+    height: 255px;
+    margin-bottom: 12px;
+}
+
+.moki404-image {
+    display: block;
+
+    width: 230px;
+    max-width: 100%;
+    height: 230px;
+
+    object-fit: contain;
+    transform: rotate(-7deg);
+    transform-origin: bottom center;
+
+    animation: moki404-look 6s ease-in-out infinite;
+}
+
+.moki404-question {
+    position: absolute;
+    z-index: 1;
+    top: 8px;
+    right: 8px;
+
+    color: #b86a16;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1;
+
+    transform: rotate(14deg);
+}
+
+.moki404-shadow {
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+
+    width: 150px;
+    height: 14px;
+    border-radius: 50%;
+
+    background: rgba(67, 73, 41, 0.13);
+    filter: blur(5px);
+}
+
+/* Número e mensagem */
+.moki404-code {
+    display: block;
+    margin: 0;
+
+    color: #e89127;
+    font-size: clamp(80px, 10vw, 112px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -6px;
+}
+
+.moki404-label {
+    display: block;
+    margin-top: 14px;
+
+    color: #746b5d;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 2px;
+}
+
+.moki404 h1 {
+    margin: 24px 0 12px;
+
+    color: #3e5529;
+    font-family: inherit;
+    font-size: clamp(25px, 3vw, 32px);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.9px;
+
+    overflow-wrap: break-word;
+}
+
+.moki404 p {
+    max-width: 350px;
+    margin: 0;
+
+    color: #706558;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.8;
+}
+
+/* Botão */
+.moki404 .moki404-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    max-width: 100%;
+    min-height: 48px;
+    margin-top: 30px;
+    padding: 13px 23px;
+
+    border: 1px solid #de8a25;
+    border-radius: 13px;
+
+    background: #f5a035;
+    box-shadow:
+        0 4px 0 #b97324,
+        0 8px 18px rgba(154, 94, 25, 0.12);
+
+    color: #422d1d;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+
+    transition:
+        transform 180ms ease,
+        background 187ms ease,
+        box-shadow 180ms ease;
+}
+
+.moki404-button svg {
+    display: block;
+    flex-shrink: 0;
+
+    transition: transform 180ms ease;
+}
+
+@media (hover: hover) {
+    .moki404 .moki404-button:hover {
+        transform: translateY(-2px);
+        background: #ffb24b;
+
+        box-shadow:
+            0 6px 0 #b97324,
+            0 12px 22px rgba(154, 94, 25, 0.16);
+    }
+
+    .moki404-button:hover svg {
+        transform: translateX(-3px);
+    }
+}
+
+.moki404 .moki404-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #b97324;
+}
+
+.moki404-button:focus-visible {
+    outline: 3px solid #3e5529;
+    outline-offset: 6px;
+}
+
+/* Movimento suave */
+@keyframes moki404-look {
+    0%,
+    40%,
+    100% {
+        transform: rotate(-7deg);
+    }
+
+    60%,
+    75% {
+        transform: rotate(3deg);
+    }
+}
+
+/* Telas menores */
+@media (max-width: 1180px) {
+    .moki404 {
+        padding-left: 180px;
+    }
+}
+
+@media (max-width: 760px) {
+    .moki404 {
+        padding: 32px 20px 100px;
+    }
+
+    .moki404-illustration {
+        width: 240px;
+        height: 220px;
+    }
+
+    .moki404-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .moki404-question {
+        top: 5px;
+        right: 5px;
+        font-size: 38px;
+    }
+
+    .moki404-shadow {
+        width: 130px;
+        height: 12px;
+    }
+
+    .moki404 h1 {
+        margin-top: 22px;
+    }
+}
+
+/* Respeita a preferência de reduzir animações */
+@media (prefers-reduced-motion: reduce) {
+    .moki404-image {
+        animation: none;
+    }
+
+    .moki404 .moki404-button,
+    .moki404-button svg {
+        transition: none;
+    }
+}
+/* Esconde o menu lateral somente na página 404 */
+body:has(.moki404) .simio-sidebar-layer {
+    display: none;
+}
+
+/* Centraliza a página sem reservar espaço para o menu */
+body:has(.moki404) #root {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: none;
+}
+
+.auth-page:has(.moki404) {
+    display: block;
+    width: 100%;
+    min-height: 100svh;
+    padding: 0;
+    animation: none;
+}
+
+.moki404 {
+    padding: 40px 24px;
+}
+
+/* Entrada suave do conteúdo */
+.moki404-content {
+    animation: moki404-appear 700ms ease-out both;
+}
+
+/* Moki flutua e olha para os lados */
+.moki404-image {
+    animation: moki404-float 6s ease-in-out infinite;
+}
+
+/* Interrogação acompanha a dúvida do Moki */
+.moki404-question {
+    transform-origin: bottom center;
+    animation: moki404-question-move 4s ease-in-out infinite;
+}
+
+/* Sombra acompanha a altura do Moki */
+.moki404-shadow {
+    animation: moki404-shadow-move 6s ease-in-out infinite;
+}
+
+/* Entrada do número */
+.moki404-code {
+    animation: moki404-number-enter 800ms 150ms ease-out both;
+}
+
+/* Movimento ao passar o mouse no botão */
+@media (hover: hover) {
+    .moki404 .moki404-button:hover svg {
+        animation: moki404-arrow-move 900ms ease-in-out infinite;
+    }
+}
+
+@keyframes moki404-appear {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes moki404-float {
+    0%,
+    100% {
+        transform: translateY(0) rotate(-7deg);
+    }
+
+    30% {
+        transform: translateY(-10px) rotate(-7deg);
+    }
+
+    60% {
+        transform: translateY(-14px) rotate(4deg);
+    }
+
+    80% {
+        transform: translateY(-5px) rotate(4deg);
+    }
+}
+
+@keyframes moki404-question-move {
+    0%,
+    100% {
+        transform: translateY(0) rotate(14deg);
+    }
+
+    45% {
+        transform: translateY(-7px) rotate(5deg);
+    }
+
+    65% {
+        transform: translateY(-7px) rotate(19deg);
+    }
+}
+
+@keyframes moki404-shadow-move {
+    0%,
+    100% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    60% {
+        transform: scaleX(0.8);
+        opacity: 0.65;
+    }
+}
+
+@keyframes moki404-number-enter {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes moki404-arrow-move {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-4px);
+    }
+}
+
+@media (max-width: 760px) {
+    .moki404 {
+        padding: 32px 20px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .moki404-content,
+    .moki404-image,
+    .moki404-question,
+    .moki404-shadow,
+    .moki404-code,
+    .moki404 .moki404-button:hover svg {
+        animation: none;
+    }
+}

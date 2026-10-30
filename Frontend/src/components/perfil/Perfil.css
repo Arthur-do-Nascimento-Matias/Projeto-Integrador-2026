@@ -13,7 +13,8 @@
   --profile-muted: #806853;
 
   position: relative;
-  left: 50%;
+  left: 48%;
+  top: -5%;
   width: 100vw;
   min-height: 100vh;
   transform: translateX(-50%);

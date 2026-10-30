@@ -277,6 +277,10 @@ class Conexao {
             const sql = `
                 SELECT
                     id_usuario,
+<<<<<<< HEAD
+=======
+                    adm,
+>>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
                     nome_de_exibicao,
                     nome_de_usuario,
                     bio,

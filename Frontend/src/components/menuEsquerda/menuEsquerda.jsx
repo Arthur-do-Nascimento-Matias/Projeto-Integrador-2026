@@ -19,7 +19,7 @@ const itensPrincipais = [
 
   { nome: 'SimIA', rota: '/chatBot', lightning: true },
 
-  { nome: 'Feed', rota: null },
+  { nome: 'Feed', rota: '/feed' },
 
 ]
 
@@ -62,6 +62,10 @@ export function nomePelaRota(pathname) {
     if (rota === "/ranking") return "Ranking";
     if (rota === "/biblioteca") return "Biblioteca";
     if (rota === "/chatbot") return "SimIA";
+<<<<<<< HEAD
+=======
+    if (rota === "/feed") return "Feed";
+>>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
     if (rota === "/perfil" || rota.startsWith("/perfil/")) return "Perfil";
     if (rota === "/configuracoes") return "Configurações";
 

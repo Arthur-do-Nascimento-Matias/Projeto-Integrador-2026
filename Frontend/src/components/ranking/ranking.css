@@ -965,6 +965,52 @@
   );
 }
 
+<<<<<<< HEAD
+=======
+.rk-classificacao > header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+}
+
+.rk-classificacao > .rk-lista {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  margin-top: 0;
+  padding: 0;
+}
+
+.rk-classificacao > .rk-lista > .rk-linha {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 60px;
+  padding: 12px 16px;
+}
+
+
+/* CORREÇÃO — COROA CORTADA */
+.rk-arena {
+  overflow: visible;
+}
+
+.rk-finalista--1 .rk-personagem {
+  padding-top: 12px;
+}
+
+.rk-finalista--1 .rk-coroa {
+  top: -20px;
+  z-index: 5;
+}
+
+
+>>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
 /* Contorno interno do vidro */
 
 .rk-pagina .rk-meu-resumo::after {

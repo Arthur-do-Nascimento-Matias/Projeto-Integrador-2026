@@ -185,32 +185,33 @@ export default function Ranking({ usuarioId }) {
 
   return (
     <section className="rk-pagina" aria-labelledby="rk-titulo">
-      {/* CABEÇALHO */}
-      <header className="rk-cabecalho">
-        <div>
-          <span className="rk-sobrancelha">
-            APRENDER JUNTOS É MAIS DIVERTIDO
-          </span>
+{/* CABEÇALHO */}
+<header className="rk-cabecalho">
+  <div className="rk-titulo-bloco">
+    <span className="rk-sobrancelha">
+      APRENDER JUNTOS É MAIS DIVERTIDO
+    </span>
 
-          <h1 id="rk-titulo">
-            Ranking de <em>amigos</em>
-          </h1>
+    <h1 id="rk-titulo">
+      Ranking de <em>amigos</em>
+    </h1>
 
-          <p>Cada descoberta te leva um galho mais alto.</p>
-        </div>
+    <p>Cada descoberta te leva um galho mais alto.</p>
 
-        <div className="rk-relogio">
-          <span>◷ &nbsp; FIM DA SEMANA</span>
-          <strong>{contador}</strong>
-          <small>Renovação às segundas</small>
-        </div>
-      </header>
+    <div className="rk-info-semana">
+      <span>
+        {ordenados.length} participantes · Ranking semanal
+      </span>
+    </div>
+  </div>
 
-      {/* INFORMAÇÕES DA SEMANA */}
-      <div className="rk-barra">
-        <span className="rk-tag">● &nbsp; Desafio semanal</span>
-        <span>{ordenados.length} participantes · Ranking semanal</span>
-      </div>
+  <div className="rk-relogio">
+    <span>◷ &nbsp; FIM DA SEMANA</span>
+    <strong>{contador}</strong>
+    <small>Renovação às segundas</small>
+  </div>
+</header>
+
 
       {carregando ? (
         <div className="rk-vazio" role="status">

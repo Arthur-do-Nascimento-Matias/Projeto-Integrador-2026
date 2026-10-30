@@ -240,12 +240,17 @@ body,
  
   /* Frutas Tropicais / Luz */
   --orange: #232B33;      
-  --orange-dark: #232B33;  
+  --orange-dark: #34485c;  
  
   /* Fundo do ambiente */
   --cream: #232B33;        
   --cream-dark: #232B33;  
   --cream-light: #232B33;
+
+  background:
+    radial-gradient(circle at 12% 18%, rgba(72, 126, 92, 0.25) 0 8%, transparent 8.3%),
+    radial-gradient(circle at 87% 80%, rgba(46, 78, 58, 0.25) 0 11%, transparent 11.3%),
+    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, var(--cream-light));
 }
 
 .auth-page {
@@ -374,6 +379,7 @@ body,
 :root[data-tema="escuro"] .familia-simio__descricao,
 :root[data-tema="escuro"] #familia-titulo,
 :root[data-tema="escuro"] .familia-simio__nota,
+:root[data-tema="escuro"] form p,
 :root[data-tema="escuro"] .stats strong, 
 :root[data-tema="escuro"] .stats span,
 :root[data-tema="escuro"] .estatisticas h2,
@@ -393,7 +399,7 @@ body,
 :root[data-tema="escuro"] .profile-stat-card,
 :root[data-tema="escuro"] .profile-panel,
 :root[data-tema="escuro"] .auth-container {
-  background-color: #232B33 !important;
+  background-color: #39453D !important;
 }
 
 :root[data-tema="escuro"] #moki-parallax .stage::after {
@@ -440,7 +446,7 @@ body,
 }
 
 :root[data-tema="escuro"] .form-box {
-    background-color: #424242;
+    background-color: #39453D;
 }
 
 :root[data-tema="escuro"] .simio-rodape__corpo {

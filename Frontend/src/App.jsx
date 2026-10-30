@@ -24,6 +24,9 @@ import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 import Ranking from "./components/ranking/ranking";
 import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
+import PainelFeed from './pages/PainelFeed'
+import NotFound from './pages/NotFound'
+
 
 export function alternarTema(setTema) {
     setTema(anterior =>
@@ -138,13 +141,42 @@ function ConteudoApp({
 
 
   const [tema, setTema] = useState(() => {
-      return localStorage.getItem("tema") || "claro";
+      const temaSalvo = localStorage.getItem("tema");
+      const escolhaManual = localStorage.getItem("temaManual");
+
+      if (escolhaManual === "true" && temaSalvo) {
+          return temaSalvo;
+      }
+
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "escuro"
+          : "claro";
   });
 
   useEffect(() => {
       document.documentElement.setAttribute("data-tema", tema);
       localStorage.setItem("tema", tema);
   }, [tema]);
+
+  useEffect(() => {
+      const mediaQuery = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+      );
+
+      function atualizarTema(evento) {
+          const escolhaManual = localStorage.getItem("temaManual");
+
+          if (escolhaManual !== "true") {
+              setTema(evento.matches ? "escuro" : "claro");
+          }
+      }
+
+      mediaQuery.addEventListener("change", atualizarTema);
+
+      return () => {
+          mediaQuery.removeEventListener("change", atualizarTema);
+      };
+  }, []);
 
   return (
 
@@ -215,6 +247,9 @@ function ConteudoApp({
           element={<Simulados />}
         />
 
+        <Route path="*" 
+          element={<NotFound />} 
+        />
 
         {/* LOGIN */}
 
@@ -227,6 +262,15 @@ function ConteudoApp({
               mode={mode}
               setMode={setMode}
             />
+          }
+        />
+
+         <Route
+          path="/feed"
+          element={
+            <RotaPrivada>
+              <PainelFeed />
+            </RotaPrivada>
           }
         />
 
