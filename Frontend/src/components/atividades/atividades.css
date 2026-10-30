@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
 /*fonte letra*/
 .atividade{
     z-index: 999;
@@ -191,4 +190,12 @@
 .parabens button:active{
     transform: translate(0,0);
     box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+@keyframes chacualhar{
+  0%{
+    transform: rotate(-5deg)
+  }
+  50%{
+    transform: rotate(5deg)
+  }
 }

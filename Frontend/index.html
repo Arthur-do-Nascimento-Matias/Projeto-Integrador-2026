@@ -1,188 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SimioLab</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="imgs/simio.png">
-    <link rel="stylesheet" href="app.css">
-    <link rel="stylesheet" href="atividades.css">
-    <link rel="stylesheet" href="chatIA.css">
-</head>
-<body>
-
-     <header class="cabecalho">
-        <div class="logo-simiolab">
-            <img src="imgs/simio.png" alt="">
-            <span class="logo-simio">
-                <span>S</span><span>i</span><span>m</span><span>i</span><span>o</span>
-            </span>
-            <span class="logo-lab">LAB</span>
-        </div>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/src/assets/simio.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <div class="menuLateralEsquerda" id="menuLateralEsquerda">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%230d603c'/%3E%3Cpath d='M10 29Q6 9 31 8Q32 32 10 29M11 28L25 15' fill='%23ffbf22' stroke='%230d603c'/%3E%3C/svg%3E"
+    />
 
-        <div class="options" id="options">
-            <a id="aprender" class="linkTrocarTela" onclick="trocarTela(0)">Aprender</a>
-            <a id="simulados" class="linkTrocarTela" onclick="trocarTela(1)">Simulados</a>
-            <a id="ranking" class="linkTrocarTela" onclick="trocarTela(2)">Ranking</a>
-            <a id="biblioteca" class="linkTrocarTela" onclick="trocarTela(3)">Biblioteca</a>
-            <a id="iaEstudos" class="linkTrocarTela" onclick="trocarTela(4)">IA para estudos</a>
-            <div class="adicionarAtividade">
-               <button onclick="AbrirAdicionarAtividade()">Adicione uma atividade na trilha</button>
-           </div>
-          <form class="menuAdicionarAtividade" id="menuAdicionarAtividade" onsubmit="adicionarAtividade()">
-            <p>Nome: <input type="text" name="" id="novoNome"></p>
-            <p>Enunciado: <input type="text" name="" id="novoEnunciado" required></p>
-            <p>Resposta: <input type="text" id="novaResposta" required></p>
-            <p>alternativa 1 <input type="text" name="" id="novaAlternativa1" required></p>
-            <p>alternativa 2 <input type="text" name="" id="novaAlternativa2" required></p>
-            <p>alternativa 3 <input type="text" name="" id="novaAlternativa3" required></p>
-            <button type="submit">Adicionar atividade</button>
-    </form>
-        </div>
-    </div>
+    <link rel="stylesheet" href="style.css" />
 
+    <!-- Google Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap"
+      rel="stylesheet"
+    />
 
-    <div class="trilha ativo" id="trilha"></div>
-
-            <div class="atividade" id="atividade">
-                <button onclick="sairAtividade()">Sair</button>
-                <h1 class="enunciado" id="enunciado"></h1>
-                <button class="alternativa1" id="alternativa1" onclick="verificar(0, this)"></button>
-                <button class="alternativa2" id="alternativa2" onclick="verificar(1, this)"></button>
-                <button class="alternativa3" id="alternativa3" onclick="verificar(2, this)"></button>
-                <button class="alternativa4" id="alternativa4" onclick="verificar(3, this)"></button>
-                </div>
-                
-                <div class="parabens" id="parabens">
-                <h1>🎉 Parabéns!</h1>
-                <p>Você concluiu esta atividade.</p>
-                <button onclick="fecharParabens()">Continuar</button>
-    </div>
-
-    <div class="telaSimulados" id="telaSimulados"></div>
-
-    <div class="telaRanking" id="telaRanking"></div>
-
-    <div class="telaBilbioteca" id="telaBiblioteca"></div>
-
-    <div class="chatIA" id="chatIA">
-
-    <div class="chat-container">    
-
-
-        <!-- ÁREA DAS MENSAGENS -->
-        <div class="chat-mensagens" id="chatMensagens">
-
-            <div class="mensagem mensagem-ia">
-
-                <div class="avatar-mensagem">
-                    🐒
-                </div>
-
-                <div class="balao-mensagem">
-                    <strong>Oi! Eu sou o Simio! 🐒</strong>
-
-                    <p>
-                        Posso te ajudar a estudar, explicar conteúdos,
-                        criar exercícios ou tirar suas dúvidas.
-                    </p>
-
-                    <p>
-                        O que você quer aprender hoje?
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- SUGESTÕES -->
-        <div class="sugestoes-chat">
-
-            <button onclick="enviarSugestao('Explique Revolução Industrial')">
-                📚 Explique um conteúdo
-            </button>
-
-            <button onclick="enviarSugestao('Crie um exercício de matemática para mim')">
-                📝 Criar exercício
-            </button>
-
-            <button onclick="enviarSugestao('Me faça perguntas sobre história')">
-                🧠 Me faça perguntas
-            </button>
-
-        </div>
-
-
-        <!-- INPUT -->
-        <div class="chat-input-area">
-
-            <textarea
-                id="chatInput"
-                placeholder="Digite sua dúvida..."
-                rows="1"
-            ></textarea>
-
-            <button
-                class="botao-enviar"
-                onclick="enviarMensagem()"
-                id="botaoEnviar"
-            >
-                ➤
-            </button>
-
-        </div>
-
-        <div class="chat-aviso">
-            O Simio pode cometer erros. Sempre confira informações importantes.
-        </div>
-
-    </div>
-
-
-    <!-- ELEMENTOS DECORATIVOS -->
-
-    <div class="folha folha-1">🌿</div>
-    <div class="folha folha-2">🍃</div>
-    <div class="folha folha-3">🌿</div>
-
-</div>
-    </div>
-
-    </div>
-          <div class="menuLateralDireita">
-
-            <div class="cards">
-
-           <div class="league-card">
-    <div class="card-header">
-        <h3>Divisão Ouro</h3>
-        <a href="#">VER DIVISÃO</a>
-    </div>
-
-    <div class="card-body">
-        <img src="imgs/ChatGPT Image 4 de ago. de 2026, 09_29_59 1.png" alt="Dormindo">
-        <p>
-            Faça uma lição pra entrar no ranking dessa semana e competir com as outras pessoas.
-        </p>
-     </div>
-     </div>
-
-     <div class="missoes-card">
-        <div class="card-header">
-            <h3>Missões do dia</h3>
-            <a href="#">VER TODAS</a>
-        </div>
-        <div class="missao-lista" id="missaoLista"></div>
-     </div>
-
-    </div>
-    <script src="main.js"></script>
-</body>
+    <!-- Rubik -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>projeto-integrador</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

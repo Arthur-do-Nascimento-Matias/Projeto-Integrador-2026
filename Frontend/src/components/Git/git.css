@@ -1,0 +1,462 @@
+.pagina-github {
+  color-scheme: dark;
+
+  --verde-escuro: #f0f3f6;
+  --texto: #a5afb9;
+  --creme: #161b22;
+  --borda: #30363d;
+  --github: #242d27;
+  --github-hover: #303e34;
+  --github-sombra: #080c09;
+}
+
+.pagina-github, .pagina-github * {
+  box-sizing: border-box;
+}
+
+.pagina-github {
+  min-height: 100%;
+}
+
+.pagina-github {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-y: hidden;
+
+  background: linear-gradient(
+    to bottom,
+    #0d1117 0%,
+    #11171c 65%,
+    #17221c 100%
+  );
+
+  color: var(--verde-escuro);
+  font-family: "Rubik", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pagina-github a {
+  color: inherit;
+}
+
+.pagina-github a:focus-visible {
+  outline: 3px solid #a7cf98;
+  outline-offset: 6px;
+}
+
+.pagina-github .icones {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.pagina-github .cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: min(1440px, calc(100% - 48px));
+  margin-inline: auto;
+  padding-block: 20px;
+}
+
+.pagina-github .voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  background: var(--creme);
+  color: #dce3e9;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 180ms ease;
+}
+
+.pagina-github .voltar svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pagina-github .voltar:hover {
+  background: #242c35;
+}
+
+.pagina-github .pagina {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.pagina-github .equipe {
+  width: min(1200px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 8px 0 48px;
+  margin-top: -25px;
+}
+
+.pagina-github .equipe > h1 {
+  margin: 0 0 36px;
+  color: var(--verde-escuro);
+  text-align: center;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+}
+
+.pagina-github .equipe > h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.pagina-github .titulo-github__icone {
+  display: block;
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+  fill: currentColor;
+}
+
+.pagina-github .cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.pagina-github .card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--borda);
+  border-radius: 25px;
+  background: var(--creme);
+
+  box-shadow:
+    0 5px 0 #080c10,
+    0 14px 25px rgb(0 0 0 / 20%);
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.pagina-github .foto {
+  aspect-ratio: 1.12;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #21262d;
+}
+
+.pagina-github .foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 400ms ease;
+}
+
+.pagina-github .card__conteudo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 19px 6px 8px;
+}
+
+.pagina-github .card__cargo {
+  display: block;
+  margin-bottom: 10px;
+  color: #9fc89d;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 1.2px;
+}
+
+.pagina-github .card h2 {
+  margin: 0;
+  color: var(--verde-escuro);
+  font-size: clamp(18px, 1.7vw, 23px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+
+.pagina-github .card__funcoes {
+  display: grid;
+  gap: 22px;
+  width: 100%;
+  margin: 34px 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.pagina-github .card__funcoes li {
+  color: #b7c0c9;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.pagina-github .github {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid #405548;
+  border-radius: 13px;
+  background: var(--github);
+  box-shadow: 0 4px 0 var(--github-sombra);
+  color: #f0f6f1;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.pagina-github .github svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.pagina-github .github__icone {
+  width: 20px;
+  height: 20px;
+}
+
+.pagina-github .github__seta {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  transition: transform 180ms ease;
+}
+
+@media (hover: hover) {
+  .pagina-github .card:hover {
+    transform: translateY(-5px);
+    border-color: #506453;
+
+    box-shadow:
+      0 7px 0 #080c10,
+      0 20px 30px rgb(0 0 0 / 30%);
+  }
+
+  .pagina-github .card:hover .foto img {
+    transform: scale(1.035);
+  }
+
+  .pagina-github .github:hover {
+    border-color: #739779;
+    background: var(--github-hover);
+  }
+
+  .pagina-github .github:hover .github__seta {
+    transform: translate(2px, -2px);
+  }
+}
+
+.pagina-github .github:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--github-sombra);
+}
+
+.pagina-github .rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  width: min(1200px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 23px 0;
+  border-top: 1px solid #303b33;
+  color: #a5b5a8;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1000px) {
+  .pagina-github .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 650px;
+  }
+
+  .pagina-github .card h2 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 650px) {
+  .pagina-github .cabecalho, .pagina-github .equipe, .pagina-github .rodape {
+    width: calc(100% - 36px);
+  }
+
+  .pagina-github .cabecalho {
+    padding-block: 16px;
+  }
+
+  .pagina-github .equipe > h1 {
+    margin-bottom: 28px;
+  }
+
+  .pagina-github .cards {
+    gap: 16px;
+  }
+
+  .pagina-github .card {
+    padding: 9px;
+    border-radius: 20px;
+  }
+
+  .pagina-github .card__conteudo {
+    padding-inline: 3px;
+  }
+
+  .pagina-github .card h2 {
+    font-size: 18px;
+  }
+
+  .pagina-github .card__funcoes {
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .pagina-github .card__funcoes li {
+    font-size: 12px;
+  }
+
+  .pagina-github .rodape {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .pagina-github .cards {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+    gap: 24px;
+  }
+
+  .pagina-github .card {
+    padding: 12px;
+  }
+
+  .pagina-github .foto {
+    aspect-ratio: 1.3;
+  }
+
+  .pagina-github .card h2 {
+    font-size: 23px;
+  }
+
+  .pagina-github .card__funcoes li {
+    font-size: 14px;
+  }
+
+  .pagina-github .github {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pagina-github .card, .pagina-github .foto img, .pagina-github .github, .pagina-github .github__seta, .pagina-github .voltar {
+    transition: none;
+  }
+}
+
+.pagina-github {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+}
+
+.pagina-github,
+.pagina-github h1,
+.pagina-github h2,
+.pagina-github p,
+.pagina-github li,
+.pagina-github span,
+.pagina-github a {
+  font-family: "Rubik", sans-serif;
+  font-style: normal;
+}
+
+.pagina-github .card__funcoes li {
+  font-style: normal;
+}
+
+/* Isolamento do layout da rota React */
+body:has(.pagina-github) {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.pagina-github {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  isolation: isolate;
+}
+
+.pagina-github > .cabecalho {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pagina-github > main.pagina {
+  position: static !important;
+  display: block;
+  inset: auto;
+  transform: none;
+  flex: 1;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+}
+
+.pagina-github > .rodape {
+  position: relative;
+  flex-shrink: 0;
+}
