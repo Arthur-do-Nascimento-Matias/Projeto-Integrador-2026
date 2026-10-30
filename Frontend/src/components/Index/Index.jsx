@@ -25,7 +25,7 @@ import geografia from '../../assets/materias/geografia.svg'
 import historia from '../../assets/materias/historia.svg'
 import ingles from '../../assets/materias/ingles.svg'
 
-function Index({ mode, setMode }) {
+function Index({ mode, setMode,  tema, setTema, alternarTema }) {
   const location = useLocation();
 
   useEffect(() => {
@@ -51,6 +51,10 @@ function Index({ mode, setMode }) {
     <a className="inicio-logo" href="#inicio" aria-label="Moki — início">
       Simio<span>Lab</span><span className="ponto">.</span>
     </a>
+
+    <button onClick={() => alternarTema(setTema)}>
+        {tema === "claro" ? "🌙 Modo escuro" : "☀️ Modo claro"}
+    </button>
 
     <span className="inicio-idioma">SUA JORNADA COMEÇA AQUI</span>
   </header>
@@ -193,13 +197,13 @@ function Index({ mode, setMode }) {
                 A AVENTURA COMEÇA AQUI!
               </p>
 
-              <h1>
+              <h1 className='wordsChange'>
                 Aprenda.<br />
                 Explore.<br />
                 <em>Evolua.</em>
               </h1>
 
-              <p>
+              <p className='wordsChange'>
                 Uma descoberta de cada vez, com o Moki.
               </p>
 
@@ -215,12 +219,12 @@ function Index({ mode, setMode }) {
                 CADA DESCOBERTA, UM NOVO PASSO
               </p>
 
-              <h2>
+              <h2 className='wordsChange'>
                 Grandes ideias  .<br />
                 <em>Pequenos passos.</em>
               </h2>
 
-              <p>
+              <p className='wordsChange'>
                 Cada pergunta abre um novo caminho.
               </p>
 
@@ -235,12 +239,12 @@ function Index({ mode, setMode }) {
                 A AVENTURA CONTINUA
               </p>
 
-              <h2>
+              <h2 className='wordsChange'>
                 Conhecimento<br />
                 que <em>floresce.</em>
               </h2>
 
-              <p>
+              <p className='wordsChange'>
                 Continue curioso. Continue crescendo.
               </p>
 
@@ -326,7 +330,7 @@ function Index({ mode, setMode }) {
       SUA JORNADA
     </p>
 
-    <h2>
+    <h2 className='titulo-gamificacao'>
       Cada conquista<br />
       faz você <em>evoluir.</em>
     </h2>
@@ -512,7 +516,7 @@ function Index({ mode, setMode }) {
         INTELIGÊNCIA ARTIFICIAL DO SIMIOLAB
       </p>
 
-      <h2>
+      <h2 className='simio-ai'>
         Aprenda com a<br />
         <strong>SimIA.</strong>
       </h2>

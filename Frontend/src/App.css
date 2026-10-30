@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root[data-tema="escuro"]{
+  /* Paleta baseada no mascote (macaco laranja) */
+    --cor-creme: #FFF8ED;
+    --cor-laranja-claro: #FFB238;
+    --cor-laranja: #FF9E1F;
+    --cor-laranja-escuro: #E07A00;
+    --cor-marrom: #6B4630;
+    --cor-marrom-escuro: #4A3020;
+    --cor-coral: #F2545B;
+    --cor-coral-escuro: #D63E45;
+    --cor-branco: #FFFFFF;
+}
+
 :root{
     /* Paleta baseada no mascote (macaco laranja) */
     --cor-creme: #FFF8ED;
@@ -210,7 +224,30 @@ body,
   }
 }
 
+
+
+
 /* Variáveis Iniciais e Estrutura - PALETA FLORESTA VIVA */
+:root[data-tema="escuro"] .auth-page {
+  /* Tons de Vegetação */
+  --forest-light: #181713;
+  --forest: #181713;      
+  --forest-dark: #0f3521;  
+ 
+  /* Tons de Madeira/Terra */
+  --brown: #181713;        
+  --brown-dark: #322114;  
+ 
+  /* Frutas Tropicais / Luz */
+  --orange: #232B33;      
+  --orange-dark: #232B33;  
+ 
+  /* Fundo do ambiente */
+  --cream: #232B33;        
+  --cream-dark: #232B33;  
+  --cream-light: #232B33;
+}
+
 .auth-page {
   /* Tons de Vegetação */
   --forest-light: #487e5c;
@@ -228,10 +265,12 @@ body,
   /* Fundo do ambiente */
   --cream: #f7f5ee;        
   --cream-dark: #e8e2d2;  
- 
+  --cream-light: #ded5c2;
+
   --transition-smooth: 0.85s cubic-bezier(0.68, -0.15, 0.265, 1.15);
   --transition-fast: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
  
+  width: 100%;
   min-height: 100vh;
   display: grid;
   place-items: center;
@@ -243,11 +282,12 @@ body,
   background:
     radial-gradient(circle at 12% 18%, rgba(72, 126, 92, 0.25) 0 8%, transparent 8.3%),
     radial-gradient(circle at 87% 80%, rgba(242, 139, 24, 0.15) 0 11%, transparent 11.3%),
-    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, #ded5c2);
+    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, var(--cream-light));
   font-family: 'Kalam', cursive;
   animation: pageEnter 0.8s ease-out forwards;
 }
  
+
 .auth-page *, .auth-page *::before, .auth-page *::after { box-sizing: border-box; }
 
  
@@ -277,186 +317,6 @@ body,
 .forest-shape-two { width: 380px; height: 200px; right: -130px; bottom: -75px; transform: rotate(215deg); animation: shapeSway 12s ease-in-out infinite alternate-reverse; }
  
 /* Container Principal */
-.auth-container {
-  position: relative;
-  z-index: 10;
-  width: min(980px, 100%);
-  height: 620px;
-  overflow: hidden;
-  border: 1px solid rgba(84, 59, 39, .08);
-  border-radius: 34px;
-  background: #fffdfa;
-  box-shadow: 0 28px 70px rgba(50, 33, 20, .15), 0 10px 20px rgba(0, 0, 0, 0.05);
-}
-/* suave 
-::view-transition-old(root) {
-  animation: rota-sair 0.18s ease-in forwards;
-}
-
-::view-transition-new(root) {
-  animation: rota-entrar 0.26s cubic-bezier(.16, 1, .3, 1) forwards;
-}
-
-@keyframes rota-sair {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  to {
-    opacity: 0.55;
-    transform: translateX(-10px);
-  }
-}
-
-@keyframes rota-entrar {
-  from {
-    opacity: 0.35;
-    transform: translateX(14px);
-    clip-path: inset(0 0 0 3%);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-    clip-path: inset(0 0 0 0);
-  }
-} */
-
-
-
-/*Slide 
-::view-transition-old(root) {
-  animation: rota-sair 0.22s ease-in forwards;
-}
-
-::view-transition-new(root) {
-  animation: rota-entrar 0.34s cubic-bezier(.16, 1, .3, 1) forwards;
-}
-
-@keyframes rota-sair {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-    filter: blur(0);
-  }
-
-  to {
-    opacity: 0.35;
-    transform: translateX(-12px);
-    filter: blur(2px);
-  }
-}
-
-@keyframes rota-entrar {
-  0% {
-    opacity: 0;
-    transform: translateX(22px);
-    clip-path: polygon(
-      12% 0,
-      100% 0,
-      100% 100%,
-      0 100%
-    );
-  }
-
-  55% {
-    opacity: 1;
-    transform: translateX(-3px);
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% 100%,
-      0 100%
-    );
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% 100%,
-      0 100%
-    );
-  }
-} */
-
-
-
-/* Swipe — estilo aplicativo
-::view-transition-old(root) {
-  animation: swipe-out 0.22s cubic-bezier(.4, 0, .6, 1) forwards;
-}
-
-::view-transition-new(root) {
-  animation: swipe-in 0.30s cubic-bezier(.16, 1, .3, 1) forwards;
-}
-
-@keyframes swipe-out {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  to {
-    opacity: 0.4;
-    transform: translateX(-28px);
-  }
-}
-
-@keyframes swipe-in {
-  from {
-    opacity: 0;
-    transform: translateX(38px);
-  }
-
-  70% {
-    opacity: 1;
-    transform: translateX(-2px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-} */
-
-/*
-::view-transition-old(root) {
-  animation: shared-page-out 0.22s ease forwards;
-}
-
-::view-transition-new(root) {
-  animation: shared-page-in 0.30s ease forwards;
-}
-
-::view-transition-group(simio-logo) {
-  animation-duration: 0.42s;
-  animation-timing-function: cubic-bezier(.16, 1, .3, 1);
-}
-
-::view-transition-old(simio-logo),
-::view-transition-new(simio-logo) {
-  height: 100%;
-}
-
-@keyframes shared-page-out {
-  to {
-    opacity: 0.25;
-  }
-}
-
-@keyframes shared-page-in {
-  from {
-    opacity: 0.25;
-  }
-
-  to {
-    opacity: 1;
-  }
-} */
 
 ::view-transition-old(root) {
   animation: shared-page-out 0.32s ease forwards;
@@ -494,4 +354,104 @@ body,
   to {
     opacity: 1;
   }
+}
+
+:root[data-tema="escuro"] #inicio-titulo,
+:root[data-tema="escuro"] .inicio-descricao,
+:root[data-tema="escuro"] .inicio-materias li,
+:root[data-tema="escuro"] .wordsChange,
+:root[data-tema="escuro"] .titulo-gamificacao,
+:root[data-tema="escuro"] .gamificacao-descricao,
+:root[data-tema="escuro"] .recurso-gamificacao strong,
+:root[data-tema="escuro"] .recurso-gamificacao p,
+:root[data-tema="escuro"] #biblioteca-home-titulo,
+:root[data-tema="escuro"] .biblioteca-home-descricao,
+:root[data-tema="escuro"] .biblioteca-home-recursos li,
+:root[data-tema="escuro"] .simio-ai,
+:root[data-tema="escuro"] .simia-apresentacao-subtitulo,
+:root[data-tema="escuro"] .simia-apresentacao-descricao,
+:root[data-tema="escuro"] .inicio-explorar,
+:root[data-tema="escuro"] .familia-simio__descricao,
+:root[data-tema="escuro"] #familia-titulo,
+:root[data-tema="escuro"] .familia-simio__nota,
+:root[data-tema="escuro"] .stats strong, 
+:root[data-tema="escuro"] .stats span,
+:root[data-tema="escuro"] .estatisticas h2,
+:root[data-tema="escuro"] .auth-page .toggle-panel,
+:root[data-tema="escuro"] .progresso h2,
+:root[data-tema="escuro"] .progress-footer,
+:root[data-tema="escuro"] .subject strong,
+:root[data-tema="escuro"] .subject span,
+:root[data-tema="escuro"] .profile-panel-heading h2,
+:root[data-tema="escuro"] .form-intro,
+:root[data-tema="escuro"] .stagger-2,
+:root[data-tema="escuro"] .auth-field label,
+:root[data-tema="escuro"] .forgot-button:hover {
+    color: #ffffff !important;
+}
+
+:root[data-tema="escuro"] .profile-stat-card,
+:root[data-tema="escuro"] .profile-panel,
+:root[data-tema="escuro"] .auth-container {
+  background-color: #232B33 !important;
+}
+
+:root[data-tema="escuro"] #moki-parallax .stage::after {
+  background: linear-gradient(
+    to bottom,
+    #31303000 0%,
+    #3130309d 25%,
+    #313030a2 45%,
+    #424242 65%,
+    #232B33 82%,
+    #232B33 93%,
+    #232B33 100%
+  );
+}
+
+:root[data-tema="escuro"] .inicio,
+:root[data-tema="escuro"] .gamificacao,
+:root[data-tema="escuro"] .biblioteca-home,
+:root[data-tema="escuro"] .simia-apresentacao,
+:root[data-tema="escuro"] .familia-simio,
+:root[data-tema="escuro"] .simio-rodape {
+  background-color: #232B33 !important;
+}
+
+:root[data-tema="escuro"] .inicio-materias {
+  background: #31303080 !important;
+  border-top: transparent;
+  border-bottom: transparent;
+}
+
+:root[data-tema="escuro"] .gamificacao::before {
+  background: #536574;
+}
+
+:root[data-tema="escuro"] .biblioteca-home::before {
+  background: #584044;
+}
+:root[data-tema="escuro"] .simia-apresentacao::before {
+  background: #344B54;
+}
+
+:root[data-tema="escuro"] .stage {
+    background: #192d24 !important;
+}
+
+:root[data-tema="escuro"] .form-box {
+    background-color: #424242;
+}
+
+:root[data-tema="escuro"] .simio-rodape__corpo {
+  background-color: #8eac84;
+}
+
+:root[data-tema="escuro"] section.familia-simio {
+    background: #232B33 !important;
+    background-image: none !important;
+}
+
+:root[data-tema="escuro"] .simio-rodape .simio-rodape__onda {
+    fill: #8eac84 !important;
 }

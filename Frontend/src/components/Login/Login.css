@@ -28,10 +28,6 @@
   box-sizing: border-box;
   padding: 30px;
   color: var(--brown-dark);
-  background:
-    radial-gradient(circle at 12% 18%, rgba(72, 126, 92, 0.25) 0 8%, transparent 8.3%),
-    radial-gradient(circle at 87% 80%, rgba(242, 139, 24, 0.15) 0 11%, transparent 11.3%),
-    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, #ded5c2);
   font-family: 'Kalam', cursive;
   animation: pageEnter 0.8s ease-out forwards;
 }
@@ -193,7 +189,7 @@
   z-index: 2;
   width: 300%;
   height: 100%;
-  border-radius: 160px;
+
   background:
     radial-gradient(circle at 22% 18%, rgba(255,255,255,.1) 0 7%, transparent 7.3%),
     radial-gradient(circle at 28% 82%, rgba(242, 139, 24, .25) 0 12%, transparent 12.3%),
@@ -203,7 +199,7 @@
 }
 .auth-container.is-register .toggle-box::before { left: 50%; }
 
-.toggle-panel { position: absolute; z-index: 3; width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 55px; pointer-events: auto; text-align: center; color: var(--cream); transition: left var(--transition-smooth), right var(--transition-smooth), opacity 0.3s ease; }
+.toggle-panel { position: absolute; z-index: 3; width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 55px; pointer-events: auto; text-align: center; color: var(--cream); transition: left var(--transition-smooth), right var(--transition-smooth), opacity 0.3s ease;}
 .toggle-left { left: 0; opacity: 1; }
 .auth-container.is-register .toggle-left { left: -50%; opacity: 0; pointer-events: none; }
 .toggle-right { right: -50%; opacity: 0; pointer-events: none; }

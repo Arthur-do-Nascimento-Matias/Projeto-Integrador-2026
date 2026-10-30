@@ -1,9 +1,12 @@
 import "./Configuracoes.css";
 import MenuEsquerda from "../MenuEsquerda/MenuEsquerda";
+import { alternarTema } from "../../App";
 
 function Configuracoes({
   folhasAtivas,
-  alterarFolhas
+  alterarFolhas,
+  tema,
+  setTema
 }) {
   return (
     <>
@@ -28,6 +31,10 @@ function Configuracoes({
             aria-label="Ativar ou desativar folhas caindo"
           >
             <span className="switch-bolinha" />
+          </button>
+
+          <button onClick={() => alternarTema(setTema)}>
+              {tema === "claro" ? "🌙 Modo escuro" : "☀️ Modo claro"}
           </button>
 
         </div>

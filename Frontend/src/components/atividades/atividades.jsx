@@ -69,7 +69,18 @@ function fecharParabens() {
         body: JSON.stringify({
             materia: materiaAtual,
             id: draft.id,
-            atividadesConcluidas: draft.atividadesConcluidas
+            atividadesConcluidas: draft.atividadesConcluidas,
+            xp: 50
+        })
+    })
+
+    fetch('http://localhost:3000/sequencia', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            idUser: draft.id
         })
     })
 

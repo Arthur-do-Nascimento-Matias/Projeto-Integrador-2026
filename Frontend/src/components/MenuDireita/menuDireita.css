@@ -1,16 +1,24 @@
 .menuLateralDireita {
-  position: absolute;
+  position: fixed;
 
   top: 50%;
   right: 28px;
 
   width: 328px;
+  max-height: calc(100dvh - 40px);
 
   transform: translateY(-50%);
 
   font-family: "Rubik", sans-serif;
 
   z-index: 10;
+
+  margin: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
 }
 
 .menuLateralDireita,
@@ -23,7 +31,7 @@
   flex-direction: column;
 
   width: 100%;
-  gap: 22px;
+  gap: 15px;
 }
 
 .menuDireita-card {
@@ -95,7 +103,7 @@
 
 @media (max-width: 1600px) and (max-height: 900px) {
   .menuLateralDireita {
-    top: 49%;
+    top: 40%;
     right: 24px;
 
     transform: translateY(-50%) scale(0.93);
@@ -119,4 +127,58 @@
 
     transform: none;
   }
+}
+/* Ajuste para 1366x768 e resoluções similares */
+@media (min-width: 901px) and (max-width: 1500px)
+       and (max-height: 820px) {
+
+    .menuLateralDireita {
+        position: fixed;
+
+        top: 50%;
+        right: 18px;
+
+        width: 300px;
+        max-height: calc(100dvh - 28px);
+
+        margin: 0;
+        padding: 4px;
+
+        transform: translateY(-50%);
+        transform-origin: center right;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        scrollbar-width: thin;
+    }
+
+    .menuDireita-cards {
+        gap: 10px;
+    }
+
+    .menuDireita-card {
+        padding: 13px;
+        border-radius: 19px;
+
+        box-shadow:
+            0 10px 22px rgba(49, 38, 27, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .menuDireita-card::before {
+        inset: 7px;
+        border-radius: 13px;
+    }
+
+    .menuDireita-cabecalho {
+        min-height: 28px;
+        padding: 2px 2px 9px;
+        gap: 8px;
+    }
+
+    .menuDireita-cabecalho h3 {
+        font-size: 16px;
+        line-height: 1.25;
+    }
 }

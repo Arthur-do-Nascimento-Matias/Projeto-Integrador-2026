@@ -7,6 +7,7 @@ import formidable from 'formidable'
 import fs from 'fs'
 
 import { buscarUsuarioAutenticado } from './utils/autenticacao.js'
+import Sequencia from './Sequencia.js'
 
 import Conexao from './Conexao.js'
 
@@ -32,7 +33,7 @@ import Missoes from './Missoes.js'
 
 
 
-const callback = (req, res) => {
+const callback = async (req, res) => {
 
 
 
@@ -458,7 +459,61 @@ const callback = (req, res) => {
 
 if(req.method == 'GET') {
 
+    if(rota.pathname == "/posicao") {
 
+        try{
+            console.log('posicao')
+
+            let posicao = await Conexao.getPosicao(param.idUser)
+            
+            console.log(posicao)
+
+            res.writeHead(200, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify(posicao));
+        }
+        catch(error){
+            throw error
+        }
+    }
+
+    if (rota.pathname === "/ranking") {
+        console.log('ranking')
+        Conexao.getRanking()
+            .then((ranking) => {
+                const participantes = ranking.map((usuario) => ({
+                    id: usuario.id_usuario,
+                    nome: usuario.nome_de_exibicao,
+                    username: usuario.nome_de_usuario,
+                    xp: Number(usuario.xp_semanal) || 0
+                }));
+
+                res.writeHead(200, {
+                    "Content-Type": "application/json; charset=utf-8"
+                });
+
+                res.end(JSON.stringify({
+                    ok: true,
+                    participantes
+                }));
+            })
+            .catch((erro) => {
+                console.error("Erro ao carregar ranking:", erro);
+
+                res.writeHead(500, {
+                    "Content-Type": "application/json; charset=utf-8"
+                });
+
+                res.end(JSON.stringify({
+                    ok: false,
+                    message: "Erro ao carregar ranking."
+                }));
+            });
+
+        return;
+    }
 
     // =========================
 
@@ -1529,7 +1584,22 @@ else if (req.method == 'POST') {
 
     })
 
+if(rota.pathname == "/sequencia") {
+    req.on('end', () => {
+        try {
 
+            console.log('app')
+
+            const dados = JSON.parse(body)
+
+            Sequencia.streak(dados.idUser)
+
+        }
+        catch(error){
+            throw error
+        }
+    })
+}
 
 if(rota.pathname == '/concluirAtividade') {
 
@@ -1997,10 +2067,11 @@ if (rota.pathname == '/mudarFoto') {
                 }))
 
             })
+        
+    
+    return
 
 
-
-        return
 
     }
 

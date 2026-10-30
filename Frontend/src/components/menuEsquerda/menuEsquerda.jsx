@@ -51,18 +51,21 @@ const fxMap = {
 
 }
 
-function nomePelaRota(pathname) {
-    const rota = pathname.replace(/\/+$/, '') || '/'
 
-    if (rota === '/painel') return 'Aprender'
-    if (rota === '/simulados') return 'Simulados'
-    if (rota === '/ranking') return 'Ranking'
-    if (rota === '/biblioteca') return 'Biblioteca'
-    if (rota === '/chatBot') return 'SimIA'
-    if (rota === '/perfil' || rota.startsWith('/perfil/')) return 'Perfil'
-    if (rota === '/configuracoes') return 'Configurações'
+export function nomePelaRota(pathname) {
+    const rota = (pathname || "/")
+        .replace(/\/+$/, "")
+        .toLowerCase() || "/";
 
-    return 'Aprender'
+    if (rota === "/" || rota === "/painel") return "Aprender";
+    if (rota === "/simulados") return "Simulados";
+    if (rota === "/ranking") return "Ranking";
+    if (rota === "/biblioteca") return "Biblioteca";
+    if (rota === "/chatbot") return "SimIA";
+    if (rota === "/perfil" || rota.startsWith("/perfil/")) return "Perfil";
+    if (rota === "/configuracoes") return "Configurações";
+
+    return "Aprender";
 }
 
 function Icone({ nome }) {
@@ -243,6 +246,10 @@ function MenuEsquerda() {
 
   const [touchLike, setTouchLike] = useState(false)
   const [mouseNaSidebar, setMouseNaSidebar] = useState(false)
+
+  useEffect(() => {
+      setItemAtivo(ativoDaRota);
+  }, [ativoDaRota]);
 
 useEffect(() => {
   const camada = document.querySelector('.simio-sidebar-layer');

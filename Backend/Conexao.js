@@ -1,10 +1,13 @@
 
+import { rejects } from 'assert';
+import { error } from 'console';
 import mysql from 'mysql';
+import { resolve } from 'nodemailer/lib/shared/url.js';
 
 class Conexao {
     static connect() {
         const connection = mysql.createConnection({
-            host: 'localhost',
+            host: '127.0.0.1',
             user: 'root',
             password: '',
             database: 'integrador'
@@ -12,6 +15,67 @@ class Conexao {
 
         connection.connect();
         return connection;
+    }
+
+    static async getPosicao(idUser) {
+        return new Promise((resolve, reject) => {
+            const connection = Conexao.connect()
+
+            const sql = `SELECT posicao
+                            FROM (
+                                SELECT
+                                    id_usuario,
+                                    ROW_NUMBER() OVER (
+                                        ORDER BY xp_semanal DESC, id_usuario ASC
+                                    ) AS posicao
+                                FROM usuarios
+                            ) AS ranking
+                            WHERE id_usuario = ?;`
+
+            connection.query(sql, [idUser], (error, results) => {
+                if(error) {
+                    connection.end()
+                    return reject(error)
+                }
+
+                connection.end()
+
+                resolve(results[0] ?? { posicao: null })
+            })
+
+        })
+    }
+
+    static async getRanking() {
+        return new Promise((resolve, reject) => {
+            
+            const connection = Conexao.connect();
+
+            const sql = `SELECT
+                            id_usuario,
+                            nome_de_exibicao,
+                            nome_de_usuario,
+                            xp_semanal
+                        FROM usuarios
+                        ORDER BY
+                            xp_semanal DESC,
+                            nome_de_exibicao ASC,
+                            id_usuario ASC`
+
+            connection.query(sql, (error, lista) => {
+
+                if (error) {
+                    connection.end()
+                    return reject(error)
+                }
+
+                connection.end()
+
+                resolve(lista)
+
+            })
+
+        })
     }
 
     static getAtividades(param) {
@@ -360,13 +424,17 @@ class Conexao {
         return new Promise((resolve, reject) => {
             const connection = Conexao.connect();
 
+            console.log('atualizar')
+
             const sql = `
                 UPDATE usuarios
-                SET ${atualizacoes}
+                SET ${atualizacoes},
+                    xp = xp + ?,
+                    xp_semanal = xp_semanal + ?
                 WHERE id_usuario = ?
             `;
 
-            connection.query(sql, [dados.id], (error, results) => {
+            connection.query(sql, [dados.xp, dados.xp, dados.id], (error, results) => {
                 connection.end();
 
                 if (error) {

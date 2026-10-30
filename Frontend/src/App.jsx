@@ -28,6 +28,11 @@ import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
 
 
+export function alternarTema(setTema) {
+    setTema(anterior =>
+        anterior === "claro" ? "escuro" : "claro"
+    );
+}
 
 function RotaPrivada({ children }) {
 
@@ -134,6 +139,16 @@ function ConteudoApp({
 
   const [mode, setMode] = useState('login')
 
+
+  const [tema, setTema] = useState(() => {
+      return localStorage.getItem("tema") || "claro";
+  });
+
+  useEffect(() => {
+      document.documentElement.setAttribute("data-tema", tema);
+      localStorage.setItem("tema", tema);
+  }, [tema]);
+
   return (
 
     <main className={estaNoIndex ? 'index-page' : 'auth-page'}>
@@ -173,6 +188,9 @@ function ConteudoApp({
           element={<PainelIndex 
               mode={mode}
               setMode={setMode}
+              tema={tema}
+              setTema={setTema}
+              alternarTema={alternarTema}
           />}
         />
 
@@ -304,6 +322,8 @@ function ConteudoApp({
               <Configuracoes
                 folhasAtivas={folhasAtivas}
                 alterarFolhas={alterarFolhas}
+                tema={tema}
+                setTema={setTema}
               />
             </RotaPrivada>
           }
