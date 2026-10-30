@@ -196,7 +196,7 @@ export default function Ranking({ usuarioId }) {
       Ranking de <em>amigos</em>
     </h1>
 
-    <p>Cada descoberta te leva um galho mais alto.</p>
+    <p className="rankingIntro">Cada descoberta te leva um galho mais alto.</p>
 
     <div className="rk-info-semana">
       <span>
@@ -375,11 +375,6 @@ export default function Ranking({ usuarioId }) {
                 );
               })}
             </ol>
-
-            <footer>
-              Atividades, missões e estudo vão somar XP. Recompensas digitais
-              previstas para os 5 primeiros.
-            </footer>
           </section>
         </>
       )}
