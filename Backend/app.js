@@ -6,10 +6,7 @@ import formidable from 'formidable'
 
 import fs from 'fs'
 
-<<<<<<< HEAD
-=======
 import { buscarUsuarioAutenticado } from './utils/autenticacao.js'
->>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
 import Sequencia from './Sequencia.js'
 
 import Conexao from './Conexao.js'
@@ -28,13 +25,10 @@ import Redacoes from './Redacoes.js'
 
 import Http from './utils/http.js'
 
-<<<<<<< HEAD
-=======
 import Feed from './Feed.js'
 
 import Missoes from './Missoes.js'
 
->>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
 
 
 
@@ -72,8 +66,6 @@ const callback = async (req, res) => {
     const param = rota.query
 
 
-<<<<<<< HEAD
-=======
     if (
     rota.pathname === '/missoes/hoje' ||
     rota.pathname === '/missoes/evento'
@@ -464,7 +456,6 @@ const callback = async (req, res) => {
         return
     }
 
->>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
 
 if(req.method == 'GET') {
 
@@ -1622,12 +1613,8 @@ if(rota.pathname == '/concluirAtividade') {
 
             const dados = JSON.parse(body)
 
-
-
-<<<<<<< HEAD
             await Conexao.atualizarAtividade(dados)
-=======
-        const idUsuario = buscarUsuarioAutenticado(req)
+            const idUsuario = buscarUsuarioAutenticado(req)
 
         if (!idUsuario) {
             Http.responderJson(res, 401, {
@@ -1645,7 +1632,6 @@ if(rota.pathname == '/concluirAtividade') {
         Http.responderJson(res, 200, {
             ok: true
         })  
->>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
 
 
 
@@ -1875,112 +1861,105 @@ if (rota.pathname == '/cadastro/verificar') {
 
     }
 
-
-
- if (rota.pathname === '/mudarBio') {
-
-
-
-        req.on('end', async () => {
-
-
-
-            try{
-
-                const dados = JSON.parse(body)
-
-                await Conexao.mudarPerfil(dados)
-
-            }
-
-
-
-            catch(erro) {
-
-                console.error(erro)
-
-                res.end(JSON.stringify({ok: false}))
-
-            }
-
-
-
-        })
-
-    }
-
-
-
-if (rota.pathname == '/mudarFoto') {
-
-
-
-    req.on('end', async () => {
-
-
-
+if (rota.pathname === "/trocarNomeUsuario") {
+    req.on("end", async () => {
         try {
+            const dados = JSON.parse(body);
 
-
-
-            const dados = JSON.parse(body)
-
-
-
-            await Conexao.atualizarFoto(dados)
-
-
+            await Conexao.mudarNome(dados);
 
             res.writeHead(200, {
-
-                'Content-Type': 'application/json; charset=utf-8'
-
-            })
-
-
+                "Content-Type": "application/json; charset=utf-8"
+            });
 
             res.end(JSON.stringify({
+                ok: true,
+                mensagem: "Nome de usuário atualizado!"
+            }));
 
-                ok: true
-
-            }))
-
-
-
-        } catch (erro) {
-
-
-
-            console.error('ERRO AO SALVAR FOTO:', erro)
-
-
+        } catch (error) {
+            console.error("Erro ao alterar nome:", error);
 
             res.writeHead(500, {
-
-                'Content-Type': 'application/json; charset=utf-8'
-
-            })
-
-
+                "Content-Type": "application/json; charset=utf-8"
+            });
 
             res.end(JSON.stringify({
-
                 ok: false,
-
-                erro: erro.message
-
-            }))
-
+                message: "Não foi possível atualizar o nome."
+            }));
         }
+    });
 
-    })
-
-
-
-    return
+    return;
+}
 
 
+if (rota.pathname === "/mudarBio") {
+    req.on("end", async () => {
+        try {
+            const dados = JSON.parse(body);
 
+            await Conexao.mudarPerfil(dados);
+
+            res.writeHead(200, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify({
+                ok: true,
+                mensagem: "Bio atualizada com sucesso!"
+            }));
+
+        } catch (erro) {
+            console.error("Erro ao atualizar bio:", erro);
+
+            res.writeHead(500, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify({
+                ok: false,
+                message: "Não foi possível atualizar a bio."
+            }));
+        }
+    });
+
+    return;
+}
+
+
+if (rota.pathname === "/mudarFoto") {
+    req.on("end", async () => {
+        try {
+            const dados = JSON.parse(body);
+
+            await Conexao.atualizarFoto(dados);
+
+            res.writeHead(200, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify({
+                ok: true,
+                mensagem: "Foto atualizada com sucesso!"
+            }));
+
+        } catch (erro) {
+            console.error("Erro ao salvar foto:", erro);
+
+            res.writeHead(500, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify({
+                ok: false,
+                message: "Não foi possível atualizar a foto."
+            }));
+        }
+    });
+
+    return;
 }
 
     // =========================
@@ -2090,11 +2069,6 @@ if (rota.pathname == '/mudarFoto') {
 
 }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
 }
 
 

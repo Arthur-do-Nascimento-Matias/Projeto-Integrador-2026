@@ -392,13 +392,16 @@ body,
 :root[data-tema="escuro"] .form-intro,
 :root[data-tema="escuro"] .stagger-2,
 :root[data-tema="escuro"] .auth-field label,
-:root[data-tema="escuro"] .forgot-button:hover {
+:root[data-tema="escuro"] .forgot-button:hover,
+:root[data-tema="escuro"] .progress-percentage,
+:root[data-tema="escuro"] #edit-profile-title {
     color: #ffffff !important;
 }
 
 :root[data-tema="escuro"] .profile-stat-card,
 :root[data-tema="escuro"] .profile-panel,
-:root[data-tema="escuro"] .auth-container {
+:root[data-tema="escuro"] .auth-container,
+:root[data-tema="escuro"] .profile-edit-modal {
   background-color: #39453D !important;
 }
 
@@ -420,7 +423,8 @@ body,
 :root[data-tema="escuro"] .biblioteca-home,
 :root[data-tema="escuro"] .simia-apresentacao,
 :root[data-tema="escuro"] .familia-simio,
-:root[data-tema="escuro"] .simio-rodape {
+:root[data-tema="escuro"] .simio-rodape,
+:root[data-tema="escuro"] .form-message {
   background-color: #232B33 !important;
 }
 

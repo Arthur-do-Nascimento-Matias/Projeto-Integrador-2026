@@ -277,10 +277,7 @@ class Conexao {
             const sql = `
                 SELECT
                     id_usuario,
-<<<<<<< HEAD
-=======
                     adm,
->>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
                     nome_de_exibicao,
                     nome_de_usuario,
                     bio,
@@ -329,6 +326,33 @@ class Conexao {
                 resolve(usuario);
             });
         });
+    }
+
+    static mudarNome(dados) {
+        return new Promise((resolve, reject) => {
+            const connection = Conexao.connect();
+
+            const sql = `
+                UPDATE usuarios
+                SET nome_de_exibicao = ?
+                WHERE id_usuario = ?
+            `;
+
+            connection.query(
+                sql,
+                [dados.nome, dados.id],
+                (error, results) => {
+                    connection.end();
+
+                    if (error) {
+                        console.error('Erro ao atualizar perfil:', error);
+                        return reject(error);
+                    }
+
+                    resolve(results);
+                }
+            );
+        })
     }
 
     static mudarPerfil(dados) {

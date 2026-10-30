@@ -47,6 +47,7 @@ function Avatar({ photo, name, className = '' }) {
 function Perfil({ draft, setDraft }) {
   const { username } = useParams()
 
+  const [nomeUsuario, setNomeUsuario] = useState("");
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -129,7 +130,8 @@ function Perfil({ draft, setDraft }) {
   }, [])
 
   function openEdit() {
-    setEditOpen(true)
+      setNomeUsuario(user.nome_de_exibicao || "");
+      setEditOpen(true);
   }
 
   function handlePhoto(event) {
@@ -147,64 +149,116 @@ function Perfil({ draft, setDraft }) {
   }
 
 async function saveProfile(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    const cleanUsername = draft.username
+    if (savingProfile) return;
+
+    const id = user.id_usuario;
+
+    const novoNome = nomeUsuario
         .trim()
-        .replace(/^@+/, '')
-        .replace(/\s+/g, '')
+        .replace(/^@+/, "")
+        .replace(/\s+/g, "");
 
-    setUser((previous) => ({
-        ...previous,
-        nome_de_exibicao:
-            draft.name.trim() ||
-            previous.nome_de_exibicao,
+    const bioNova = draft.bio.trim();
 
-        nome_de_usuario:
-            cleanUsername ||
-            previous.nome_de_usuario,
-
-        bio: draft.bio.trim(),
-
-        foto_perfil:
-            draft.photo ||
-            previous.foto_perfil,
-    }))
-
-    if (draft.photoFile !== null) {
-
-        const arrayBuffer =
-            await draft.photoFile.arrayBuffer()
-
-        const foto =
-            Array.from(new Uint8Array(arrayBuffer))
-
-        fetch('http://localhost:3000/mudarFoto', {
-            method: 'POST',
-
-            headers: {
-                'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify({
-                id: user.id_usuario,
-                foto: foto
-            })
-        })
+    if (!novoNome) {
+        alert("O nome de usuário não pode ficar vazio.");
+        return;
     }
 
-    fetch('http://localhost:3000/mudarBio', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            id: user.id_usuario,
-            bio: draft.bio.trim(),
-        }),
-    })
+    setSavingProfile(true);
 
-    setEditOpen(false)
+    async function enviar(rota, dados) {
+        console.log(`[Perfil] Enviando para /${rota}`, dados.id);
+
+        const resposta = await fetch(
+            `http://localhost:3000/${rota}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dados)
+            }
+        );
+
+        const resultado = await resposta.json();
+
+        if (!resposta.ok || resultado.ok !== true) {
+            throw new Error(
+                resultado.message ||
+                `Erro ao executar /${rota}`
+            );
+        }
+
+        console.log(`[Perfil] /${rota} concluída`);
+
+        return resultado;
+    }
+
+    try {
+        // 1. ALTERAR NOME DE USUÁRIO
+        if (novoNome !== user.nome_de_exibicao) {
+            await enviar("trocarNomeUsuario", {
+                id: id,
+                nome: novoNome
+            });
+        }
+
+        // 2. ALTERAR BIO
+        if (bioNova !== (user.bio || "")) {
+            await enviar("mudarBio", {
+                id: id,
+                bio: bioNova
+            });
+        }
+
+        // 3. ALTERAR FOTO
+        if (draft.photoFile instanceof File) {
+            const arrayBuffer = await draft.photoFile.arrayBuffer();
+
+            const foto = Array.from(
+                new Uint8Array(arrayBuffer)
+            );
+
+            await enviar("mudarFoto", {
+                id: id,
+                foto: foto
+            });
+        }
+
+        // 4. ATUALIZAR INTERFACE
+        setUser(previous => ({
+            ...previous,
+            nome_de_exibicao: novoNome,
+            bio: bioNova,
+            foto_perfil: draft.photo || previous.foto_perfil
+        }));
+
+        setDraft(previous => ({
+            ...previous,
+            username: novoNome,
+            bio: bioNova,
+            photoFile: null
+        }));
+
+        // 5. FECHAR MODAL
+        setEditOpen(false);
+
+        console.log("Perfil salvo com sucesso!");
+
+    } catch (erro) {
+        console.error("Erro ao salvar perfil:", erro);
+
+        alert(
+            "Não foi possível salvar o perfil: " +
+            erro.message
+        );
+
+    } finally {
+        setSavingProfile(false);
+    }
 }
 
   if (loading) {
@@ -711,9 +765,14 @@ async function saveProfile(event) {
 
               </div>
 
-              <h1>
-                {user.nome_de_exibicao}
-              </h1>
+              <p className="profile-username">Nome de usuário</p>
+
+              <input
+                  className="trocarNomeUsuario"
+                  placeholder="Digite seu novo nome"
+                  value={nomeUsuario}
+                  onChange={(e) => setNomeUsuario(e.target.value)}
+              />
 
               <p className="profile-username">
                 @{user.nome_de_usuario}

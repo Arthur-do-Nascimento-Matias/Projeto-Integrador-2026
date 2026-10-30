@@ -269,6 +269,18 @@
   line-height: 1.1;
 }
 
+.trocarNomeUsuario {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #ddcbb8;
+  border-radius: 11px;
+  outline: 0;
+  color: #322114;
+  background: #fff;
+  font: 14px 'Space Mono', monospace;
+  transition: border-color .2s, box-shadow .2s, background .2s, transform .2s ease;
+}
+
 .profile-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

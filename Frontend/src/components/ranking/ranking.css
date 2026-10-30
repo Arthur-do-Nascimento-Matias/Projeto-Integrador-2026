@@ -142,13 +142,6 @@
 
   border-bottom: 5px solid #b6c49a;
   border-radius: 35px;
-
-  background: radial-gradient(
-    ellipse at 50% 95%,
-    #dce7c8 0,
-    #eff0df80 48%,
-    transparent 72%
-  );
 }
 
 .rk-podio {
@@ -965,8 +958,6 @@
   );
 }
 
-<<<<<<< HEAD
-=======
 .rk-classificacao > header {
   position: relative;
   display: flex;
@@ -981,7 +972,7 @@
   position: relative;
   display: grid;
   gap: 8px;
-  margin-top: 0;
+
   padding: 0;
 }
 
@@ -1010,7 +1001,6 @@
 }
 
 
->>>>>>> a5fd36b662ced1a2c37370f77df4ca2162e4189a
 /* Contorno interno do vidro */
 
 .rk-pagina .rk-meu-resumo::after {

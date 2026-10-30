@@ -168,7 +168,7 @@
 
 /* Mensagens do Form */
 .form-message { margin: -4px 0 12px; border-radius: 8px; padding: 8px 10px; font: 12px/1.35 'Space Mono', monospace; animation: authFadeUp 0.3s ease-out forwards; }
-.form-message.error { color: #932f2c; background: #ffebea; border-left: 3px solid #bd433d; }
+.form-message.error { color: #000000; background: #ffebea; border-left: 3px solid #bd433d; }
 .form-message.success { color: var(--forest-dark); background: #e5f4e9; border-left: 3px solid var(--forest); animation: successPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
 .register-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px; }
