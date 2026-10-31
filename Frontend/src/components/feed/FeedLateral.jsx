@@ -24,7 +24,7 @@ function Avatar({ foto, nome }) {
     )
 }
 
-function FeedLateral({ comunidades }) {
+function FeedLateral({ comunidades, comunidadeAtiva, setComunidadeAtiva }) {
     const [usuario, setUsuario] = useState(null)
     const [missoes, setMissoes] = useState([])
     const [carregando, setCarregando] = useState(true)
@@ -92,127 +92,8 @@ function FeedLateral({ comunidades }) {
         carregarLateral()
     }, [])
 
-    if (carregando) {
-        return (
-            <aside className="feed-sidebar">
-                <div className="feed-side-card feed-side-loading">
-                    <span className="feed-loader" />
-                </div>
-            </aside>
-        )
-    }
-
     return (
         <aside className="feed-sidebar">
-            {usuario && (
-                <section className="feed-side-card feed-user-card">
-                    <header>
-                        <Avatar
-                            foto={usuario.foto_perfil}
-                            nome={usuario.nome_de_exibicao}
-                        />
-
-                        <div>
-                            <strong>
-                                {usuario.nome_de_exibicao}
-                            </strong>
-
-                            <span>
-                                @{usuario.nome_de_usuario}
-                            </span>
-                        </div>
-                    </header>
-
-                    <div className="feed-user-stats">
-                        <div>
-                            <span>XP semanal</span>
-
-                            <strong>
-                                {Number(
-                                    usuario.xp_semanal
-                                ).toLocaleString('pt-BR')}
-                            </strong>
-                        </div>
-
-                        <div>
-                            <span>Sequência</span>
-
-                            <strong>
-                                🔥 {Number(usuario.streak) || 0}
-                            </strong>
-                        </div>
-                    </div>
-
-                    <div className="feed-user-division">
-                        <span>Divisão atual</span>
-
-                        <strong>
-                            {usuario.divisao || 'Bronze'}
-                        </strong>
-                    </div>
-                </section>
-            )}
-
-            <section className="feed-side-card">
-                <header className="feed-side-title">
-                    <div>
-                        <span>PARA HOJE</span>
-                        <h2>Missões diárias</h2>
-                    </div>
-
-                    <span aria-hidden="true">🎯</span>
-                </header>
-
-                <div className="feed-side-missions">
-                    {missoes.length === 0 ? (
-                        <p className="feed-side-empty">
-                            Nenhuma missão disponível.
-                        </p>
-                    ) : (
-                        missoes.slice(0, 3).map(missao => {
-                            const progresso =
-                                Number(missao.progresso) || 0
-
-                            const meta =
-                                Number(missao.meta) || 1
-
-                            const porcentagem = Math.min(
-                                100,
-                                (progresso / meta) * 100
-                            )
-
-                            return (
-                                <article
-                                    className="feed-side-mission"
-                                    key={missao.id_usuario_missao}
-                                >
-                                    <div>
-                                        <strong>
-                                            {missao.missao}
-                                        </strong>
-
-                                        <span>
-                                            +{missao.xp_recompensa} XP
-                                        </span>
-                                    </div>
-
-                                    <p>
-                                        {progresso}/{meta}
-                                    </p>
-
-                                    <div className="feed-mission-track">
-                                        <span
-                                            style={{
-                                                width: `${porcentagem}%`
-                                            }}
-                                        />
-                                    </div>
-                                </article>
-                            )
-                        })
-                    )}
-                </div>
-            </section>
 
             <section className="feed-side-card">
                 <header className="feed-side-title">
@@ -225,24 +106,34 @@ function FeedLateral({ comunidades }) {
                 </header>
 
                 <div className="feed-side-communities">
+
                     {comunidadesEmAlta.map((comunidade, indice) => (
-                        <article key={comunidade.id_comunidade}>
+                        <article
+                            key={comunidade.id_comunidade}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setComunidadeAtiva(comunidade.slug)}
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter' || event.key === ' ') {
+                                    event.preventDefault()
+                                    setComunidadeAtiva(comunidade.slug)
+                                }
+                            }}
+                        >
                             <strong className="feed-community-position">
                                 {indice + 1}
                             </strong>
 
                             <span
                                 className="feed-community-color"
-                                style={{
-                                    background: comunidade.cor
-                                }}
+                                style={{ background: comunidade.cor }}
                             />
 
                             <div>
                                 <strong>{comunidade.nome}</strong>
 
                                 <span>
-                                    {Number(comunidade.total_posts)}{' '}
+                                    {Number(comunidade.total_posts) || 0}{' '}
                                     {Number(comunidade.total_posts) === 1
                                         ? 'publicação'
                                         : 'publicações'}
@@ -250,6 +141,7 @@ function FeedLateral({ comunidades }) {
                             </div>
                         </article>
                     ))}
+
                 </div>
             </section>
 

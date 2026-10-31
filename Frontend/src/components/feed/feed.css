@@ -178,8 +178,8 @@
 .feed-community:hover,
 .feed-community.active {
     border-color: var(--feed-green);
-    background: #eaf8eb;
-    color: #176e37;
+    background: #39453D;
+    color: #ffffff;
 }
 
 .feed-order {
@@ -221,8 +221,6 @@
     overflow: hidden;
     border: 1px solid var(--feed-border);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 10px 30px rgba(24, 77, 46, 0.07);
     transition: transform 180ms ease, border-color 180ms ease,
         box-shadow 180ms ease;
 }
@@ -268,13 +266,34 @@
 }
 
 .feed-votes strong {
-    color: #2b5a3b;
+    color: #ffffff;
     font-size: 13px;
 }
 
 .feed-post-body {
     min-width: 0;
     padding: 18px 20px 17px;
+        border:
+        3px solid
+        #8A7662;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #806e60 0%,
+            #766557 38%,
+            #62604a 68%,
+            #3e5529 100%
+        );
+
+    box-shadow:
+
+        0 28px 60px
+        rgba(45, 33, 24, 0.38);
+        
+    transition: transform 180ms ease, border-color 180ms ease,
+        box-shadow 180ms ease;
 }
 
 .feed-post-meta {
@@ -313,14 +332,14 @@
 
 .feed-post-meta strong {
     overflow: hidden;
-    color: #305c40;
+    color: #fffff;
     font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .feed-post-meta small {
-    color: #82978a;
+    color: #ffffff;
     font-size: 10px;
 }
 
@@ -458,8 +477,25 @@
 .feed-side-tip {
     border: 1px solid var(--feed-border);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 9px 28px rgba(24, 77, 46, 0.07);
+    border:
+        3px solid
+        #8A7662;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #806e60 0%,
+            #766557 38%,
+            #62604a 68%,
+            #3e5529 100%
+        );
+
+    box-shadow:
+
+        0 28px 60px
+        rgba(45, 33, 24, 0.38);
+        
 }
 
 .feed-side-card {
@@ -616,7 +652,7 @@
 
 .feed-side-mission strong {
     overflow: hidden;
-    color: #315d41;
+    color: #ffffff;
     font-size: 11px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -658,10 +694,12 @@
     border-radius: 10px;
     padding: 7px;
     gap: 7px;
+    cursor: pointer;
+    transition: all 300ms ease;
 }
 
 .feed-side-communities article:hover {
-    background: #f1faef;
+    background: #39453D;
 }
 
 .feed-community-position {
@@ -690,12 +728,12 @@
 }
 
 .feed-side-communities article > div strong {
-    color: #315d41;
+    color: #ffffff;
     font-size: 11px;
 }
 
 .feed-side-communities article > div span {
-    color: #89a08f;
+    color: #ffffff;
     font-size: 9px;
 }
 
@@ -1346,8 +1384,25 @@ body:has(.feed-page) #root {
     padding: 12px;
     border: 1px solid var(--feed-border);
     border-radius: 16px;
-    background: #f9fcf7;
-    box-shadow: 0 8px 24px rgba(21, 66, 36, .05);
+    border:
+        3px solid
+        #8A7662;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #806e60 0%,
+            #766557 38%,
+            #62604a 68%,
+            #3e5529 100%
+        );
+
+    box-shadow:
+
+        0 28px 60px
+        rgba(45, 33, 24, 0.38);
+        
 }
 
 .feed-filter-scroll {
@@ -1595,22 +1650,17 @@ body:has(.feed-page) #root {
 .feed-filters {
     position: relative;
     top: auto;
-    border-color: #ded8cb;
-    background: #fffaf1;
-    box-shadow: 0 8px 24px rgba(62, 48, 32, .07);
 }
 
 .feed-community {
-    border-color: #e3ddcf;
-    background: #fffdf8;
     color: #5b644b;
 }
 
 .feed-community:hover,
 .feed-community.active {
     border-color: #a9c88b;
-    background: #e9efdf;
-    color: #3e5529;
+    background: #39453D;
+    color: #ffffff;
 }
 
 .feed-new-post,
@@ -1626,19 +1676,12 @@ body:has(.feed-page) #root {
     box-shadow: 0 7px 0 #b76b22;
 }
 
-.feed-post,
-.feed-side-card {
-    border-color: #ded8cb;
-    background: #fffdf8;
-    box-shadow: 0 8px 22px rgba(62, 48, 32, .07);
-}
-
 .feed-post:hover {
     border-color: #a9c88b;
 }
 
 .feed-votes {
-    background: #edf1e5;
+    background: #39453D;
 }
 
 .feed-votes button.positive,
@@ -1649,13 +1692,13 @@ body:has(.feed-page) #root {
 
 .feed-post h2,
 .feed-side-title h2 {
-    color: #3e5529;
+    color: #ffffff;
     font-family: "Rubik", sans-serif;
 }
 
 .feed-post-text,
 .feed-post-meta {
-    color: #706f63;
+    color: #ffffff;
 }
 
 .feed-post-actions {

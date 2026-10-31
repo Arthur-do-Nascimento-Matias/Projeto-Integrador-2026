@@ -500,7 +500,11 @@ useEffect(() => {
                     </section>
                 )}
             </section>
-             <FeedLateral comunidades={comunidades} />
+             <FeedLateral 
+                 comunidades={comunidades} 
+                 comunidadeAtiva={comunidadeAtiva}
+                setComunidadeAtiva={setComunidadeAtiva}
+             />
     </div>
 
             {criandoPost && (
