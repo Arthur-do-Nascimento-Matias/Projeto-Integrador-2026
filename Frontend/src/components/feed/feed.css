@@ -714,6 +714,12 @@
     background: #fff7e6;
 }
 
+.moki{
+    width: 60px;
+    height: 80px;
+    margin-left: -10px;
+}
+
 .feed-side-tip > span {
     font-size: 29px;
 }
@@ -1192,26 +1198,6 @@ body:has(.feed-page) #root {
     text-align: left;
 }
 
-.auth-page:has(.feed-page) {
-    position: relative;
-    display: block;
-    width: 100%;
-    min-height: 100vh;
-    overflow: visible;
-    padding: 0;
-    place-items: initial;
-    animation: none;
-}
-
-.auth-page:has(.feed-page) .feed-page {
-    position: relative;
-    z-index: 2;
-}
-
-.auth-page:has(.feed-page) .ambient-elements,
-.auth-page:has(.feed-page) .forest-shape {
-    position: fixed;
-}
 
 @keyframes feed-spin {
     to {

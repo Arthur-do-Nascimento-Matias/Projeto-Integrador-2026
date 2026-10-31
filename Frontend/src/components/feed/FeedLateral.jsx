@@ -1,3 +1,4 @@
+import MOKI from "../../assets/MOKI.png"
 import { useEffect, useMemo, useState } from 'react'
 
 function Avatar({ foto, nome }) {
@@ -253,7 +254,7 @@ function FeedLateral({ comunidades }) {
             </section>
 
             <section className="feed-side-tip">
-                <span aria-hidden="true">🐒</span>
+                <span aria-hidden="true"><img src={MOKI} alt="" className="moki"/></span>
 
                 <div>
                     <strong>Dica do Moki</strong>

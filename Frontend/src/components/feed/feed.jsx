@@ -270,11 +270,11 @@ useEffect(() => {
                             COMUNIDADE SIMIOLAB
                         </span>
 
-                        <h1>
+                        <h1 className='learn-together'>
                             Aprenda junto. <em>Compartilhe.</em>
                         </h1>
 
-                        <p>
+                        <p className='ask-help-discover'>
                             Tire dúvidas, ajude a turma e descubra conteúdos novos.
                         </p>
                     </div>

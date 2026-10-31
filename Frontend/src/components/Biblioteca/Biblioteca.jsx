@@ -110,10 +110,6 @@ function Biblioteca() {
 
                         <span className="secao-marcador"></span>
 
-                        <h2>
-                            Todos os livros
-                        </h2>
-
                     </div>
 
                     <div className="biblioteca-linha"></div>
