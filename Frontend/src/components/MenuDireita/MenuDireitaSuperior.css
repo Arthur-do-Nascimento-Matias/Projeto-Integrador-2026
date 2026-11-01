@@ -25,6 +25,10 @@
   line-height: 1.5;
 }
 
+.menuDireitaSuperior-conteudo h3{
+  text-align: center;
+}
+
 .menuDireitaSuperior-botao {
   display: flex;
   align-items: center;
