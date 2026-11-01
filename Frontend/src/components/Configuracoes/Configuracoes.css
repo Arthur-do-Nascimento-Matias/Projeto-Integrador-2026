@@ -42,6 +42,9 @@
     font-size: 18px;
   
     color: #4b3529;
+
+    letter-spacing: normal;
+    word-spacing: normal;
   }
   
   .config-texto p {

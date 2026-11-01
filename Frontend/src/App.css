@@ -403,7 +403,8 @@ body,
 :root[data-tema="escuro"] .auth-field label,
 :root[data-tema="escuro"] .forgot-button:hover,
 :root[data-tema="escuro"] .progress-percentage,
-:root[data-tema="escuro"] #edit-profile-title {
+:root[data-tema="escuro"] #edit-profile-title,
+:root[data-tema="escuro"] .configuracoes h1 {
     color: #ffffff !important;
 }
 
@@ -420,7 +421,7 @@ body,
     #31303000 0%,
     #3130309d 25%,
     #313030a2 45%,
-    #424242 65%,
+    #232B33 65%,
     #232B33 82%,
     #232B33 93%,
     #232B33 100%

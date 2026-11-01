@@ -1,27 +1,35 @@
-/*fonte letra*/
-.atividade{
-    z-index: 999;
+.atividade {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100dvh;
+
+    z-index: 99999;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+
     background-color: #F2F0E6;
-    background-image:
-        repeating-linear-gradient(
-            transparent 0px,
-            transparent 38px,
-            /*espaço das linhas*/
-            #A9C4E0 39px,
-            #A9C4E0 40px
-        );
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    position: absolute;
+    background-image: repeating-linear-gradient(
+        transparent 0px,
+        transparent 38px,
+        #A9C4E0 39px,
+        #A9C4E0 40px
+    );
+
     transform: translateX(100%);
-    transition: all 300ms ease;
+    transition: transform 300ms ease;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
     padding: 40px 20px 40px 90px;
-    box-sizing: border-box;
+
     font-family: 'Space Mono', monospace;
 }
 /*linha vermelha q parece caderno*/

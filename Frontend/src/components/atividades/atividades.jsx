@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import './Atividades.css'
 import {registrarAcerto,registrarAtividadeConcluida} from "../utils/missoes";
-
+import { createPortal } from "react-dom";
 
     // =========================
     // O futuro é glorioso irmoes
@@ -13,9 +13,19 @@ let respostaBloqueada = true;
 let indiceAtv = 1
 let cliques = 0
 
-function sairAtividade(refAtividade, trilha) {
-    refAtividade.current.style.transform = 'translateX(100%)'
-    trilha.style.opacity = '1'
+function sairAtividade(refAtividade) {
+    if (refAtividade.current) {
+        refAtividade.current.style.transform = "translateX(100%)";
+    }
+
+    const trilha = document.getElementById("trilha");
+
+    if (trilha) {
+        trilha.style.opacity = "1";
+    }
+
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
 }
 
 export function criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens) {
@@ -122,31 +132,89 @@ function verificar(id, resp){
 }
 
 useEffect(() => {
+    if (!atividadeAtual) return;
 
-    if (!atividadeAtual) return
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
 
-    criarAtividade(refAtividade, refEnunciado, atividadeAtual, materiaAtual, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4, refParabens)
+    criarAtividade(
+        refAtividade,
+        refEnunciado,
+        atividadeAtual,
+        materiaAtual,
+        refAlternativa1,
+        refAlternativa2,
+        refAlternativa3,
+        refAlternativa4,
+        refParabens
+    );
 
-}, [atividadeAtual])
+}, [atividadeAtual]);
 
-    return(
+    return createPortal(
         <>
-            <div className="atividade" id="atividade" ref={refAtividade}>
-                    <button onClick={(e) => sairAtividade(refAtividade, trilha)}>Sair</button>
-                     <h1 className="enunciado" id="enunciado" ref={refEnunciado}></h1>
-                        <button className="alternativa1" id="alternativa1" onClick={(e) => verificar(0, e.currentTarget)} ref={refAlternativa1}></button>
-                        <button className="alternativa2" id="alternativa2" onClick={(e) => verificar(1, e.currentTarget)} ref={refAlternativa2}></button>
-                        <button className="alternativa3" id="alternativa3" onClick={(e) => verificar(2, e.currentTarget)} ref={refAlternativa3}></button>
-                        <button className="alternativa4" id="alternativa4" onClick={(e) => verificar(3, e.currentTarget)} ref={refAlternativa4}></button>
-                    </div>
-                    
-                    <div className="parabens" id="parabens" ref={refParabens}>
-                    <h1>🎉 Parabéns!</h1>
-                    <p>Você concluiu esta atividade.</p>
-                    <button onClick={fecharParabens}>Continuar</button>
-                </div>
-        </>
-    )
+            <div
+                className="atividade"
+                id="atividade"
+                ref={refAtividade}
+            >
+                <button
+                    onClick={() => sairAtividade(refAtividade)}
+                >
+                    Sair
+                </button>
+
+                <h1
+                    className="enunciado"
+                    id="enunciado"
+                    ref={refEnunciado}
+                />
+
+                <button
+                    className="alternativa1"
+                    id="alternativa1"
+                    onClick={(e) => verificar(0, e.currentTarget)}
+                    ref={refAlternativa1}
+                />
+
+                <button
+                    className="alternativa2"
+                    id="alternativa2"
+                    onClick={(e) => verificar(1, e.currentTarget)}
+                    ref={refAlternativa2}
+                />
+
+                <button
+                    className="alternativa3"
+                    id="alternativa3"
+                    onClick={(e) => verificar(2, e.currentTarget)}
+                    ref={refAlternativa3}
+                />
+
+                <button
+                    className="alternativa4"
+                    id="alternativa4"
+                    onClick={(e) => verificar(3, e.currentTarget)}
+                    ref={refAlternativa4}
+                />
+            </div>
+
+            <div
+                className="parabens"
+                id="parabens"
+                ref={refParabens}
+            >
+                <h1>🎉 Parabéns!</h1>
+
+                <p>Você concluiu esta atividade.</p>
+
+                <button onClick={fecharParabens}>
+                    Continuar
+                </button>
+            </div>
+        </>,
+        document.body
+    );
 }
 
 export default atividades

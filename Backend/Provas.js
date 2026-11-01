@@ -10,7 +10,7 @@ class Provas {
                 host: '127.0.0.1',
                 user: 'root',
                 password: '',
-                database: 'integrador',
+                database: 'integrador-novo-pqbugou',
             })
 
             connection.connect()
@@ -80,7 +80,7 @@ class Provas {
                 host: '127.0.0.1',
                 user: 'root',
                 password: '',
-                database: 'integrador',
+                database: 'integrador-novo-pqbugou',
             })
 
             connection.connect()
@@ -142,7 +142,7 @@ class Provas {
                 host: '127.0.0.1',
                 user: 'root',
                 password: '',
-                database: 'integrador',
+                database: 'integrador-novo-pqbugou',
             })
 
             connection.connect()

@@ -1731,3 +1731,9 @@ body:has(.feed-page) #root {
     border-color: #efd3a6;
     background: #fff0d7;
 }
+
+@media(max-width: 980px) {
+    .feed-sidebar{
+        display: none;
+    }
+}

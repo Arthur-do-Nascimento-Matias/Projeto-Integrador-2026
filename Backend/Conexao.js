@@ -10,7 +10,7 @@ class Conexao {
             host: '127.0.0.1',
             user: 'root',
             password: '',
-            database: 'integrador'
+            database: 'integrador-novo-pqbugou'
         });
 
         connection.connect();
@@ -120,18 +120,43 @@ class Conexao {
         });
     }
 
-    static criarTrilha(param) {
+    static criarTrilha(id, idUser) {
+
+        const colunas = [
+            'atvidades_concluidas_geral',
+            'atvidades_concluidas_matematica',
+            'atvidades_concluidas_portugues',
+            'atvidades_concluidas_historia',
+            'atvidades_concluidas_geografia',
+            'atvidades_concluidas_ciencias',
+            'atvidades_concluidas_ingles'
+        ];
+
         return new Promise((resolve, reject) => {
             const connection = Conexao.connect();
 
-            const sql = 'SELECT * FROM `perguntas` WHERE id_materia = ?';
+            console.log("ID da matéria:", id);
+            console.log("ID do usuário:", idUser);
 
-            connection.query(sql, [param.id], (error, indices) => {
+            const sql = `
+                SELECT
+                    p.*,
+                    u.${colunas[id]} AS atividades_concluidas
+                FROM perguntas p
+                JOIN usuarios u ON u.id_usuario = ?
+                WHERE p.id_materia = ?
+                ORDER BY p.ordem ASC;
+`;
+
+            connection.query(sql, [idUser, id], (error, indices) => {
                 connection.end();
 
                 if (error) {
                     return reject(error);
                 }
+
+                console.log('here')
+                console.log(indices)
 
                 resolve({
                     indices

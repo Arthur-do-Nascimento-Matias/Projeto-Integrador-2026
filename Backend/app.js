@@ -1202,109 +1202,28 @@ if(req.method == 'GET') {
 
     if (rota.pathname == '/atividades') {
 
-
-
         res.writeHead(200, {
-
             'Content-Type': 'application/json; charset=utf-8'
-
         })
-
-
 
         Conexao.getAtividades(param)
-
             .then(con => {
-
-
-
                 if (con.concluido) {
-
-
-
                     res.end(JSON.stringify({
-
                         concluido: 'concluido'
-
                     }))
-
-
-
                     return
-
                 }
-
-
-
                 res.end(JSON.stringify({
-
                     pergunta: con.perguntas[0].enunciado,
-
                     alternativa1: con.alternativas[0],
-
                     alternativa2: con.alternativas[1],
-
                     alternativa3: con.alternativas[2],
-
                     alternativa4: con.alternativas[3]
-
                 }))
-
             })
-
-
-
         return
-
     }
-
-
-
-
-
-    // =========================
-
-    // NOME
-
-    // =========================
-
-
-
-    if (rota.pathname == '/nome') {
-
-
-
-        res.writeHead(200, {
-
-            'Content-Type': 'application/json; charset=utf-8'
-
-        })
-
-
-
-        Conexao.criarTrilha(param)
-
-            .then(con => {
-
-
-
-                res.end(JSON.stringify({
-
-                    nome: con.indices
-
-                }))
-
-            })
-
-
-
-        return
-
-    }
-
-
-
-
 
     // =========================
 
@@ -1584,15 +1503,41 @@ else if (req.method == 'POST') {
 
     })
 
+    if (rota.pathname == '/criarTrilha') {
+
+        req.on("end", async () => {
+        
+        try {
+
+            const dados = JSON.parse(body)
+
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+
+            Conexao.criarTrilha(dados.id, dados.idUser)
+                .then(con => {
+                    res.end(JSON.stringify({
+                        nome: con.indices
+                    }))
+                })
+        } 
+        
+        catch(error) {
+            throw error
+        }
+      })
+    }
+
 if(rota.pathname == "/sequencia") {
-    req.on('end', () => {
+    req.on('end', async () => {
         try {
 
             console.log('app')
 
             const dados = JSON.parse(body)
 
-            Sequencia.streak(dados.idUser)
+            await Sequencia.streak(dados.idUser)
 
         }
         catch(error){
