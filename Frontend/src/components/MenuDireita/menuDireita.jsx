@@ -6,6 +6,7 @@ import MenuDireitaSuperior from "./MenuDireitaSuperior";
 import MenuDireitaInferior from "./MenuDireitaInferior";
 
 function MenuDireita({ draft }) {
+  /*
   return createPortal(
     <aside className="menuLateralDireita">
       <div className="menuDireita-cards">
@@ -15,6 +16,7 @@ function MenuDireita({ draft }) {
     </aside>,
     document.body
   );
+  */
 }
 
 export default MenuDireita;

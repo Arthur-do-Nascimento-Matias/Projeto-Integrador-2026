@@ -1529,22 +1529,32 @@ else if (req.method == 'POST') {
       })
     }
 
-if(rota.pathname == "/sequencia") {
-    req.on('end', async () => {
+
+if (rota.pathname === "/sequencia") {
+    req.on("end", async () => {
         try {
+            const dados = JSON.parse(body);
 
-            console.log('app')
+            const resultado = await Sequencia.streak(dados.idUser);
 
-            const dados = JSON.parse(body)
+            Http.responderJson(res, 200, {
+                ok: true,
+                ...resultado
+            });
 
-            await Sequencia.streak(dados.idUser)
+        } catch (erro) {
+            console.error("Erro na sequência:", erro);
 
+            Http.responderJson(res, 500, {
+                ok: false,
+                erro: "Não foi possível atualizar a sequência."
+            });
         }
-        catch(error){
-            throw error
-        }
-    })
+    });
+
+    return;
 }
+
 
 if(rota.pathname == '/concluirAtividade') {
 
@@ -1554,11 +1564,8 @@ if(rota.pathname == '/concluirAtividade') {
 
         try {
 
-
-
             const dados = JSON.parse(body)
 
-            await Conexao.atualizarAtividade(dados)
             const idUsuario = buscarUsuarioAutenticado(req)
 
         if (!idUsuario) {
