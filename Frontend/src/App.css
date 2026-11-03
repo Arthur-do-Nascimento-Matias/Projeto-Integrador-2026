@@ -408,6 +408,10 @@ body,
     color: #ffffff !important;
 }
 
+:root[data-tema="escuro"] .recent-item:hover {
+  background: #232B33;
+}
+
 :root[data-tema="escuro"] .profile-stat-card,
 :root[data-tema="escuro"] .profile-panel,
 :root[data-tema="escuro"] .auth-container,

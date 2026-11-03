@@ -674,9 +674,9 @@
 }
 
 .botaoAtividade{
-    width: 80px;
-    height: 80px;
-    border-radius: 50px;
+    width: 90px;
+    height: 90px;
+    border-radius: 100px;
     border: none;
     transition: all 200ms ease;
     background: var(--cor-laranja-claro);

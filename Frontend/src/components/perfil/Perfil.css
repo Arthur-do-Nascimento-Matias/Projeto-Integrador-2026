@@ -48,7 +48,6 @@
   align-items: center;
   gap: 34px;
   overflow: hidden;
-  border: 1px solid rgba(15, 53, 33, .24);
   border-radius: 34px;
   padding: 42px 44px;
   color: var(--profile-cream);
@@ -130,7 +129,6 @@
   bottom: 8px;
   width: 24px;
   height: 24px;
-  border: 5px solid var(--profile-forest-dark);
   border-radius: 50%;
   background: #ffc15b;
   box-shadow: 0 3px 8px rgba(0,0,0,.18);
@@ -238,7 +236,6 @@
   align-items: center;
   min-height: 42px;
   padding: 9px 15px;
-  border: 1px solid rgba(255,255,255,.24);
   border-radius: 12px;
   color: #e6f1e9;
   background: rgba(255,255,255,.09);
@@ -272,7 +269,6 @@
 .trocarNomeUsuario {
   width: 100%;
   padding: 10px;
-  border: 1.5px solid #ddcbb8;
   border-radius: 11px;
   outline: 0;
   color: #322114;
@@ -293,7 +289,6 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  border: 1px solid var(--profile-border);
   border-radius: 20px;
   padding: 21px;
   background: rgba(255,253,250,.94);
@@ -303,7 +298,6 @@
 
 .profile-stat-card:hover {
   transform: translateY(-5px);
-  border-color: #dec4a6;
   box-shadow: 0 14px 28px rgba(84,59,39,.13);
 }
 
@@ -341,7 +335,6 @@
 
 .profile-panel,
 .profile-future {
-  border: 1px solid var(--profile-border);
   border-radius: 24px;
   padding: 27px;
   background: rgba(255,253,250,.96);
@@ -491,7 +484,6 @@
 .profile-edit-modal {
   position: relative;
   width: min(520px, 100%);
-  border: 1px solid rgba(84,59,39,.12);
   border-radius: 27px;
   padding: 34px;
   color: var(--profile-brown-dark, #322114);
@@ -563,7 +555,6 @@
 .profile-field textarea,
 .username-input-wrap {
   width: 100%;
-  border: 1.5px solid #ddcbb8;
   border-radius: 11px;
   outline: 0;
   color: #322114;
@@ -578,7 +569,6 @@
 .profile-field input:focus,
 .profile-field textarea:focus,
 .username-input-wrap:focus-within {
-  border-color: #f28b18;
   box-shadow: 0 4px 15px rgba(242,139,24,.15);
   background: #fffdf8;
   transform: translateY(-2px);

@@ -1445,3 +1445,6 @@
 .scene:has(.sidebar.more-open) .simio-logo {
     scale: 0.45;
 }
+.simio-sidebar-layer .sidebar.more-open .shell {
+    height: 680px;
+}
