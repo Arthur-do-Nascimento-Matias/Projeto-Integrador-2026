@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from "react-dom";
 import { useParams } from 'react-router-dom'
 import './Perfil.css'
 
@@ -697,7 +698,8 @@ async function saveProfile(event) {
 
       {/* MODAL DE EDIÇÃO */}
 
-      {editOpen && (
+      {editOpen && createPortal(
+
 
         <div
           className="profile-modal-backdrop"
@@ -829,8 +831,8 @@ async function saveProfile(event) {
 
           </section>
 
-        </div>
-
+        </div>,
+        document.body
       )}
 
     </>

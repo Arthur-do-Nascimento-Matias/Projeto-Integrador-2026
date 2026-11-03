@@ -404,7 +404,9 @@ body,
 :root[data-tema="escuro"] .forgot-button:hover,
 :root[data-tema="escuro"] .progress-percentage,
 :root[data-tema="escuro"] #edit-profile-title,
-:root[data-tema="escuro"] .configuracoes h1 {
+:root[data-tema="escuro"] .configuracoes h1,
+:root[data-tema="escuro"] .profile-field span, 
+:root[data-tema="escuro"] .profile-field small{
     color: #ffffff !important;
 }
 

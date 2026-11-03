@@ -165,6 +165,7 @@
   margin: 8px 0 0;
   color: #ffd797;
   font: 700 14px 'Space Mono', monospace;
+  margin-bottom: 6px;
 }
 
 .profile-bio {
@@ -270,11 +271,18 @@
   width: 100%;
   padding: 10px;
   border-radius: 11px;
+  border: none;
   outline: 0;
   color: #322114;
   background: #fff;
   font: 14px 'Space Mono', monospace;
   transition: border-color .2s, box-shadow .2s, background .2s, transform .2s ease;
+}
+
+.trocarNomeUsuario:focus {
+  box-shadow: 0 4px 15px rgba(242,139,24,.15);
+  background: #fffdf8;
+  transform: translateY(-2px);
 }
 
 .profile-stats-grid {
@@ -510,9 +518,12 @@
   font-size: 27px;
   line-height: 1;
   transition: transform .2s, background .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.profile-modal-close:hover { transform: rotate(90deg); background: #ebd5bc; }
+.profile-modal-close:hover { background: #c7b49e; }
 .edit-modal-heading { margin-bottom: 23px; padding-right: 46px; }
 
 .edit-photo-row {
