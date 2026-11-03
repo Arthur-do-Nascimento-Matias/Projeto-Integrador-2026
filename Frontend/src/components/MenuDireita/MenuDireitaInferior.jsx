@@ -137,9 +137,14 @@ useEffect(() => {
 
   async function carregarMissoes() {
     try {
-      const resposta = await fetch(
-        `http://localhost:3000/missoes/hoje?id_usuario=${encodeURIComponent(idUsuario)}`
-      );
+     const resposta = await fetch(
+    'http://localhost:3000/missoes/hoje',
+    {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    }
+)
 
       const dados = await resposta.json();
 

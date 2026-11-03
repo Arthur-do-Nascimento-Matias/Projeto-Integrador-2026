@@ -6,7 +6,9 @@ import formidable from 'formidable'
 
 import fs from 'fs'
 
-import { buscarUsuarioAutenticado } from './utils/autenticacao.js'
+import {
+    buscarUsuarioAutenticado
+} from './utils/autenticacao.js'
 
 import Conexao from './Conexao.js'
 
@@ -58,10 +60,7 @@ const callback = (req, res) => {
 
     }
 
-
-
     const rota = url.parse(req.url, true)
-
     const param = rota.query
 
 
@@ -455,118 +454,7 @@ const callback = (req, res) => {
         return
     }
 
-
-if(req.method == 'GET') {
-
-
-
-    // =========================
-
-    // MISSOES #VV
-
-    // =========================
-
-
-
-    if (rota.pathname == '/missoes/hoje') {
-
-
-
-        const idUsuario = Number(param.id_usuario)
-
-
-
-        if (!idUsuario) {
-
-            res.writeHead(400, {
-
-                'Content-Type':
-
-                    'application/json; charset=utf-8'
-
-            })
-
-
-
-            res.end(JSON.stringify({
-
-                erro: 'Informe um id_usuario válido.'
-
-            }))
-
-
-
-            return
-
-        }
-
-
-
-        Conexao.buscarOuCriarMissoes(idUsuario)
-
-
-
-            .then(con => {
-
-
-
-                res.writeHead(200, {
-
-                    'Content-Type':
-
-                        'application/json; charset=utf-8'
-
-                })
-
-
-
-                res.end(JSON.stringify(con))
-
-            })
-
-
-
-            .catch(error => {
-
-
-
-                console.error(
-
-                    'ERRO AO BUSCAR MISSÕES:',
-
-                    error
-
-                )
-
-
-
-                res.writeHead(500, {
-
-                    'Content-Type':
-
-                        'application/json; charset=utf-8'
-
-                })
-
-
-
-                res.end(JSON.stringify({
-
-                    erro: error.message
-
-                }))
-
-            })
-
-
-
-        return
-
-    }
-
-
-
-
+if (req.method === 'GET') {
 
     if (rota.pathname == '/perfil') {
 
@@ -1513,7 +1401,7 @@ if (rota.pathname == '/abrirProva') {
 
     // =========================
 
-            }
+}
 
 else if (req.method == 'POST') {   
 
@@ -1900,112 +1788,7 @@ if (rota.pathname == '/mudarFoto') {
 
 }
 
-    // =========================
-
-    // MISSOES #VV
-
-    // =========================
-
-
-
-    if (rota.pathname == '/missoes/hoje') {
-
-
-
-        const idUsuario = Number(param.id_usuario)
-
-
-
-        if (!idUsuario) {
-
-            res.writeHead(400, {
-
-                'Content-Type':
-
-                    'application/json; charset=utf-8'
-
-            })
-
-
-
-            res.end(JSON.stringify({
-
-                erro: 'Informe um id_usuario válido.'
-
-            }))
-
-
-
-            return
-
-        }
-
-
-
-        Conexao.buscarOuCriarMissoes(idUsuario)
-
-
-
-            .then(con => {
-
-
-
-                res.writeHead(200, {
-
-                    'Content-Type':
-
-                        'application/json; charset=utf-8'
-
-                })
-
-
-
-                res.end(JSON.stringify(con))
-
-            })
-
-
-
-            .catch(error => {
-
-
-
-                console.error(
-
-                    'ERRO AO BUSCAR MISSÕES:',
-
-                    error
-
-                )
-
-
-
-                res.writeHead(500, {
-
-                    'Content-Type':
-
-                        'application/json; charset=utf-8'
-
-                })
-
-
-
-                res.end(JSON.stringify({
-
-                    erro: error.message
-
-                }))
-
-            })
-
-
-
-        return
-
-    }
-
 }
-
 
 
 }

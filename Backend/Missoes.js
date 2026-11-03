@@ -266,7 +266,10 @@ class Missoes {
 
             const contadores = calcularProgresso(eventos)
 
-            let xpGanho = 0
+            let xpGanho =
+        evento?.tipo === 'atividade' && registrado
+            ? 50
+            : 0
 
             for (const missao of missoes) {
                 const progresso = Math.min(
@@ -377,12 +380,21 @@ class Missoes {
     }
 
     static async registrar(conexao, idUsuario, evento) {
-        let {
-            tipo,
-            referencia,
-            materia,
-            correta
-        } = evento
+      if (
+    !evento ||
+    typeof evento !== 'object' ||
+    Array.isArray(evento)
+) {
+    throw erroCliente('Evento inválido.')
+}
+
+let {
+    tipo,
+    referencia,
+    materia
+} = evento
+
+let correta = null
 
         const tiposPermitidos = [
             'resposta',
@@ -589,38 +601,72 @@ class Missoes {
         )
 
         if (
-            tipo === 'atividade' &&
-            insercao.affectedRows === 1
-        ) {
-            const colunas = {
-                1: 'atvidades_concluidas_matematica',
-                2: 'atvidades_concluidas_portugues',
-                3: 'atvidades_concluidas_historia',
-                4: 'atvidades_concluidas_geografia',
-                5: 'atvidades_concluidas_ciencias',
-                6: 'atvidades_concluidas_ingles'
-            }
+    tipo === 'atividade' &&
+    insercao.affectedRows === 1
+) {
+    const colunas = {
+        1: 'atvidades_concluidas_matematica',
+        2: 'atvidades_concluidas_portugues',
+        3: 'atvidades_concluidas_historia',
+        4: 'atvidades_concluidas_geografia',
+        5: 'atvidades_concluidas_ciencias',
+        6: 'atvidades_concluidas_ingles'
+    }
 
-            const coluna = colunas[materia]
+    const coluna = colunas[materia]
 
-            if (!coluna) {
-                throw erroCliente('Matéria inválida.')
-            }
+    if (!coluna) {
+        throw erroCliente('Matéria inválida.')
+    }
 
-            await consultar(
-                conexao,
-                `
-                UPDATE usuarios
-                SET
-                    atvidades_concluidas_geral =
-                        atvidades_concluidas_geral + 1,
-                    ${coluna} = ${coluna} + 1
-                WHERE id_usuario = ?
-                `,
-                [idUsuario]
-            )
-        }
+    await consultar(
+        conexao,
+        `
+        UPDATE usuarios
+        SET
+            atvidades_concluidas_geral =
+                atvidades_concluidas_geral + 1,
 
+            ${coluna} = ${coluna} + 1,
+
+            xp = xp + 50,
+            xp_semanal = xp_semanal + 50,
+
+            streak = CASE
+                WHEN ultima_atividade = CURDATE()
+                    THEN streak
+
+                WHEN ultima_atividade =
+                    DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+                    THEN streak + 1
+
+                ELSE 1
+            END,
+
+            ultima_atividade = CURDATE()
+
+        WHERE id_usuario = ?
+        `,
+        [idUsuario]
+    )
+
+    await consultar(
+        conexao,
+        `
+        INSERT INTO historico_xp (
+            id_usuario,
+            xp_ganho,
+            origem
+        )
+        VALUES (?, 50, ?)
+        `,
+        [
+            idUsuario,
+            `atividade:${referencia}`
+        ]
+    )
+
+}
         return insercao.affectedRows === 1
     }
 }
