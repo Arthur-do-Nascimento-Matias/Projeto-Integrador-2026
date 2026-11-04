@@ -127,6 +127,8 @@ function Perfil({ draft, setDraft }) {
           usuario.atvidades_concluidas_ciencias,
           usuario.atvidades_concluidas_ingles,
         ],
+
+        total_perguntas: usuario.total_perguntas
       });
 
         console.log(draft)
@@ -314,8 +316,11 @@ async function saveProfile(event) {
   /*
   * Dados vindos diretamente do banco.
   */
-  const atividadesConcluidas =
-    Number(user.atvidades_concluidas_geral) || 0
+  const atividadesConcluidas = Number(user.atvidades_concluidas_geral) || 0
+
+  const totalPerguntas = Number(user.total_perguntas) || 0;
+
+  const progressPercentage = (((atividadesConcluidas * 3) * 100) / totalPerguntas).toFixed(2)
 
   const xp =
     Number(user.xp) || 0
@@ -336,7 +341,6 @@ async function saveProfile(event) {
   * Por enquanto mostramos o número de atividades
   * concluídas.
   */
-  const progressPercentage = 0
 
   return (
     <>

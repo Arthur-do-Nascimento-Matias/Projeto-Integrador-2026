@@ -69,7 +69,8 @@ function ConteudoApp({
     username: '',
     bio: '',
     photo: null,
-    atividadesConcluidas: []
+    atividadesConcluidas: [],
+    total_perguntas: ''
   });
 
 
@@ -124,6 +125,8 @@ function ConteudoApp({
             Number(usuario.atvidades_concluidas_ciencias) || 0,
             Number(usuario.atvidades_concluidas_ingles) || 0,
           ],
+
+          total_perguntas: usuario.total_perguntas
         });
 
       } catch (erro) {

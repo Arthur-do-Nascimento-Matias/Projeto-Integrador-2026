@@ -300,30 +300,31 @@ class Conexao {
             const connection = Conexao.connect();
 
             const sql = `
-                SELECT
-                    id_usuario,
-                    adm,
-                    nome_de_exibicao,
-                    nome_de_usuario,
-                    bio,
-                    email,
-                    foto_perfil_texto AS foto,
-                    vidas,
-                    streak,
-                    xp,
-                    xp_semanal,
-                    posicao_ranking,
-                    divisao,
-                    atvidades_concluidas_portugues,
-                    atvidades_concluidas_matematica,
-                    atvidades_concluidas_ciencias,
-                    atvidades_concluidas_geografia,
-                    atvidades_concluidas_ingles,
-                    atvidades_concluidas_historia,
-                    atvidades_concluidas_geral
-                FROM usuarios
-                WHERE id_usuario = ?
-                LIMIT 1
+                        SELECT
+                            id_usuario,
+                            adm,
+                            nome_de_exibicao,
+                            nome_de_usuario,
+                            bio,
+                            email,
+                            foto_perfil_texto AS foto,
+                            vidas,
+                            streak,
+                            xp,
+                            xp_semanal,
+                            posicao_ranking,
+                            divisao,
+                            atvidades_concluidas_portugues,
+                            atvidades_concluidas_matematica,
+                            atvidades_concluidas_ciencias,
+                            atvidades_concluidas_geografia,
+                            atvidades_concluidas_ingles,
+                            atvidades_concluidas_historia,
+                            atvidades_concluidas_geral,
+                            (SELECT COUNT(*) FROM perguntas) AS total_perguntas
+                        FROM usuarios
+                        WHERE id_usuario = ?
+                        LIMIT 1;
             `;
 
             connection.query(sql, [idUsuario], (error, results) => {
