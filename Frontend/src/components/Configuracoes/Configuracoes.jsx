@@ -1,16 +1,41 @@
 import "./Configuracoes.css";
-import MenuEsquerda from "../MenuEsquerda/MenuEsquerda";
+import { useNavigate } from "react-router-dom";
+
+import {
+  executarTransicaoLogin
+} from "../TransicaoLogin/TransicaoLogin";
+
 
 function Configuracoes({
   folhasAtivas,
   alterarFolhas
 }) {
+  const navigate = useNavigate();
+
+
+  async function sairDaConta() {
+    const confirmar = window.confirm(
+      "Deseja realmente sair da sua conta?"
+    );
+
+    if (!confirmar) return;
+
+    await executarTransicaoLogin(() => {
+      localStorage.removeItem("token");
+
+      navigate("/login", {
+        replace: true
+      });
+    });
+  }
+
+
   return (
-    <>
+    <div className="configuracoes">
 
-      <div className="configuracoes">
+      <h1>Configurações</h1>
 
-        <h1>Configurações</h1>
+      <div className="config-lista">
 
         <div className="config-card">
 
@@ -23,8 +48,13 @@ function Configuracoes({
           </div>
 
           <button
-            className={`switch ${folhasAtivas ? "ativo" : ""}`}
-            onClick={() => alterarFolhas(!folhasAtivas)}
+            type="button"
+            className={`switch ${
+              folhasAtivas ? "ativo" : ""
+            }`}
+            onClick={() =>
+              alterarFolhas(!folhasAtivas)
+            }
             aria-label="Ativar ou desativar folhas caindo"
           >
             <span className="switch-bolinha" />
@@ -32,8 +62,30 @@ function Configuracoes({
 
         </div>
 
+
+        <div className="config-card config-card-conta">
+
+          <div className="config-texto">
+            <h2>Sair da conta</h2>
+
+            <p>
+              Encerre sua sessão neste dispositivo.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="botao-sair"
+            onClick={sairDaConta}
+          >
+            Sair
+          </button>
+
+        </div>
+
       </div>
-    </>
+
+    </div>
   );
 }
 

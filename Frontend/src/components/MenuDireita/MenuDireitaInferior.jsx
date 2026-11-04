@@ -2,6 +2,12 @@ import { useEffect, useRef, useState } from "react";
 
 import "./MenuDireitaInferior.css";
 
+import {
+  EVENTO_MISSOES,
+  carregarMissoes
+} from "../utils/missoes";
+
+
 function IconeMissao({ nome }) {
   return (
     <svg
@@ -43,6 +49,7 @@ function IconeMissao({ nome }) {
   );
 }
 
+
 function ListaMissoes({ missoes, draft }) {
   return (
     <ul className="menuDireitaInferior-lista">
@@ -59,9 +66,14 @@ function ListaMissoes({ missoes, draft }) {
             className={`menuDireitaInferior-icone menuDireitaInferior-icone--${missao.icone}`}
           >
             <IconeMissao
-              nome={missao.concluida ? "check" : missao.icone}
+              nome={
+                missao.concluida
+                  ? "check"
+                  : missao.icone
+              }
             />
           </div>
+
           <div className="menuDireitaInferior-texto">
             <div className="menuDireitaInferior-missao-topo">
               <h4>{missao.titulo}</h4>
@@ -106,6 +118,7 @@ function descobrirIcone(tipo) {
   return icones[tipo] || "bandeira";
 }
 
+
 function converterMissao(missaoBanco) {
   return {
     id: missaoBanco.id_usuario_missao,
@@ -116,9 +129,11 @@ function converterMissao(missaoBanco) {
     icone: descobrirIcone(missaoBanco.tipo),
     progresso: Number(missaoBanco.progresso),
     meta: Number(missaoBanco.meta),
-    concluida: Number(missaoBanco.concluida) === 1,
+    concluida:
+      Number(missaoBanco.concluida) === 1,
   };
 }
+
 
 function MenuDireitaInferior({ draft }) {
   const [missoes, setMissoes] = useState([]);
@@ -127,76 +142,86 @@ function MenuDireitaInferior({ draft }) {
   const modalRef = useRef(null);
   const botaoRef = useRef(null);
 
-useEffect(() => {
-  if (!idUsuario) {
-    setMissoes([]);
-    return;
-  }
 
-  let componenteAtivo = true;
-
-  async function carregarMissoes() {
-    try {
-     const resposta = await fetch(
-    'http://localhost:3000/missoes/hoje',
-    {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+  useEffect(() => {
+    if (!idUsuario) {
+      setMissoes([]);
+      return;
     }
-)
 
-      const dados = await resposta.json();
+    let componenteAtivo = true;
 
-      if (!resposta.ok) {
-        throw new Error(
-          dados.erro || "Não foi possível carregar as missões."
+    async function atualizarMissoes() {
+      try {
+        const dados = await carregarMissoes();
+
+        const novasMissoes = dados.map(
+          converterMissao
         );
-      }
 
-      const novasMissoes = (dados.missoes || []).map(
-        converterMissao
+        if (componenteAtivo) {
+          setMissoes(novasMissoes);
+        }
+
+      } catch (error) {
+        console.error(
+          "Erro ao carregar missões:",
+          error
+        );
+
+        if (componenteAtivo) {
+          setMissoes([]);
+        }
+      }
+    }
+
+    atualizarMissoes();
+
+    window.addEventListener(
+      "focus",
+      atualizarMissoes
+    );
+
+    window.addEventListener(
+      EVENTO_MISSOES,
+      atualizarMissoes
+    );
+
+    return () => {
+      componenteAtivo = false;
+
+      window.removeEventListener(
+        "focus",
+        atualizarMissoes
       );
 
-      if (componenteAtivo) {
-        setMissoes(novasMissoes);
-      }
+      window.removeEventListener(
+        EVENTO_MISSOES,
+        atualizarMissoes
+      );
+    };
 
-    } catch (error) {
-      console.error("Erro ao carregar missões:", error);
+  }, [idUsuario]);
 
-      if (componenteAtivo) {
-        setMissoes([]);
-      }
-    }
-  }
-
-  carregarMissoes();
-
-  window.addEventListener("focus", carregarMissoes);
-
-  return () => {
-    componenteAtivo = false;
-
-    window.removeEventListener("focus", carregarMissoes);
-  };
-
-}, [idUsuario]);
 
   const concluidas = missoes.filter(
     (missao) => missao.concluida
   ).length;
 
   const todasConcluidas =
-    missoes.length > 0 && concluidas === missoes.length;
+    missoes.length > 0 &&
+    concluidas === missoes.length;
+
 
   function abrirModal() {
     modalRef.current?.showModal();
   }
 
+
   function fecharModal() {
     modalRef.current?.close();
   }
+
 
   return (
     <>
@@ -234,7 +259,10 @@ useEffect(() => {
           </strong>
         </div>
 
-        <ListaMissoes missoes={missoes} draft={draft}/>
+        <ListaMissoes
+          missoes={missoes}
+          draft={draft}
+        />
 
         <div className="menuDireitaInferior-rodape">
           <span aria-hidden="true" />
@@ -247,9 +275,14 @@ useEffect(() => {
         ref={modalRef}
         className="menuDireitaInferior-modal"
         aria-labelledby="menuDireita-missoes-modal-titulo"
-        onClose={() => botaoRef.current?.focus()}
+        onClose={() =>
+          botaoRef.current?.focus()
+        }
         onClick={(evento) => {
-          if (evento.target === evento.currentTarget) {
+          if (
+            evento.target ===
+            evento.currentTarget
+          ) {
             fecharModal();
           }
         }}
@@ -267,7 +300,6 @@ useEffect(() => {
               aria-label="Fechar missões"
               autoFocus
             >
-              
             </button>
           </div>
 
@@ -279,7 +311,8 @@ useEffect(() => {
 
           <p className="menuDireitaInferior-modal-descricao">
             Complete as metas de hoje no seu ritmo.
-            Seu progresso é atualizado conforme você estuda.
+            Seu progresso é atualizado conforme você
+            estuda.
           </p>
 
           <div className="menuDireitaInferior-total">
@@ -290,12 +323,15 @@ useEffect(() => {
             </strong>
           </div>
 
-          <ListaMissoes missoes={missoes} />
+          <ListaMissoes
+            missoes={missoes}
+            draft={draft}
+          />
 
           <p className="menuDireitaInferior-aviso">
-            Progresso salvo neste navegador, compartilhado
-            por quem usa este dispositivo. Ainda sem crédito
-            de XP no ranking.
+            Seu progresso fica salvo na sua conta.
+            Missões concluídas concedem XP apenas
+            uma vez.
           </p>
 
           <button

@@ -1,12 +1,27 @@
 import { useState, useEffect } from "react";
 import "../Biblioteca/Biblioteca.css";
-import { registrarLivroAberto } from "../utils/missoes";
+import {
+    registrarLivroAberto,
+    registrarVisitaBiblioteca,
+    registrarLeitura
+} from "../utils/missoes";
+
 
 function Biblioteca() {
     const [capas, setCapas] = useState([]);
     const [busca, setBusca] = useState("");
 
     useEffect(() => {
+
+
+        registrarVisitaBiblioteca()
+    .catch((erro) => {
+        console.error(
+            "Erro ao registrar visita à biblioteca:",
+            erro
+        );
+    });
+
         fetch("http://localhost:3000/livros")
             .then((resp) => resp.json())
             .then((data) => {
@@ -16,17 +31,55 @@ function Biblioteca() {
                 console.error("Erro ao carregar os livros:", erro);
             });
     }, []);
+function abrirLivro(id) {
+    const novaAba = window.open(
+        `http://localhost:3000/abrirLivro?id=${id}`,
+        "_blank"
+    );
 
-    function abrirLivro(id) {
-        window.open(
-            `http://localhost:3000/abrirLivro?id=${id}`,
-            "_blank"
-        );
-        if (novaAba) {
-            novaAba.opener = null;
-            registrarLivroAberto(id);
+    if (!novaAba) return;
+
+    novaAba.opener = null;
+
+    registrarLivroAberto(id)
+        .catch((erro) => {
+            console.error(
+                "Erro ao registrar livro aberto:",
+                erro
+            );
+        });
+
+    const sessaoLeitura = crypto.randomUUID();
+    let pulso = 0;
+
+    registrarLeitura(sessaoLeitura, pulso)
+        .catch((erro) => {
+            console.error(
+                "Erro ao iniciar leitura:",
+                erro
+            );
+        });
+
+    const acompanhamento = setInterval(() => {
+        if (novaAba.closed) {
+            clearInterval(acompanhamento);
+            return;
         }
-    }
+
+        pulso += 1;
+
+        registrarLeitura(
+            sessaoLeitura,
+            pulso
+        ).catch((erro) => {
+            console.error(
+                "Erro ao registrar tempo de leitura:",
+                erro
+            );
+        });
+
+    }, 15000);
+}
 
     const livrosFiltrados = capas.filter((capa) =>
         String(capa.titulo || "")

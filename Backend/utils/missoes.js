@@ -1,25 +1,46 @@
-export const EVENTO_MISSOES = 'moki:missoes-atualizadas'
+export const EVENTO_MISSOES =
+    'moki:missoes-atualizadas'
 
 const API = 'http://localhost:3000'
 
 let fila = Promise.resolve()
 
+function obterToken() {
+    return localStorage.getItem('token')
+}
+
+function criarIdEvento() {
+    return crypto.randomUUID()
+}
+
+async function lerResposta(resposta) {
+    try {
+        return await resposta.json()
+    } catch {
+        return {}
+    }
+}
+
 export async function carregarMissoes() {
-    const token = localStorage.getItem('token')
+    const token = obterToken()
 
     if (!token) {
         throw new Error(
-            'Faça login para carregar suas missões.'
+            'Faça login novamente para carregar as missões.'
         )
     }
 
-    const resposta = await fetch(`${API}/missoes/hoje`, {
-        headers: {
-            Authorization: `Bearer ${token}`
+    const resposta = await fetch(
+        `${API}/missoes/hoje`,
+        {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         }
-    })
+    )
 
-    const dados = await resposta.json()
+    const dados = await lerResposta(resposta)
 
     if (!resposta.ok) {
         throw new Error(
@@ -32,7 +53,7 @@ export async function carregarMissoes() {
 }
 
 function registrar(evento) {
-    const token = localStorage.getItem('token')
+    const token = obterToken()
 
     if (!token) {
         return Promise.reject(
@@ -41,23 +62,28 @@ function registrar(evento) {
     }
 
     const tarefa = fila.then(async () => {
-        if (localStorage.getItem('token') !== token) {
-            throw new Error('A conta conectada foi alterada.')
+        if (obterToken() !== token) {
+            throw new Error(
+                'A conta conectada foi alterada.'
+            )
         }
 
         const resposta = await fetch(
             `${API}/missoes/evento`,
             {
                 method: 'POST',
+                keepalive: true,
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    'Content-Type':
+                        'application/json',
+                    Authorization:
+                        `Bearer ${token}`
                 },
                 body: JSON.stringify(evento)
             }
         )
 
-        const dados = await resposta.json()
+        const dados = await lerResposta(resposta)
 
         if (!resposta.ok) {
             throw new Error(
@@ -67,25 +93,34 @@ function registrar(evento) {
         }
 
         window.dispatchEvent(
-            new CustomEvent(EVENTO_MISSOES, {
-                detail: dados
-            })
+            new CustomEvent(
+                EVENTO_MISSOES,
+                {
+                    detail: dados
+                }
+            )
         )
 
         return dados
     })
 
-    // Uma falha não bloqueia as próximas ações.
+    /*
+     * Se uma requisição falhar, as próximas
+     * ações continuam sendo enviadas.
+     */
     fila = tarefa.catch(() => {})
 
     return tarefa
 }
 
-export function registrarResposta(idAlternativa) {
+export function registrarResposta(
+    idAlternativa,
+    eventoId = criarIdEvento()
+) {
     return registrar({
         tipo: 'resposta',
-        id_alternativa: idAlternativa,
-        evento_id: crypto.randomUUID()
+        id_alternativa: Number(idAlternativa),
+        evento_id: eventoId
     })
 }
 
@@ -95,8 +130,8 @@ export function registrarAtividadeConcluida(
 ) {
     return registrar({
         tipo: 'atividade',
-        materia,
-        atividade
+        materia: Number(materia),
+        atividade: Number(atividade)
     })
 }
 
@@ -113,17 +148,22 @@ export function registrarLivroAberto(idLivro) {
     })
 }
 
-export function registrarMensagemMoki(idMensagem) {
+export function registrarMensagemMoki(
+    idMensagem = criarIdEvento()
+) {
     return registrar({
         tipo: 'mensagem',
         referencia: idMensagem
     })
 }
 
-export function registrarLeitura(sessao, pulso) {
+export function registrarLeitura(
+    sessao,
+    pulso
+) {
     return registrar({
         tipo: 'leitura',
         sessao,
-        pulso
+        pulso: Number(pulso)
     })
 }

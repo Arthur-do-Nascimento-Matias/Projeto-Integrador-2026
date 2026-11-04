@@ -3,6 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
+const tamanhoTextoSalvo =
+  localStorage.getItem("tamanhoTexto") ||
+  "normal";
+
+document.documentElement.dataset.tamanhoTexto =
+  tamanhoTextoSalvo;
 createRoot(document.getElementById('root')).render(
 
     <App />

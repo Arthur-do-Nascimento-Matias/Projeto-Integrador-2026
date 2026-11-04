@@ -34,7 +34,7 @@ import Missoes from './Missoes.js'
 
 
 
-const callback = (req, res) => {
+const callback = async (req, res) => {
 
 
 
@@ -64,58 +64,136 @@ const callback = (req, res) => {
     const param = rota.query
 
 
-    if (
+// =========================
+// MISSÕES
+// =========================
+
+if (
     rota.pathname === '/missoes/hoje' ||
     rota.pathname === '/missoes/evento'
 ) {
+    const consulta =
+        rota.pathname === '/missoes/hoje'
+
+    const metodoEsperado = consulta
+        ? 'GET'
+        : 'POST'
+
+    if (req.method !== metodoEsperado) {
+        res.setHeader('Allow', metodoEsperado)
+
+        Http.responderJson(res, 405, {
+            erro: `Use o método ${metodoEsperado}.`
+        })
+
+        return
+    }
+
     const idUsuario = buscarUsuarioAutenticado(req)
 
     if (!idUsuario) {
         Http.responderJson(res, 401, {
             erro: 'Faça login novamente.'
         })
+
         return
     }
 
-    const consulta =
-        rota.pathname === '/missoes/hoje' &&
-        req.method === 'GET'
+    try {
+        let evento = null
 
-    const registro =
-        rota.pathname === '/missoes/evento' &&
-        req.method === 'POST'
+        if (!consulta) {
+            let dados
 
-    if (!consulta && !registro) {
-        Http.responderJson(res, 405, {
-            erro: 'Método não permitido.'
-        })
-        return
-    }
+            try {
+                dados = await Http.lerCorpo(req)
+            } catch {
+                Http.responderJson(res, 400, {
+                    erro: 'Envie um JSON válido.'
+                })
 
-    async function atenderMissoes() {
-        try {
-            const evento = registro
-                ? await Http.lerCorpo(req)
-                : null
+                return
+            }
 
-            const dados = await Missoes.processar(
-                idUsuario,
-                evento
-            )
+            if (
+                !dados ||
+                typeof dados !== 'object' ||
+                Array.isArray(dados)
+            ) {
+                Http.responderJson(res, 400, {
+                    erro: 'Os dados da ação são inválidos.'
+                })
 
-            Http.responderJson(res, 200, dados)
-        } catch (erro) {
-            console.error('Erro nas missões:', erro)
+                return
+            }
 
-            Http.responderJson(
-                res,
-                erro.status || 500,
-                { erro: erro.message }
-            )
+            const tiposPermitidos = [
+                'resposta',
+                'atividade',
+                'biblioteca',
+                'livro',
+                'mensagem',
+                'leitura'
+            ]
+
+            if (!tiposPermitidos.includes(dados.tipo)) {
+                Http.responderJson(res, 400, {
+                    erro: 'Tipo de ação inválido.'
+                })
+
+                return
+            }
+
+            evento = {
+                tipo: dados.tipo,
+                referencia: dados.referencia,
+                materia: dados.materia,
+                atividade: dados.atividade,
+                id_alternativa: dados.id_alternativa,
+                evento_id: dados.evento_id,
+                sessao: dados.sessao,
+                pulso: dados.pulso
+            }
         }
+
+        const resultado = await Missoes.processar(
+            idUsuario,
+            evento
+        )
+
+        Http.responderJson(res, 200, {
+            ok: true,
+            ...resultado
+        })
+    } catch (erro) {
+        console.error(
+            'Erro ao processar missões:',
+            erro
+        )
+
+        if (
+            res.headersSent ||
+            res.writableEnded ||
+            res.destroyed
+        ) {
+            return
+        }
+
+        const erroDeValidacao =
+            erro.status === 400
+
+        Http.responderJson(
+            res,
+            erroDeValidacao ? 400 : 500,
+            {
+                ok: false,
+                erro: erroDeValidacao
+                    ? erro.message
+                    : 'Não foi possível atualizar as missões.'
+            }
+        )
     }
 
-    atenderMissoes()
     return
 }
 

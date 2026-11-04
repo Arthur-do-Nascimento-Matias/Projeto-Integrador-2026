@@ -1,105 +1,427 @@
 .configuracoes {
-    min-height: 100vh;
-    padding: 60px;
-  
-    font-family: "Rubik", sans-serif;
+  width: 100%;
+  min-height: 100vh;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding:
+    clamp(55px, 8vh, 95px)
+    40px
+    60px
+    180px;
+
+  font-family: "Rubik", sans-serif;
+}
+
+
+/* ========================================
+   TÍTULO
+======================================== */
+
+.configuracoes > h1 {
+  width: min(100%, 560px);
+
+  margin: 0 0 28px;
+
+  color: #4b3529;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+
+  text-align: left;
+}
+
+
+/* ========================================
+   LISTA
+======================================== */
+
+.config-lista {
+  width: min(100%, 560px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+
+/* ========================================
+   CARD
+======================================== */
+
+.config-card {
+  width: 100%;
+  min-height: 94px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+
+  padding: 22px 26px;
+
+  border: 1px solid
+    rgba(92, 66, 50, 0.06);
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  box-shadow:
+    0 12px 32px rgba(57, 39, 29, 0.1);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.config-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 16px 38px rgba(57, 39, 29, 0.14);
+}
+
+
+/* ========================================
+   TEXTO
+======================================== */
+
+.config-texto {
+  min-width: 0;
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.configuracoes .config-texto h2 {
+  position: static;
+
+  width: auto;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  color: #4b3529;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: 0;
+
+  text-align: left;
+  white-space: normal;
+
+  transform: none;
+}
+
+.configuracoes .config-texto p {
+  position: static;
+
+  width: auto;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  color: #88756a;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+
+  text-align: left;
+  white-space: normal;
+
+  transform: none;
+}
+
+
+/* ========================================
+   SWITCH
+======================================== */
+
+.switch {
+  position: relative;
+
+  width: 55px;
+  min-width: 55px;
+  height: 30px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #b8b8b8;
+
+  cursor: pointer;
+
+  transition:
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.switch:hover {
+  box-shadow:
+    0 0 0 4px rgba(89, 115, 52, 0.1);
+}
+
+.switch:focus-visible {
+  outline: 3px solid
+    rgba(89, 115, 52, 0.28);
+  outline-offset: 3px;
+}
+
+
+/* BOLINHA */
+
+.switch-bolinha {
+  position: absolute;
+
+  width: 22px;
+  height: 22px;
+
+  top: 4px;
+  left: 4px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.22);
+
+  transition:
+    transform 220ms ease;
+}
+
+
+/* LIGADO */
+
+.switch.ativo {
+  background: #597334;
+}
+
+.switch.ativo .switch-bolinha {
+  transform: translateX(25px);
+}
+
+
+/* ========================================
+   SELETOR DE TAMANHO
+======================================== */
+
+.config-seletor {
+  min-width: 118px;
+
+  box-sizing: border-box;
+
+  padding: 11px 34px 11px 14px;
+
+  border: 1px solid #d8cec7;
+  border-radius: 12px;
+
+  background-color: #fdfaf7;
+  color: #4b3529;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0;
+
+  cursor: pointer;
+  outline: none;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.config-seletor:hover {
+  border-color: #9a826f;
+  background: #ffffff;
+}
+
+.config-seletor:focus {
+  border-color: #597334;
+
+  box-shadow:
+    0 0 0 3px rgba(89, 115, 52, 0.15);
+}
+
+
+/* ========================================
+   SAIR DA CONTA
+======================================== */
+
+.config-card-conta {
+  border-color:
+    rgba(184, 67, 67, 0.14);
+}
+
+.botao-sair {
+  min-width: 90px;
+
+  box-sizing: border-box;
+
+  padding: 11px 20px;
+
+  border: 1px solid #d66a62;
+  border-radius: 12px;
+
+  background: #fff4f2;
+  color: #a63f38;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.botao-sair:hover {
+  background: #c9574f;
+  color: #ffffff;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 16px rgba(201, 87, 79, 0.22);
+}
+
+.botao-sair:active {
+  transform: translateY(0);
+}
+
+.botao-sair:focus-visible {
+  outline: 3px solid
+    rgba(201, 87, 79, 0.25);
+  outline-offset: 3px;
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 900px) {
+  .configuracoes {
+    padding:
+      50px
+      28px
+      50px
+      145px;
   }
-  
-  .configuracoes h1 {
-    margin: 0 0 30px;
-  
-    font-size: 32px;
-  
-    color: #4b3529;
+}
+
+
+@media (max-width: 700px) {
+  .configuracoes {
+    align-items: stretch;
+
+    padding:
+      34px
+      20px
+      110px;
   }
-  
-  
-  /* CARD */
-  
+
+  .configuracoes > h1 {
+    width: 100%;
+
+    margin-bottom: 22px;
+
+    font-size: 1.75rem;
+  }
+
+  .config-lista {
+    width: 100%;
+  }
+
   .config-card {
-    width: 500px;
-  
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  
-    padding: 22px 25px;
-  
-    border-radius: 20px;
-  
-    background: #ffffff;
-  
-    box-shadow:
-      0 10px 30px rgba(57, 39, 29, 0.12);
+    min-height: 88px;
+
+    gap: 18px;
+
+    padding: 19px;
   }
-  
-  
-  /* TEXTO */
-  
-  .config-texto h2 {
-    margin: 0 0 5px;
-  
-    font-size: 18px;
-  
-    color: #4b3529;
+
+  .configuracoes .config-texto h2 {
+    font-size: 1.0625rem;
   }
-  
-  .config-texto p {
-    margin: 0;
-  
-    font-size: 14px;
-  
-    color: #88756a;
+
+  .configuracoes .config-texto p {
+    font-size: 0.8125rem;
   }
-  
-  
-  /* SWITCH */
-  
-  .switch {
-    position: relative;
-  
-    width: 55px;
-    height: 30px;
-  
-    border: none;
-    border-radius: 50px;
-  
-    background: #b8b8b8;
-  
-    cursor: pointer;
-  
-    transition: 0.3s;
+
+  .config-seletor {
+    min-width: 105px;
   }
-  
-  
-  /* BOLINHA */
-  
-  .switch-bolinha {
-    position: absolute;
-  
-    width: 22px;
-    height: 22px;
-  
-    left: 4px;
-    top: 4px;
-  
-    border-radius: 50%;
-  
-    background: white;
-  
-    transition: 0.3s;
-  
-    box-shadow:
-      0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+@media (max-width: 430px) {
+  .config-card {
+    align-items: flex-start;
+    flex-direction: column;
   }
-  
-  
-  /* LIGADO */
-  
-  .switch.ativo {
-    background: #597334;
+
+  .switch,
+  .config-seletor,
+  .botao-sair {
+    align-self: flex-end;
   }
-  
-  .switch.ativo .switch-bolinha {
-    transform: translateX(25px);
-  }
+}
+
+
+
+
+/* ========================================
+   TAMANHO GLOBAL DOS TEXTOS
+======================================== */
+
+html {
+  font-size: 16px;
+}
+
+html[data-tamanho-texto="pequeno"] {
+  font-size: 14px;
+}
+
+html[data-tamanho-texto="normal"] {
+  font-size: 16px;
+}
+
+html[data-tamanho-texto="grande"] {
+  font-size: 18px;
+}

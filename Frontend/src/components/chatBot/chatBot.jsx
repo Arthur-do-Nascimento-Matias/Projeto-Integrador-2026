@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
+import {
+  registrarMensagemMoki
+} from '../utils/missoes'
+
 import './chatBot.css'
 
 import mascotePadrao from '../../assets/MOKI.png'
@@ -108,6 +112,16 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
                 texto: html
             }
         ])
+        
+        registrarMensagemMoki()
+    .catch((erroMissao) => {
+        console.error(
+            'Erro ao registrar mensagem na missão:',
+            erroMissao
+        )
+    })
+
+
 
     } catch (error) {
 
