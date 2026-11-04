@@ -6,7 +6,7 @@ import cienciaIcon from "../../assets/materias/ciencia.svg";
 import geoIcon from "../../assets/materias/geografia.svg";
 import histIcon from "../../assets/materias/historia.svg";
 import matIcon from "../../assets/materias/matematica.svg";
-import { criarAtividade } from "../atividades/atividades";
+
 
 const materias = [
   {
@@ -277,8 +277,7 @@ useEffect(() => {
                     selecionarMateria(materia)
                     criarTrilha(materia.id)
                     setMateriaAtual(materia.id)
-                    criarAtividade(refAtividade, refEnunciado, atividadeAtual, materia.id, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4)
-                    atividadeAtual = 0
+                    setAtividadeAtual(0)
                     }
                   }
                   onMouseEnter={() => {
