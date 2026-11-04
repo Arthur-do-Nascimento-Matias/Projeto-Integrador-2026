@@ -1,7 +1,16 @@
+import moki from "../../assets/simio.png"
+import punk from "../../assets/gotico.png"
+import artista from "../../assets/artista.png"
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from "react-dom";
 import { useParams } from 'react-router-dom'
 import './Perfil.css'
+
+const fotosPerfil = {
+  moki: moki,
+  gotico: punk,
+  artista: artista,
+};
 
 function StatCard({ icon, value, label, delay }) {
   return (
@@ -21,7 +30,7 @@ function StatCard({ icon, value, label, delay }) {
   )
 }
 
-function Avatar({ photo, name, className = '' }) {
+function Avatar({ setPhotoImage, photo, name, className = '' }) {
   const initials = useMemo(() => {
     return (name || '')
       .split(' ')
@@ -31,11 +40,12 @@ function Avatar({ photo, name, className = '' }) {
       .join('')
   }, [name])
 
+
   return (
     <div className={`profile-avatar ${className}`}>
       {photo ? (
         <img
-          src={photo}
+          src={fotosPerfil[photo] || moki}
           alt={`Foto de ${name}`}
         />
       ) : (
@@ -55,11 +65,13 @@ function Perfil({ draft, setDraft }) {
   const [editOpen, setEditOpen] = useState(false)
   const [novaBio, setNovaBio] = useState('')
   const [savingProfile, setSavingProfile] = useState(false)
+  const [photoImage, setPhotoImage] = useState("")
+  const [fotoOpen, setFotoOpen] = useState(false);
 
   /*
-   * Atualmente o /perfil retorna o usuário
-   * autenticado pelo token.
-   */
+  * Atualmente o /perfil retorna o usuário
+  * autenticado pelo token.
+  */
   const isOwner = !username || username === user?.nome_de_usuario
 
   useEffect(() => {
@@ -91,30 +103,33 @@ function Perfil({ draft, setDraft }) {
           return
         }
 
-        const usuario = dados.usuario
+      const usuario = dados.usuario;
 
-        setUser(usuario)
+      const fotoSalva = usuario.foto_perfil || usuario.foto || "";
 
-        console.log('id', usuario.id_usuario)
+      setUser({
+        ...usuario,
+        foto_perfil: fotoSalva,
+      });
 
       setDraft({
-        id: usuario.id_usuario || '',
-        name: usuario.nome_de_exibicao || '',
-        username: usuario.nome_de_usuario || '',
-        bio: usuario.bio || '',
-        photoFile: null,
+        id: usuario.id_usuario || "",
+        name: usuario.nome_de_exibicao || "",
+        username: usuario.nome_de_usuario || "",
+        bio: usuario.bio || "",
+        photo: fotoSalva,
         atividadesConcluidas: [
-
           usuario.atvidades_concluidas_geral,
           usuario.atvidades_concluidas_matematica,
           usuario.atvidades_concluidas_portugues,
           usuario.atvidades_concluidas_historia,
           usuario.atvidades_concluidas_geografia,
           usuario.atvidades_concluidas_ciencias,
-          usuario.atvidades_concluidas_ingles
+          usuario.atvidades_concluidas_ingles,
+        ],
+      });
 
-        ]
-      })
+        console.log(draft)
 
       } catch (erro) {
         console.error(erro)
@@ -131,8 +146,15 @@ function Perfil({ draft, setDraft }) {
   }, [])
 
   function openEdit() {
-      setNomeUsuario(user.nome_de_exibicao || "");
-      setEditOpen(true);
+    setNomeUsuario(user.nome_de_exibicao || "");
+
+    setDraft(previous => ({
+      ...previous,
+      photo: user.foto_perfil || "",
+    }));
+
+    setFotoOpen(false);
+    setEditOpen(true);
   }
 
   function handlePhoto(event) {
@@ -148,27 +170,6 @@ function Perfil({ draft, setDraft }) {
       photoFile: file,
     }))
   }
-
-async function saveProfile(event) {
-    event.preventDefault();
-
-    if (savingProfile) return;
-
-    const id = user.id_usuario;
-
-    const novoNome = nomeUsuario
-        .trim()
-        .replace(/^@+/, "")
-        .replace(/\s+/g, "");
-
-    const bioNova = draft.bio.trim();
-
-    if (!novoNome) {
-        alert("O nome de usuário não pode ficar vazio.");
-        return;
-    }
-
-    setSavingProfile(true);
 
     async function enviar(rota, dados) {
         console.log(`[Perfil] Enviando para /${rota}`, dados.id);
@@ -198,6 +199,38 @@ async function saveProfile(event) {
         return resultado;
     }
 
+async function trocar(fotinha) {
+    setDraft(previous => ({
+      ...previous,
+      photo: fotinha,
+    }));
+
+    setFotoOpen(false);
+}
+
+async function saveProfile(event) {
+    event.preventDefault();
+
+    if (savingProfile) return;
+
+    const id = user.id_usuario;
+
+    const novoNome = nomeUsuario
+        .trim()
+        .replace(/^@+/, "")
+        .replace(/\s+/g, "");
+
+    const bioNova = draft.bio.trim();
+
+    const fotoNova = draft.photo
+
+    if (!novoNome) {
+        alert("O nome de usuário não pode ficar vazio.");
+        return;
+    }
+
+    setSavingProfile(true);
+
     try {
         // 1. ALTERAR NOME DE USUÁRIO
         if (novoNome !== user.nome_de_exibicao) {
@@ -216,18 +249,12 @@ async function saveProfile(event) {
         }
 
         // 3. ALTERAR FOTO
-        if (draft.photoFile instanceof File) {
-            const arrayBuffer = await draft.photoFile.arrayBuffer();
-
-            const foto = Array.from(
-                new Uint8Array(arrayBuffer)
-            );
-
+          if (fotoNova && fotoNova !== user.foto_perfil) {
             await enviar("mudarFoto", {
-                id: id,
-                foto: foto
+              id: user.id_usuario,
+              foto: fotoNova,
             });
-        }
+          }
 
         // 4. ATUALIZAR INTERFACE
         setUser(previous => ({
@@ -285,8 +312,8 @@ async function saveProfile(event) {
   }
 
   /*
-   * Dados vindos diretamente do banco.
-   */
+  * Dados vindos diretamente do banco.
+  */
   const atividadesConcluidas =
     Number(user.atvidades_concluidas_geral) || 0
 
@@ -297,18 +324,18 @@ async function saveProfile(event) {
     Number(user.streak) || 0
 
   /*
-   * Como sua tabela atual não possui uma coluna
-   * de data de cadastro, não vamos inventar uma.
-   */
+  * Como sua tabela atual não possui uma coluna
+  * de data de cadastro, não vamos inventar uma.
+  */
   const joinedAt = '2026'
 
   /*
-   * Sua tabela ainda não possui uma informação
-   * de porcentagem de progresso.
-   *
-   * Por enquanto mostramos o número de atividades
-   * concluídas.
-   */
+  * Sua tabela ainda não possui uma informação
+  * de porcentagem de progresso.
+  *
+  * Por enquanto mostramos o número de atividades
+  * concluídas.
+  */
   const progressPercentage = 0
 
   return (
@@ -334,7 +361,6 @@ async function saveProfile(event) {
             />
 
             <div className="profile-avatar-wrap">
-
               <Avatar
                 photo={user.foto_perfil}
                 name={user.nome_de_exibicao}
@@ -345,7 +371,6 @@ async function saveProfile(event) {
                 className="profile-online-dot"
                 title="Perfil ativo"
               />
-
             </div>
 
             <div className="profile-identity">
@@ -362,7 +387,7 @@ async function saveProfile(event) {
                 @{user.nome_de_usuario}
               </p>
 
-             <p className="profile-bio">
+            <p className="profile-bio">
                 {user.bio?.trim()
                   ? user.bio
                   : 'Este aluno ainda não adicionou uma bio.'}
@@ -743,6 +768,7 @@ async function saveProfile(event) {
               <div className="edit-photo-row">
 
                 <Avatar
+                  setPhotoImage={setPhotoImage}
                   photo={
                     draft.photo ||
                     user.foto_perfil
@@ -753,15 +779,12 @@ async function saveProfile(event) {
                   className="profile-avatar-large"
                 />
 
-                <label className="photo-upload-button">
+                <label 
+                  className="photo-upload-button"
+                  onClick={() => setFotoOpen(true)}
+                >
 
                   Alterar foto
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhoto}
-                  />
 
                 </label>
 
@@ -780,7 +803,7 @@ async function saveProfile(event) {
                 @{user.nome_de_usuario}
               </p>
 
-             <label className="profile-field">
+            <label className="profile-field">
                 <span>Bio</span>
 
                 <textarea
@@ -803,7 +826,7 @@ async function saveProfile(event) {
                 </small>
               </label>
 
-             <div className="edit-modal-actions">
+            <div className="edit-modal-actions">
 
                 <button
                     className="profile-secondary-button"
@@ -830,6 +853,58 @@ async function saveProfile(event) {
             </form>
 
           </section>
+
+          {editOpen && fotoOpen && createPortal(
+            <div
+              className="profile-modal-backdrop"
+              style={{ zIndex: 10000 }}
+              onMouseDown={() => setFotoOpen(false)}
+            >
+              <section
+                className="profile-edit-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Trocar foto"
+                onMouseDown={(event) => event.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  className="profile-modal-close"
+                  onClick={() => setFotoOpen(false)}
+                  aria-label="Fechar"
+                >
+                  ×
+                </button>
+
+                <h2>Escolha sua foto</h2>
+
+                <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+                  <img 
+                    src={moki} 
+                    alt="Moki" 
+                    width={100} 
+                    value="moki"
+                    onClick={() => trocar("moki")}
+                  />
+                  <img 
+                    src={punk} 
+                    alt="Moki punk"
+                    width={100} 
+                    value="punk"
+                    onClick={() => trocar("gotico")}
+                  />
+                  <img 
+                    src={artista} 
+                    alt="Moki artista" 
+                    width={100} 
+                    value="artista"
+                    onClick={() => trocar("artista")}
+                  />
+                </div>
+              </section>
+            </div>,
+            document.body
+          )}
 
         </div>,
         document.body

@@ -37,6 +37,8 @@ export default function ChatBot({ mascoteSrc = mascotePadrao, endpoint = 'http:/
   const requisicao = useRef(null)
   const ocupado = useRef(false)
 
+  let memoria = []
+
   useEffect(() => () => requisicao.current?.abort(), [])
   useEffect(() => {
     const input = inputRef.current
@@ -80,7 +82,8 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                mensagem: mensagem
+                mensagem: mensagem,
+                memoria: memoria.slice(-10)
               })
             }
         )
@@ -100,6 +103,8 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
         const html = DOMPurify.sanitize(
             marked.parse(dados.resposta)
         )
+
+        memoria.push(mensagem)
 
         setMensagens(prev => [
             ...prev,

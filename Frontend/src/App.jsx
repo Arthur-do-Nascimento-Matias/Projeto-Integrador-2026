@@ -68,7 +68,7 @@ function ConteudoApp({
     name: '',
     username: '',
     bio: '',
-    photoFile: null,
+    photo: null,
     atividadesConcluidas: []
   });
 
@@ -113,7 +113,7 @@ function ConteudoApp({
           name: usuario.nome_de_exibicao || '',
           username: usuario.nome_de_usuario || '',
           bio: usuario.bio || '',
-          photoFile: null,
+          photo: usuario.foto_perfil_texto || '',
 
           atividadesConcluidas: [
             Number(usuario.atvidades_concluidas_geral) || 0,

@@ -307,7 +307,7 @@ class Conexao {
                     nome_de_usuario,
                     bio,
                     email,
-                    foto_perfil,
+                    foto_perfil_texto AS foto,
                     vidas,
                     streak,
                     xp,
@@ -339,14 +339,6 @@ class Conexao {
                 }
 
                 const usuario = results[0];
-
-                // Converte a foto armazenada em BLOB para Base64
-                if (usuario.foto_perfil) {
-                    usuario.foto_perfil =
-                        `data:image/jpeg;base64,${usuario.foto_perfil.toString('base64')}`;
-                } else {
-                    usuario.foto_perfil = '';
-                }
 
                 resolve(usuario);
             });
@@ -409,22 +401,18 @@ class Conexao {
 
     static atualizarFoto(dados) {
         return new Promise((resolve, reject) => {
-            // Aceita Buffer ou conteúdo binário recebido
-            const fotoBuffer = Buffer.isBuffer(dados.foto)
-                ? dados.foto
-                : Buffer.from(dados.foto);
 
             const connection = Conexao.connect();
 
             const sql = `
                 UPDATE usuarios
-                SET foto_perfil = ?
+                SET foto_perfil_texto = ?
                 WHERE id_usuario = ?
             `;
 
             connection.query(
                 sql,
-                [fotoBuffer, dados.id],
+                [dados.foto, dados.id],
                 (error, results) => {
                     connection.end();
 

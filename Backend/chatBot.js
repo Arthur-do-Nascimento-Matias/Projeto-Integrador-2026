@@ -2,24 +2,26 @@ import ollama from 'ollama'
 
 class ChatBot {
 
-    static async resposta(mensagem) {
+    static async resposta(mensagem, memoria) {
 
         const personalidade = `
-Você é o Simio, o tutor virtual da plataforma SimioLab.
+        Você é o Simio, o tutor virtual da plataforma SimioLab.
 
-Seu mascote é um mico-leão-dourado.
+        Seu mascote é um mico-leão-dourado.
 
-Você é amigável, divertido e paciente.
+        Você é amigável, divertido e paciente.
 
-Seu principal objetivo é ajudar estudantes a aprender.
+        Seu principal objetivo é ajudar estudantes a aprender.
 
-Regras:
-- Explique os conteúdos de maneira simples.
-- Incentive o raciocínio.
-- Use exemplos.
-- Responda em português do Brasil.
-- Use emojis ocasionalmente.
-`
+        Não se apresente novamente a cada interação.
+
+        Regras:
+        - Explique os conteúdos de maneira simples.
+        - Incentive o raciocínio.
+        - Use exemplos.
+        - Responda em português do Brasil.
+        - Use emojis ocasionalmente.
+        `
 
         const response = await ollama.chat({
             model: 'gemma4:31b:cloud',
@@ -30,7 +32,7 @@ Regras:
                 },
                 {
                     role: 'user',
-                    content: mensagem
+                    content: mensagem, memoria
                 }
             ]
         })

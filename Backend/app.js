@@ -1750,67 +1750,26 @@ if (rota.pathname == '/cadastro/verificar') {
 
 
             try {
-
-
-
-                const dados = JSON.parse(body)
-
-
-
-                const resposta = await ChatBot.resposta(dados.mensagem)
-
-
-
-                console.log('Ollama respondeu')
-
-
-
-                res.writeHead(200, {
-
-                    'Content-Type': 'application/json; charset=utf-8'
-
-                })
-
-
-
-                res.end(JSON.stringify({
-
-                    resposta: resposta
-
-                }))
-
-
-
+            const dados = JSON.parse(body)
+            const resposta = await ChatBot.resposta(dados.mensagem, dados.memoria)
+            console.log('Ollama respondeu')
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+            res.end(JSON.stringify({
+                resposta: resposta
+            }))
             } catch (error) {
-
-
-
                 console.error('ERRO NO CHATBOT:', error)
-
-
-
                 res.writeHead(500, {
-
                     'Content-Type': 'application/json; charset=utf-8'
-
                 })
-
-
-
                 res.end(JSON.stringify({
-
                     erro: error.message
-
                 }))
-
             }
-
         })
-
-
-
         return
-
     }
 
 if (rota.pathname === "/trocarNomeUsuario") {
