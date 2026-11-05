@@ -1,4 +1,3 @@
-
 import mysql from "mysql";
 
 function formatarData(data) {
