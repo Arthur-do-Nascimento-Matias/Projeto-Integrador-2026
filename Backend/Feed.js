@@ -176,10 +176,7 @@ static resolverDenuncia(idDenuncia, acao) {
                 AND p.ativo = 1
             WHERE c.ativa = 1
             GROUP BY c.id_comunidade
-<<<<<<< HEAD
-=======
             ORDER BY c.nome
->>>>>>> origin/kauan
         `
 
         return Feed.executar(sql)
