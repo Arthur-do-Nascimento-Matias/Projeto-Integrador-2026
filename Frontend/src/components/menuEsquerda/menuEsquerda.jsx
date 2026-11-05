@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-
 import { useLocation, useNavigate } from 'react-router-dom'
-import { flushSync } from 'react-dom'
+import { flushSync, createPortal } from 'react-dom'
 
 import './MenuEsquerda.css'
 
@@ -19,7 +18,7 @@ const itensPrincipais = [
 
   { nome: 'SimIA', rota: '/chatBot', lightning: true },
 
-  { nome: 'Feed', rota: null },
+  { nome: 'Feed', rota: '/feed' },
 
 ]
 
@@ -51,18 +50,22 @@ const fxMap = {
 
 }
 
-function nomePelaRota(pathname) {
-    const rota = pathname.replace(/\/+$/, '') || '/'
 
-    if (rota === '/painel') return 'Aprender'
-    if (rota === '/simulados') return 'Simulados'
-    if (rota === '/ranking') return 'Ranking'
-    if (rota === '/biblioteca') return 'Biblioteca'
-    if (rota === '/chatBot') return 'SimIA'
-    if (rota === '/perfil' || rota.startsWith('/perfil/')) return 'Perfil'
-    if (rota === '/configuracoes') return 'Configurações'
+export function nomePelaRota(pathname) {
+    const rota = (pathname || "/")
+        .replace(/\/+$/, "")
+        .toLowerCase() || "/";
 
-    return 'Aprender'
+    if (rota === "/" || rota === "/painel") return "Aprender";
+    if (rota === "/simulados") return "Simulados";
+    if (rota === "/ranking") return "Ranking";
+    if (rota === "/biblioteca") return "Biblioteca";
+    if (rota === "/chatbot") return "SimIA";
+    if (rota === "/feed") return "Feed";
+    if (rota === "/perfil" || rota.startsWith("/perfil/")) return "Perfil";
+    if (rota === "/configuracoes") return "Configurações";
+
+    return "Aprender";
 }
 
 function Icone({ nome }) {
@@ -244,59 +247,9 @@ function MenuEsquerda() {
   const [touchLike, setTouchLike] = useState(false)
   const [mouseNaSidebar, setMouseNaSidebar] = useState(false)
 
-useEffect(() => {
-  const camada = document.querySelector('.simio-sidebar-layer');
-
-  if (!camada) return;
-
-  function atualizarScroll(event) {
-    const alvo = event?.target;
-
-    if (
-      alvo instanceof Element &&
-      alvo.closest('.simio-sidebar-layer')
-    ) {
-      return;
-    }
-
-    // Na Biblioteca, ignorar a rolagem da div central
-    if (
-      location.pathname === '/biblioteca' ||
-      location.pathname === '/chatBot'
-    )  {
-      camada.style.setProperty('--page-scroll', '0px');
-      return;
-    }
-
-    let deslocamento = window.scrollY;
-
-    if (
-      alvo instanceof Element &&
-      alvo.scrollHeight > alvo.clientHeight &&
-      alvo.clientWidth >= window.innerWidth * 0.45
-    ) {
-      deslocamento = alvo.scrollTop;
-    }
-
-    camada.style.setProperty(
-      '--page-scroll',
-      `${deslocamento}px`
-    );
-  }
-
-  window.addEventListener('scroll', atualizarScroll, {
-    passive: true
-  });
-
-  document.addEventListener('scroll', atualizarScroll, true);
-
-  atualizarScroll();
-
-  return () => {
-    window.removeEventListener('scroll', atualizarScroll);
-    document.removeEventListener('scroll', atualizarScroll, true);
-  };
-}, [location.pathname]);
+  useEffect(() => {
+      setItemAtivo(ativoDaRota);
+  }, [ativoDaRota]);
 
   // A expansão acompanha o mouse, mesmo durante a transição de rotas.
   useEffect(() => {
@@ -606,7 +559,7 @@ function aoSelecionar(item, event) {
 
   }
 
-  return (
+  return createPortal(
 
     <div className="simio-sidebar-layer" aria-label="Navegação SimioLab">
 
@@ -721,8 +674,8 @@ function aoSelecionar(item, event) {
 
       </div>
 
-    </div>
-
+    </div>,
+    document.body
   )
 
 }

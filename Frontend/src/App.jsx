@@ -27,7 +27,11 @@ import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
 
-
+export function alternarTema(setTema) {
+    setTema(anterior =>
+        anterior === "claro" ? "escuro" : "claro"
+    );
+}
 
 function RotaPrivada({ children }) {
 
@@ -63,8 +67,9 @@ function ConteudoApp({
     name: '',
     username: '',
     bio: '',
-    photoFile: null,
-    atividadesConcluidas: []
+    photo: null,
+    atividadesConcluidas: [],
+    total_perguntas: ''
   });
 
 
@@ -108,7 +113,7 @@ function ConteudoApp({
           name: usuario.nome_de_exibicao || '',
           username: usuario.nome_de_usuario || '',
           bio: usuario.bio || '',
-          photoFile: null,
+          photo: usuario.foto_perfil_texto || '',
 
           atividadesConcluidas: [
             Number(usuario.atvidades_concluidas_geral) || 0,
@@ -119,6 +124,8 @@ function ConteudoApp({
             Number(usuario.atvidades_concluidas_ciencias) || 0,
             Number(usuario.atvidades_concluidas_ingles) || 0,
           ],
+
+          total_perguntas: usuario.total_perguntas
         });
 
       } catch (erro) {
@@ -133,6 +140,45 @@ function ConteudoApp({
   }, [estaNoLogin, estaNoIndex, navigate]);
 
   const [mode, setMode] = useState('login')
+
+
+  const [tema, setTema] = useState(() => {
+      const temaSalvo = localStorage.getItem("tema");
+      const escolhaManual = localStorage.getItem("temaManual");
+
+      if (escolhaManual === "true" && temaSalvo) {
+          return temaSalvo;
+      }
+
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "escuro"
+          : "claro";
+  });
+
+  useEffect(() => {
+      document.documentElement.setAttribute("data-tema", tema);
+      localStorage.setItem("tema", tema);
+  }, [tema]);
+
+  useEffect(() => {
+      const mediaQuery = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+      );
+
+      function atualizarTema(evento) {
+          const escolhaManual = localStorage.getItem("temaManual");
+
+          if (escolhaManual !== "true") {
+              setTema(evento.matches ? "escuro" : "claro");
+          }
+      }
+
+      mediaQuery.addEventListener("change", atualizarTema);
+
+      return () => {
+          mediaQuery.removeEventListener("change", atualizarTema);
+      };
+  }, []);
 
   return (
 
@@ -173,6 +219,9 @@ function ConteudoApp({
           element={<PainelIndex 
               mode={mode}
               setMode={setMode}
+              tema={tema}
+              setTema={setTema}
+              alternarTema={alternarTema}
           />}
         />
 
@@ -200,7 +249,9 @@ function ConteudoApp({
           element={<Simulados />}
         />
 
-<Route path="*" element={<NotFound />} />
+        <Route path="*" 
+          element={<NotFound />} 
+        />
 
         {/* LOGIN */}
 
@@ -304,6 +355,8 @@ function ConteudoApp({
               <Configuracoes
                 folhasAtivas={folhasAtivas}
                 alterarFolhas={alterarFolhas}
+                tema={tema}
+                setTema={setTema}
               />
             </RotaPrivada>
           }

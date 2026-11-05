@@ -375,9 +375,25 @@
 
     padding: 19px;
   }
+<<<<<<< HEAD
+  
+  
+  /* TEXTO */
+  
+  .config-texto h2 {
+    margin: 0 0 5px;
+  
+    font-size: 18px;
+  
+    color: #4b3529;
+
+    letter-spacing: normal;
+    word-spacing: normal;
+=======
 
   .configuracoes .config-texto h2 {
     font-size: 1.0625rem;
+>>>>>>> origin/kauan
   }
 
   .configuracoes .config-texto p {
@@ -401,6 +417,12 @@
   .botao-sair {
     align-self: flex-end;
   }
+<<<<<<< HEAD
+  
+  .switch.ativo .switch-bolinha {
+    transform: translateX(25px);
+  }
+=======
 }
 
 
@@ -425,3 +447,4 @@ html[data-tamanho-texto="normal"] {
 html[data-tamanho-texto="grande"] {
   font-size: 18px;
 }
+>>>>>>> origin/kauan

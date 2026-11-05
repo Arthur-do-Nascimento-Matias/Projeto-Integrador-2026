@@ -73,7 +73,6 @@ export function calcularProgresso(eventos) {
             if (Number(evento.correta) === 1) {
                 if (!acertos.has(evento.referencia)) {
                     acertos.add(evento.referencia)
-
                     sequencia++
 
                     melhorSequencia = Math.max(
@@ -303,10 +302,9 @@ class Missoes {
             const contadores =
                 calcularProgresso(eventos)
 
-            let xpGanho =
-                evento?.tipo === 'atividade' && registrado
-                    ? 50
-                    : 0
+            // A conclusão da atividade já concede XP em /concluirAtividade.
+            // Aqui são contabilizadas apenas recompensas de missões.
+            let xpGanho = 0
 
             for (const missao of missoes) {
                 const meta = Number(missao.meta)
@@ -558,7 +556,7 @@ class Missoes {
             )
 
             const todasRespondidas =
-                perguntas.length > 0 &&
+                perguntas.length === 3 &&
                 perguntas.every(pergunta =>
                     acertos.has(
                         String(pergunta.id_pergunta)
@@ -725,63 +723,9 @@ class Missoes {
         const registrado =
             insercao.affectedRows === 1
 
-        if (
-            tipo === 'atividade' &&
-            registrado
-        ) {
-            const coluna =
-                COLUNAS_MATERIAS[materia]
-
-            await consultar(
-                conexao,
-                `
-                UPDATE usuarios
-                SET
-                    atvidades_concluidas_geral =
-                        atvidades_concluidas_geral + 1,
-
-                    ${coluna} = ${coluna} + 1,
-
-                    xp = xp + 50,
-                    xp_semanal = xp_semanal + 50,
-
-                    streak = CASE
-                        WHEN ultima_atividade = CURDATE()
-                            THEN streak
-
-                        WHEN ultima_atividade =
-                            DATE_SUB(
-                                CURDATE(),
-                                INTERVAL 1 DAY
-                            )
-                            THEN streak + 1
-
-                        ELSE 1
-                    END,
-
-                    ultima_atividade = CURDATE()
-
-                WHERE id_usuario = ?
-                `,
-                [idUsuario]
-            )
-
-            await consultar(
-                conexao,
-                `
-                INSERT INTO historico_xp (
-                    id_usuario,
-                    xp_ganho,
-                    origem
-                )
-                VALUES (?, 50, ?)
-                `,
-                [
-                    idUsuario,
-                    `atividade:${referencia}`
-                ]
-            )
-        }
+        // O progresso permanente, streak e XP de atividade são atualizados
+        // exclusivamente pela rota /concluirAtividade.
+        // Este registro serve apenas para acompanhar missões diárias.
 
         return registrado
     }

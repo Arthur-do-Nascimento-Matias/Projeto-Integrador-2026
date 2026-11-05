@@ -7,7 +7,7 @@ class Livros{
     return new Promise((resolve, reject) => {
 
         const connection = mysql.createConnection({
-            host: 'localhost',
+            host: '127.0.0.1',
             user: 'root',
             password: '',
             database: 'integrador',
@@ -53,7 +53,7 @@ class Livros{
         return new Promise((resolve, reject) => {
 
         const connection = mysql.createConnection({
-            host: 'localhost',
+            host: '127.0.0.1',
             user: 'root',
             password: '',
             database: 'integrador',

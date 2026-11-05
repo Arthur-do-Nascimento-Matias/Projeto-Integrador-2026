@@ -1,4 +1,5 @@
 import "./Configuracoes.css";
+import { alternarTema } from "../../App";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -8,7 +9,9 @@ import {
 
 function Configuracoes({
   folhasAtivas,
-  alterarFolhas
+  alterarFolhas,
+  tema,
+  setTema
 }) {
   const navigate = useNavigate();
 
@@ -58,6 +61,10 @@ function Configuracoes({
             aria-label="Ativar ou desativar folhas caindo"
           >
             <span className="switch-bolinha" />
+          </button>
+
+          <button onClick={() => alternarTema(setTema)}>
+              {tema === "claro" ? "🌙 Modo escuro" : "☀️ Modo claro"}
           </button>
 
         </div>

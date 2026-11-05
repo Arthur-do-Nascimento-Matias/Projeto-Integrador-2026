@@ -81,7 +81,7 @@
 .chatIA .simia-avatar-grande img { transform: rotate(5deg); }
 
 /* Conteúdo e tela inicial */
-.chatIA .simia-conteudo { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent; padding: 28px clamp(20px,3.5vw,54px); }
+.chatIA .simia-conteudo { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; scrollbar-color: rgba(255,255,255,.25) transparent; padding: 28px clamp(20px,3.5vw,54px); }
 .chatIA .simia-conteudo::-webkit-scrollbar { width: 7px; }
 .chatIA .simia-conteudo::-webkit-scrollbar-thumb { background: rgba(255,255,255,.20); border-radius: 20px; }
 .chatIA .simia-conteudo::-webkit-scrollbar-thumb:hover { background: rgba(245,160,53,.42); }

@@ -2,13 +2,6 @@
 
 /* BASE DA PÁGINA */
 
-.auth-page:has(.rk-layout) {
-  position: relative;
-  width: 100%;
-  padding: 0;
-  display: block;
-}
-
 .rk-layout {
   width: 100%;
   min-height: 100vh;
@@ -149,13 +142,6 @@
 
   border-bottom: 5px solid #b6c49a;
   border-radius: 35px;
-
-  background: radial-gradient(
-    ellipse at 50% 95%,
-    #dce7c8 0,
-    #eff0df80 48%,
-    transparent 72%
-  );
 }
 
 .rk-podio {
@@ -429,7 +415,6 @@
 .rk-classificacao {
   padding: 25px;
 
-  border: 1px solid #e6dfd0;
   border-radius: 26px;
   background: #fffdf7ed;
 
@@ -569,14 +554,6 @@
 
 .rk-pontos small {
   font-size: 10px;
-}
-
-.rk-classificacao footer {
-  margin-top: 20px;
-
-  color: #7b6d58;
-  font-size: 10px;
-  text-align: center;
 }
 
 /* ESTADO SEM PARTICIPANTES */
@@ -971,6 +948,50 @@
     transparent 100%
   );
 }
+
+.rk-classificacao > header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+}
+
+.rk-classificacao > .rk-lista {
+  position: relative;
+  display: grid;
+  gap: 8px;
+
+  margin-top: 0;
+  padding: 0;
+}
+
+.rk-classificacao > .rk-lista > .rk-linha {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 60px;
+  padding: 12px 16px;
+}
+
+
+/* CORREÇÃO — COROA CORTADA */
+.rk-arena {
+  overflow: visible;
+}
+
+.rk-finalista--1 .rk-personagem {
+  padding-top: 12px;
+}
+
+.rk-finalista--1 .rk-coroa {
+  top: -20px;
+  z-index: 5;
+}
+
 
 /* Contorno interno do vidro */
 

@@ -48,6 +48,7 @@ function Painel({ draft, setDraft }) {
                 refAlternativa4={refAlternativa4}
                 refAtividade={refAtividade}
                 atividadeAtual={atividadeAtual}
+                setAtividadeAtual={setAtividadeAtual}
                 setAtvLiberada={setAtvLiberada}
                 materiaAtual={materiaAtual}
             />

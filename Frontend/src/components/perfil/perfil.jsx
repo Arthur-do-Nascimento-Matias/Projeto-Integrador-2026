@@ -1,6 +1,16 @@
+import moki from "../../assets/simio.png"
+import punk from "../../assets/gotico.png"
+import artista from "../../assets/artista.png"
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from "react-dom";
 import { useParams } from 'react-router-dom'
 import './Perfil.css'
+
+const fotosPerfil = {
+  moki: moki,
+  gotico: punk,
+  artista: artista,
+};
 
 function StatCard({ icon, value, label, delay }) {
   return (
@@ -12,7 +22,7 @@ function StatCard({ icon, value, label, delay }) {
         {icon}
       </div>
 
-      <div>
+      <div className='stats'>
         <strong>{value}</strong>
         <span>{label}</span>
       </div>
@@ -20,7 +30,7 @@ function StatCard({ icon, value, label, delay }) {
   )
 }
 
-function Avatar({ photo, name, className = '' }) {
+function Avatar({ setPhotoImage, photo, name, className = '' }) {
   const initials = useMemo(() => {
     return (name || '')
       .split(' ')
@@ -30,11 +40,12 @@ function Avatar({ photo, name, className = '' }) {
       .join('')
   }, [name])
 
+
   return (
     <div className={`profile-avatar ${className}`}>
       {photo ? (
         <img
-          src={photo}
+          src={fotosPerfil[photo] || moki}
           alt={`Foto de ${name}`}
         />
       ) : (
@@ -47,17 +58,20 @@ function Avatar({ photo, name, className = '' }) {
 function Perfil({ draft, setDraft }) {
   const { username } = useParams()
 
+  const [nomeUsuario, setNomeUsuario] = useState("");
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [editOpen, setEditOpen] = useState(false)
   const [novaBio, setNovaBio] = useState('')
   const [savingProfile, setSavingProfile] = useState(false)
+  const [photoImage, setPhotoImage] = useState("")
+  const [fotoOpen, setFotoOpen] = useState(false);
 
   /*
-   * Atualmente o /perfil retorna o usuário
-   * autenticado pelo token.
-   */
+  * Atualmente o /perfil retorna o usuário
+  * autenticado pelo token.
+  */
   const isOwner = !username || username === user?.nome_de_usuario
 
   useEffect(() => {
@@ -89,30 +103,35 @@ function Perfil({ draft, setDraft }) {
           return
         }
 
-        const usuario = dados.usuario
+      const usuario = dados.usuario;
 
-        setUser(usuario)
+      const fotoSalva = usuario.foto_perfil || usuario.foto || "";
 
-        console.log('id', usuario.id_usuario)
+      setUser({
+        ...usuario,
+        foto_perfil: fotoSalva,
+      });
 
       setDraft({
-        id: usuario.id_usuario || '',
-        name: usuario.nome_de_exibicao || '',
-        username: usuario.nome_de_usuario || '',
-        bio: usuario.bio || '',
-        photoFile: null,
+        id: usuario.id_usuario || "",
+        name: usuario.nome_de_exibicao || "",
+        username: usuario.nome_de_usuario || "",
+        bio: usuario.bio || "",
+        photo: fotoSalva,
         atividadesConcluidas: [
-
           usuario.atvidades_concluidas_geral,
           usuario.atvidades_concluidas_matematica,
           usuario.atvidades_concluidas_portugues,
           usuario.atvidades_concluidas_historia,
           usuario.atvidades_concluidas_geografia,
           usuario.atvidades_concluidas_ciencias,
-          usuario.atvidades_concluidas_ingles
+          usuario.atvidades_concluidas_ingles,
+        ],
 
-        ]
-      })
+        total_perguntas: usuario.total_perguntas
+      });
+
+        console.log(draft)
 
       } catch (erro) {
         console.error(erro)
@@ -129,7 +148,15 @@ function Perfil({ draft, setDraft }) {
   }, [])
 
   function openEdit() {
-    setEditOpen(true)
+    setNomeUsuario(user.nome_de_exibicao || "");
+
+    setDraft(previous => ({
+      ...previous,
+      photo: user.foto_perfil || "",
+    }));
+
+    setFotoOpen(false);
+    setEditOpen(true);
   }
 
   function handlePhoto(event) {
@@ -146,65 +173,122 @@ function Perfil({ draft, setDraft }) {
     }))
   }
 
-async function saveProfile(event) {
-    event.preventDefault()
+    async function enviar(rota, dados) {
+        console.log(`[Perfil] Enviando para /${rota}`, dados.id);
 
-    const cleanUsername = draft.username
-        .trim()
-        .replace(/^@+/, '')
-        .replace(/\s+/g, '')
+        const resposta = await fetch(
+            `http://localhost:3000/${rota}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dados)
+            }
+        );
 
-    setUser((previous) => ({
-        ...previous,
-        nome_de_exibicao:
-            draft.name.trim() ||
-            previous.nome_de_exibicao,
+        const resultado = await resposta.json();
 
-        nome_de_usuario:
-            cleanUsername ||
-            previous.nome_de_usuario,
+        if (!resposta.ok || resultado.ok !== true) {
+            throw new Error(
+                resultado.message ||
+                `Erro ao executar /${rota}`
+            );
+        }
 
-        bio: draft.bio.trim(),
+        console.log(`[Perfil] /${rota} concluída`);
 
-        foto_perfil:
-            draft.photo ||
-            previous.foto_perfil,
-    }))
-
-    if (draft.photoFile !== null) {
-
-        const arrayBuffer =
-            await draft.photoFile.arrayBuffer()
-
-        const foto =
-            Array.from(new Uint8Array(arrayBuffer))
-
-        fetch('http://localhost:3000/mudarFoto', {
-            method: 'POST',
-
-            headers: {
-                'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify({
-                id: user.id_usuario,
-                foto: foto
-            })
-        })
+        return resultado;
     }
 
-    fetch('http://localhost:3000/mudarBio', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            id: user.id_usuario,
-            bio: draft.bio.trim(),
-        }),
-    })
+async function trocar(fotinha) {
+    setDraft(previous => ({
+      ...previous,
+      photo: fotinha,
+    }));
 
-    setEditOpen(false)
+    setFotoOpen(false);
+}
+
+async function saveProfile(event) {
+    event.preventDefault();
+
+    if (savingProfile) return;
+
+    const id = user.id_usuario;
+
+    const novoNome = nomeUsuario
+        .trim()
+        .replace(/^@+/, "")
+        .replace(/\s+/g, "");
+
+    const bioNova = draft.bio.trim();
+
+    const fotoNova = draft.photo
+
+    if (!novoNome) {
+        alert("O nome de usuário não pode ficar vazio.");
+        return;
+    }
+
+    setSavingProfile(true);
+
+    try {
+        // 1. ALTERAR NOME DE USUÁRIO
+        if (novoNome !== user.nome_de_exibicao) {
+            await enviar("trocarNomeUsuario", {
+                id: id,
+                nome: novoNome
+            });
+        }
+
+        // 2. ALTERAR BIO
+        if (bioNova !== (user.bio || "")) {
+            await enviar("mudarBio", {
+                id: id,
+                bio: bioNova
+            });
+        }
+
+        // 3. ALTERAR FOTO
+          if (fotoNova && fotoNova !== user.foto_perfil) {
+            await enviar("mudarFoto", {
+              id: user.id_usuario,
+              foto: fotoNova,
+            });
+          }
+
+        // 4. ATUALIZAR INTERFACE
+        setUser(previous => ({
+            ...previous,
+            nome_de_exibicao: novoNome,
+            bio: bioNova,
+            foto_perfil: draft.photo || previous.foto_perfil
+        }));
+
+        setDraft(previous => ({
+            ...previous,
+            username: novoNome,
+            bio: bioNova,
+            photoFile: null
+        }));
+
+        // 5. FECHAR MODAL
+        setEditOpen(false);
+
+        console.log("Perfil salvo com sucesso!");
+
+    } catch (erro) {
+        console.error("Erro ao salvar perfil:", erro);
+
+        alert(
+            "Não foi possível salvar o perfil: " +
+            erro.message
+        );
+
+    } finally {
+        setSavingProfile(false);
+    }
 }
 
   if (loading) {
@@ -230,10 +314,13 @@ async function saveProfile(event) {
   }
 
   /*
-   * Dados vindos diretamente do banco.
-   */
-  const atividadesConcluidas =
-    Number(user.atvidades_concluidas_geral) || 0
+  * Dados vindos diretamente do banco.
+  */
+  const atividadesConcluidas = Number(user.atvidades_concluidas_geral) || 0
+
+  const totalPerguntas = Number(user.total_perguntas) || 0;
+
+  const progressPercentage = (((atividadesConcluidas * 3) * 100) / totalPerguntas).toFixed(2)
 
   const xp =
     Number(user.xp) || 0
@@ -242,19 +329,18 @@ async function saveProfile(event) {
     Number(user.streak) || 0
 
   /*
-   * Como sua tabela atual não possui uma coluna
-   * de data de cadastro, não vamos inventar uma.
-   */
+  * Como sua tabela atual não possui uma coluna
+  * de data de cadastro, não vamos inventar uma.
+  */
   const joinedAt = '2026'
 
   /*
-   * Sua tabela ainda não possui uma informação
-   * de porcentagem de progresso.
-   *
-   * Por enquanto mostramos o número de atividades
-   * concluídas.
-   */
-  const progressPercentage = 0
+  * Sua tabela ainda não possui uma informação
+  * de porcentagem de progresso.
+  *
+  * Por enquanto mostramos o número de atividades
+  * concluídas.
+  */
 
   return (
     <>
@@ -279,7 +365,6 @@ async function saveProfile(event) {
             />
 
             <div className="profile-avatar-wrap">
-
               <Avatar
                 photo={user.foto_perfil}
                 name={user.nome_de_exibicao}
@@ -290,7 +375,6 @@ async function saveProfile(event) {
                 className="profile-online-dot"
                 title="Perfil ativo"
               />
-
             </div>
 
             <div className="profile-identity">
@@ -307,7 +391,7 @@ async function saveProfile(event) {
                 @{user.nome_de_usuario}
               </p>
 
-             <p className="profile-bio">
+            <p className="profile-bio">
                 {user.bio?.trim()
                   ? user.bio
                   : 'Este aluno ainda não adicionou uma bio.'}
@@ -346,13 +430,7 @@ async function saveProfile(event) {
               className="profile-section-heading profile-reveal"
               style={{ '--reveal-delay': '110ms' }}
             >
-              <div>
-
-                <p className="profile-kicker">
-                  {isOwner
-                    ? 'SEU RITMO'
-                    : 'RITMO DO ALUNO'}
-                </p>
+              <div className='estatisticas'>
 
                 <h2 id="stats-title">
                   Estatísticas
@@ -399,7 +477,7 @@ async function saveProfile(event) {
 
               <div className="profile-panel-heading">
 
-                <div>
+                <div className='progresso'>
 
                   <p className="profile-kicker">
                     TRILHA ATUAL
@@ -433,10 +511,6 @@ async function saveProfile(event) {
                 <span>
                   {atividadesConcluidas} atividades concluídas
                 </span>
-
-                <strong>
-                  {atividadesConcluidas}
-                </strong>
 
               </div>
 
@@ -490,7 +564,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Português
                     </strong>
@@ -517,7 +591,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Matemática
                     </strong>
@@ -544,7 +618,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Ciências
                     </strong>
@@ -571,7 +645,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       História
                     </strong>
@@ -598,7 +672,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Geografia
                     </strong>
@@ -625,7 +699,7 @@ async function saveProfile(event) {
                     ✓
                   </span>
 
-                  <div>
+                  <div className='subject'>
                     <strong>
                       Inglês
                     </strong>
@@ -653,7 +727,8 @@ async function saveProfile(event) {
 
       {/* MODAL DE EDIÇÃO */}
 
-      {editOpen && (
+      {editOpen && createPortal(
+
 
         <div
           className="profile-modal-backdrop"
@@ -697,6 +772,7 @@ async function saveProfile(event) {
               <div className="edit-photo-row">
 
                 <Avatar
+                  setPhotoImage={setPhotoImage}
                   photo={
                     draft.photo ||
                     user.foto_perfil
@@ -707,29 +783,31 @@ async function saveProfile(event) {
                   className="profile-avatar-large"
                 />
 
-                <label className="photo-upload-button">
+                <label 
+                  className="photo-upload-button"
+                  onClick={() => setFotoOpen(true)}
+                >
 
                   Alterar foto
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhoto}
-                  />
 
                 </label>
 
               </div>
 
-              <h1>
-                {user.nome_de_exibicao}
-              </h1>
+              <p className="profile-username">Nome de usuário</p>
+
+              <input
+                  className="trocarNomeUsuario"
+                  placeholder="Digite seu novo nome"
+                  value={nomeUsuario}
+                  onChange={(e) => setNomeUsuario(e.target.value)}
+              />
 
               <p className="profile-username">
                 @{user.nome_de_usuario}
               </p>
 
-             <label className="profile-field">
+            <label className="profile-field">
                 <span>Bio</span>
 
                 <textarea
@@ -752,7 +830,7 @@ async function saveProfile(event) {
                 </small>
               </label>
 
-             <div className="edit-modal-actions">
+            <div className="edit-modal-actions">
 
                 <button
                     className="profile-secondary-button"
@@ -780,8 +858,60 @@ async function saveProfile(event) {
 
           </section>
 
-        </div>
+          {editOpen && fotoOpen && createPortal(
+            <div
+              className="profile-modal-backdrop"
+              style={{ zIndex: 10000 }}
+              onMouseDown={() => setFotoOpen(false)}
+            >
+              <section
+                className="profile-edit-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Trocar foto"
+                onMouseDown={(event) => event.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  className="profile-modal-close"
+                  onClick={() => setFotoOpen(false)}
+                  aria-label="Fechar"
+                >
+                  ×
+                </button>
 
+                <h2>Escolha sua foto</h2>
+
+                <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+                  <img 
+                    src={moki} 
+                    alt="Moki" 
+                    width={100} 
+                    value="moki"
+                    onClick={() => trocar("moki")}
+                  />
+                  <img 
+                    src={punk} 
+                    alt="Moki punk"
+                    width={100} 
+                    value="punk"
+                    onClick={() => trocar("gotico")}
+                  />
+                  <img 
+                    src={artista} 
+                    alt="Moki artista" 
+                    width={100} 
+                    value="artista"
+                    onClick={() => trocar("artista")}
+                  />
+                </div>
+              </section>
+            </div>,
+            document.body
+          )}
+
+        </div>,
+        document.body
       )}
 
     </>

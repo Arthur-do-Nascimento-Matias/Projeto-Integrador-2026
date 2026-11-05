@@ -1,12 +1,16 @@
 import PainelIndex from "../components/Index/Index"
 
-function Index({ mode, setMode }) {
+function Index({ mode, setMode, tema, setTema, alternarTema }) {
   return (
     <>
 
         <PainelIndex 
             mode={mode}
-            setMode={setMode}/>
+            setMode={setMode}
+            tema={tema}
+            setTema={setTema}
+            alternarTema={alternarTema}
+        />
     </>
 )
 }
