@@ -17,6 +17,7 @@ const materias = [
     { id: 6, nome: "Inglês", descricao: "Língua Inglesa", cor: "#465936", icon: enIcon }
 ];
 
+
 function pontoPolar(cx, cy, raio, angulo) {
     const radianos = ((angulo - 90) * Math.PI) / 180;
     return {

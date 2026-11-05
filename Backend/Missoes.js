@@ -1,6 +1,6 @@
 import Conexao from './Conexao.js'
 
-const tiposDisponiveis = [
+const TIPOS_MISSAO = [
     'acertar_questao',
     'concluir_atividade',
     'abrir_livros',
@@ -12,39 +12,61 @@ const tiposDisponiveis = [
     'tempo_leitura'
 ]
 
-let preparacao
+const COLUNAS_MATERIAS = {
+    1: 'atvidades_concluidas_matematica',
+    2: 'atvidades_concluidas_portugues',
+    3: 'atvidades_concluidas_historia',
+    4: 'atvidades_concluidas_geografia',
+    5: 'atvidades_concluidas_ciencias',
+    6: 'atvidades_concluidas_ingles'
+}
+
+const TIPOS_EVENTO = [
+    'resposta',
+    'atividade',
+    'biblioteca',
+    'livro',
+    'mensagem',
+    'leitura'
+]
+
+let preparacao = null
 
 function consultar(conexao, sql, valores = []) {
     return new Promise((resolve, reject) => {
         conexao.query(sql, valores, (erro, resultado) => {
             if (erro) {
                 reject(erro)
-            } else {
-                resolve(resultado)
+                return
             }
+
+            resolve(resultado)
         })
     })
 }
 
 function erroCliente(mensagem) {
-    return Object.assign(
-        new Error(mensagem),
-        { status: 400 }
-    )
+    const erro = new Error(mensagem)
+    erro.status = 400
+    return erro
+}
+
+function uuidValido(valor) {
+    return /^[a-f0-9-]{36}$/i.test(String(valor || ''))
 }
 
 export function calcularProgresso(eventos) {
-    let sequencia = 0
-    let melhorSequencia = 0
-    let visitas = 0
-    let mensagens = 0
-    let segundosLeitura = 0
-
     const acertos = new Set()
     const atividades = new Set()
-    const perfeitas = new Set()
+    const atividadesSemErros = new Set()
     const materias = new Set()
     const livros = new Set()
+    const mensagens = new Set()
+
+    let sequencia = 0
+    let melhorSequencia = 0
+    let visitasBiblioteca = 0
+    let segundosLeitura = 0
 
     for (const evento of eventos) {
         if (evento.tipo === 'resposta') {
@@ -68,7 +90,9 @@ export function calcularProgresso(eventos) {
             materias.add(Number(evento.materia))
 
             if (Number(evento.correta) === 1) {
-                perfeitas.add(evento.referencia)
+                atividadesSemErros.add(
+                    evento.referencia
+                )
             }
         }
 
@@ -77,15 +101,16 @@ export function calcularProgresso(eventos) {
         }
 
         if (evento.tipo === 'biblioteca') {
-            visitas = 1
+            visitasBiblioteca = 1
         }
 
         if (evento.tipo === 'mensagem') {
-            mensagens++
+            mensagens.add(evento.referencia)
         }
 
         if (evento.tipo === 'leitura') {
-            segundosLeitura += Number(evento.correta) || 0
+            segundosLeitura +=
+                Number(evento.correta) || 0
         }
     }
 
@@ -94,10 +119,10 @@ export function calcularProgresso(eventos) {
         concluir_atividade: atividades.size,
         abrir_livros: livros.size,
         acertos_seguidos: melhorSequencia,
-        atividade_sem_erros: perfeitas.size,
-        enviar_mensagem_moki: mensagens,
+        atividade_sem_erros: atividadesSemErros.size,
+        enviar_mensagem_moki: mensagens.size,
         estudar_materias: materias.size,
-        visitar_biblioteca: visitas,
+        visitar_biblioteca: visitasBiblioteca,
         tempo_leitura: Math.floor(segundosLeitura / 60)
     }
 }
@@ -114,7 +139,7 @@ class Missoes {
                         `
                         CREATE TABLE IF NOT EXISTS eventos_missoes (
                             id_evento BIGINT UNSIGNED
-                                NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                NOT NULL AUTO_INCREMENT,
 
                             id_usuario INT NOT NULL,
                             data_evento DATE NOT NULL,
@@ -125,6 +150,8 @@ class Missoes {
 
                             criado_em DATETIME NOT NULL
                                 DEFAULT CURRENT_TIMESTAMP,
+
+                            PRIMARY KEY (id_evento),
 
                             UNIQUE KEY uq_evento_missao (
                                 id_usuario,
@@ -183,9 +210,12 @@ class Missoes {
         const conexao = Conexao.connect()
 
         try {
-            await consultar(conexao, 'START TRANSACTION')
+            await consultar(
+                conexao,
+                'START TRANSACTION'
+            )
 
-            // Impede duas ações simultâneas de duplicarem o XP.
+            // Serializa as atualizações da mesma conta.
             const usuarios = await consultar(
                 conexao,
                 `
@@ -198,7 +228,9 @@ class Missoes {
             )
 
             if (!usuarios.length) {
-                throw erroCliente('Usuário não encontrado.')
+                throw erroCliente(
+                    'Usuário não encontrado.'
+                )
             }
 
             let missoes = await Missoes.buscar(
@@ -217,7 +249,7 @@ class Missoes {
                     ORDER BY RAND()
                     LIMIT 3
                     `,
-                    [tiposDisponiveis]
+                    [TIPOS_MISSAO]
                 )
 
                 for (const missao of sorteadas) {
@@ -234,7 +266,10 @@ class Missoes {
                         )
                         VALUES (?, ?, CURDATE(), 0, 0, 0)
                         `,
-                        [idUsuario, missao.id_missao]
+                        [
+                            idUsuario,
+                            missao.id_missao
+                        ]
                     )
                 }
 
@@ -264,21 +299,26 @@ class Missoes {
                 [idUsuario]
             )
 
-            const contadores = calcularProgresso(eventos)
+            const contadores =
+                calcularProgresso(eventos)
 
-            let xpGanho = 0
+            let xpGanho =
+                evento?.tipo === 'atividade' && registrado
+                    ? 50
+                    : 0
 
             for (const missao of missoes) {
+                const meta = Number(missao.meta)
+
                 const progresso = Math.min(
-                    Number(missao.meta),
+                    meta,
                     Math.max(
                         Number(missao.progresso) || 0,
                         contadores[missao.tipo] || 0
                     )
                 )
 
-                const concluida =
-                    progresso >= Number(missao.meta)
+                const concluida = progresso >= meta
 
                 await consultar(
                     conexao,
@@ -302,9 +342,12 @@ class Missoes {
                     ]
                 )
 
+                const recompensaEntregue =
+                    Number(missao.recompensa_entregue) === 1
+
                 if (
                     concluida &&
-                    !Number(missao.recompensa_entregue)
+                    !recompensaEntregue
                 ) {
                     const xp =
                         Number(missao.xp_recompensa) || 0
@@ -357,7 +400,10 @@ class Missoes {
                 idUsuario
             )
 
-            await consultar(conexao, 'COMMIT')
+            await consultar(
+                conexao,
+                'COMMIT'
+            )
 
             return {
                 missoes: resultado,
@@ -376,110 +422,101 @@ class Missoes {
         }
     }
 
-    static async registrar(conexao, idUsuario, evento) {
-        let {
-            tipo,
-            referencia,
-            materia,
-            correta
-        } = evento
-
-        const tiposPermitidos = [
-            'resposta',
-            'atividade',
-            'biblioteca',
-            'livro',
-            'mensagem',
-            'leitura'
-        ]
-
-        if (!tiposPermitidos.includes(tipo)) {
-            throw erroCliente('Evento de missão inválido.')
+    static async registrar(
+        conexao,
+        idUsuario,
+        evento
+    ) {
+        if (
+            !evento ||
+            typeof evento !== 'object' ||
+            Array.isArray(evento)
+        ) {
+            throw erroCliente(
+                'Evento inválido.'
+            )
         }
 
-        if (tipo === 'leitura') {
-            const sessao = String(evento.sessao || '')
-            const pulso = Number(evento.pulso)
+        const tipo = evento.tipo
+
+        if (!TIPOS_EVENTO.includes(tipo)) {
+            throw erroCliente(
+                'Tipo de ação inválido.'
+            )
+        }
+
+        let referencia = evento.referencia
+        let materia = null
+        let correta = null
+
+        if (tipo === 'resposta') {
+            if (!uuidValido(evento.evento_id)) {
+                throw erroCliente(
+                    'Identificador da resposta inválido.'
+                )
+            }
+
+            const idAlternativa =
+                Number(evento.id_alternativa)
 
             if (
-                !/^[a-f0-9-]{36}$/i.test(sessao) ||
-                !Number.isSafeInteger(pulso) ||
-                pulso < 0
+                !Number.isSafeInteger(idAlternativa) ||
+                idAlternativa < 1
             ) {
-                throw erroCliente('Sessão de leitura inválida.')
-            }
-
-            referencia = `${sessao}:${pulso}`
-            correta = 0
-
-            if (pulso > 0) {
-                const anterior = await consultar(
-                    conexao,
-                    `
-                    SELECT
-                        TIMESTAMPDIFF(
-                            SECOND,
-                            criado_em,
-                            NOW()
-                        ) AS segundos
-                    FROM eventos_missoes
-                    WHERE id_usuario = ?
-                      AND data_evento = CURDATE()
-                      AND tipo = 'leitura'
-                      AND referencia LIKE ?
-                    ORDER BY id_evento DESC
-                    LIMIT 1
-                    `,
-                    [idUsuario, `${sessao}:%`]
+                throw erroCliente(
+                    'Alternativa inválida.'
                 )
-
-                correta = anterior.length
-                    ? Math.min(
-                        30,
-                        Math.max(
-                            0,
-                            Number(anterior[0].segundos)
-                        )
-                    )
-                    : 0
             }
-        } else if (tipo === 'resposta') {
+
             const alternativas = await consultar(
                 conexao,
                 `
-                SELECT a.*, p.id_materia
+                SELECT
+                    a.id_pergunta,
+                    a.verdadeira,
+                    p.id_materia
                 FROM alternativas AS a
                 INNER JOIN perguntas AS p
                     ON p.id_pergunta = a.id_pergunta
                 WHERE a.id_alternativa = ?
                 `,
-                [Number(evento.id_alternativa) || 0]
+                [idAlternativa]
             )
 
             const alternativa = alternativas[0]
 
             if (!alternativa) {
-                throw erroCliente('Alternativa inválida.')
+                throw erroCliente(
+                    'Alternativa não encontrada.'
+                )
             }
 
             materia = alternativa.id_materia
-            correta = Number(alternativa.verdadeira) === 1
-                ? 1
-                : 0
+
+            correta =
+                Number(alternativa.verdadeira) === 1
+                    ? 1
+                    : 0
 
             referencia = correta
                 ? String(alternativa.id_pergunta)
                 : `erro:${alternativa.id_pergunta}:${evento.evento_id}`
-        } else if (tipo === 'atividade') {
+        }
+
+        if (tipo === 'atividade') {
             materia = Number(evento.materia)
 
-            const atividade = Number(evento.atividade)
+            const atividade =
+                Number(evento.atividade)
 
             if (
-                !Number.isInteger(atividade) ||
+                !COLUNAS_MATERIAS[materia] ||
+                !Number.isSafeInteger(atividade) ||
                 atividade < 1
             ) {
-                throw erroCliente('Atividade inválida.')
+                throw erroCliente(
+                    'Atividade ou matéria inválida.'
+                )
             }
 
             const perguntas = await consultar(
@@ -511,16 +548,23 @@ class Missoes {
 
             const acertos = new Set(
                 respostas
-                    .filter(item => Number(item.correta) === 1)
-                    .map(item => String(item.referencia))
+                    .filter(item =>
+                        Number(item.correta) === 1
+                    )
+                    .map(item =>
+                        String(item.referencia)
+                    )
             )
 
-            if (
-                !perguntas.length ||
-                !perguntas.every(pergunta =>
-                    acertos.has(String(pergunta.id_pergunta))
+            const todasRespondidas =
+                perguntas.length > 0 &&
+                perguntas.every(pergunta =>
+                    acertos.has(
+                        String(pergunta.id_pergunta)
+                    )
                 )
-            ) {
+
+            if (!todasRespondidas) {
                 throw erroCliente(
                     'Conclua as questões da atividade antes de registrá-la.'
                 )
@@ -540,20 +584,109 @@ class Missoes {
 
             correta = teveErro ? 0 : 1
             referencia = `${materia}:${atividade}`
-        } else if (tipo === 'livro') {
+        }
+
+        if (tipo === 'biblioteca') {
+            referencia = 'visita'
+        }
+
+        if (tipo === 'livro') {
+            const idLivro =
+                Number(evento.referencia)
+
+            if (
+                !Number.isSafeInteger(idLivro) ||
+                idLivro < 1
+            ) {
+                throw erroCliente(
+                    'Livro inválido.'
+                )
+            }
+
             const livros = await consultar(
                 conexao,
-                'SELECT idLivro FROM livros WHERE idLivro = ?',
-                [Number(referencia) || 0]
+                `
+                SELECT idLivro
+                FROM livros
+                WHERE idLivro = ?
+                `,
+                [idLivro]
             )
 
             if (!livros.length) {
-                throw erroCliente('Livro não encontrado.')
+                throw erroCliente(
+                    'Livro não encontrado.'
+                )
             }
 
-            referencia = String(livros[0].idLivro)
-        } else if (tipo === 'biblioteca') {
-            referencia = 'visita'
+            referencia =
+                String(livros[0].idLivro)
+        }
+
+        if (tipo === 'mensagem') {
+            if (!uuidValido(referencia)) {
+                throw erroCliente(
+                    'Identificador da mensagem inválido.'
+                )
+            }
+        }
+
+        if (tipo === 'leitura') {
+            const sessao =
+                String(evento.sessao || '')
+
+            const pulso =
+                Number(evento.pulso)
+
+            if (
+                !uuidValido(sessao) ||
+                !Number.isSafeInteger(pulso) ||
+                pulso < 0
+            ) {
+                throw erroCliente(
+                    'Sessão de leitura inválida.'
+                )
+            }
+
+            referencia = `${sessao}:${pulso}`
+            correta = 0
+
+            if (pulso > 0) {
+                const anteriores = await consultar(
+                    conexao,
+                    `
+                    SELECT
+                        TIMESTAMPDIFF(
+                            SECOND,
+                            criado_em,
+                            NOW()
+                        ) AS segundos
+                    FROM eventos_missoes
+                    WHERE id_usuario = ?
+                      AND data_evento = CURDATE()
+                      AND tipo = 'leitura'
+                      AND referencia LIKE ?
+                    ORDER BY id_evento DESC
+                    LIMIT 1
+                    `,
+                    [
+                        idUsuario,
+                        `${sessao}:%`
+                    ]
+                )
+
+                if (anteriores.length) {
+                    correta = Math.min(
+                        30,
+                        Math.max(
+                            0,
+                            Number(
+                                anteriores[0].segundos
+                            )
+                        )
+                    )
+                }
+            }
         }
 
         if (
@@ -562,7 +695,7 @@ class Missoes {
             referencia.length > 100
         ) {
             throw erroCliente(
-                'Identificador do evento inválido.'
+                'Identificador da ação inválido.'
             )
         }
 
@@ -583,29 +716,20 @@ class Missoes {
                 idUsuario,
                 tipo,
                 referencia,
-                materia || null,
-                correta ?? null
+                materia,
+                correta
             ]
         )
 
+        const registrado =
+            insercao.affectedRows === 1
+
         if (
             tipo === 'atividade' &&
-            insercao.affectedRows === 1
+            registrado
         ) {
-            const colunas = {
-                1: 'atvidades_concluidas_matematica',
-                2: 'atvidades_concluidas_portugues',
-                3: 'atvidades_concluidas_historia',
-                4: 'atvidades_concluidas_geografia',
-                5: 'atvidades_concluidas_ciencias',
-                6: 'atvidades_concluidas_ingles'
-            }
-
-            const coluna = colunas[materia]
-
-            if (!coluna) {
-                throw erroCliente('Matéria inválida.')
-            }
+            const coluna =
+                COLUNAS_MATERIAS[materia]
 
             await consultar(
                 conexao,
@@ -614,14 +738,51 @@ class Missoes {
                 SET
                     atvidades_concluidas_geral =
                         atvidades_concluidas_geral + 1,
-                    ${coluna} = ${coluna} + 1
+
+                    ${coluna} = ${coluna} + 1,
+
+                    xp = xp + 50,
+                    xp_semanal = xp_semanal + 50,
+
+                    streak = CASE
+                        WHEN ultima_atividade = CURDATE()
+                            THEN streak
+
+                        WHEN ultima_atividade =
+                            DATE_SUB(
+                                CURDATE(),
+                                INTERVAL 1 DAY
+                            )
+                            THEN streak + 1
+
+                        ELSE 1
+                    END,
+
+                    ultima_atividade = CURDATE()
+
                 WHERE id_usuario = ?
                 `,
                 [idUsuario]
             )
+
+            await consultar(
+                conexao,
+                `
+                INSERT INTO historico_xp (
+                    id_usuario,
+                    xp_ganho,
+                    origem
+                )
+                VALUES (?, 50, ?)
+                `,
+                [
+                    idUsuario,
+                    `atividade:${referencia}`
+                ]
+            )
         }
 
-        return insercao.affectedRows === 1
+        return registrado
     }
 }
 

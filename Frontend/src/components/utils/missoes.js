@@ -1,263 +1,176 @@
-const CHAVE = "moki:missoes-locais:v2";
+export const EVENTO_MISSOES =
+    'moki:missoes-atualizadas'
 
-export const EVENTO_MISSOES = "moki:missoes-atualizadas";
+const API = 'http://localhost:3000'
 
-// Uma missão de cada grupo será sorteada.
-const grupos = [
-  [
-    {
-      id: "atividade-1",
-      tipo: "atividades",
-      titulo: "Conclua uma atividade",
-      descricao: "Finalize uma atividade hoje.",
-      meta: 1,
-      icone: "bandeira",
-    },
-    {
-      id: "atividade-2",
-      tipo: "atividades",
-      titulo: "Conclua duas atividades",
-      descricao: "Finalize duas atividades diferentes hoje.",
-      meta: 2,
-      icone: "bandeira",
-    },
-    {
-      id: "atividade-3",
-      tipo: "atividades",
-      titulo: "Conclua três atividades",
-      descricao: "Finalize três atividades diferentes hoje.",
-      meta: 3,
-      icone: "bandeira",
-    },
-  ],
+let fila = Promise.resolve()
 
-  [
-    {
-      id: "acertos-3",
-      tipo: "acertos",
-      titulo: "Acerte três questões",
-      descricao: "Responda corretamente três questões diferentes.",
-      meta: 3,
-      icone: "alvo",
-    },
-    {
-      id: "acertos-5",
-      tipo: "acertos",
-      titulo: "Acerte cinco questões",
-      descricao: "Responda corretamente cinco questões diferentes.",
-      meta: 5,
-      icone: "alvo",
-    },
-    {
-      id: "acertos-8",
-      tipo: "acertos",
-      titulo: "Acerte oito questões",
-      descricao: "Responda corretamente oito questões diferentes.",
-      meta: 8,
-      icone: "alvo",
-    },
-  ],
 
-  [
-    {
-      id: "biblioteca-1",
-      tipo: "biblioteca",
-      titulo: "Explore a biblioteca",
-      descricao: "Visite a biblioteca hoje.",
-      meta: 1,
-      icone: "livro",
-    },
-    {
-      id: "livro-1",
-      tipo: "livros",
-      titulo: "Conheça um livro",
-      descricao: "Abra um livro da biblioteca hoje.",
-      meta: 1,
-      icone: "livro",
-    },
-  ],
-];
-
-const catalogo = grupos.flat();
-
-const tipos = [
-  "atividades",
-  "acertos",
-  "biblioteca",
-  "livros",
-];
-
-// Mantém o progresso durante a sessão se o navegador
-// bloquear o localStorage.
-let memoria = null;
-
-export function dataLocal() {
-  const agora = new Date();
-
-  const ano = agora.getFullYear();
-  const mes = String(agora.getMonth() + 1).padStart(2, "0");
-  const dia = String(agora.getDate()).padStart(2, "0");
-
-  return `${ano}-${mes}-${dia}`;
+function obterToken() {
+    return localStorage.getItem('token')
 }
 
-function salvar(estado) {
-  memoria = estado;
 
-  try {
-    localStorage.setItem(CHAVE, JSON.stringify(estado));
-  } catch {
-    // Continua funcionando em memória nesta sessão.
-  }
-}
-
-function criarDia() {
-  const selecionadas = grupos.map((grupo) => {
-    const indice = Math.floor(Math.random() * grupo.length);
-
-    return grupo[indice].id;
-  });
-
-  return {
-    data: dataLocal(),
-    selecionadas,
-
-    registros: {
-      atividades: [],
-      acertos: [],
-      biblioteca: [],
-      livros: [],
-    },
-  };
-}
-
-function estadoValido(estado) {
-  if (!estado || estado.data !== dataLocal()) {
-    return false;
-  }
-
-  if (
-    !Array.isArray(estado.selecionadas) ||
-    estado.selecionadas.length !== grupos.length
-  ) {
-    return false;
-  }
-
-  const selecaoValida = grupos.every((grupo, indice) =>
-    grupo.some(
-      (missao) => missao.id === estado.selecionadas[indice]
-    )
-  );
-
-  const registrosValidos = tipos.every((tipo) => {
-    const registros = estado.registros?.[tipo];
-
-    return (
-      Array.isArray(registros) &&
-      registros.every((item) => typeof item === "string")
-    );
-  });
-
-  return selecaoValida && registrosValidos;
-}
-
-function carregar() {
-  let estado = memoria;
-
-  try {
-    const salvo = localStorage.getItem(CHAVE);
-
-    if (salvo) {
-      estado = JSON.parse(salvo);
+async function lerResposta(resposta) {
+    try {
+        return await resposta.json()
+    } catch {
+        return {}
     }
-  } catch {
-    // Usa o estado em memória se o armazenamento falhar.
-  }
-
-  if (!estadoValido(estado)) {
-    estado = criarDia();
-    salvar(estado);
-  }
-
-  memoria = estado;
-
-  return estado;
 }
 
-export function obterMissoes() {
-  const estado = carregar();
 
-  return estado.selecionadas.map((id) => {
-    const missao = catalogo.find((item) => item.id === id);
+export async function carregarMissoes() {
+    const token = obterToken()
 
-    const quantidade = new Set(
-      estado.registros[missao.tipo]
-    ).size;
+    if (!token) {
+        throw new Error(
+            'Faça login novamente.'
+        )
+    }
 
-    const progresso = Math.min(quantidade, missao.meta);
+    const resposta = await fetch(
+        `${API}/missoes/hoje`,
+        {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    )
 
-    return {
-      ...missao,
-      progresso,
-      concluida: progresso >= missao.meta,
-    };
-  });
+    const dados = await lerResposta(resposta)
+
+    if (!resposta.ok) {
+        throw new Error(
+            dados.erro ||
+            'Não foi possível carregar as missões.'
+        )
+    }
+
+    return dados.missoes || []
 }
 
-function registrar(tipo, identificador) {
-  if (
-    !tipos.includes(tipo) ||
-    identificador === undefined ||
-    identificador === null ||
-    identificador === ""
-  ) {
-    return;
-  }
 
-  const estado = carregar();
-  const chave = String(identificador);
+function registrar(evento) {
+    const token = obterToken()
 
-  // A mesma ação não conta novamente naquele dia.
-  if (estado.registros[tipo].includes(chave)) {
-    return;
-  }
+    if (!token) {
+        return Promise.reject(
+            new Error('Faça login novamente.')
+        )
+    }
 
-  estado.registros[tipo].push(chave);
+    const tarefa = fila.then(async () => {
+        if (obterToken() !== token) {
+            throw new Error(
+                'A conta conectada foi alterada.'
+            )
+        }
 
-  salvar(estado);
+        const resposta = await fetch(
+            `${API}/missoes/evento`,
+            {
+                method: 'POST',
+                keepalive: true,
+                headers: {
+                    'Content-Type':
+                        'application/json',
+                    Authorization:
+                        `Bearer ${token}`
+                },
+                body: JSON.stringify(evento)
+            }
+        )
 
-  window.dispatchEvent(new Event(EVENTO_MISSOES));
+        const dados = await lerResposta(resposta)
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.erro ||
+                'Não foi possível registrar a missão.'
+            )
+        }
+
+        window.dispatchEvent(
+            new CustomEvent(
+                EVENTO_MISSOES,
+                {
+                    detail: dados
+                }
+            )
+        )
+
+        return dados
+    })
+
+    /*
+     * Uma requisição com erro não bloqueia
+     * os próximos eventos.
+     */
+    fila = tarefa.catch(() => {})
+
+    return tarefa
 }
+
+
+export function registrarResposta(
+    idAlternativa,
+    eventoId = crypto.randomUUID()
+) {
+    return registrar({
+        tipo: 'resposta',
+        id_alternativa:
+            Number(idAlternativa),
+        evento_id: eventoId
+    })
+}
+
 
 export function registrarAtividadeConcluida(
-  idMateria,
-  idAtividade
+    materia,
+    atividade
 ) {
-  if (idMateria == null || idAtividade == null) {
-    return;
-  }
-
-  registrar(
-    "atividades",
-    JSON.stringify([idMateria, idAtividade])
-  );
+    return registrar({
+        tipo: 'atividade',
+        materia: Number(materia),
+        atividade: Number(atividade)
+    })
 }
 
-export function registrarAcerto(idMateria, idQuestao) {
-  if (idMateria == null || idQuestao == null) {
-    return;
-  }
-
-  registrar(
-    "acertos",
-    JSON.stringify([idMateria, idQuestao])
-  );
-}
 
 export function registrarVisitaBiblioteca() {
-  registrar("biblioteca", "visita");
+    return registrar({
+        tipo: 'biblioteca'
+    })
 }
 
+
 export function registrarLivroAberto(idLivro) {
-  registrar("livros", idLivro);
+    return registrar({
+        tipo: 'livro',
+        referencia: String(idLivro)
+    })
+}
+
+
+export function registrarMensagemMoki(
+    idMensagem = crypto.randomUUID()
+) {
+    return registrar({
+        tipo: 'mensagem',
+        referencia: idMensagem
+    })
+}
+
+
+export function registrarLeitura(
+    sessao,
+    pulso
+) {
+    return registrar({
+        tipo: 'leitura',
+        sessao,
+        pulso: Number(pulso)
+    })
 }

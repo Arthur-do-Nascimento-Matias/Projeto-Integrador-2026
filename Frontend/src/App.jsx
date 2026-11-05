@@ -27,7 +27,6 @@ import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
 
-
 export function alternarTema(setTema) {
     setTema(anterior =>
         anterior === "claro" ? "escuro" : "claro"

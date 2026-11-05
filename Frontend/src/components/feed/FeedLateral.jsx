@@ -141,7 +141,6 @@ function FeedLateral({ comunidades, comunidadeAtiva, setComunidadeAtiva }) {
                             </div>
                         </article>
                     ))}
-
                 </div>
             </section>
 
