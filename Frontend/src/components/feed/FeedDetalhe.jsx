@@ -1,6 +1,14 @@
+import { createPortal } from "react-dom"
 import { useEffect, useState } from 'react'
 
 const API_URL = 'http://localhost:3000'
+
+const MOTIVOS_DENUNCIA = [
+    { valor: 'ofensivo', nome: 'Conteúdo ofensivo ou discriminatório' },
+    { valor: 'spam', nome: 'Spam ou propaganda' },
+    { valor: 'informacao_errada', nome: 'Informações falsas' },
+    { valor: 'outro', nome: 'Outro motivo' }
+]
 
 function tempoRelativo(data) {
     const agora = new Date()
@@ -53,6 +61,12 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
         useState(false)
     const [ehAdmin, setEhAdmin] = useState(false)
     const [erro, setErro] = useState('')
+
+    const [denunciaAberta, setDenunciaAberta] = useState(null)
+    const [motivoDenuncia, setMotivoDenuncia] = useState('')
+    const [descricaoDenuncia, setDescricaoDenuncia] = useState('')
+    const [erroDenuncia, setErroDenuncia] = useState('')
+    const [denunciaEnviada, setDenunciaEnviada] = useState(false)
 
     function cabecalhos() {
         return {
@@ -198,52 +212,40 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
         }
     }
 
-    async function denunciarConteudo({
+    function abrirDenuncia({
         idPostDenunciado = null,
         idComentario = null
     }) {
-        const motivoInformado = window.prompt(
-            'Informe o motivo da denúncia:\n\n' +
-                'ofensivo\n' +
-                'spam\n' +
-                'informacao_errada\n' +
-                'outro'
-        )
+        setDenunciaAberta({
+            idPostDenunciado,
+            idComentario
+        })
 
-        if (motivoInformado === null) {
-            return
+        setMotivoDenuncia('')
+        setDescricaoDenuncia('')
+        setErroDenuncia('')
+        setDenunciaEnviada(false)
+    }
+
+    function fecharDenuncia() {
+        if (!acaoEmAndamento) {
+            setDenunciaAberta(null)
         }
+    }
 
-        const motivo = motivoInformado
-            .trim()
-            .toLowerCase()
-            .replaceAll(' ', '_')
+    async function enviarDenuncia(event) {
+        event.preventDefault()
 
-        const motivosPermitidos = [
-            'ofensivo',
-            'spam',
-            'informacao_errada',
-            'outro'
-        ]
-
-        if (!motivosPermitidos.includes(motivo)) {
-            window.alert(
-                'Motivo inválido. Use ofensivo, spam, informacao_errada ou outro.'
-            )
-
-            return
-        }
-
-        const descricaoInformada = window.prompt(
-            'Descreva o problema. Esta parte é opcional.'
-        )
-
-        if (descricaoInformada === null) {
+        if (
+            !denunciaAberta ||
+            !motivoDenuncia ||
+            acaoEmAndamento
+        ) {
             return
         }
 
         setAcaoEmAndamento(true)
-        setErro('')
+        setErroDenuncia('')
 
         try {
             const resposta = await fetch(
@@ -252,10 +254,10 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                     method: 'POST',
                     headers: cabecalhos(),
                     body: JSON.stringify({
-                        id_post: idPostDenunciado,
-                        id_comentario: idComentario,
-                        motivo,
-                        descricao: descricaoInformada
+                        id_post: denunciaAberta.idPostDenunciado,
+                        id_comentario: denunciaAberta.idComentario,
+                        motivo: motivoDenuncia,
+                        descricao: descricaoDenuncia.trim()
                     })
                 }
             )
@@ -265,15 +267,14 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
             if (!resposta.ok) {
                 throw new Error(
                     dados.erro ||
-                        'Não foi possível enviar a denúncia.'
+                    'Não foi possível enviar a denúncia.'
                 )
             }
 
-            window.alert(
-                'Denúncia enviada. Um administrador poderá analisar o conteúdo.'
-            )
+            setDenunciaEnviada(true)
+
         } catch (erroAtual) {
-            setErro(erroAtual.message)
+            setErroDenuncia(erroAtual.message)
         } finally {
             setAcaoEmAndamento(false)
         }
@@ -281,7 +282,9 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
 
     async function ocultarConteudo(tipo, id) {
         const nomeConteudo =
-            tipo === 'post' ? 'esta publicação' : 'este comentário'
+            tipo === 'post'
+                ? 'esta publicação'
+                : 'este comentário'
 
         const confirmou = window.confirm(
             `Deseja realmente ocultar ${nomeConteudo}?`
@@ -312,7 +315,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
             if (!resposta.ok) {
                 throw new Error(
                     dados.erro ||
-                        'Não foi possível ocultar o conteúdo.'
+                    'Não foi possível ocultar o conteúdo.'
                 )
             }
 
@@ -324,6 +327,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
             }
 
             await carregarPost()
+
         } catch (erroAtual) {
             setErro(erroAtual.message)
         } finally {
@@ -331,7 +335,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
         }
     }
 
-    return (
+    return createPortal(
         <div
             className="feed-detail-backdrop"
             onMouseDown={aoFechar}
@@ -430,9 +434,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                     </span>
 
                                     <time>
-                                        {tempoRelativo(
-                                            post.criado_em
-                                        )}
+                                        {tempoRelativo(post.criado_em)}
                                     </time>
                                 </div>
 
@@ -446,9 +448,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                             <button
                                                 className="feed-action-hide"
                                                 type="button"
-                                                disabled={
-                                                    acaoEmAndamento
-                                                }
+                                                disabled={acaoEmAndamento}
                                                 onClick={() => {
                                                     ocultarConteudo(
                                                         'post',
@@ -462,11 +462,9 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                             <button
                                                 className="feed-action-report"
                                                 type="button"
-                                                disabled={
-                                                    acaoEmAndamento
-                                                }
+                                                disabled={acaoEmAndamento}
                                                 onClick={() => {
-                                                    denunciarConteudo({
+                                                    abrirDenuncia({
                                                         idPostDenunciado:
                                                             post.id_post
                                                     })
@@ -514,7 +512,8 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                             <div className="feed-comments-list">
                                 {comentarios.length === 0 ? (
                                     <p className="feed-no-comments">
-                                        Ainda não há comentários. Comece a conversa.
+                                        Ainda não há comentários.
+                                        Comece a conversa.
                                     </p>
                                 ) : (
                                     comentarios.map(item => (
@@ -523,27 +522,18 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                             key={item.id_comentario}
                                         >
                                             <Avatar
-                                                foto={
-                                                    item.foto_perfil
-                                                }
-                                                nome={
-                                                    item.nome_de_exibicao
-                                                }
+                                                foto={item.foto_perfil}
+                                                nome={item.nome_de_exibicao}
                                             />
 
                                             <div className="feed-comment-content">
                                                 <header>
                                                     <strong>
-                                                        {
-                                                            item.nome_de_exibicao
-                                                        }
+                                                        {item.nome_de_exibicao}
                                                     </strong>
 
                                                     <small>
-                                                        @
-                                                        {
-                                                            item.nome_de_usuario
-                                                        }
+                                                        @{item.nome_de_usuario}
                                                     </small>
 
                                                     <time>
@@ -561,9 +551,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                                             <button
                                                                 className="feed-action-hide"
                                                                 type="button"
-                                                                disabled={
-                                                                    acaoEmAndamento
-                                                                }
+                                                                disabled={acaoEmAndamento}
                                                                 onClick={() => {
                                                                     ocultarConteudo(
                                                                         'comentario',
@@ -577,16 +565,12 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                                             <button
                                                                 className="feed-action-report"
                                                                 type="button"
-                                                                disabled={
-                                                                    acaoEmAndamento
-                                                                }
+                                                                disabled={acaoEmAndamento}
                                                                 onClick={() => {
-                                                                    denunciarConteudo(
-                                                                        {
-                                                                            idComentario:
-                                                                                item.id_comentario
-                                                                        }
-                                                                    )
+                                                                    abrirDenuncia({
+                                                                        idComentario:
+                                                                            item.id_comentario
+                                                                    })
                                                                 }}
                                                             >
                                                                 Denunciar comentário
@@ -603,7 +587,189 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                     </>
                 )}
             </section>
-        </div>
+
+            {denunciaAberta && (
+                <div
+                    className="feed-denuncia-backdrop"
+                    onMouseDown={event => {
+                        event.stopPropagation()
+
+                        if (event.target === event.currentTarget) {
+                            fecharDenuncia()
+                        }
+                    }}
+                >
+                    <section
+                        className="feed-denuncia-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="feed-denuncia-titulo"
+                        onMouseDown={event => event.stopPropagation()}
+                        onKeyDown={event => {
+                            if (event.key === 'Escape') {
+                                event.stopPropagation()
+                                fecharDenuncia()
+                            }
+                        }}
+                    >
+                        {denunciaEnviada ? (
+                            <div
+                                className="feed-denuncia-sucesso"
+                                role="status"
+                            >
+                                <div
+                                    className="feed-denuncia-sucesso-icone"
+                                    aria-hidden="true"
+                                >
+                                    ✓
+                                </div>
+
+                                <h2 id="feed-denuncia-titulo">
+                                    Denúncia enviada!
+                                </h2>
+
+                                <p>
+                                    Obrigado por ajudar a manter
+                                    a comunidade segura. Um
+                                    administrador poderá analisar
+                                    o conteúdo.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    onClick={fecharDenuncia}
+                                >
+                                    Entendi
+                                </button>
+                            </div>
+                        ) : (
+                            <form onSubmit={enviarDenuncia}>
+                                <div className="feed-denuncia-cabecalho">
+                                    <span
+                                        className="feed-denuncia-icone"
+                                        aria-hidden="true"
+                                    >
+                                        ⚑
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        className="feed-denuncia-fechar"
+                                        onClick={fecharDenuncia}
+                                        disabled={acaoEmAndamento}
+                                        aria-label="Fechar denúncia"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+
+                                <h2 id="feed-denuncia-titulo">
+                                    Denunciar{' '}
+                                    {denunciaAberta.idComentario
+                                        ? 'comentário'
+                                        : 'publicação'}
+                                </h2>
+
+                                <p className="feed-denuncia-intro">
+                                    Por que você deseja denunciar
+                                    este conteúdo? Sua denúncia
+                                    será encaminhada para análise.
+                                </p>
+
+                                <fieldset className="feed-denuncia-motivos">
+                                    <legend>
+                                        Selecione um motivo
+                                    </legend>
+
+                                    {MOTIVOS_DENUNCIA.map(opcao => (
+                                        <label
+                                            key={opcao.valor}
+                                            className="feed-denuncia-opcao"
+                                        >
+                                            <input
+                                                type="radio"
+                                                name="motivoDenuncia"
+                                                value={opcao.valor}
+                                                checked={
+                                                    motivoDenuncia ===
+                                                    opcao.valor
+                                                }
+                                                autoFocus={
+                                                    opcao.valor ===
+                                                    'ofensivo'
+                                                }
+                                                onChange={event =>
+                                                    setMotivoDenuncia(
+                                                        event.target.value
+                                                    )
+                                                }
+                                                disabled={acaoEmAndamento}
+                                            />
+
+                                            <span>{opcao.nome}</span>
+                                        </label>
+                                    ))}
+                                </fieldset>
+
+                                <label className="feed-denuncia-descricao">
+                                    <span>
+                                        Detalhes adicionais{' '}
+                                        <small>(opcional)</small>
+                                    </span>
+
+                                    <textarea
+                                        value={descricaoDenuncia}
+                                        onChange={event =>
+                                            setDescricaoDenuncia(
+                                                event.target.value
+                                            )
+                                        }
+                                        placeholder="Conte um pouco mais sobre o problema..."
+                                        maxLength={1000}
+                                        disabled={acaoEmAndamento}
+                                        rows={3}
+                                    />
+                                </label>
+
+                                {erroDenuncia && (
+                                    <p
+                                        className="feed-denuncia-erro"
+                                        role="alert"
+                                    >
+                                        {erroDenuncia}
+                                    </p>
+                                )}
+
+                                <div className="feed-denuncia-acoes">
+                                    <button
+                                        type="button"
+                                        className="feed-denuncia-cancelar"
+                                        onClick={fecharDenuncia}
+                                        disabled={acaoEmAndamento}
+                                    >
+                                        Cancelar
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        className="feed-denuncia-enviar"
+                                        disabled={
+                                            !motivoDenuncia ||
+                                            acaoEmAndamento
+                                        }
+                                    >
+                                        {acaoEmAndamento
+                                            ? 'Enviando...'
+                                            : 'Enviar denúncia'}
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+                    </section>
+                </div>
+            )}
+        </div>, 
+        document.body
     )
 }
 
