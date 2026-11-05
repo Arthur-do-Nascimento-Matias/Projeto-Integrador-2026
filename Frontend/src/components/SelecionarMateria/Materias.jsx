@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import "./Materias.css";
-
 import brIcon from "../../assets/materias/brasil.svg";
 import enIcon from "../../assets/materias/ingles.svg";
 import cienciaIcon from "../../assets/materias/ciencia.svg";
 import geoIcon from "../../assets/materias/geografia.svg";
 import histIcon from "../../assets/materias/historia.svg";
 import matIcon from "../../assets/materias/matematica.svg";
-
 const materias = [
     { id: 2, nome: "Português", descricao: "Língua Portuguesa", cor: "#ff8214", icon: brIcon },
     { id: 1, nome: "Matemática", descricao: "Números e lógica", cor: "#75543c", icon: matIcon },
@@ -16,8 +14,6 @@ const materias = [
     { id: 4, nome: "Geografia", descricao: "Espaço e território", cor: "#64724a", icon: geoIcon },
     { id: 6, nome: "Inglês", descricao: "Língua Inglesa", cor: "#465936", icon: enIcon }
 ];
-
-
 function pontoPolar(cx, cy, raio, angulo) {
     const radianos = ((angulo - 90) * Math.PI) / 180;
     return {
@@ -25,14 +21,12 @@ function pontoPolar(cx, cy, raio, angulo) {
         y: cy + raio * Math.sin(radianos)
     };
 }
-
 function criarFatia(cx, cy, raioExterno, raioInterno, inicio, fim) {
     const externoInicio = pontoPolar(cx, cy, raioExterno, fim);
     const externoFim = pontoPolar(cx, cy, raioExterno, inicio);
     const internoInicio = pontoPolar(cx, cy, raioInterno, inicio);
     const internoFim = pontoPolar(cx, cy, raioInterno, fim);
     const arcoGrande = fim - inicio <= 180 ? 0 : 1;
-
     return [
         `M ${externoInicio.x} ${externoInicio.y}`,
         `A ${raioExterno} ${raioExterno} 0 ${arcoGrande} 0 ${externoFim.x} ${externoFim.y}`,
@@ -41,7 +35,6 @@ function criarFatia(cx, cy, raioExterno, raioInterno, inicio, fim) {
         "Z"
     ].join(" ");
 }
-
 function Materias({
     draft,
     refAtividade,
@@ -60,10 +53,18 @@ function Materias({
         concluidas: 0,
         carregando: true
     });
-
     const refTrilha = useRef(null);
-    const materiaExibida = materiaHover || materiaAtiva;
 
+    // O botão Sair precisa limpar o número no pai para permitir reabrir a mesma lição.
+    useEffect(() => {
+        function aoFechar() {
+            setAtividadeAtual(null);
+            if (refTrilha.current) refTrilha.current.style.opacity = "1";
+        }
+        window.addEventListener("simio:atividade-fechada", aoFechar);
+        return () => window.removeEventListener("simio:atividade-fechada", aoFechar);
+    }, [setAtividadeAtual]);
+    const materiaExibida = materiaHover || materiaAtiva;
     const materiasRenderizadas = materias
         .map((materia, index) => ({ materia, index }))
         .sort((a, b) => {
@@ -74,21 +75,17 @@ function Materias({
             };
             return prioridade(a) - prioridade(b);
         });
-
     // A matéria inicial visível é Português. Mantém o pai sincronizado.
     useEffect(() => {
         setMateriaAtual(materiaAtiva.id);
     }, [materiaAtiva.id, setMateriaAtual]);
-
     // Busca sempre o progresso persistido. atvLiberada serve apenas como sinal
     // para recarregar a trilha após o backend confirmar uma conclusão.
     useEffect(() => {
         const idMateria = materiaAtiva.id;
         const idUser = draft?.id;
         if (!idUser) return;
-
         const controller = new AbortController();
-
         async function carregarTrilha() {
             try {
                 const resposta = await fetch("http://localhost:3000/criarTrilha", {
@@ -98,14 +95,11 @@ function Materias({
                     cache: "no-store",
                     signal: controller.signal
                 });
-
                 if (!resposta.ok) {
                     throw new Error(`Erro HTTP ${resposta.status}`);
                 }
-
                 const dados = await resposta.json();
                 const perguntas = Array.isArray(dados.nome) ? dados.nome : [];
-
                 const total = Math.ceil(perguntas.length / 3);
                 // O banco retorna atividades_concluidas como atividades,
                 // não como quantidade de perguntas.
@@ -113,7 +107,6 @@ function Materias({
                 const concluidasBanco = Number.isFinite(valorBanco)
                     ? Math.max(0, Math.trunc(valorBanco))
                     : 0;
-
                 setTrilha({
                     materiaId: idMateria,
                     total,
@@ -127,17 +120,14 @@ function Materias({
                 }
             }
         }
-
         carregarTrilha();
         return () => controller.abort();
     }, [draft?.id, materiaAtiva.id, atvLiberada]);
-
     function selecionarMateria(materia) {
         setMateriaAtiva(materia);
         setMateriaHover(null);
         setMateriaAtual(materia.id);
         setAtividadeAtual(null);
-
         if (materia.id !== materiaAtiva.id) {
             setTrilha({
                 materiaId: materia.id,
@@ -146,16 +136,12 @@ function Materias({
                 carregando: true
             });
         }
-
         if (onChange) onChange(materia);
         setTimeout(() => setAberto(false), 220);
     }
-
     function entrarAtividade(id) {
         if (trilha.materiaId !== materiaAtiva.id || trilha.carregando) return;
-
         const proximaAtividade = trilha.concluidas + 1;
-
         if (id === proximaAtividade) {
             setAtividadeAtual(id);
             if (refTrilha.current) refTrilha.current.style.opacity = "0";
@@ -166,7 +152,6 @@ function Materias({
             alert("Atividade bloqueada");
         }
     }
-
     return (
         <>
             <div className="materias-container">
@@ -176,7 +161,6 @@ function Materias({
                         onClick={() => setAberto(false)}
                     />
                 )}
-
                 <button
                     type="button"
                     className={`materias-botao ${aberto ? "aberto" : ""}`}
@@ -192,7 +176,6 @@ function Materias({
                     <span className="materias-botao-nome">{materiaAtiva.nome}</span>
                     <span className="materias-seta">▼</span>
                 </button>
-
                 <div className={`materias-roda-container ${aberto ? "visivel" : ""}`}>
                     <div className="materias-roda">
                         <svg viewBox="0 0 360 360" className="materias-svg">
@@ -204,7 +187,6 @@ function Materias({
                                 const meio = index * tamanho + tamanho / 2;
                                 const posicaoTexto = pontoPolar(180, 180, 128, meio);
                                 const ativa = materia.id === materiaAtiva.id;
-
                                 return (
                                     <g
                                         key={materia.id}
@@ -233,7 +215,6 @@ function Materias({
                                 );
                             })}
                         </svg>
-
                         <div className="materias-centro">
                             <div className="materias-centro-icone" key={materiaExibida.id}>
                                 <img
@@ -248,14 +229,12 @@ function Materias({
                     </div>
                 </div>
             </div>
-
             <div className="trilha ativo" id="trilha" ref={refTrilha}>
                 {trilha.materiaId === materiaAtiva.id &&
                     Array.from({ length: trilha.total }, (_, i) => {
                         const id = i + 1;
                         const concluida = i < trilha.concluidas;
                         const atual = i === trilha.concluidas;
-
                         return (
                             <button
                                 type="button"
@@ -271,5 +250,4 @@ function Materias({
         </>
     );
 }
-
 export default Materias;
