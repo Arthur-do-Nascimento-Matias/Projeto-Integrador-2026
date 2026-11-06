@@ -40,6 +40,11 @@ function Configuracoes({
 
       <div className="config-lista">
 
+        <button onClick={() => alternarTema(setTema)} className="alternar-modo">
+            {tema === "claro" ? "🌙 Modo escuro" : "☀️ Modo claro"}
+        </button>
+
+
         <div className="config-card">
 
           <div className="config-texto">
@@ -63,12 +68,22 @@ function Configuracoes({
             <span className="switch-bolinha" />
           </button>
 
-          <button onClick={() => alternarTema(setTema)}>
-              {tema === "claro" ? "🌙 Modo escuro" : "☀️ Modo claro"}
-          </button>
-
         </div>
 
+        <div className="config-card config-password">
+          <div className="config-texto">
+            <h2>Trocar senha</h2>
+
+            <p>Troque sua senha atual</p>
+          </div>
+          <button
+            type="button"
+            className="botao-trocar-senha"
+
+          >
+            Trocar senha 
+          </button>
+        </div>
 
         <div className="config-card config-card-conta">
 

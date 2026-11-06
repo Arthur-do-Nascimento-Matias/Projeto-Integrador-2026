@@ -52,6 +52,13 @@
   gap: 18px;
 }
 
+.alternar-modo {
+  transition: all 300ms ease;
+}
+
+.alternar-modo:hover {
+  background-color: rgb(236, 234, 234);
+}
 
 /* ========================================
    CARD
@@ -281,7 +288,7 @@
     rgba(184, 67, 67, 0.14);
 }
 
-.botao-sair {
+.botao-sair, .botao-trocar-senha{
   min-width: 90px;
 
   box-sizing: border-box;
@@ -310,7 +317,7 @@
     box-shadow 180ms ease;
 }
 
-.botao-sair:hover {
+.botao-sair:hover, .botao-trocar-senha:hover {
   background: #c9574f;
   color: #ffffff;
 
@@ -320,11 +327,11 @@
     0 7px 16px rgba(201, 87, 79, 0.22);
 }
 
-.botao-sair:active {
+.botao-sair:active, .botao-trocar-senha:active {
   transform: translateY(0);
 }
 
-.botao-sair:focus-visible {
+.botao-sair:focus-visible, .botao-trocar-senha:focus-visible {
   outline: 3px solid
     rgba(201, 87, 79, 0.25);
   outline-offset: 3px;
@@ -375,7 +382,6 @@
 
     padding: 19px;
   }
-<<<<<<< HEAD
   
   
   /* TEXTO */
@@ -389,11 +395,9 @@
 
     letter-spacing: normal;
     word-spacing: normal;
-=======
 
   .configuracoes .config-texto h2 {
     font-size: 1.0625rem;
->>>>>>> origin/kauan
   }
 
   .configuracoes .config-texto p {
@@ -417,12 +421,10 @@
   .botao-sair {
     align-self: flex-end;
   }
-<<<<<<< HEAD
   
   .switch.ativo .switch-bolinha {
     transform: translateX(25px);
   }
-=======
 }
 
 
@@ -447,4 +449,4 @@ html[data-tamanho-texto="normal"] {
 html[data-tamanho-texto="grande"] {
   font-size: 18px;
 }
->>>>>>> origin/kauan
+}
