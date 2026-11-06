@@ -44,7 +44,8 @@ class Conexao {
                             id_usuario,
                             nome_de_exibicao,
                             nome_de_usuario,
-                            xp_semanal
+                            xp_semanal,
+                            foto_perfil_texto AS foto
                         FROM usuarios
                         ORDER BY
                             xp_semanal DESC,

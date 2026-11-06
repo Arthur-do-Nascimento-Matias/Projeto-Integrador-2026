@@ -22,6 +22,11 @@
   color: var(--simia-texto);
   font: 400 14px/1.6 'Rubik', sans-serif;
 }
+
+em {
+  color: beige;
+}
+
 .chatIA, .chatIA * { box-sizing: border-box; }
 .chatIA button,
 .chatIA textarea { font: inherit; }

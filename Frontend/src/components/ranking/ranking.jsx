@@ -3,6 +3,28 @@ import { useEffect, useRef, useState } from "react";
 import Moki from "../../assets/MOKI.png";
 import "./Ranking.css";
 
+const moki = "/avatares-simio/moki.png";
+const zoro = "/avatares-simio/zoro.png";
+const miro = "/avatares-simio/miro.png";
+const bimo = "/avatares-simio/bimo.png";
+const ibra = "/avatares-simio/ibra.png";
+const mika = "/avatares-simio/mika.png";
+const kimo = "/avatares-simio/kimo.png";
+const tuki = "/avatares-simio/tuki.png";
+const nala = "/avatares-simio/nala.png";
+
+const fotosPerfil = {
+  moki,
+  zoro,
+  miro,
+  bimo,
+  ibra,
+  mika,
+  kimo,
+  tuki,
+  nala
+};
+
 const numero = new Intl.NumberFormat("pt-BR");
 const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 const cores = ["menta", "areia", "rosa", "laranja", "azul"];
@@ -28,6 +50,10 @@ function tempoRestante(fim) {
 }
 
 function Avatar({ amigo, grande = false }) {
+  const foto = fotosPerfil[
+    String(amigo.foto || "moki").trim().toLowerCase()
+  ] || moki;
+
   return (
     <span
       className={[
@@ -36,7 +62,10 @@ function Avatar({ amigo, grande = false }) {
         grande ? "rk-avatar--grande" : "",
       ].join(" ")}
     >
-      <img src={Moki} alt="" />
+      <img
+        src={foto}
+        alt={`Avatar de ${amigo.nome}`}
+      />
     </span>
   );
 }
@@ -113,6 +142,7 @@ export default function Ranking({ usuarioId }) {
           nome: usuario.nome || usuario.username || "Explorador",
           xp: Number(usuario.xp) || 0,
           cor: cores[indice % cores.length],
+          foto: usuario.foto
         }));
 
         if (ativo) setParticipantes(participantesFormatados);

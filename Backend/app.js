@@ -367,7 +367,8 @@ if(req.method == 'GET') {
                     id: usuario.id_usuario,
                     nome: usuario.nome_de_exibicao,
                     username: usuario.nome_de_usuario,
-                    xp: Number(usuario.xp_semanal) || 0
+                    xp: Number(usuario.xp_semanal) || 0,
+                    foto: usuario.foto
                 }));
                 res.writeHead(200, {
                     "Content-Type": "application/json; charset=utf-8"

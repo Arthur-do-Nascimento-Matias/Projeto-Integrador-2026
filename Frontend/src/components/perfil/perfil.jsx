@@ -1,15 +1,27 @@
-import moki from "../../assets/simio.png"
-import punk from "../../assets/gotico.png"
-import artista from "../../assets/artista.png"
+const moki = "/avatares-simio/moki.png";
+const zoro = "/avatares-simio/zoro.png";
+const miro = "/avatares-simio/miro.png";
+const bimo = "/avatares-simio/bimo.png";
+const ibra = "/avatares-simio/ibra.png";
+const mika = "/avatares-simio/mika.png";
+const kimo = "/avatares-simio/kimo.png";
+const tuki = "/avatares-simio/tuki.png";
+const nala = "/avatares-simio/nala.png";
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from "react-dom";
 import { useParams } from 'react-router-dom'
 import './Perfil.css'
 
 const fotosPerfil = {
-  moki: moki,
-  gotico: punk,
-  artista: artista,
+  moki,
+  zoro,
+  miro,
+  bimo,
+  ibra,
+  mika,
+  kimo,
+  tuki,
+  nala
 };
 
 function StatCard({ icon, value, label, delay }) {
@@ -891,18 +903,53 @@ async function saveProfile(event) {
                     onClick={() => trocar("moki")}
                   />
                   <img 
-                    src={punk} 
-                    alt="Moki punk"
+                    src={zoro} 
+                    alt="Zoro"
                     width={100} 
-                    value="punk"
-                    onClick={() => trocar("gotico")}
+                    value="zoro"
+                    onClick={() => trocar("zoro")}
                   />
                   <img 
-                    src={artista} 
-                    alt="Moki artista" 
+                    src={miro} 
+                    alt="Miro" 
                     width={100} 
-                    value="artista"
-                    onClick={() => trocar("artista")}
+                    value="miro"
+                    onClick={() => trocar("miro")}
+                  />
+                  <img 
+                    src={ibra} 
+                    alt="Ibra" 
+                    width={100} 
+                    value="ibra"
+                    onClick={() => trocar("ibra")}
+                  />
+                  <img 
+                    src={mika} 
+                    alt="Mika" 
+                    width={100} 
+                    value="mika"
+                    onClick={() => trocar("mika")}
+                  />
+                  <img 
+                    src={kimo} 
+                    alt="Kimo" 
+                    width={100} 
+                    value="kimo"
+                    onClick={() => trocar("kimo")}
+                  />
+                  <img 
+                    src={tuki} 
+                    alt="Tuki" 
+                    width={100} 
+                    value="tuki"
+                    onClick={() => trocar("tuki")}
+                  />
+                  <img 
+                    src={nala} 
+                    alt="Nala" 
+                    width={100} 
+                    value="nala"
+                    onClick={() => trocar("nala")}
                   />
                 </div>
               </section>
