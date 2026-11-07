@@ -7,6 +7,7 @@ import Sequencia from './Sequencia.js'
 import Conexao from './Conexao.js'
 import Livros from './Livros.js'
 import ChatBot from './ChatBot.js'
+import Email from './Email.js'
 import Cadastro from './Cadastro.js'
 import Login from './Login.js'
 import Provas from './Provas.js'
@@ -14,6 +15,8 @@ import Redacoes from './Redacoes.js'
 import Http from './utils/http.js'
 import Feed from './Feed.js'
 import Missoes from './Missoes.js'
+import { error } from 'console'
+import { json } from 'stream/consumers'
 // As duas rotas da trilha usam a mesma consulta e o mesmo formato de resposta.
 async function responderTrilha(dados, res) {
     const idMateria = Number(dados?.id);
@@ -764,6 +767,19 @@ else if (req.method == 'POST') {
     req.on('data', chunk => {
         body += chunk
     })
+
+    if(rota.pathname === "/recover") {
+        req.on('end', async () => {
+            try {
+                const dados = JSON.parse(body)
+                await Email.recover(dados)
+            } 
+            catch(error){
+                throw error
+            }
+        })
+    }
+
     if (rota.pathname === '/criarTrilha') {
         req.on('end', async () => {
             let dados;
