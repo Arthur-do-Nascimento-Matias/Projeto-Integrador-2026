@@ -130,6 +130,38 @@ const callback = async (req, res) => {
         atenderMissoes()
         return
     }
+    if (['/feed/conteudo/editar', '/feed/conteudo/excluir'].includes(rota.pathname)) {
+        if (req.method !== 'POST') {
+            Http.responderJson(res, 405, { ok: false, erro: 'Método não permitido.' })
+            return
+        }
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, { ok: false, erro: 'Faça login novamente.' })
+            return
+        }
+        try {
+            const dados = await Http.lerCorpo(req)
+            if (!dados || typeof dados !== 'object' || Array.isArray(dados)) {
+                Http.responderJson(res, 400, { ok: false, erro: 'Dados inválidos.' })
+                return
+            }
+            const resultado = await Feed.alterarConteudoProprio({
+                ...dados,
+                id_usuario: idUsuario,
+                acao: rota.pathname.endsWith('/editar') ? 'editar' : 'excluir'
+            })
+            Http.responderJson(res, 200, resultado)
+        } catch (erro) {
+            const status = erro.status || 500
+            if (status >= 500) console.error('Erro ao alterar conteúdo próprio:', erro)
+            Http.responderJson(res, status, {
+                ok: false,
+                erro: status >= 500 ? 'Não foi possível alterar o conteúdo.' : erro.message
+            })
+        }
+        return
+    }
     if (req.method === 'GET' && rota.pathname === '/comunidades') {
         const idUsuario = buscarUsuarioAutenticado(req)
         if (!idUsuario) {
