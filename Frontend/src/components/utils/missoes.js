@@ -1,3 +1,5 @@
+import { prepararSons, tocarSom } from "./sons"
+
 export const EVENTO_MISSOES =
     'moki:missoes-atualizadas'
 
@@ -53,6 +55,7 @@ export async function carregarMissoes() {
 
 
 function registrar(evento) {
+    const audioPronto = prepararSons()
     const token = obterToken()
 
     if (!token) {
@@ -90,6 +93,11 @@ function registrar(evento) {
                 dados.erro ||
                 'Não foi possível registrar a missão.'
             )
+        }
+
+        // xp_ganho nesta rota corresponde somente a novas recompensas de missões.
+        if (Number(dados.xp_ganho) > 0) {
+            Promise.resolve(audioPronto).then(() => tocarSom('missao'))
         }
 
         window.dispatchEvent(

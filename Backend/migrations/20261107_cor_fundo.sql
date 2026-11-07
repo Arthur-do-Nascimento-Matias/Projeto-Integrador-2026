@@ -1,0 +1,1 @@
+﻿ALTER TABLE usuarios ADD COLUMN cor_fundo CHAR(7) NOT NULL DEFAULT '#B4CFA8';

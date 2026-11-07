@@ -45,9 +45,10 @@ class Conexao {
                             nome_de_exibicao,
                             nome_de_usuario,
                             xp_semanal,
-                            foto_perfil_texto AS foto
-                        FROM usuarios
-                        ORDER BY
+                            foto_perfil_texto AS foto,
+                            cor_fundo
+                            FROM usuarios
+                            ORDER BY
                             xp_semanal DESC,
                             nome_de_exibicao ASC,
                             id_usuario ASC`
@@ -259,6 +260,7 @@ class Conexao {
                             bio,
                             email,
                             foto_perfil_texto AS foto,
+                            cor_fundo,
                             vidas,
                             streak,
                             xp,
@@ -352,6 +354,20 @@ class Conexao {
                         console.error('Erro ao atualizar foto:', error);
                         return reject(error);
                     }
+                    resolve(results);
+                }
+            );
+        });
+    }
+    static atualizarAparencia(dados) {
+        return new Promise((resolve, reject) => {
+            const connection = Conexao.connect();
+            connection.query(
+                'UPDATE usuarios SET foto_perfil_texto = ?, cor_fundo = ? WHERE id_usuario = ?',
+                [dados.foto, dados.cor_fundo, dados.id],
+                (error, results) => {
+                    connection.end();
+                    if (error) return reject(error);
                     resolve(results);
                 }
             );

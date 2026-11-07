@@ -33,7 +33,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Cabeçalho */
 
 header {
   position: absolute;
@@ -47,6 +46,101 @@ header {
   justify-content: space-between;
   align-items: center;
 }
+
+.simio-tema {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  margin-left: auto;
+
+  width: 80px;
+  height: 44px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #96b77d;
+  box-shadow: 0 4px 0 #62794b;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.simio-tema-bolinha {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  background: #fff8ed;
+  box-shadow: 0 2px 3px #00000026;
+
+  transition: transform 350ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.simio-tema-sol,
+.simio-tema-lua {
+  position: absolute;
+  top: 10px;
+
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.simio-tema-sol {
+  right: 10px;
+  color: #ffb238;
+  animation: simioSolGirar 20s linear infinite;
+}
+
+.simio-tema-lua {
+  left: 10px;
+  color: #f1dfc0;
+  transform: rotate(-15deg);
+}
+
+.simio-tema[aria-checked="true"] {
+  background: #203d2c;
+  box-shadow: 0 4px 0 #122619;
+}
+
+.simio-tema[aria-checked="true"] .simio-tema-bolinha {
+  transform: translateX(36px);
+}
+
+.simio-tema:focus-visible {
+  outline: 3px solid #ffb238;
+  outline-offset: 6px;
+}
+
+@keyframes simioSolGirar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .simio-tema,
+  .simio-tema-bolinha {
+    transition: none;
+  }
+
+  .simio-tema-sol {
+    animation: none;
+  }
+}
+
 
 .brand {
   font-size: 30px;
@@ -445,6 +539,8 @@ a:focus-visible {
 .materias{
   width: 64px;
   height: 64px;
+
+  transition: all 0.3s ease-in-out;
 }
 
 .materias:hover {
@@ -465,7 +561,11 @@ a:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+
+  
 }
+
+
 
 .inicio-logo {
   font-family: "Rubik", sans-serif;
@@ -491,6 +591,18 @@ span.ponto {
   letter-spacing: 1.5px;
   color: #65816b;
   font-family: "Rubik", sans-serif;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.inicio-header-direita {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
 }
 
 .inicio-conteudo {

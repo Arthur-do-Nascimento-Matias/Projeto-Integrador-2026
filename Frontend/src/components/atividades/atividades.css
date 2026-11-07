@@ -197,8 +197,14 @@
 }
 
 .atividade-feedback-erro {
-    position: absolute;
-    inset: auto 0 0;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: 520px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    margin-top: 12px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -302,4 +308,10 @@
     50% {
         transform: rotate(5deg)
     }
+}
+@media (max-width: 520px) {
+    .atividade-feedback-erro { gap: 10px; padding: 16px 12px; }
+    .atividade-feedback-erro strong { font-size: 17px; }
+    .atividade-feedback-erro p { font-size: 12px; }
+    .atividade-feedback-erro__icone { width: 36px; height: 36px; }
 }

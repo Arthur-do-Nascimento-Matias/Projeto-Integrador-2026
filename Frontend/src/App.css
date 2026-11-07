@@ -451,6 +451,14 @@ body,
   background-color: #232B33 !important;
 }
 
+:root[data-tema="escuro"] .rk-pagina .rk-linha:hover {
+  background: #4b5e50 !important;
+}
+
+:root[data-tema="escuro"] .rk-pagina .rk-linha:nth-child(odd):hover {
+  background: #1a2229 !important;
+}
+
 :root[data-tema="escuro"] .inicio-materias {
   background: #31303080 !important;
   border-top: transparent;

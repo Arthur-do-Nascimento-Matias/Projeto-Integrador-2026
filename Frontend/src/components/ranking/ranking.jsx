@@ -27,7 +27,6 @@ const fotosPerfil = {
 
 const numero = new Intl.NumberFormat("pt-BR");
 const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
-const cores = ["menta", "areia", "rosa", "laranja", "azul"];
 
 // Próxima segunda-feira, às 00h, no horário do navegador.
 function proximaSegunda() {
@@ -56,11 +55,10 @@ function Avatar({ amigo, grande = false }) {
 
   return (
     <span
-      className={[
-        "rk-avatar",
-        `rk-avatar--${amigo.cor || "menta"}`,
-        grande ? "rk-avatar--grande" : "",
-      ].join(" ")}
+      className={`rk-avatar${grande ? " rk-avatar--grande" : ""}`}
+      style={{
+        backgroundColor: amigo.cor_fundo || "#B4CFA8",
+      }}
     >
       <img
         src={foto}
@@ -136,13 +134,13 @@ export default function Ranking({ usuarioId }) {
           throw new Error(dados.message || "Resposta inválida do servidor.");
         }
 
-        const participantesFormatados = dados.participantes.map((usuario, indice) => ({
+        const participantesFormatados = dados.participantes.map((usuario) => ({
           ...usuario,
           id: Number(usuario.id),
           nome: usuario.nome || usuario.username || "Explorador",
           xp: Number(usuario.xp) || 0,
-          cor: cores[indice % cores.length],
-          foto: usuario.foto
+          cor_fundo: usuario.cor_fundo || "#B4CFA8",
+          foto: usuario.foto,
         }));
 
         if (ativo) setParticipantes(participantesFormatados);
@@ -215,32 +213,32 @@ export default function Ranking({ usuarioId }) {
 
   return (
     <section className="rk-pagina" aria-labelledby="rk-titulo">
-{/* CABEÇALHO */}
-<header className="rk-cabecalho">
-  <div className="rk-titulo-bloco">
-    <span className="rk-sobrancelha">
-      APRENDER JUNTOS É MAIS DIVERTIDO
-    </span>
+      {/* CABEÇALHO */}
+      <header className="rk-cabecalho">
+        <div className="rk-titulo-bloco">
+          <span className="rk-sobrancelha">
+            APRENDER JUNTOS É MAIS DIVERTIDO
+          </span>
 
-    <h1 id="rk-titulo">
-      Ranking de <em>amigos</em>
-    </h1>
+          <h1 id="rk-titulo">
+            Ranking de <em>amigos</em>
+          </h1>
 
-    <p className="rankingIntro">Cada descoberta te leva um galho mais alto.</p>
+          <p className="rankingIntro">Cada descoberta te leva um galho mais alto.</p>
 
-    <div className="rk-info-semana">
-      <span>
-        {ordenados.length} participantes · Ranking semanal
-      </span>
-    </div>
-  </div>
+          <div className="rk-info-semana">
+            <span>
+              {ordenados.length} participantes · Ranking semanal
+            </span>
+          </div>
+        </div>
 
-  <div className="rk-relogio">
-    <span>◷ &nbsp; FIM DA SEMANA</span>
-    <strong>{contador}</strong>
-    <small>Renovação às segundas</small>
-  </div>
-</header>
+        <div className="rk-relogio">
+          <span>◷ &nbsp; FIM DA SEMANA</span>
+          <strong>{contador}</strong>
+          <small>Renovação às segundas</small>
+        </div>
+      </header>
 
 
       {carregando ? (
@@ -301,7 +299,7 @@ export default function Ranking({ usuarioId }) {
                     <strong className="rk-nome-podio">
                       {amigo.nome}
                       {Number(amigo.id) === Number(usuarioId) &&
-                      amigo.nome !== "Você"
+                        amigo.nome !== "Você"
                         ? " (Você)"
                         : ""}
                     </strong>
@@ -369,9 +367,8 @@ export default function Ranking({ usuarioId }) {
                     aria-current={souEu ? "true" : undefined}
                   >
                     <span
-                      className={`rk-posicao${
-                        indice < 3 ? ` rk-posicao--${indice + 1}` : ""
-                      }`}
+                      className={`rk-posicao${indice < 3 ? ` rk-posicao--${indice + 1}` : ""
+                        }`}
                     >
                       {indice + 1}
                       <span className="rk-sr">º lugar</span>
