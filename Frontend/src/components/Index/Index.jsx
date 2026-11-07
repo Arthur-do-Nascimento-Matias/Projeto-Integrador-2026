@@ -308,11 +308,13 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
             Vamos evoluir juntos?
           </div>
 
-          <img
+          <div className="index-mascote-frame index-mascote-frame--bimo">
+            <img
             className="gamer-vinheta"
             src={gamerAceno}
             alt="Macaco Gamer do SimioLab"
           />
+          </div>
 
         </div>
 
@@ -425,13 +427,15 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
             Vamos colorir novas ideias?
           </div>
 
-          <img
+          <div className="index-mascote-frame index-mascote-frame--miro">
+            <img
             className="biblioteca-home-mascote"
             src={artista}
             alt="Mascote artista da biblioteca"
             loading="lazy"
             draggable="false"
           />
+          </div>
         </div>
 
         <div className="biblioteca-home-conteudo">
@@ -572,15 +576,14 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
             </p>
 
             <div className="simia-apresentacao-assuntos">
-              <span>Explicações simples</span>
-              <span>Respostas passo a passo</span>
+              <span className="simia-assunto">Explicações simples</span>
+              <span className="simia-assunto">Respostas passo a passo</span>
             </div>
           </div>
 
           <div className="simia-apresentacao-painel">
             <div className="simia-painel-cabecalho">
               <span className="simia-painel-status"></span>
-              <strong>SimIA está pensando...</strong>
             </div>
 
             <div className="simia-painel-pergunta">
@@ -612,7 +615,8 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
             </div>
 
             <div className="simia-painel-detalhe">
-              <span>+</span>
+              <p>Escreva sua dúvida...</p>
+              <span className="input-enviar">↑</span>
             </div>
           </div>
 
@@ -634,6 +638,7 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
               <br />
             </div>
 
+            <div className="index-mascote-frame index-mascote-frame--zoro">
             <img
               className="simia-apresentacao-mascote"
               src={punk}
@@ -641,6 +646,7 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
               loading="lazy"
               draggable="false"
             />
+          </div>
           </div>
 
         </div>

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import FeedAcoesAutor from './FeedAcoesAutor'
+import FeedDenuncia from './FeedDenuncia'
 
 const API_URL = 'http://localhost:3000'
 
@@ -19,30 +21,36 @@ function tempoRelativo(data) {
     return `há ${Math.floor(horas / 24)} d`
 }
 
-function Avatar({ foto, nome }) {
-    const iniciais = (nome || 'SL')
-        .split(' ')
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(parte => parte[0])
-        .join('')
-        .toUpperCase()
+const fotosPerfil = {
+    moki: '/avatares-simio/moki.png',
+    zoro: '/avatares-simio/zoro.png',
+    miro: '/avatares-simio/miro.png',
+    bimo: '/avatares-simio/bimo.png',
+    ibra: '/avatares-simio/ibra.png',
+    mika: '/avatares-simio/mika.png',
+    kimo: '/avatares-simio/kimo.png',
+    tuki: '/avatares-simio/tuki.png',
+    nala: '/avatares-simio/nala.png',
+}
+
+function Avatar({ foto, nome, corFundo }) {
+    const imagem = fotosPerfil[String(foto || 'moki').trim().toLowerCase()] || fotosPerfil.moki
 
     return (
-        <div className="feed-avatar">
-            {foto ? (
-                <img
-                    src={foto}
-                    alt={`Foto de ${nome}`}
-                />
-            ) : (
-                <span>{iniciais}</span>
-            )}
+        <div
+            className="feed-avatar"
+            style={{ backgroundColor: corFundo || '#B4CFA8' }}
+        >
+            <img
+                src={imagem}
+                alt={`Avatar de ${nome || 'Explorador'}`}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
         </div>
     )
 }
 
-function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
+function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
     const [post, setPost] = useState(null)
     const [comentarios, setComentarios] = useState([])
     const [comentario, setComentario] = useState('')
@@ -52,7 +60,9 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
     const [permissaoCarregada, setPermissaoCarregada] =
         useState(false)
     const [ehAdmin, setEhAdmin] = useState(false)
+    const [usuarioAtualId, setUsuarioAtualId] = useState(null)
     const [erro, setErro] = useState('')
+    const [alvoDenuncia, setAlvoDenuncia] = useState(null)
 
     function cabecalhos() {
         return {
@@ -78,6 +88,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
             }
 
             setEhAdmin(Number(dados.usuario?.adm) === 1)
+            setUsuarioAtualId(Number(dados.usuario?.id_usuario) || null)
         } catch (erroAtual) {
             console.error(
                 'Erro ao verificar administrador:',
@@ -85,6 +96,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
             )
 
             setEhAdmin(false)
+            setUsuarioAtualId(null)
         } finally {
             setPermissaoCarregada(true)
         }
@@ -198,85 +210,8 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
         }
     }
 
-    async function denunciarConteudo({
-        idPostDenunciado = null,
-        idComentario = null
-    }) {
-        const motivoInformado = window.prompt(
-            'Informe o motivo da denúncia:\n\n' +
-                'ofensivo\n' +
-                'spam\n' +
-                'informacao_errada\n' +
-                'outro'
-        )
-
-        if (motivoInformado === null) {
-            return
-        }
-
-        const motivo = motivoInformado
-            .trim()
-            .toLowerCase()
-            .replaceAll(' ', '_')
-
-        const motivosPermitidos = [
-            'ofensivo',
-            'spam',
-            'informacao_errada',
-            'outro'
-        ]
-
-        if (!motivosPermitidos.includes(motivo)) {
-            window.alert(
-                'Motivo inválido. Use ofensivo, spam, informacao_errada ou outro.'
-            )
-
-            return
-        }
-
-        const descricaoInformada = window.prompt(
-            'Descreva o problema. Esta parte é opcional.'
-        )
-
-        if (descricaoInformada === null) {
-            return
-        }
-
-        setAcaoEmAndamento(true)
-        setErro('')
-
-        try {
-            const resposta = await fetch(
-                `${API_URL}/feed/denuncias`,
-                {
-                    method: 'POST',
-                    headers: cabecalhos(),
-                    body: JSON.stringify({
-                        id_post: idPostDenunciado,
-                        id_comentario: idComentario,
-                        motivo,
-                        descricao: descricaoInformada
-                    })
-                }
-            )
-
-            const dados = await resposta.json()
-
-            if (!resposta.ok) {
-                throw new Error(
-                    dados.erro ||
-                        'Não foi possível enviar a denúncia.'
-                )
-            }
-
-            window.alert(
-                'Denúncia enviada. Um administrador poderá analisar o conteúdo.'
-            )
-        } catch (erroAtual) {
-            setErro(erroAtual.message)
-        } finally {
-            setAcaoEmAndamento(false)
-        }
+    function denunciarConteudo({ idPostDenunciado = null, idComentario = null }) {
+        setAlvoDenuncia({ id_post: idPostDenunciado, id_comentario: idComentario })
     }
 
     async function ocultarConteudo(tipo, id) {
@@ -398,12 +333,40 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                 >
                                     ▼
                                 </button>
+
+                                {usuarioAtualId && Number(post.id_usuario) === usuarioAtualId && (
+                                    <FeedAcoesAutor
+                                        tipo="post"
+                                        item={post}
+                                        aoAtualizar={async acao => {
+                                            if (acao !== 'excluir') await carregarPost()
+                                            await aoAtualizar()
+                                        }}
+                                        aoExcluir={aoFechar}
+                                    />
+                                )}
+
+                                {permissaoCarregada && !ehAdmin && Number(post.id_usuario) !== usuarioAtualId && (
+                                    <button
+                                        className="feed-detail-report"
+                                        type="button"
+                                        disabled={acaoEmAndamento}
+                                        onClick={() => denunciarConteudo({ idPostDenunciado: post.id_post })}
+                                        aria-label="Denunciar publicação"
+                                        title="Denunciar publicação"
+                                    >
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                            <path d="M5 21V3m0 1c5-4 9 4 14 0v10c-5 4-9-4-14 0" />
+                                        </svg>
+                                    </button>
+                                )}
                             </div>
 
                             <div className="feed-detail-body">
                                 <div className="feed-post-meta">
                                     <Avatar
                                         foto={post.foto_perfil}
+                                        corFundo={post.cor_fundo}
                                         nome={post.nome_de_exibicao}
                                     />
 
@@ -440,41 +403,16 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
 
                                 <p>{post.conteudo}</p>
 
-                                {permissaoCarregada && (
+                                {permissaoCarregada && ehAdmin && (
                                     <div className="feed-moderation-actions">
-                                        {ehAdmin ? (
-                                            <button
-                                                className="feed-action-hide"
-                                                type="button"
-                                                disabled={
-                                                    acaoEmAndamento
-                                                }
-                                                onClick={() => {
-                                                    ocultarConteudo(
-                                                        'post',
-                                                        post.id_post
-                                                    )
-                                                }}
-                                            >
-                                                Ocultar publicação
-                                            </button>
-                                        ) : (
-                                            <button
-                                                className="feed-action-report"
-                                                type="button"
-                                                disabled={
-                                                    acaoEmAndamento
-                                                }
-                                                onClick={() => {
-                                                    denunciarConteudo({
-                                                        idPostDenunciado:
-                                                            post.id_post
-                                                    })
-                                                }}
-                                            >
-                                                Denunciar publicação
-                                            </button>
-                                        )}
+                                        <button
+                                            className="feed-action-hide"
+                                            type="button"
+                                            disabled={acaoEmAndamento}
+                                            onClick={() => ocultarConteudo('post', post.id_post)}
+                                        >
+                                            Ocultar publicação
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -522,14 +460,37 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                                             className="feed-comment"
                                             key={item.id_comentario}
                                         >
-                                            <Avatar
-                                                foto={
-                                                    item.foto_perfil
-                                                }
-                                                nome={
-                                                    item.nome_de_exibicao
-                                                }
-                                            />
+                                            <div className="feed-comment-side">
+                                                <Avatar
+                                                    foto={item.foto_perfil}
+                                                    corFundo={item.cor_fundo}
+                                                    nome={item.nome_de_exibicao}
+                                                />
+                                                {usuarioAtualId && Number(item.id_usuario) === usuarioAtualId && (
+                                                    <FeedAcoesAutor
+                                                        tipo="comentario"
+                                                        item={item}
+                                                        aoAtualizar={async () => {
+                                                            await carregarPost()
+                                                            await aoAtualizar()
+                                                        }}
+                                                    />
+                                                )}
+                                                {permissaoCarregada && !ehAdmin && Number(item.id_usuario) !== usuarioAtualId && (
+                                                    <button
+                                                        className="feed-comment-report"
+                                                        type="button"
+                                                        disabled={acaoEmAndamento}
+                                                        onClick={() => denunciarConteudo({ idComentario: item.id_comentario })}
+                                                        aria-label="Denunciar comentário"
+                                                        title="Denunciar comentário"
+                                                    >
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                            <path d="M5 21V3m0 1c5-4 9 4 14 0v10c-5 4-9-4-14 0" />
+                                                        </svg>
+                                                    </button>
+                                                )}
+                                            </div>
 
                                             <div className="feed-comment-content">
                                                 <header>
@@ -555,43 +516,16 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
 
                                                 <p>{item.conteudo}</p>
 
-                                                {permissaoCarregada && (
+                                                {permissaoCarregada && ehAdmin && (
                                                     <div className="feed-moderation-actions">
-                                                        {ehAdmin ? (
-                                                            <button
-                                                                className="feed-action-hide"
-                                                                type="button"
-                                                                disabled={
-                                                                    acaoEmAndamento
-                                                                }
-                                                                onClick={() => {
-                                                                    ocultarConteudo(
-                                                                        'comentario',
-                                                                        item.id_comentario
-                                                                    )
-                                                                }}
-                                                            >
-                                                                Ocultar comentário
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                className="feed-action-report"
-                                                                type="button"
-                                                                disabled={
-                                                                    acaoEmAndamento
-                                                                }
-                                                                onClick={() => {
-                                                                    denunciarConteudo(
-                                                                        {
-                                                                            idComentario:
-                                                                                item.id_comentario
-                                                                        }
-                                                                    )
-                                                                }}
-                                                            >
-                                                                Denunciar comentário
-                                                            </button>
-                                                        )}
+                                                        <button
+                                                            className="feed-action-hide"
+                                                            type="button"
+                                                            disabled={acaoEmAndamento}
+                                                            onClick={() => ocultarConteudo('comentario', item.id_comentario)}
+                                                        >
+                                                            Ocultar comentário
+                                                        </button>
                                                     </div>
                                                 )}
                                             </div>
@@ -601,6 +535,16 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar }) {
                             </div>
                         </section>
                     </>
+                )}
+                {alvoDenuncia && (
+                    <FeedDenuncia
+                        alvo={alvoDenuncia}
+                        aoFechar={() => setAlvoDenuncia(null)}
+                        aoEnviado={() => {
+                            setAlvoDenuncia(null)
+                            aoDenunciaEnviada?.()
+                        }}
+                    />
                 )}
             </section>
         </div>

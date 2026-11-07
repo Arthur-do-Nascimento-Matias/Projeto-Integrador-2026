@@ -59,8 +59,8 @@ function ConteudoApp({
 
   const estaNoIndex = location.pathname === '/';
   const estaNoLogin = location.pathname === '/login';
-  const estaNoInstagram = location.pathname === "/instagram";
-  const estaNoGit = location.pathname === "/Git";
+const estaNoInstagram = location.pathname.toLowerCase() === "/instagram";
+const estaNoGit = location.pathname.toLowerCase() === "/github";
 
   const [draft, setDraft] = useState({
     id: '',
@@ -75,7 +75,12 @@ function ConteudoApp({
 
   useEffect(() => {
 
-    if (estaNoLogin || estaNoIndex) return;
+    if (
+    estaNoLogin ||
+    estaNoIndex ||
+    estaNoInstagram ||
+    estaNoGit
+) return;
 
     async function carregarUsuario() {
 
@@ -137,7 +142,13 @@ function ConteudoApp({
 
     carregarUsuario();
 
-  }, [estaNoLogin, estaNoIndex, navigate]);
+  }, [
+    estaNoLogin,
+    estaNoIndex,
+    estaNoInstagram,
+    estaNoGit,
+    navigate
+]);
 
   const [mode, setMode] = useState('login')
 

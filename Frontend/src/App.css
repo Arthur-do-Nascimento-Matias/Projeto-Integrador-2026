@@ -496,3 +496,306 @@ body,
 :root[data-tema="escuro"] .simio-rodape .simio-rodape__onda {
     fill: #8eac84 !important;
 }
+/* Feed — modo escuro controlado exclusivamente pelo tema do App. */
+:root[data-tema="escuro"] .feed-page {
+    --feed-surface: #343c45;
+    --feed-surface-alt: #2b333b;
+    --feed-border: #4a5561;
+    --feed-shadow: #171d23;
+    --feed-text: #eaecea;
+    --feed-copy: #c9d0d5;
+    --feed-muted: #aab5be;
+    --feed-green: #98b97f;
+    --feed-green-dark: #bdd0ac;
+    color-scheme: dark;
+}
+
+/* Estes textos já participam de uma regra global com !important acima. */
+:root[data-tema="escuro"] .feed-page .learn-together {
+    color: var(--feed-text) !important;
+}
+
+:root[data-tema="escuro"] .feed-page .ask-help-discover,
+:root[data-tema="escuro"] .feed-page form p {
+    color: var(--feed-copy) !important;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-kicker,
+:root[data-tema="escuro"] .feed-page .feed-header h1 em,
+:root[data-tema="escuro"] .feed-page .feed-side-title > div > span,
+:root[data-tema="escuro"] .feed-page .feed-modal-header span,
+:root[data-tema="escuro"] .feed-page .feed-detail-header > span,
+:root[data-tema="escuro"] .feed-page .feed-moderation-header span {
+    color: #edb263;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-admin-button {
+    border-color: #75584e;
+    background: #493d3b;
+    box-shadow: 0 4px 0 #252228;
+    color: #e4b3a6;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-filter-scroll {
+    scrollbar-color: #66795b transparent;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-community {
+    background: #39434d;
+    color: #c8d1d7;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-community:hover,
+:root[data-tema="escuro"] .feed-page .feed-community.active {
+    border-color: #82956b;
+    background: #506449;
+    color: #f1eee3;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-order {
+    background: #2b333b;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-order button {
+    color: #abb8b4;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-order button.active {
+    background: #4a5662;
+    box-shadow: 0 2px 0 #1d252c;
+    color: #e7ece5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button:hover {
+    background: #414b55;
+    color: var(--feed-text);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button.positive {
+    border-color: #d99b3f;
+    background: #f5b452;
+    box-shadow: 0 3px 0 #9d6923;
+    color: #50381a;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button.negative {
+    border-color: #ad99be;
+    background: #cebbdf;
+    box-shadow: 0 3px 0 #735c88;
+    color: #523d63;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button:active {
+    box-shadow: none;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes .feed-post-report:hover,
+:root[data-tema="escuro"] .feed-page .feed-votes .feed-detail-report:hover {
+    background: #563f3d;
+    color: #f0b4a2;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-avatar {
+    border-color: #5a6570;
+    box-shadow: 0 4px 0 #20272f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-comment .feed-avatar {
+    box-shadow: 0 3px 0 #20272f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-community {
+    border-color: color-mix(in srgb, var(--topic-color, var(--community-color, #62824b)) 35%, #47515b);
+    background: color-mix(in srgb, var(--topic-color, var(--community-color, #62824b)) 17%, #343c45);
+    box-shadow: 0 3px 0 #20272f;
+    color: color-mix(in srgb, var(--topic-color, var(--community-color, #62824b)) 18%, #e4ece6);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions {
+    border-top-color: var(--feed-border);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions button {
+    border-color: #58616b;
+    background: #414b55;
+    box-shadow: 0 4px 0 #20272f;
+    color: var(--feed-text);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions button:hover {
+    background: #4c5762;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions button:active {
+    box-shadow: none;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-communities article:hover,
+:root[data-tema="escuro"] .feed-page .feed-side-communities article:focus-visible {
+    background: #414e42;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-community-position {
+    color: #abbfa0;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-communities article > div strong {
+    color: #dce5d5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-communities article > div span {
+    color: #aebba5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-tip {
+    border-color: #6b5b42;
+    background: #3d3931;
+    box-shadow: 0 5px 0 #24221e;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-tip strong {
+    color: #e7b968;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-tip p {
+    color: #d4c5aa;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-state {
+    border-color: #64705f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-loader {
+    border-color: #4b5b4a;
+    border-top-color: #98b97f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-error {
+    border-color: #805343;
+    background: #49352f;
+    color: #f1bca5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal-backdrop,
+:root[data-tema="escuro"] .feed-page .feed-detail-backdrop,
+:root[data-tema="escuro"] .feed-page .feed-moderation-backdrop {
+    background: #11171dd6;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal,
+:root[data-tema="escuro"] .feed-page .feed-detail,
+:root[data-tema="escuro"] .feed-page .feed-moderation-panel {
+    box-shadow: 0 9px 0 #151b21;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal-header > button,
+:root[data-tema="escuro"] .feed-page .feed-detail-header > button,
+:root[data-tema="escuro"] .feed-page .feed-moderation-header > button {
+    border-color: #5a6670;
+    background: #404b54;
+    color: #dbe4d5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal input,
+:root[data-tema="escuro"] .feed-page .feed-modal select,
+:root[data-tema="escuro"] .feed-page .feed-modal textarea,
+:root[data-tema="escuro"] .feed-page .feed-comment-form textarea {
+    border-color: #56616b;
+    background: #29323a;
+    color: var(--feed-text);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal input::placeholder,
+:root[data-tema="escuro"] .feed-page .feed-modal textarea::placeholder,
+:root[data-tema="escuro"] .feed-page .feed-comment-form textarea::placeholder {
+    color: #a4b0ba;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-comment-content {
+    background: #2d363f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-moderation-actions button {
+    border-color: #746343;
+    background: #443e31;
+    color: #e6c583;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-moderation-actions .feed-action-hide {
+    border-color: #7c5548;
+    background: #483632;
+    color: #e9b5a5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report {
+    background: #2d363f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-type {
+    background: #354a56;
+    color: #c6dce7;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-type--comentario {
+    background: #443b50;
+    color: #c8b5dc;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-reason > strong {
+    color: #efb19c;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-content {
+    background: #263039;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-actions button {
+    border-color: #5c6b54;
+    background: #3c493a;
+    color: #cbdcbe;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-actions .feed-report-hide {
+    border-color: #b86a56;
+    background: #9d493b;
+    color: #f6e8df;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-moderation-empty-icon {
+    background: #3e5036;
+    color: #c0d5ac;
+}
+
+/* Feed — ações de autoria no tema escuro do App. */
+:root[data-tema="escuro"] .feed-page .feed-votes .feed-owner-delete:hover,
+:root[data-tema="escuro"] .feed-page .feed-comment-side .feed-owner-delete:hover,
+:root[data-tema="escuro"] .feed-page .feed-comment-report:hover {
+    background: #563f3d;
+    color: #f0b4a2;
+}
+:root[data-tema="escuro"] .feed-page .feed-editor-dialog::backdrop { background: #11171dd6; }
+:root[data-tema="escuro"] .feed-page .feed-editor-cancel {
+    border-color: #58616b;
+    background: #414b55;
+    box-shadow: 0 3px 0 #20272f;
+}
+:root[data-tema="escuro"] .feed-page .feed-editor-cancel:hover { background: #4c5762; }
+:root[data-tema="escuro"] .feed-page .feed-editor-cancel:active { box-shadow: none; }
+
+/* Comunidades — filtro lateral e seletor compacto no tema escuro. */
+:root[data-tema="escuro"] .feed-page .feed-sidebar .feed-communities-heading > span { color: #edb263; }
+:root[data-tema="escuro"] .feed-page .feed-mobile-community select { background: #2b333b; }
+:root[data-tema="escuro"] .feed-page .feed-choice-total { background: #2b333b; color: #b6c1b2; }
+:root[data-tema="escuro"] .feed-page .feed-community-choice[aria-pressed="true"] { border-color: #7d9366; background: #43553e; color: #e5ecdd; }
+:root[data-tema="escuro"] .feed-page .feed-community-choice[aria-pressed="true"] .feed-choice-total { background: #2e3d29; color: #cbdcba; }
+
+/* Feed — confirmação de exclusão no tema escuro. */
+:root[data-tema="escuro"] .feed-page .feed-confirm-header > span { color: #edb263; }
+:root[data-tema="escuro"] .feed-page .feed-confirm-icon { border-color: #785447; background: #503b35; box-shadow: 0 4px 0 #2e2320; color: #efb7a4; }
+:root[data-tema="escuro"] .feed-page .feed-confirm-delete { box-shadow: 0 4px 0 #592a23; }
+:root[data-tema="escuro"] .feed-page .feed-confirm-delete:active { box-shadow: none; }
+
+/* Compartilhamento — notificação verde no tema escuro. */
+:root[data-tema="escuro"] .feed-share-toast { border-color: #64865a; background: #31482f; box-shadow: 0 5px 0 #1b2b19; color: #dce9d2; }
+:root[data-tema="escuro"] .feed-share-toast > button:hover { background: #48633d; }
+:root[data-tema="escuro"] .feed-share-toast--erro { border-color: #826b46; background: #493d2c; box-shadow: 0 5px 0 #2d251b; color: #ead7b5; }

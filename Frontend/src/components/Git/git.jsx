@@ -12,19 +12,19 @@ const equipe = [
     nome: "Theo",
     foto: Theo,
     funcoes: ["Front-end", "Design e identidade visual"],
-    github: "USUARIO_THEO",
+    github: "Theo-Melo",
   },
   {
     nome: "Arthur",
     foto: Arthur,
     funcoes: ["Back-end", "Integração das funcionalidades"],
-    github: "USUARIO_ARTHUR",
+    github: "Arthur-do-Nascimento-Matias",
   },
   {
     nome: "Kauan",
     foto: Kauan,
     funcoes: ["Front-end", "Ajustes de interface"],
-    github: "USUARIO_KAUAN",
+    github: "kauan-carlos-cs2010",
   },
   {
     nome: "Guilherme Simão",
