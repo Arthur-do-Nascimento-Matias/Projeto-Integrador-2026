@@ -780,6 +780,38 @@ else if (req.method == 'POST') {
         })
     }
 
+ if (req.method === 'POST' && rota.pathname === '/redefinirSenha') {
+    console.log('REQUISIÇÃO DE REDEFINIÇÃO RECEBIDA');
+
+    try {
+        const dados = await Http.lerCorpo(req);
+
+        console.log('Corpo recebido, iniciando atualização.');
+
+        const resultado = await Email.redefinirSenha(
+            dados.token,
+            dados.novaSenha
+        );
+
+        console.log('SENHA ATUALIZADA COM SUCESSO');
+
+        Http.responderJson(res, 200, {
+            ok: true,
+            ...resultado
+        });
+
+    } catch (erro) {
+        console.error('ERRO NA REDEFINIÇÃO:', erro);
+
+        Http.responderJson(res, 500, {
+            ok: false,
+            erro: 'Não foi possível redefinir a senha.'
+        });
+    }
+
+    return;
+}
+
     if (rota.pathname === '/criarTrilha') {
         req.on('end', async () => {
             let dados;
