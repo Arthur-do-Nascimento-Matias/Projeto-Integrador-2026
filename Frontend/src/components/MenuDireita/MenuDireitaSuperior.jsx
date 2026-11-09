@@ -102,6 +102,11 @@ function MenuDireitaSuperior({ draft }) {
             >
                 VER RANKING
             </Link>
+            
+            <div className='ad'>
+                <img src="/ads/VIDA-TERRESTRE.png" alt="" />
+            </div>
+
         </section>
     );
 }

@@ -4,35 +4,36 @@
     top: 50%;
     right: 28px;
 
-    width: 328px;
+    width: 300px;
+
+    height: auto;
     max-height: calc(100dvh - 40px);
+
+    margin: 0;
+    padding: 0;
 
     transform: translateY(-50%);
 
     font-family: "Rubik", sans-serif;
-
     z-index: 901;
-
-    margin: 0;
 
     overflow-y: auto;
     overflow-x: hidden;
 
-    scrollbar-width: thin;
+    scrollbar-width: none;
 }
-
 
 .menuLateralDireita,
 .menuLateralDireita * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .menuDireita-cards {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  width: 100%;
-  gap: 15px;
+    width: 100%;
+    gap: 15px;
 }
 
 .menuDireita-card {
@@ -140,7 +141,7 @@
         right: 18px;
 
         width: 300px;
-        max-height: calc(100dvh - 28px);
+
 
         margin: 0;
         padding: 4px;
