@@ -259,8 +259,8 @@
 .recover-modal h2 { margin: 5px 0 8px; color: var(--brown-dark); font-size: 30px; }
 .recover-modal p { margin: 0 0 20px; color: var(--brown); font: 14px/1.5 'Space Mono', monospace; }
 .recover-modal input { margin-bottom: 19px; }
-.modal-close { position: absolute; top: 13px; right: 15px; width: 36px; height: 36px; border: 0; border-radius: 50%; cursor: pointer; color: var(--brown); background: #f7ede0; font-size: 25px; transition: transform 0.2s, background 0.2s; }
-.modal-close:hover { background: #ebd5bc; transform: rotate(90deg); }
+.modal-close { display: flex; position: absolute; top: 13px; right: 15px; width: 36px; height: 36px; border: 0; border-radius: 50%; cursor: pointer; color: var(--brown); background: #f7ede0; font-size: 25px; transition: transform 0.2s, background 0.2s; align-items: center; justify-content: center; }
+.modal-close:hover { background: #ebd5bc; }
 .modal-icon { width: 45px; height: 45px; display: grid; place-items: center; border-radius: 14px; color: white; background: var(--forest); font-size: 22px; }
 .success-icon { background: var(--forest); animation: successPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
 .recover-success strong { display: block; margin: -9px 0 24px; color: var(--forest); font: 700 14px 'Space Mono', monospace; overflow-wrap: anywhere; }

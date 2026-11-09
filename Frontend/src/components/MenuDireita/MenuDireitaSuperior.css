@@ -75,3 +75,58 @@
     max-height: 15vh;
   }
 }
+.ad {
+
+    position: relative;
+    bottom: 10%;
+    right: 0px;
+
+    width: auto;
+    height: auto;
+    padding: 10px;
+
+    background: #f5eddf;
+    border: 1px solid rgba(117, 84, 60, 0.25);
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+
+    margin-top: 2vh;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.ad::before {
+    content: "PUBLICIDADE";
+    display: block;
+    margin: 2px 0 9px;
+
+    color: #75543c;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-align: center;
+}
+
+.ad img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+:root[data-tema="escuro"] .ad {
+    background: #293238;
+    border-color: rgba(224, 205, 172, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+:root[data-tema="escuro"] .ad::before {
+    color: #c5bba9;
+}
+
+/* Oculta o cartão quando falta espaço lateral. */
+@media (max-width: 1450px) {
+    .ad {
+        display: none;
+    }
+}

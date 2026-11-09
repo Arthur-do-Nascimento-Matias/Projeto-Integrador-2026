@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import mysql from 'mysql';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import crypto from 'node:crypto';
 
 class Email {

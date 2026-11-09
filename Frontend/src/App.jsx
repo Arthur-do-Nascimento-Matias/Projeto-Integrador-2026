@@ -186,7 +186,6 @@ function ConteudoApp({
 
     <main className={estaNoIndex ? 'index-page' : 'auth-page'}>
 
-      {/* FUNDO DA FLORESTA - NÃO APARECE NO INDEX */}
 
       {!estaNoIndex && (
         <>
