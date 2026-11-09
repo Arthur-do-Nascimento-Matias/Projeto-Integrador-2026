@@ -1,162 +1,55 @@
-import MOKI from "../../assets/MOKI.png"
-import { useEffect, useMemo, useState } from 'react'
+import MOKI from '../../assets/MOKI.png'
 
-function Avatar({ foto, nome }) {
-    const iniciais = (nome || 'SL')
-        .split(' ')
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(parte => parte[0])
-        .join('')
-        .toUpperCase()
-
-    return (
-        <div className="feed-side-avatar">
-            {foto ? (
-                <img
-                    src={foto}
-                    alt={`Foto de ${nome}`}
-                />
-            ) : (
-                <span>{iniciais}</span>
-            )}
-        </div>
-    )
-}
-
-function FeedLateral({ comunidades, comunidadeAtiva, setComunidadeAtiva }) {
-    const [usuario, setUsuario] = useState(null)
-    const [missoes, setMissoes] = useState([])
-    const [carregando, setCarregando] = useState(true)
-
-    const comunidadesEmAlta = useMemo(() => {
-        return [...comunidades]
-            .sort((a, b) => {
-                return Number(b.total_posts) - Number(a.total_posts)
-            })
-            .slice(0, 5)
-    }, [comunidades])
-
-    useEffect(() => {
-        async function carregarLateral() {
-            const token = localStorage.getItem('token')
-
-            if (!token) {
-                setCarregando(false)
-                return
-            }
-
-            try {
-                const respostaPerfil = await fetch(
-                    'http://localhost:3000/perfil',
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                )
-
-                const dadosPerfil = await respostaPerfil.json()
-
-                if (!respostaPerfil.ok || !dadosPerfil.ok) {
-                    throw new Error(
-                        dadosPerfil.message ||
-                        'Não foi possível carregar o usuário.'
-                    )
-                }
-
-                const usuarioAtual = dadosPerfil.usuario
-
-                setUsuario(usuarioAtual)
-
-                const respostaMissoes = await fetch(
-                    `http://localhost:3000/missoes/hoje?id_usuario=${usuarioAtual.id_usuario}`
-                )
-
-                const dadosMissoes = await respostaMissoes.json()
-
-                if (respostaMissoes.ok) {
-                    setMissoes(dadosMissoes.missoes || [])
-                }
-
-            } catch (erro) {
-                console.error(
-                    'Erro ao carregar lateral do feed:',
-                    erro
-                )
-            } finally {
-                setCarregando(false)
-            }
-        }
-
-        carregarLateral()
-    }, [])
+export default function FeedLateral({ comunidades, comunidadeAtiva, setComunidadeAtiva }) {
+    const totalPublicacoes = comunidades.reduce((total, comunidade) => total + (Number(comunidade.total_posts) || 0), 0)
 
     return (
         <aside className="feed-sidebar">
-
-            <section className="feed-side-card">
-                <header className="feed-side-title">
-                    <div>
-                        <span>COMUNIDADES</span>
-                        <h2>Selvas em alta</h2>
-                    </div>
-
-                    <span aria-hidden="true">🌿</span>
+            <section className="feed-side-card feed-communities" aria-labelledby="feed-communities-heading">
+                <header className="feed-communities-heading">
+                    <span>ENCONTRE SUA TRILHA</span>
+                    <h2 id="feed-communities-heading">Comunidades</h2>
+                    <p>Escolha o que quer acompanhar.</p>
                 </header>
 
-                <div className="feed-side-communities">
+                <nav className="feed-community-nav" aria-label="Filtrar publicações por comunidade">
+                    <button
+                        type="button"
+                        className="feed-community-choice"
+                        aria-pressed={!comunidadeAtiva}
+                        onClick={() => setComunidadeAtiva('')}
+                    >
+                        <span className="feed-choice-dot feed-choice-dot--all" aria-hidden="true" />
+                        <span className="feed-choice-name">Todas</span>
+                        <span className="feed-choice-total" aria-label={`${totalPublicacoes} publicações`}>{totalPublicacoes}</span>
+                    </button>
 
-                    {comunidadesEmAlta.map((comunidade, indice) => (
-                        <article
-                            key={comunidade.id_comunidade}
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => setComunidadeAtiva(comunidade.slug)}
-                            onKeyDown={(event) => {
-                                if (event.key === 'Enter' || event.key === ' ') {
-                                    event.preventDefault()
-                                    setComunidadeAtiva(comunidade.slug)
-                                }
-                            }}
-                        >
-                            <strong className="feed-community-position">
-                                {indice + 1}
-                            </strong>
-
-                            <span
-                                className="feed-community-color"
-                                style={{ background: comunidade.cor }}
-                            />
-
-                            <div>
-                                <strong>{comunidade.nome}</strong>
-
-                                <span>
-                                    {Number(comunidade.total_posts) || 0}{' '}
-                                    {Number(comunidade.total_posts) === 1
-                                        ? 'publicação'
-                                        : 'publicações'}
-                                </span>
-                            </div>
-                        </article>
-                    ))}
-                </div>
+                    {comunidades.map(comunidade => {
+                        const total = Number(comunidade.total_posts) || 0
+                        return (
+                            <button
+                                type="button"
+                                className="feed-community-choice"
+                                key={comunidade.id_comunidade}
+                                aria-pressed={comunidadeAtiva === comunidade.slug}
+                                onClick={() => setComunidadeAtiva(comunidade.slug)}
+                            >
+                                <span className="feed-choice-dot" style={{ backgroundColor: comunidade.cor }} aria-hidden="true" />
+                                <span className="feed-choice-name">{comunidade.nome}</span>
+                                <span className="feed-choice-total" aria-label={`${total} ${total === 1 ? 'publicação' : 'publicações'}`}>{total}</span>
+                            </button>
+                        )
+                    })}
+                </nav>
             </section>
 
             <section className="feed-side-tip">
-                <span aria-hidden="true"><img src={MOKI} alt="" className="moki"/></span>
-
+                <span aria-hidden="true"><img src={MOKI} alt="" className="moki" /></span>
                 <div>
                     <strong>Dica do Moki</strong>
-
-                    <p>
-                        Ajude alguém com uma resposta clara e respeitosa.
-                    </p>
+                    <p>Ajude alguém com uma resposta clara e respeitosa.</p>
                 </div>
             </section>
         </aside>
     )
 }
-
-export default FeedLateral

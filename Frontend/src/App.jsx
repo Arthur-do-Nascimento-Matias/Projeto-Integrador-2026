@@ -139,7 +139,13 @@ function ConteudoApp({
 
     carregarUsuario();
 
-  }, [estaNoLogin, estaNoIndex, navigate]);
+  }, [
+    estaNoLogin,
+    estaNoIndex,
+    estaNoInstagram,
+    estaNoGit,
+    navigate
+]);
 
   const [mode, setMode] = useState('login')
 

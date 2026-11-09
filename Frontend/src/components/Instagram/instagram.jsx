@@ -13,21 +13,21 @@ const equipe = [
     foto: Theo,
     area: "Front-end",
     funcao: "Design e identidade visual",
-    instagram: "USUARIO_THEO",
+    instagram: "dev_theomelo",
   },
   {
     nome: "Arthur",
     foto: Arthur,
     area: "Back-end",
     funcao: "Integração das funcionalidades",
-    instagram: "USUARIO_ARTHUR",
+    instagram: "dev_arthur_matias",
   },
   {
     nome: "Kauan",
     foto: Kauan,
     area: "Front-end",
     funcao: "Ajustes de interface",
-    instagram: "USUARIO_KAUAN",
+    instagram: "dev_kauanc",
   },
   {
     nome: "Guilherme Simão",
@@ -72,9 +72,6 @@ function Instagram() {
           Voltar ao site
         </Link>
       </header>
-
-      <br />
-      <br />
 
       <main className="pagina">
         <section className="equipe" aria-labelledby="equipe-titulo">
