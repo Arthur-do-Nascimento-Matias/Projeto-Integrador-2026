@@ -689,29 +689,20 @@ const callback = async (req, res) => {
             req.method === 'GET'
         ) {
             const idUsuario = Number(param.id_usuario)
+
             if (!idUsuario) {
-            res.writeHead(200, {
-                'Content-Type': 'application/pdf',
-                'Content-Disposition':
-                    'inline; filename="prova.pdf"'
+                Http.responderJson(res, 400, {
+                    erro: 'Informe um id_usuario válido.'
+                })
+                return
+            }
+
+            // Implementação do histórico pendente.
+            Http.responderJson(res, 501, {
+                erro: 'Histórico ainda não implementado.'
             })
-            res.end(resp)
-        })
-        .catch(error => {
-            console.error(
-                'ERRO AO ABRIR PROVA:',
-                error
-            )
-            res.writeHead(500, {
-                'Content-Type':
-                    'application/json; charset=utf-8'
-            })
-            res.end(JSON.stringify({
-                erro: error.message
-            }))
-        })
-    return
-}
+            return
+        }
     // =========================
     // CHATBOT
     // =========================
@@ -767,28 +758,22 @@ else if (req.method == 'POST') {
 }
 
     if (rota.pathname === '/criarTrilha') {
-        req.on('end', async () => {
-            let dados;
-            try {
-                dados = JSON.parse(body);
-            } catch {
-                Http.responderJson(res, 400, {
-                    erro: 'Informe um id_usuario válido.'
-                })
-                return
-            }
-            Redacoes.listarHistorico(idUsuario)
-                .then(historico => {
-                    Http.responderJson(res, 200, {
-                        historico
+            req.on('end', async () => {
+                let dados
+
+                try {
+                    dados = JSON.parse(body)
+                } catch {
+                    Http.responderJson(res, 400, {
+                        ok: false,
+                        erro: 'Envie um JSON válido.'
                     })
-                })
-                .catch(error => {
-                    console.error('ERRO AO BUSCAR HISTÓRICO:', error)
-                    Http.responderJson(res, 500, {
-                        erro: error.message
-                    })
-                })
+                    return
+                }
+
+                await responderTrilha(dados, res)
+            })
+
             return
         }
         // =========================
@@ -910,12 +895,8 @@ else if (req.method == 'POST') {
         // =========================
         // CHATBOT
         // =========================
-    }
-    else if (req.method == 'POST') {
-        let body = ''
-        req.on('data', chunk => {
-            body += chunk
-        })
+    
+
         if (rota.pathname === '/criarTrilha') {
             req.on('end', async () => {
                 let dados;
@@ -1167,8 +1148,8 @@ else if (req.method == 'POST') {
                 })
             return
         }
-    }
-}
+    }}
+
 const server = http.createServer(callback)
 server.listen(3000)
 console.log('Server iniciado')
