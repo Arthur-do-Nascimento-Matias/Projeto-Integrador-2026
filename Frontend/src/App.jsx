@@ -26,6 +26,7 @@ import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
+import RedefinirSenha from './components/recuperarSenha/redefinirSenha';
 
 export function alternarTema(setTema) {
     setTema(anterior =>
@@ -61,6 +62,7 @@ function ConteudoApp({
   const estaNoLogin = location.pathname === '/login';
   const estaNoInstagram = location.pathname === "/instagram";
   const estaNoGit = location.pathname === "/Git";
+  const estaNaRedefinicaoSenha = location.pathname === "/redefinir-senha";
 
   const [draft, setDraft] = useState({
     id: '',
@@ -75,7 +77,7 @@ function ConteudoApp({
 
   useEffect(() => {
 
-    if (estaNoLogin || estaNoIndex) return;
+    if (estaNoLogin || estaNoIndex || estaNaRedefinicaoSenha) return;
 
     async function carregarUsuario() {
 
@@ -203,7 +205,7 @@ function ConteudoApp({
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
 
-      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && (
+      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && !estaNaRedefinicaoSenha &&(
         <MenuEsquerda />
       )}
 
@@ -211,6 +213,13 @@ function ConteudoApp({
       {/* ROTAS */}
 
       <Routes>
+
+          <Route 
+            path="/redefinir-senha"
+            element={
+              <RedefinirSenha />
+            }
+          />
 
         {/* PÁGINA INICIAL PÚBLICA */}
 
