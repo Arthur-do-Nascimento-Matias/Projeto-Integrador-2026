@@ -26,6 +26,7 @@ import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
+import RedefinirSenha from './components/recuperarSenha/redefinirSenha';
 
 export function alternarTema(setTema) {
     setTema(anterior =>
@@ -59,8 +60,9 @@ function ConteudoApp({
 
   const estaNoIndex = location.pathname === '/';
   const estaNoLogin = location.pathname === '/login';
-const estaNoInstagram = location.pathname.toLowerCase() === "/instagram";
-const estaNoGit = location.pathname.toLowerCase() === "/github";
+  const estaNoInstagram = location.pathname === "/instagram";
+  const estaNoGit = location.pathname === "/Git";
+  const estaNaRedefinicaoSenha = location.pathname === "/redefinir-senha";
 
   const [draft, setDraft] = useState({
     id: '',
@@ -75,12 +77,7 @@ const estaNoGit = location.pathname.toLowerCase() === "/github";
 
   useEffect(() => {
 
-    if (
-    estaNoLogin ||
-    estaNoIndex ||
-    estaNoInstagram ||
-    estaNoGit
-) return;
+    if (estaNoLogin || estaNoIndex || estaNaRedefinicaoSenha) return;
 
     async function carregarUsuario() {
 
@@ -195,7 +192,6 @@ const estaNoGit = location.pathname.toLowerCase() === "/github";
 
     <main className={estaNoIndex ? 'index-page' : 'auth-page'}>
 
-      {/* FUNDO DA FLORESTA - NÃO APARECE NO INDEX */}
 
       {!estaNoIndex && (
         <>
@@ -214,7 +210,7 @@ const estaNoGit = location.pathname.toLowerCase() === "/github";
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
 
-      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && (
+      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && !estaNaRedefinicaoSenha &&(
         <MenuEsquerda />
       )}
 
@@ -222,6 +218,13 @@ const estaNoGit = location.pathname.toLowerCase() === "/github";
       {/* ROTAS */}
 
       <Routes>
+
+          <Route 
+            path="/redefinir-senha"
+            element={
+              <RedefinirSenha />
+            }
+          />
 
         {/* PÁGINA INICIAL PÚBLICA */}
 

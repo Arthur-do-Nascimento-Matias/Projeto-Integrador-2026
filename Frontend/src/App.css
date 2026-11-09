@@ -382,6 +382,7 @@ body,
 :root[data-tema="escuro"] form p,
 :root[data-tema="escuro"] .rk-sobrancelha,
 :root[data-tema="escuro"] #rk-titulo,
+:root[data-tema="escuro"] #recover-title,
 :root[data-tema="escuro"] .rk-titulo-bloco,
 :root[data-tema="escuro"] .rankingIntro,
 :root[data-tema="escuro"] #rk-titulo em,
@@ -447,6 +448,7 @@ body,
 :root[data-tema="escuro"] .familia-simio,
 :root[data-tema="escuro"] .simio-rodape,
 :root[data-tema="escuro"] .form-message,
+:root[data-tema="escuro"] .recover-modal,
 :root[data-tema="escuro"] .rk-linha:nth-child(odd) {
   background-color: #232B33 !important;
 }

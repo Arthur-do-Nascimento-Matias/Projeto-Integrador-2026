@@ -7,6 +7,7 @@ import Sequencia from './Sequencia.js'
 import Conexao from './Conexao.js'
 import Livros from './Livros.js'
 import ChatBot from './ChatBot.js'
+import Email from './Email.js'
 import Cadastro from './Cadastro.js'
 import Login from './Login.js'
 import Provas from './Provas.js'
@@ -14,6 +15,8 @@ import Redacoes from './Redacoes.js'
 import Http from './utils/http.js'
 import Feed from './Feed.js'
 import Missoes from './Missoes.js'
+import { error } from 'console'
+import { json } from 'stream/consumers'
 // As duas rotas da trilha usam a mesma consulta e o mesmo formato de resposta.
 async function responderTrilha(dados, res) {
     const idMateria = Number(dados?.id);
@@ -687,6 +690,88 @@ const callback = async (req, res) => {
         ) {
             const idUsuario = Number(param.id_usuario)
             if (!idUsuario) {
+            res.writeHead(200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition':
+                    'inline; filename="prova.pdf"'
+            })
+            res.end(resp)
+        })
+        .catch(error => {
+            console.error(
+                'ERRO AO ABRIR PROVA:',
+                error
+            )
+            res.writeHead(500, {
+                'Content-Type':
+                    'application/json; charset=utf-8'
+            })
+            res.end(JSON.stringify({
+                erro: error.message
+            }))
+        })
+    return
+}
+    // =========================
+    // CHATBOT
+    // =========================
+            }
+else if (req.method == 'POST') {   
+    let body = ''
+    req.on('data', chunk => {
+        body += chunk
+    })
+
+    if(rota.pathname === "/recover") {
+        req.on('end', async () => {
+            try {
+                const dados = JSON.parse(body)
+                await Email.recover(dados)
+            } 
+            catch(error){
+                throw error
+            }
+        })
+    }
+
+ if (req.method === 'POST' && rota.pathname === '/redefinirSenha') {
+    console.log('REQUISIÇÃO DE REDEFINIÇÃO RECEBIDA');
+
+    try {
+        const dados = await Http.lerCorpo(req);
+
+        console.log('Corpo recebido, iniciando atualização.');
+
+        const resultado = await Email.redefinirSenha(
+            dados.token,
+            dados.novaSenha
+        );
+
+        console.log('SENHA ATUALIZADA COM SUCESSO');
+
+        Http.responderJson(res, 200, {
+            ok: true,
+            ...resultado
+        });
+
+    } catch (erro) {
+        console.error('ERRO NA REDEFINIÇÃO:', erro);
+
+        Http.responderJson(res, 500, {
+            ok: false,
+            erro: 'Não foi possível redefinir a senha.'
+        });
+    }
+
+    return;
+}
+
+    if (rota.pathname === '/criarTrilha') {
+        req.on('end', async () => {
+            let dados;
+            try {
+                dados = JSON.parse(body);
+            } catch {
                 Http.responderJson(res, 400, {
                     erro: 'Informe um id_usuario válido.'
                 })

@@ -1,4 +1,7 @@
-/* CABEÇALHO */
+.menuDireitaInferior {
+  transform: scale(0.8);
+  margin-top: -13vh;
+}
 
 .menuDireitaInferior-verTodas {
   padding: 8px 0;
