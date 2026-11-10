@@ -409,6 +409,29 @@ const callback = async (req, res) => {
         return
     }
     if (req.method == 'GET') {
+        if (rota.pathname == '/atividades') {
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+            Conexao.getAtividades(param)
+                .then(con => {
+                    if (con.concluido) {
+                        res.end(JSON.stringify({
+                            concluido: 'concluido'
+                        }))
+                        return
+                    }
+                    res.end(JSON.stringify({
+                        pergunta: con.perguntas[0].enunciado,
+                        alternativa1: con.alternativas[0],
+                        alternativa2: con.alternativas[1],
+                        alternativa3: con.alternativas[2],
+                        alternativa4: con.alternativas[3]
+                    }))
+                })
+            return
+        }
+
         // Compatibilidade com Materias.jsx que consulta GET /nome?id=...&idUser=...
         if (rota.pathname === '/nome') {
             await responderTrilha(param, res);
@@ -776,31 +799,7 @@ else if (req.method == 'POST') {
 
             return
         }
-        // =========================
-        // ATIVIDADES
-        // =========================
-        if (rota.pathname == '/atividades') {
-            res.writeHead(200, {
-                'Content-Type': 'application/json; charset=utf-8'
-            })
-            Conexao.getAtividades(param)
-                .then(con => {
-                    if (con.concluido) {
-                        res.end(JSON.stringify({
-                            concluido: 'concluido'
-                        }))
-                        return
-                    }
-                    res.end(JSON.stringify({
-                        pergunta: con.perguntas[0].enunciado,
-                        alternativa1: con.alternativas[0],
-                        alternativa2: con.alternativas[1],
-                        alternativa3: con.alternativas[2],
-                        alternativa4: con.alternativas[3]
-                    }))
-                })
-            return
-        }
+       
         // =========================
         // LIVROS
         // =========================

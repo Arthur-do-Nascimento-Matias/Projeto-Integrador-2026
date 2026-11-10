@@ -9,7 +9,7 @@ class Conexao {
             host: '127.0.0.1',
             user: 'root',
             password: '',
-            database: 'integrador-novo-pqbugou'
+            database: 'integrador'
         });
         connection.connect();
         return connection;
@@ -258,6 +258,7 @@ class Conexao {
                             nome_de_exibicao,
                             nome_de_usuario,
                             bio,
+                            streak,
                             email,
                             foto_perfil_texto AS foto,
                             cor_fundo,

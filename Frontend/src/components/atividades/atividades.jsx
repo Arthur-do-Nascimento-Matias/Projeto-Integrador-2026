@@ -21,7 +21,7 @@ export async function criarAtividade(
     });
     if (!resposta.ok) throw new Error(`Erro ao carregar pergunta: HTTP ${resposta.status}`);
     const dados = await resposta.json();
-    if (dados.concluido || !dados.pergunta) {
+    if (!dados.pergunta) {
         throw new Error("O backend não retornou uma pergunta para esta atividade.");
     }
     const alternativas = [dados.alternativa1, dados.alternativa2, dados.alternativa3, dados.alternativa4];
@@ -199,15 +199,6 @@ function Atividades({
                 Promise.resolve(audioPronto).then(() => {
                     if (versao === sessao.current) tocarSom("acerto");
                 });
-            }
-            if (cliques.current < 2) {
-                cliques.current += 1;
-                indiceAtv.current += 1;
-                await carregarPergunta(indiceAtv.current, versao);
-            } else {
-                // Como no fluxo original, salva ao pressionar Continuar.
-                sairAtividade(refAtividade);
-                setResultado(resumirLicao(respostas.current, 3, 50));
             }
         } catch (erro) {
             if (versao !== sessao.current) return;

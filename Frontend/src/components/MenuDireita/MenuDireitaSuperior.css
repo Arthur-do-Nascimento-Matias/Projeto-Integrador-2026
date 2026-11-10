@@ -7,6 +7,12 @@
   min-height: 410px;
 }
 
+.streakEnergia {
+  display: flex;
+  flex-direction: column;
+  gap: -100px;
+}
+
 .menuDireitaSuperior-conteudo {
   display: flex;
   align-items: center;

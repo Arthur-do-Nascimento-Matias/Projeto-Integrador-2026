@@ -71,7 +71,8 @@ function ConteudoApp({
     bio: '',
     photo: null,
     atividadesConcluidas: [],
-    total_perguntas: ''
+    total_perguntas: '',
+    streak: null,
   });
 
 
@@ -127,7 +128,8 @@ function ConteudoApp({
             Number(usuario.atvidades_concluidas_ingles) || 0,
           ],
 
-          total_perguntas: usuario.total_perguntas
+          total_perguntas: usuario.total_perguntas,
+          streak: usuario.streak
         });
 
       } catch (erro) {
