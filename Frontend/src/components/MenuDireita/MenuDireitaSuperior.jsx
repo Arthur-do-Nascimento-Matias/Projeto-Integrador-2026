@@ -88,7 +88,7 @@ function MenuDireitaSuperior({ draft }) {
             aria-labelledby="menuDireita-divisao-titulo"
         >
             <div className="streakEnergia">
-                <h4>🔥Sequência: {draft.streak} dias <br />🔋Energia: </h4>
+                <h4>🔥Sequência: {draft.streak} dias <br />🔋Energia: {draft.energia}</h4>
             </div>
             <div className="menuDireita-cabecalho">
                 <h3 id="menuDireita-divisao-titulo">

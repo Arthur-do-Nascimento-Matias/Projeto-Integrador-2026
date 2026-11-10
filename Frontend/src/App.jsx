@@ -73,6 +73,7 @@ function ConteudoApp({
     atividadesConcluidas: [],
     total_perguntas: '',
     streak: null,
+    energia: null
   });
 
 
@@ -129,7 +130,8 @@ function ConteudoApp({
           ],
 
           total_perguntas: usuario.total_perguntas,
-          streak: usuario.streak
+          streak: usuario.streak,
+          energia: usuario.energia
         });
 
       } catch (erro) {

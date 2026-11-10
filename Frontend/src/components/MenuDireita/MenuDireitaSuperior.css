@@ -4,7 +4,7 @@
 
   margin-top: -5vh;
   transform: scale(0.8);
-  min-height: 410px;
+  min-height: fit-content;
 }
 
 .streakEnergia {

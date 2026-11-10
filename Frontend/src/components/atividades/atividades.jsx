@@ -7,13 +7,16 @@ import { resumirLicao } from "./resultadoLicao.js";
 import { registrarResposta, registrarAtividadeConcluida } from "../utils/missoes";
 // indiceQuestao é a ordem da pergunta dentro da matéria (começa em 1).
 export async function criarAtividade(
-    refAtividade, refEnunciado, indiceQuestao, materiaAtual,
+    draft, refAtividade, refEnunciado, indiceQuestao, materiaAtual,
     refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4,
     controle = {}
 ) {
+
     const parametros = new URLSearchParams({
         materia: String(materiaAtual),
-        atividadeAtual: String(indiceQuestao)
+        atividadeAtual: String(indiceQuestao),
+        energia: String(draft.energia),
+        id: String(draft.id)
     });
     const resposta = await fetch(`http://localhost:3000/atividades?${parametros}`, {
         cache: "no-store",
@@ -77,7 +80,7 @@ function Atividades({
         if (refEnunciado.current) refEnunciado.current.textContent = "Carregando pergunta...";
         try {
             const resposta = await criarAtividade(
-                refAtividade, refEnunciado, indice, materiaAtual,
+                draft, refAtividade, refEnunciado, indice, materiaAtual,
                 ...refsAlternativas, { signal: controle.signal }
             );
             if (versao !== sessao.current || controle.signal.aborted) return;
@@ -192,6 +195,7 @@ function Atividades({
                 indiceAtv.current += 1;
                 await carregarPergunta(indiceAtv.current, versao);
             } else {
+                draft.id = draft.id - 1
                 sairAtividade(refAtividade);
                 setResultado(resumirLicao(respostas.current, 3, 50));
             }
@@ -236,6 +240,7 @@ function Atividades({
             atividadeSalva.current = true;
             setResultado(null);
             sairAtividade(refAtividade);
+            draft.energia = draft.energia - 1
             // Exatamente o gatilho usado pela trilha original para reler o banco.
             setAtvLiberada(anterior => anterior + 1);
             window.dispatchEvent(new Event("simio:atividade-fechada"));
