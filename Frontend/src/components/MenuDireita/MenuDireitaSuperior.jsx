@@ -132,7 +132,7 @@ function MenuDireitaSuperior({ draft }) {
                         key="anuncio-2"
                         src="/ads/peak.jpeg"
                         alt="Publicidade"
-                        onClick={() => window.location.href="https://www.bing.com/"}
+                        onClick={() => window.location.href="https://peak.squareweb.app/"}
                     />
                 )}
             </div>

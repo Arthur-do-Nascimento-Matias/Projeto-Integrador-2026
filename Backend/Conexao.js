@@ -9,7 +9,7 @@ class Conexao {
             host: '127.0.0.1',
             user: 'root',
             password: '',
-            database: 'integrador-novo-pqbugou'
+            database: 'integrador'
         });
         connection.connect();
         return connection;
@@ -66,7 +66,7 @@ class Conexao {
         return new Promise((resolve, reject) => {
             const connection = Conexao.connect();
 
-            const sqlVerificador = 'SELECT energia FROM usuarios WHERE id = ?'
+            const sqlVerificador = 'SELECT energia FROM usuarios WHERE id_usuario = ?'
 
             connection.query(sqlVerificador, [param.id], (error, results) => {
                 if(error) {
