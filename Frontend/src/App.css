@@ -450,6 +450,13 @@ body,
 :root[data-tema="escuro"] .rk-linha:nth-child(odd) {
   background-color: #232B33 !important;
 }
+:root[data-tema="escuro"] .rk-linha.rk-linha--eu {
+  background-color: #483e2c !important;
+}
+:root[data-tema="escuro"] .rk-linha:hover {
+  background-color: #4b5e50 !important;
+}
+
 
 :root[data-tema="escuro"] .inicio-materias {
   background: #31303080 !important;

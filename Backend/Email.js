@@ -11,7 +11,7 @@ class Email {
 
         auth: {
             user: 'projetointegradoratgk@gmail.com',
-            pass: 'cxvv ewhx ebak zutx'
+            pass: 'bwtx nzyn utwh ftkm'
         }
     })
 

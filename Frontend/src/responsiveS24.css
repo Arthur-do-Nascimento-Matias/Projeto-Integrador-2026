@@ -1,0 +1,579 @@
+/* =========================================================
+   RESPONSIVIDADE — GALAXY S24
+   Viewport: 360 x 780
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  :root {
+    --s24-menu-altura: 78px;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  /* ---------- MENU INFERIOR ---------- */
+
+  .simio-sidebar-layer,
+  .simio-sidebar-layer .scene {
+    position: fixed;
+    inset: auto 0 0;
+
+    width: 100%;
+    height: var(--s24-menu-altura);
+    min-height: 0;
+
+    overflow: visible;
+    z-index: 900;
+  }
+
+  .simio-sidebar-layer .simio-logo,
+  .simio-sidebar-layer .ambient,
+  .simio-sidebar-layer .active-rail,
+  .simio-sidebar-layer .divider,
+  .simio-sidebar-layer .menu-toggle,
+  .simio-sidebar-layer .ia-badge {
+    display: none;
+  }
+
+  .simio-sidebar-layer .sidebar,
+  .simio-sidebar-layer .sidebar:hover,
+  .simio-sidebar-layer .sidebar.pin-open,
+  .simio-sidebar-layer .sidebar.more-open {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    transform: none;
+  }
+
+  .simio-sidebar-layer .sidebar::before {
+    display: none;
+  }
+
+  .simio-sidebar-layer .shell,
+  .simio-sidebar-layer .sidebar.more-open .shell {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 20px 20px 0 0;
+  }
+
+  .simio-sidebar-layer nav {
+    display: flex;
+    flex-direction: row;
+
+    height: 100%;
+    padding: 5px 8px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+  }
+
+  .simio-sidebar-layer .main-menu,
+  .simio-sidebar-layer .lower,
+  .simio-sidebar-layer .more-menu,
+  .simio-sidebar-layer .more-menu-inner {
+    display: contents;
+  }
+
+  .simio-sidebar-layer .sidebar .nav-item {
+    flex: 0 0 62px;
+
+    width: 62px;
+    min-width: 62px;
+    min-height: 65px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 2px;
+    padding: 3px;
+
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .simio-sidebar-layer .sidebar .icon-wrap {
+    width: 33px;
+    min-width: 33px;
+    height: 33px;
+
+    margin: 0;
+  }
+
+  .simio-sidebar-layer .sidebar svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .simio-sidebar-layer .sidebar .lightning svg {
+    width: 20px;
+    height: 24px;
+  }
+
+  .simio-sidebar-layer .sidebar .label {
+    position: static;
+
+    opacity: 1;
+    transform: none;
+
+    font-size: 9px;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  .simio-sidebar-layer .sidebar .nav-item::before,
+  .simio-sidebar-layer .sidebar .nav-item::after {
+    top: 4px;
+    left: 50%;
+
+    width: 38px;
+    height: 38px;
+  }
+
+  /* ---------- BASE DAS TELAS ---------- */
+
+  .auth-page {
+    position: relative;
+
+    display: block;
+
+    min-height: 100dvh;
+    padding: 14px 12px calc(var(--s24-menu-altura) + 22px);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .auth-page:has(.auth-container) {
+    display: grid;
+    padding: 0;
+  }
+
+  /* ---------- APRENDER ---------- */
+
+  .materias-container {
+    top: 10px;
+
+    padding: 0 12px;
+  }
+
+  .materias-botao {
+    width: 100%;
+    height: 70px;
+
+    padding: 0 12px;
+
+    border-radius: 22px;
+  }
+
+  .materias-botao-icone {
+    width: 42px;
+    height: 42px;
+  }
+
+  .materias-botao-img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .materias-botao-nome {
+    font-size: 17px;
+  }
+
+  .materias-seta {
+    width: 34px;
+    height: 34px;
+  }
+
+  .materias-roda-container {
+    top: 112px;
+  }
+
+  .materias-roda {
+    width: min(88vw, 330px);
+    height: min(88vw, 330px);
+  }
+
+  .materias-centro {
+    width: 42%;
+    height: 42%;
+  }
+
+  .materias-centro-icone {
+    width: 42px;
+    height: 42px;
+
+    margin-bottom: 3px;
+  }
+
+  .materias-centro-img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .materias-centro strong {
+    font-size: 13px;
+  }
+
+  .materias-centro span {
+    font-size: 8px;
+  }
+
+  .trilha {
+    margin-top: 65px;
+    padding-bottom: 0;
+  }
+
+  .botaoAtividade {
+    width: 74px;
+    height: 74px;
+  }
+
+  .menuLateralDireita {
+    position: relative;
+    top: auto;
+    right: auto;
+
+    width: 100%;
+    max-height: none;
+
+    margin: 30px auto 0;
+
+    transform: none;
+    overflow: visible;
+  }
+
+  .menuDireita-cards {
+    display: flex;
+    gap: 14px;
+  }
+
+  /* ---------- ATIVIDADES ---------- */
+
+  .atividade {
+    min-height: 100dvh;
+    height: auto;
+
+    padding: 24px 16px 40px 34px;
+    overflow-y: auto;
+  }
+
+  .atividade::before {
+    left: 15px;
+  }
+
+  .atividade > button:first-child {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .enunciado {
+    width: 100%;
+
+    margin: 30px 0 25px;
+
+    font-size: 23px;
+    line-height: 1.35;
+  }
+
+  .alternativa1,
+  .alternativa2,
+  .alternativa3,
+  .alternativa4 {
+    width: 100%;
+
+    padding: 14px 14px 14px 46px;
+    margin-bottom: 12px;
+
+    font-size: 13px;
+  }
+
+  .alternativa1::before,
+  .alternativa2::before,
+  .alternativa3::before,
+  .alternativa4::before {
+    left: 15px;
+    font-size: 18px;
+  }
+
+  /* ---------- BIBLIOTECA ---------- */
+
+  .container {
+    position: relative;
+
+    width: 100%;
+    min-height: 650px;
+    height: auto;
+
+    margin: 0;
+    scale: 1;
+
+    border-radius: 24px;
+  }
+
+  .biblioteca-header {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 16px;
+    padding: 22px 18px;
+  }
+
+  .biblioteca-identidade h1 {
+    font-size: 25px;
+  }
+
+  .biblioteca-header-direita {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .biblioteca-busca {
+    width: 100%;
+    height: 44px;
+  }
+
+  .biblioteca-busca input {
+    font-size: 16px;
+  }
+
+  .biblioteca-conteudo {
+    padding: 0 18px 28px;
+    overflow: visible;
+  }
+
+  .biblioteca-secao-topo {
+    align-items: flex-start;
+  }
+
+  .biblioteca-linha {
+    display: none;
+  }
+
+  .capas {
+    justify-content: center;
+
+    gap: 28px 18px;
+  }
+
+  .livro {
+    width: 130px;
+  }
+
+  .livro-capa-wrap {
+    width: 130px;
+    height: 210px;
+  }
+
+  .livro-prateleira {
+    width: 148px;
+  }
+
+  /* ---------- SIMIA ---------- */
+
+  .chatIA {
+    position: relative;
+    left: auto;
+    top: auto;
+
+    width: 100%;
+    padding: 0;
+  }
+
+  .chatIA .simia-container {
+    width: 100%;
+    height: calc(100dvh - var(--s24-menu-altura) - 28px);
+    min-height: 480px;
+
+    border-radius: 22px;
+  }
+
+  .chatIA .simia-conteudo {
+    padding: 18px 13px;
+  }
+
+  /* ---------- RANKING ---------- */
+
+  .rk-pagina {
+    width: 100%;
+
+    margin: 0;
+    padding: 24px 4px 0;
+  }
+
+  .rk-cabecalho {
+    display: block;
+  }
+
+  .rk-cabecalho h1 {
+    font-size: 29px;
+  }
+
+  .rk-relogio {
+    margin-top: 16px;
+  }
+
+  /* ---------- PERFIL ---------- */
+
+  .profile-page {
+    position: relative;
+    left: auto;
+    top: auto;
+
+    width: 100%;
+    min-height: 100dvh;
+
+    padding: 20px 0 0;
+
+    transform: none;
+  }
+
+  .profile-hero {
+    grid-template-columns: 1fr;
+
+    text-align: center;
+  }
+
+  .profile-meta-row {
+    justify-content: center;
+  }
+
+  .profile-hero-actions {
+    justify-self: center;
+  }
+
+  .profile-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ---------- CONFIGURAÇÕES ---------- */
+
+  .configuracoes {
+    min-height: 0;
+
+    padding: 24px 4px 0;
+  }
+
+  .configuracoes > h1,
+  .config-lista {
+    width: 100%;
+  }
+
+  .config-card {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .switch,
+  .config-seletor,
+  .botao-sair,
+  .botao-trocar-senha {
+    align-self: flex-end;
+  }
+
+  /* ---------- FEED ---------- */
+
+  .feed-page {
+    padding: 22px 0 0;
+  }
+
+  .feed-page .feed-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .feed-page .feed-sidebar {
+    grid-column: 1;
+  }
+
+  .feed-page .feed-header h1 {
+    font-size: 29px;
+  }
+
+  /* ---------- SIMULADOS ---------- */
+
+  .simulados {
+    min-height: 0;
+
+    padding: 24px 2px 0;
+  }
+
+  .simuladosCabecalho h1 {
+    font-size: 36px;
+    letter-spacing: -2px;
+  }
+
+  .simuladosAbas {
+    width: 100%;
+  }
+
+  .simuladosAbaBotao {
+    flex: 1;
+
+    justify-content: center;
+    padding: 12px 8px;
+
+    font-size: 12px;
+  }
+
+  .simuladosGrade,
+  .redacoesResumo,
+  .referenciasGrade,
+  .redacoesGradeTemas {
+    grid-template-columns: 1fr;
+  }
+
+  .simuladosCardCapa {
+    height: 310px;
+  }
+
+  .redacoesConteudo,
+  .editorGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .redacoesPassos {
+    grid-template-columns: 1fr;
+  }
+
+  .redacoesPasso {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* ---------- MODAIS ---------- */
+
+  .referenciaModalFundo,
+  .redacaoAvisoModal {
+    padding: 12px;
+  }
+
+  .referenciaModalCaixa {
+    max-height: calc(100dvh - 24px);
+    border-radius: 20px;
+  }
+
+  .referenciaModalTopo,
+  .referenciaTextoCompleto,
+  .referenciaModalRodape {
+    padding: 16px;
+  }
+
+  .referenciaDicaMoki {
+    margin: 16px;
+  }
+}
