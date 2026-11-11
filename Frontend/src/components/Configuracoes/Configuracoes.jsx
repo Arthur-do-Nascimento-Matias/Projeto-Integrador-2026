@@ -1,10 +1,11 @@
 import "./Configuracoes.css";
 import { alternarTema } from "../../App";
 import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 import {
   executarTransicaoLogin
 } from "../TransicaoLogin/TransicaoLogin";
+import { createPortal } from "react-dom";
 
 
 function Configuracoes({
@@ -13,8 +14,13 @@ function Configuracoes({
   tema,
   setTema
 }) {
+
+  const [modalAberto, setModalAberto] = useState(false);
   const navigate = useNavigate();
 
+  function trocarSenha() {
+    setModalAberto(true);
+  }
 
   async function sairDaConta() {
     const confirmar = window.confirm(
@@ -34,6 +40,7 @@ function Configuracoes({
 
 
   return (
+    <>
     <div className="configuracoes">
 
       <h1>Configurações</h1>
@@ -122,7 +129,7 @@ function Configuracoes({
           <button
             type="button"
             className="botao-trocar-senha"
-
+            onClick={trocarSenha}
           >
             Trocar senha
           </button>
@@ -151,6 +158,47 @@ function Configuracoes({
       </div>
 
     </div>
+
+        {modalAberto && createPortal(
+          <div className="modal-overlay">
+          <div className="modalTrocar">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <input
+                type="password"
+                id="senhaAtual"
+                placeholder="Digite a senha atual"
+                required
+              />
+
+              <input
+                type="password"
+                id="senhaNova"
+                placeholder="Digite sua nova senha"
+                required
+              />
+
+              <input
+                type="password"
+                id="confirmarSenhaNova"
+                placeholder="Confirme sua senha nova"
+                required
+              />
+
+              <button type="submit">Trocar senha</button>
+
+              <button
+                type="button"
+                onClick={() => setModalAberto(false)}
+              >
+                Cancelar
+              </button>
+            </form>
+          </div>
+          </div>,
+          document.body
+        )}
+
+    </>
   );
 }
 

@@ -501,3 +501,37 @@
     font-size: 18px;
   }
 }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.modalTrocar {
+  height: 50vh;
+  width: 20vw;
+  background-color: white;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalTrocar form {
+  display: flex;
+  flex-direction: column;
+}
