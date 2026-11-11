@@ -44,9 +44,11 @@ class Conexao {
                             id_usuario,
                             nome_de_exibicao,
                             nome_de_usuario,
-                            xp_semanal
-                        FROM usuarios
-                        ORDER BY
+                            xp_semanal,
+                            foto_perfil_texto AS foto,
+                            cor_fundo
+                            FROM usuarios
+                            ORDER BY
                             xp_semanal DESC,
                             nome_de_exibicao ASC,
                             id_usuario ASC`
@@ -63,6 +65,20 @@ class Conexao {
     static getAtividades(param) {
         return new Promise((resolve, reject) => {
             const connection = Conexao.connect();
+
+            const sqlVerificador = 'SELECT energia FROM usuarios WHERE id_usuario = ?'
+
+            connection.query(sqlVerificador, [param.id], (error, results) => {
+                if(error) {
+                    connection.end()
+                    return reject(error)
+                }
+                if(results[0] <= 0) {
+                    connection.end()
+                    return
+                }
+            })
+
             const sql = 'SELECT * FROM `perguntas` WHERE id_materia = ? AND ordem = ?';
             connection.query(sql, [param.materia, param.atividadeAtual], (error, perguntas) => {
                 if (error) {
@@ -256,9 +272,11 @@ class Conexao {
                             nome_de_exibicao,
                             nome_de_usuario,
                             bio,
+                            streak,
                             email,
                             foto_perfil_texto AS foto,
-                            vidas,
+                            cor_fundo,
+                            energia,
                             streak,
                             xp,
                             xp_semanal,
@@ -356,6 +374,20 @@ class Conexao {
             );
         });
     }
+    static atualizarAparencia(dados) {
+        return new Promise((resolve, reject) => {
+            const connection = Conexao.connect();
+            connection.query(
+                'UPDATE usuarios SET foto_perfil_texto = ?, cor_fundo = ? WHERE id_usuario = ?',
+                [dados.foto, dados.cor_fundo, dados.id],
+                (error, results) => {
+                    connection.end();
+                    if (error) return reject(error);
+                    resolve(results);
+                }
+            );
+        });
+    }
     static async atualizarAtividade(dados) {
         const colunas = [
             'atvidades_concluidas_geral',
@@ -391,6 +423,7 @@ class Conexao {
             const resultado = await query(`
                 UPDATE usuarios
                 SET ${coluna} = ?,
+                    energia = energia - 1,
                     atvidades_concluidas_geral = COALESCE(atvidades_concluidas_geral, 0) + 1,
                     xp = COALESCE(xp, 0) + ?,
                     xp_semanal = COALESCE(xp_semanal, 0) + ?

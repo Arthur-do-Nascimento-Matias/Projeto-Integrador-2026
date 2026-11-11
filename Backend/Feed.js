@@ -209,7 +209,8 @@ static resolverDenuncia(idDenuncia, acao) {
                 u.id_usuario,
                 u.nome_de_exibicao,
                 u.nome_de_usuario,
-                u.foto_perfil,
+                u.foto_perfil_texto AS foto_perfil,
+                u.cor_fundo,
 
                 COALESCE((
                     SELECT SUM(
@@ -273,7 +274,8 @@ static resolverDenuncia(idDenuncia, acao) {
                 u.id_usuario,
                 u.nome_de_exibicao,
                 u.nome_de_usuario,
-                u.foto_perfil,
+                u.foto_perfil_texto AS foto_perfil,
+                u.cor_fundo,
 
                 COALESCE((
                     SELECT SUM(
@@ -325,7 +327,8 @@ static resolverDenuncia(idDenuncia, acao) {
                 u.id_usuario,
                 u.nome_de_exibicao,
                 u.nome_de_usuario,
-                u.foto_perfil
+                u.foto_perfil_texto AS foto_perfil,
+                u.cor_fundo
 
             FROM comentarios_posts AS cp
 
@@ -511,24 +514,74 @@ static resolverDenuncia(idDenuncia, acao) {
         return Feed.executar(sql, [dados.id])
     }
 
+    static async alterarConteudoProprio(dados) {
+        const falhar = (status, mensagem) => {
+            throw Object.assign(new Error(mensagem), { status })
+        }
+        if (!['post', 'comentario'].includes(dados.tipo) ||
+            !['editar', 'excluir'].includes(dados.acao)) {
+            falhar(400, 'Ação ou tipo de conteúdo inválido.')
+        }
+        const id = Number(dados.id)
+        const idUsuario = Number(dados.id_usuario)
+        if (!Number.isSafeInteger(id) || id <= 0 ||
+            !Number.isSafeInteger(idUsuario) || idUsuario <= 0) {
+            falhar(400, 'Informe um conteúdo e um usuário válidos.')
+        }
+        const ehPost = dados.tipo === 'post'
+        const tabela = ehPost ? 'posts' : 'comentarios_posts'
+        const coluna = ehPost ? 'id_post' : 'id_comentario'
+        const condicao = `${coluna} = ? AND id_usuario = ? AND ativo = 1`
+        let campos = 'ativo = 0'
+        let valores = []
+
+        if (dados.acao === 'editar') {
+            if (typeof dados.conteudo !== 'string' || !dados.conteudo.trim()) {
+                falhar(400, 'Escreva o conteúdo.')
+            }
+            const conteudo = dados.conteudo.trim()
+            if (conteudo.length > (ehPost ? 5000 : 3000)) {
+                falhar(400, 'O conteúdo ultrapassa o limite permitido.')
+            }
+            if (ehPost) {
+                if (typeof dados.titulo !== 'string' || !dados.titulo.trim() || dados.titulo.trim().length > 160) {
+                    falhar(400, 'Informe um título de até 160 caracteres.')
+                }
+                campos = 'titulo = ?, conteudo = ?, atualizado_em = CURRENT_TIMESTAMP'
+                valores = [dados.titulo.trim(), conteudo]
+            } else {
+                campos = 'conteudo = ?'
+                valores = [conteudo]
+            }
+        }
+
+        // A autoria é verificada na própria escrita, inclusive em alterações concorrentes.
+        const resultado = await Feed.executar(
+            `UPDATE ${tabela} SET ${campos} WHERE ${condicao}`,
+            [...valores, id, idUsuario]
+        )
+        if (!resultado.affectedRows) {
+            // Alguns drivers retornam zero quando o texto salvo não mudou.
+            const existentes = dados.acao === 'editar'
+                ? await Feed.executar(`SELECT ${coluna} FROM ${tabela} WHERE ${condicao} LIMIT 1`, [id, idUsuario])
+                : []
+            if (!existentes.length) {
+                falhar(404, 'Conteúdo indisponível ou não pertence a você.')
+            }
+        }
+        return { ok: true }
+    }
+
     static formatarPost(post) {
         return {
             ...post,
-            foto_perfil: post.foto_perfil
-                ? `data:image/jpeg;base64,${post.foto_perfil.toString('base64')}`
-                : '',
             pontuacao: Number(post.pontuacao) || 0,
             total_comentarios: Number(post.total_comentarios) || 0
         }
     }
 
     static formatarComentario(comentario) {
-        return {
-            ...comentario,
-            foto_perfil: comentario.foto_perfil
-                ? `data:image/jpeg;base64,${comentario.foto_perfil.toString('base64')}`
-                : ''
-        }
+        return { ...comentario }
     }
 }
 

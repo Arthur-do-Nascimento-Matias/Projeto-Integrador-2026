@@ -225,9 +225,9 @@
 }
 
 .rk-avatar--grande img {
-  width: 118%;
-  height: 118%;
-  max-width: none;
+  width: 90%;
+  height: 90%;
+  max-width: 100%;
 
   object-fit: contain;
   transition: transform 0.25s;

@@ -1,16 +1,46 @@
-import moki from "../../assets/simio.png"
-import punk from "../../assets/gotico.png"
-import artista from "../../assets/artista.png"
-import { useEffect, useMemo, useState } from 'react'
+const moki = "/avatares-simio/moki.png";
+const zoro = "/avatares-simio/zoro.png";
+const miro = "/avatares-simio/miro.png";
+const ibra = "/avatares-simio/ibra.png";
+const mika = "/avatares-simio/mika.png";
+const kimo = "/avatares-simio/kimo.png";
+const tuki = "/avatares-simio/tuki.png";
+const nala = "/avatares-simio/nala.png";
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from "react-dom";
 import { useParams } from 'react-router-dom'
 import './Perfil.css'
 
 const fotosPerfil = {
-  moki: moki,
-  gotico: punk,
-  artista: artista,
+  moki,
+  zoro,
+  miro,
+  ibra,
+  mika,
+  kimo,
+  tuki,
+  nala
 };
+
+const coresPerfil = [
+  { nome: 'Verde sálvia', valor: '#B4CFA8' },
+  { nome: 'Creme', valor: '#F1DFC0' },
+  { nome: 'Azul suave', valor: '#B8D5E5' },
+  { nome: 'Lilás', valor: '#D4C0E4' },
+  { nome: 'Pêssego', valor: '#F0C3A7' },
+  { nome: 'Rosa suave', valor: '#E8BDCB' },
+];
+const corPadrao = coresPerfil[0].valor;
+
+function PencilIcon() {
+  return (
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+      strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <path d="m16 3 5 5M4 15 15.5 3.5a2.1 2.1 0 0 1 3 0l2 2a2.1 2.1 0 0 1 0 3L9 20l-6 1 1-6Z" />
+    </svg>
+  );
+}
 
 function StatCard({ icon, value, label, delay }) {
   return (
@@ -30,7 +60,7 @@ function StatCard({ icon, value, label, delay }) {
   )
 }
 
-function Avatar({ setPhotoImage, photo, name, className = '' }) {
+function Avatar({ photo, name, background = corPadrao, className = '' }) {
   const initials = useMemo(() => {
     return (name || '')
       .split(' ')
@@ -42,7 +72,7 @@ function Avatar({ setPhotoImage, photo, name, className = '' }) {
 
 
   return (
-    <div className={`profile-avatar ${className}`}>
+    <div className={`profile-avatar ${className}`} style={{ backgroundColor: background }}>
       {photo ? (
         <img
           src={fotosPerfil[photo] || moki}
@@ -63,10 +93,58 @@ function Perfil({ draft, setDraft }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [editOpen, setEditOpen] = useState(false)
-  const [novaBio, setNovaBio] = useState('')
   const [savingProfile, setSavingProfile] = useState(false)
-  const [photoImage, setPhotoImage] = useState("")
   const [fotoOpen, setFotoOpen] = useState(false);
+  const [corOpen, setCorOpen] = useState(false);
+  const editModalRef = useRef(null);
+  const pickerModalRef = useRef(null);
+
+  useEffect(() => {
+    if (!editOpen) return;
+    const anterior = document.activeElement;
+    editModalRef.current?.querySelector('button')?.focus();
+    return () => { if (anterior?.isConnected) anterior.focus(); };
+  }, [editOpen]);
+
+  useEffect(() => {
+    if (!fotoOpen && !corOpen) return;
+    const anterior = document.activeElement;
+    pickerModalRef.current?.querySelector('button')?.focus();
+    return () => { if (anterior?.isConnected) anterior.focus(); };
+  }, [fotoOpen, corOpen]);
+
+  // O teclado fica no diálogo que está por cima.
+  useEffect(() => {
+    if (!editOpen) return;
+    const modal = (fotoOpen || corOpen) ? pickerModalRef.current : editModalRef.current;
+    if (!modal) return;
+    const seletor = 'button:not(:disabled), input:not(:disabled), textarea:not(:disabled), [tabindex="0"]';
+    const focaveis = () => Array.from(modal.querySelectorAll(seletor));
+    function teclado(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        if (savingProfile) return;
+        if (fotoOpen) setFotoOpen(false);
+        else if (corOpen) setCorOpen(false);
+        else setEditOpen(false);
+      }
+      if (event.key === 'Tab') {
+        const itens = focaveis();
+        const primeiro = itens[0];
+        const ultimo = itens[itens.length - 1];
+        if (!primeiro) { event.preventDefault(); modal.focus(); return; }
+        if (event.shiftKey && (document.activeElement === primeiro || !modal.contains(document.activeElement))) {
+          event.preventDefault(); ultimo.focus();
+        } else if (!event.shiftKey && (document.activeElement === ultimo || !modal.contains(document.activeElement))) {
+          event.preventDefault(); primeiro.focus();
+        }
+      }
+    }
+    document.addEventListener('keydown', teclado);
+    return () => {
+      document.removeEventListener('keydown', teclado);
+    };
+  }, [editOpen, fotoOpen, corOpen, savingProfile]);
 
   /*
   * Atualmente o /perfil retorna o usuário
@@ -118,6 +196,7 @@ function Perfil({ draft, setDraft }) {
         username: usuario.nome_de_usuario || "",
         bio: usuario.bio || "",
         photo: fotoSalva,
+        cor_fundo: usuario.cor_fundo || corPadrao,
         atividadesConcluidas: [
           usuario.atvidades_concluidas_geral,
           usuario.atvidades_concluidas_matematica,
@@ -153,24 +232,13 @@ function Perfil({ draft, setDraft }) {
     setDraft(previous => ({
       ...previous,
       photo: user.foto_perfil || "",
+      bio: user.bio || "",
+      cor_fundo: user.cor_fundo || corPadrao,
     }));
 
     setFotoOpen(false);
+    setCorOpen(false);
     setEditOpen(true);
-  }
-
-  function handlePhoto(event) {
-    const file = event.target.files?.[0]
-
-    if (!file) return
-
-    const objectUrl = URL.createObjectURL(file)
-
-    setDraft((previous) => ({
-      ...previous,
-      photo: objectUrl,
-      photoFile: file,
-    }))
   }
 
     async function enviar(rota, dados) {
@@ -181,7 +249,8 @@ function Perfil({ draft, setDraft }) {
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
                 },
                 body: JSON.stringify(dados)
             }
@@ -224,7 +293,8 @@ async function saveProfile(event) {
 
     const bioNova = draft.bio.trim();
 
-    const fotoNova = draft.photo
+    const fotoNova = draft.photo || user.foto_perfil || "";
+    const corNova = draft.cor_fundo || corPadrao;
 
     if (!novoNome) {
         alert("O nome de usuário não pode ficar vazio.");
@@ -250,25 +320,24 @@ async function saveProfile(event) {
             });
         }
 
-        // 3. ALTERAR FOTO
-          if (fotoNova && fotoNova !== user.foto_perfil) {
-            await enviar("mudarFoto", {
-              id: user.id_usuario,
-              foto: fotoNova,
-            });
-          }
+        // Foto e cor são gravadas juntas para o usuário autenticado.
+        if (fotoNova !== (user.foto_perfil || "") || corNova !== (user.cor_fundo || corPadrao)) {
+            await enviar("mudarAparencia", { foto: fotoNova, cor_fundo: corNova });
+        }
 
         // 4. ATUALIZAR INTERFACE
         setUser(previous => ({
             ...previous,
             nome_de_exibicao: novoNome,
             bio: bioNova,
-            foto_perfil: draft.photo || previous.foto_perfil
+            foto_perfil: fotoNova,
+            cor_fundo: corNova
         }));
 
         setDraft(previous => ({
             ...previous,
-            username: novoNome,
+            name: novoNome,
+            cor_fundo: corNova,
             bio: bioNova,
             photoFile: null
         }));
@@ -367,6 +436,7 @@ async function saveProfile(event) {
             <div className="profile-avatar-wrap">
               <Avatar
                 photo={user.foto_perfil}
+                background={user.cor_fundo || corPadrao}
                 name={user.nome_de_exibicao}
                 className="profile-avatar-large"
               />
@@ -733,11 +803,13 @@ async function saveProfile(event) {
         <div
           className="profile-modal-backdrop"
           role="presentation"
-          onMouseDown={() => setEditOpen(false)}
+          onMouseDown={() => { if (!savingProfile) setEditOpen(false); }}
         >
 
           <section
             className="profile-edit-modal"
+            ref={editModalRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-labelledby="edit-profile-title"
@@ -750,6 +822,7 @@ async function saveProfile(event) {
               className="profile-modal-close"
               type="button"
               onClick={() => setEditOpen(false)}
+              disabled={savingProfile}
               aria-label="Fechar"
             >
               ×
@@ -770,33 +843,40 @@ async function saveProfile(event) {
             <form onSubmit={saveProfile}>
 
               <div className="edit-photo-row">
-
-                <Avatar
-                  setPhotoImage={setPhotoImage}
-                  photo={
-                    draft.photo ||
-                    user.foto_perfil
-                  }
-                  name={
-                    user.nome_de_exibicao
-                  }
-                  className="profile-avatar-large"
-                />
-
-                <label 
-                  className="photo-upload-button"
-                  onClick={() => setFotoOpen(true)}
-                >
-
-                  Alterar foto
-
-                </label>
-
+                <div className="profile-customization-item">
+                  <div className="profile-customization-square">
+                    <Avatar
+                      photo={draft.photo || user.foto_perfil}
+                      background={draft.cor_fundo || corPadrao}
+                      name={nomeUsuario || user.nome_de_exibicao}
+                      className="profile-avatar-editor"
+                    />
+                    <button type="button" className="profile-pencil-button"
+                      aria-label="Alterar mascote" title="Alterar mascote"
+                      disabled={savingProfile} onClick={() => setFotoOpen(true)}>
+                      <PencilIcon />
+                    </button>
+                  </div>
+                  <span className="profile-customization-label">Mascote</span>
+                </div>
+                <div className="profile-customization-item">
+                  <div className="profile-customization-square profile-color-preview"
+                    style={{ backgroundColor: draft.cor_fundo || corPadrao }}>
+                    <button type="button" className="profile-pencil-button"
+                      aria-label="Alterar cor de fundo" title="Alterar cor de fundo"
+                      disabled={savingProfile} onClick={() => setCorOpen(true)}>
+                      <PencilIcon />
+                    </button>
+                  </div>
+                  <span className="profile-customization-label">Cor de fundo</span>
+                </div>
               </div>
 
-              <p className="profile-username">Nome de usuário</p>
+              <label className="profile-username" htmlFor="profile-display-name">Nome de usuário</label>
 
               <input
+                  id="profile-display-name"
+                  maxLength={20}
                   className="trocarNomeUsuario"
                   placeholder="Digite seu novo nome"
                   value={nomeUsuario}
@@ -814,10 +894,9 @@ async function saveProfile(event) {
                   maxLength="255"
                   rows="4"
                   placeholder="Conte um pouco sobre você..."
-                  value={draft.bio}
+                  value={draft.bio || ""}
                   onChange={(event) => {
                     const bioNova = event.target.value
-                    setNovaBio(bioNova)
                     setDraft({
                       ...draft,
                       bio: bioNova,
@@ -826,7 +905,7 @@ async function saveProfile(event) {
                 />
 
                 <small>
-                  {draft.bio.length}/255
+                  {(draft.bio || "").length}/255
                 </small>
               </label>
 
@@ -858,56 +937,52 @@ async function saveProfile(event) {
 
           </section>
 
-          {editOpen && fotoOpen && createPortal(
-            <div
-              className="profile-modal-backdrop"
-              style={{ zIndex: 10000 }}
-              onMouseDown={() => setFotoOpen(false)}
-            >
-              <section
-                className="profile-edit-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Trocar foto"
-                onMouseDown={(event) => event.stopPropagation()}
-              >
-                <button
-                  type="button"
-                  className="profile-modal-close"
-                  onClick={() => setFotoOpen(false)}
-                  aria-label="Fechar"
-                >
-                  ×
-                </button>
-
-                <h2>Escolha sua foto</h2>
-
-                <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                  <img 
-                    src={moki} 
-                    alt="Moki" 
-                    width={100} 
-                    value="moki"
-                    onClick={() => trocar("moki")}
-                  />
-                  <img 
-                    src={punk} 
-                    alt="Moki punk"
-                    width={100} 
-                    value="punk"
-                    onClick={() => trocar("gotico")}
-                  />
-                  <img 
-                    src={artista} 
-                    alt="Moki artista" 
-                    width={100} 
-                    value="artista"
-                    onClick={() => trocar("artista")}
-                  />
+          {(fotoOpen || corOpen) && createPortal(
+            <div className="profile-modal-backdrop profile-picker-backdrop"
+              onMouseDown={(event) => { event.stopPropagation(); setFotoOpen(false); setCorOpen(false); }}>
+              <section className="profile-edit-modal profile-picker-modal"
+                ref={pickerModalRef} tabIndex={-1} role="dialog" aria-modal="true"
+                aria-labelledby="profile-picker-title"
+                onMouseDown={(event) => event.stopPropagation()}>
+                <button type="button" className="profile-modal-close"
+                  onClick={() => { setFotoOpen(false); setCorOpen(false); }} aria-label="Fechar seleção">×</button>
+                <div className="edit-modal-heading">
+                  <p className="profile-kicker">{fotoOpen ? 'FAMÍLIA SÍMIO' : 'DO SEU JEITO'}</p>
+                  <h2 id="profile-picker-title">{fotoOpen ? 'Escolha seu mascote' : 'Escolha sua cor'}</h2>
                 </div>
+                {fotoOpen ? (
+                  <div className="profile-avatar-options">
+                    {Object.entries(fotosPerfil).map(([id, src]) => (
+                      <button key={id} type="button" className="profile-avatar-option"
+                        aria-pressed={draft.photo === id} onClick={() => trocar(id)}>
+                        <span className="profile-avatar-option-image"
+                          style={{ backgroundColor: draft.cor_fundo || corPadrao }}>
+                          <img src={src} alt="" />
+                          {draft.photo === id && <span className="profile-selection-check" aria-hidden="true">✓</span>}
+                        </span>
+                        <span>{id.charAt(0).toUpperCase() + id.slice(1)}</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="profile-color-options">
+                    {coresPerfil.map(({ nome, valor }) => (
+                      <button key={valor} type="button" className="profile-color-option"
+                        aria-pressed={(draft.cor_fundo || corPadrao) === valor}
+                        onClick={() => {
+                          setDraft(previous => ({ ...previous, cor_fundo: valor }));
+                          setCorOpen(false);
+                        }}>
+                        <span className="profile-color-swatch" style={{ backgroundColor: valor }}>
+                          {(draft.cor_fundo || corPadrao) === valor && <span aria-hidden="true">✓</span>}
+                        </span>
+                        <span>{nome}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </section>
-            </div>,
-            document.body
+            </div>, document.body
           )}
 
         </div>,

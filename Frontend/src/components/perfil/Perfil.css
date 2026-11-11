@@ -96,7 +96,6 @@
   border: 4px solid #fff9ef;
   border-radius: 28px;
   color: var(--profile-cream);
-  background: linear-gradient(145deg, var(--profile-orange), var(--profile-orange-dark));
   box-shadow: 0 10px 25px rgba(50,33,20,.2);
   font: 700 26px 'Space Mono', monospace;
 }
@@ -104,7 +103,8 @@
 .profile-avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 10%;
 }
 
 .profile-avatar-large {
@@ -173,6 +173,8 @@
   margin: 18px 0 0;
   color: #e1eee5;
   font: 14px/1.58 'Space Mono', monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .profile-meta-row {
@@ -729,3 +731,149 @@
     transition-duration: .01ms !important;
   }
 }
+
+/* Personalização do avatar */
+.profile-edit-modal .edit-photo-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 170px));
+  align-items: start;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+
+.profile-customization-item { min-width: 0; }
+
+.profile-customization-square {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 38px;
+}
+
+.profile-avatar.profile-avatar-editor,
+.profile-color-preview {
+  width: 100%;
+  border: 5px solid #fff9ef;
+  border-radius: 38px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12), 0 0 0 6px rgba(128,104,83,.09);
+}
+
+.profile-avatar.profile-avatar-editor { height: 100%; font-size: 42px; }
+
+.profile-pencil-button {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 3px solid #fffdfa;
+  border-radius: 50%;
+  color: #543b27;
+  background: #f5eadc;
+  box-shadow: 0 4px 10px rgba(50,33,20,.2);
+  cursor: pointer;
+  transition: transform .2s, background .2s;
+}
+
+.profile-pencil-button:hover { transform: translateY(-2px) rotate(-8deg); background: #f1dfc0; }
+.profile-customization-label {
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+  color: inherit;
+  font: 700 14px 'Rubik', sans-serif;
+  color: #ffd797;
+}
+
+.profile-picker-backdrop { z-index: 10000; }
+.profile-picker-modal { width: min(560px, 100%); }
+.profile-picker-modal h2 {
+  margin: 0;
+  font: 700 clamp(25px, 5vw, 30px)/1.15 'Rubik', sans-serif;
+  color: #FEFEFE;
+  letter-spacing: 1px;
+}
+
+.profile-avatar-options,
+.profile-color-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 14px;
+}
+
+.profile-avatar-option,
+.profile-color-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: 700 14px/1.3 'Rubik', sans-serif;
+  color: #FEFEFE;
+  cursor: pointer;
+}
+
+.profile-avatar-option-image,
+.profile-color-swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 3px solid transparent;
+  border-radius: 24px;
+  box-shadow: inset 0 0 0 1px rgba(50,33,20,.09);
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+
+.profile-avatar-option-image img { width: 100%; height: 100%; object-fit: contain; padding: 10%; }
+.profile-avatar-option:hover .profile-avatar-option-image,
+.profile-color-option:hover .profile-color-swatch { transform: translateY(-3px); }
+.profile-avatar-option[aria-pressed="true"] .profile-avatar-option-image,
+.profile-color-option[aria-pressed="true"] .profile-color-swatch {
+  border-color: #cc6d00;
+  box-shadow: 0 0 0 3px rgba(242,139,24,.18);
+}
+
+.profile-selection-check {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #225a3d;
+  color: #fff;
+  font: 700 14px sans-serif;
+}
+
+.profile-color-swatch { color: #225a3d; font: 700 30px sans-serif; }
+.profile-pencil-button:focus-visible,
+.profile-avatar-option:focus-visible,
+.profile-color-option:focus-visible,
+.profile-modal-close:focus-visible {
+  outline: 3px solid #cc6d00;
+  outline-offset: 5px;
+}
+.profile-modal-backdrop button:disabled { cursor: wait; opacity: .65; }
+
+@media (max-width: 420px) {
+  .profile-edit-modal .edit-photo-row { gap: 20px; }
+  .profile-customization-square,
+  .profile-avatar.profile-avatar-editor,
+  .profile-color-preview { border-radius: 28px; }
+  .profile-avatar-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profile-color-options { gap: 16px 10px; }
+  .profile-color-option { font-size: 12px; }
+}
+
+.profile-edit-modal label.profile-username { display: block; margin-bottom: 8px; }

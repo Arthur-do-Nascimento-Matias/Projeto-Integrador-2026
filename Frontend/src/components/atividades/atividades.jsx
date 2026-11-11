@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import "./Atividades.css";
+import "./atividades.css";
+import { prepararSons, tocarSom } from "../utils/sons";
 import LicaoConcluida from "./LicaoConcluida";
 import { resumirLicao } from "./resultadoLicao.js";
 import { registrarResposta, registrarAtividadeConcluida } from "../utils/missoes";
 // indiceQuestao é a ordem da pergunta dentro da matéria (começa em 1).
 export async function criarAtividade(
-    refAtividade, refEnunciado, indiceQuestao, materiaAtual,
+    draft, refAtividade, refEnunciado, indiceQuestao, materiaAtual,
     refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4,
     controle = {}
 ) {
+
     const parametros = new URLSearchParams({
         materia: String(materiaAtual),
-        atividadeAtual: String(indiceQuestao)
+        atividadeAtual: String(indiceQuestao),
+        energia: String(draft.energia),
+        id: String(draft.id)
     });
     const resposta = await fetch(`http://localhost:3000/atividades?${parametros}`, {
         cache: "no-store",
@@ -20,7 +24,7 @@ export async function criarAtividade(
     });
     if (!resposta.ok) throw new Error(`Erro ao carregar pergunta: HTTP ${resposta.status}`);
     const dados = await resposta.json();
-    if (dados.concluido || !dados.pergunta) {
+    if (!dados.pergunta) {
         throw new Error("O backend não retornou uma pergunta para esta atividade.");
     }
     const alternativas = [dados.alternativa1, dados.alternativa2, dados.alternativa3, dados.alternativa4];
@@ -50,6 +54,9 @@ function Atividades({
     draft, refAtividade, atividadeAtual, setAtvLiberada, materiaAtual,
     refEnunciado, refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4
 }) {
+    const [mostrarErro, setMostrarErro] = useState(false);
+    const animacaoErro = useRef(null);
+    useEffect(() => () => animacaoErro.current?.cancel(), []);
     const indiceAtv = useRef(1);
     const cliques = useRef(0);
     const alternativas = useRef([]);
@@ -65,13 +72,15 @@ function Atividades({
     const refsAlternativas = [refAlternativa1, refAlternativa2, refAlternativa3, refAlternativa4];
     async function carregarPergunta(indice, versao = sessao.current) {
         respostaBloqueada.current = true;
+        setMostrarErro(false);
+        animacaoErro.current?.cancel();
         requisicao.current?.abort();
         const controle = new AbortController();
         requisicao.current = controle;
         if (refEnunciado.current) refEnunciado.current.textContent = "Carregando pergunta...";
         try {
             const resposta = await criarAtividade(
-                refAtividade, refEnunciado, indice, materiaAtual,
+                draft, refAtividade, refEnunciado, indice, materiaAtual,
                 ...refsAlternativas, { signal: controle.signal }
             );
             if (versao !== sessao.current || controle.signal.aborted) return;
@@ -99,6 +108,7 @@ function Atividades({
         setResultado(null);
         setSalvando(false);
         setErroSalvar("");
+        setMostrarErro(false);
         document.documentElement.style.overflow = "hidden";
         document.body.style.overflow = "hidden";
         carregarPergunta(indiceAtv.current, versao);
@@ -115,6 +125,8 @@ function Atividades({
         requisicao.current?.abort();
         respostaBloqueada.current = true;
         sairAtividade(refAtividade);
+        setMostrarErro(false);
+        animacaoErro.current?.cancel();
         setResultado(null);
         window.dispatchEvent(new Event("simio:atividade-fechada"));
     }
@@ -123,27 +135,74 @@ function Atividades({
         const alternativa = alternativas.current[id];
         if (!alternativa) return;
         respostaBloqueada.current = true;
+        const audioPronto = prepararSons();
         const versao = sessao.current;
         try {
             // Registra também as respostas erradas, usando o ID da alternativa.
-            await registrarResposta(alternativa.id_alternativa);
+            const registro = await registrarResposta(alternativa.id_alternativa);
             if (versao !== sessao.current) return;
             const correta = Number(alternativa.verdadeira) === 1;
             respostas.current.push({ questao: indiceAtv.current, correta });
             if (!correta) {
-                botao.style.animation = "chacualhar 200ms ease-in-out alternate";
-                setTimeout(() => { botao.style.animation = ""; }, 200);
-                respostaBloqueada.current = false;
+                setMostrarErro(true);
+                Promise.resolve(audioPronto).then(() => {
+                    if (versao === sessao.current) tocarSom("erro");
+                });
+                const reduzirMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                animacaoErro.current?.cancel();
+                if (botao.animate) {
+                    const passos = reduzirMovimento
+                        ? [{ backgroundColor: "#FFE4DE" }, { backgroundColor: "#FFFDF8" }]
+                        : [
+                            { translate: "0 0", backgroundColor: "#FFE4DE", borderColor: "#C46B57" },
+                            { translate: "-8px 0", backgroundColor: "#FFE4DE" },
+                            { translate: "6px 0", backgroundColor: "#FFE4DE" },
+                            { translate: "-4px 0", backgroundColor: "#FFE4DE" },
+                            { translate: "2px 0", backgroundColor: "#FFE4DE" },
+                            { translate: "0 0" }
+                        ];
+                    animacaoErro.current = botao.animate(passos, {
+                        duration: reduzirMovimento ? 160 : 420,
+                        easing: "ease-out"
+                    });
+                    await animacaoErro.current.finished.catch(() => { });
+                }
+                if (versao === sessao.current) respostaBloqueada.current = false;
                 return;
             }
-            if (cliques.current < 2) {
+            setMostrarErro(false);
+
+            const terminouLicao = cliques.current >= 2;
+
+            // A missão já toca sua celebração pelo utils/missoes.js.
+            // Sem nova recompensa de missão, escolhe o som desta resposta.
+            Promise.resolve(audioPronto).then(() => {
+                if (terminouLicao) {
+                    window.setTimeout(() => {
+                        if (versao !== sessao.current) return;
+
+                        tocarSom("missao");
+                    }, 400);
+                } else {
+                    if (versao !== sessao.current) return;
+
+                    tocarSom("acerto");
+                }
+            });
+
+            if (!terminouLicao) {
                 cliques.current += 1;
                 indiceAtv.current += 1;
                 await carregarPergunta(indiceAtv.current, versao);
             } else {
-                // Como no fluxo original, salva ao pressionar Continuar.
+                draft.id = draft.id - 1
                 sairAtividade(refAtividade);
                 setResultado(resumirLicao(respostas.current, 3, 50));
+            }
+            if (!(Number(registro?.xp_ganho) > 0)) {
+                Promise.resolve(audioPronto).then(() => {
+                    if (versao === sessao.current) tocarSom("acerto");
+                });
             }
         } catch (erro) {
             if (versao !== sessao.current) return;
@@ -181,6 +240,7 @@ function Atividades({
             atividadeSalva.current = true;
             setResultado(null);
             sairAtividade(refAtividade);
+            draft.energia = draft.energia - 1
             // Exatamente o gatilho usado pela trilha original para reler o banco.
             setAtvLiberada(anterior => anterior + 1);
             window.dispatchEvent(new Event("simio:atividade-fechada"));
@@ -218,6 +278,15 @@ function Atividades({
                 <button className="alternativa2" id="alternativa2" onClick={e => verificar(1, e.currentTarget)} ref={refAlternativa2} />
                 <button className="alternativa3" id="alternativa3" onClick={e => verificar(2, e.currentTarget)} ref={refAlternativa3} />
                 <button className="alternativa4" id="alternativa4" onClick={e => verificar(3, e.currentTarget)} ref={refAlternativa4} />
+                {mostrarErro && (
+                    <div className="atividade-feedback-erro" role="status" aria-live="polite" aria-atomic="true">
+                        <span className="atividade-feedback-erro__icone" aria-hidden="true">×</span>
+                        <div>
+                            <strong>Quase lá!</strong>
+                            <p>Tente outra alternativa. Você consegue!</p>
+                        </div>
+                    </div>
+                )}
             </div>
             {resultado && <LicaoConcluida
                 resultado={resultado}

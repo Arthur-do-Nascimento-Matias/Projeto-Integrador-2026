@@ -9,20 +9,14 @@
   align-items: center;
 
   padding:
-    clamp(55px, 8vh, 95px)
-    40px
-    60px
-    180px;
+    clamp(55px, 8vh, 95px) 40px 60px 180px;
 
   font-family: "Rubik", sans-serif;
 }
 
 
-/* ========================================
-   TÍTULO
-======================================== */
 
-.configuracoes > h1 {
+.configuracoes>h1 {
   width: min(100%, 560px);
 
   margin: 0 0 28px;
@@ -52,6 +46,99 @@
   gap: 18px;
 }
 
+.simio-tema {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  margin-left: auto;
+
+  width: 80px;
+  height: 44px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #96b77d;
+  box-shadow: 0 4px 0 #62794b;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.simio-tema-bolinha {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  background: #fff8ed;
+  box-shadow: 0 2px 3px #00000026;
+
+  transition: transform 350ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.simio-tema-sol,
+.simio-tema-lua {
+  position: absolute;
+  top: 10px;
+
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.simio-tema-sol {
+  right: 10px;
+  color: #ffb238;
+  animation: simioSolGirar 20s linear infinite;
+}
+
+.simio-tema-lua {
+  left: 10px;
+  color: #f1dfc0;
+  transform: rotate(-15deg);
+}
+
+.simio-tema[aria-checked="true"] {
+  background: #203d2c;
+  box-shadow: 0 4px 0 #122619;
+}
+
+.simio-tema[aria-checked="true"] .simio-tema-bolinha {
+  transform: translateX(36px);
+}
+
+.simio-tema:focus-visible {
+  outline: 3px solid #ffb238;
+  outline-offset: 6px;
+}
+
+@keyframes simioSolGirar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .simio-tema,
+  .simio-tema-bolinha {
+    transition: none;
+  }
+
+  .simio-tema-sol {
+    animation: none;
+  }
+}
 
 /* ========================================
    CARD
@@ -70,8 +157,6 @@
 
   padding: 22px 26px;
 
-  border: 1px solid
-    rgba(92, 66, 50, 0.06);
   border-radius: 20px;
 
   background: rgba(255, 255, 255, 0.94);
@@ -79,22 +164,17 @@
   box-shadow:
     0 12px 32px rgba(57, 39, 29, 0.1);
 
+  box-shadow: 0 6px 0 #b8bdb9;
+
   transition:
     transform 180ms ease,
-    box-shadow 180ms ease;
+    scale 220ms ease
 }
 
 .config-card:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 16px 38px rgba(57, 39, 29, 0.14);
+  scale: 1.05;
 }
-
-
-/* ========================================
-   TEXTO
-======================================== */
 
 .config-texto {
   min-width: 0;
@@ -154,11 +234,6 @@
   transform: none;
 }
 
-
-/* ========================================
-   SWITCH
-======================================== */
-
 .switch {
   position: relative;
 
@@ -186,13 +261,9 @@
 }
 
 .switch:focus-visible {
-  outline: 3px solid
-    rgba(89, 115, 52, 0.28);
+  outline: 3px solid rgba(89, 115, 52, 0.28);
   outline-offset: 3px;
 }
-
-
-/* BOLINHA */
 
 .switch-bolinha {
   position: absolute;
@@ -215,8 +286,6 @@
 }
 
 
-/* LIGADO */
-
 .switch.ativo {
   background: #597334;
 }
@@ -225,10 +294,6 @@
   transform: translateX(25px);
 }
 
-
-/* ========================================
-   SELETOR DE TAMANHO
-======================================== */
 
 .config-seletor {
   min-width: 118px;
@@ -271,17 +336,13 @@
     0 0 0 3px rgba(89, 115, 52, 0.15);
 }
 
-
-/* ========================================
-   SAIR DA CONTA
-======================================== */
-
 .config-card-conta {
   border-color:
     rgba(184, 67, 67, 0.14);
 }
 
-.botao-sair {
+.botao-sair,
+.botao-trocar-senha {
   min-width: 90px;
 
   box-sizing: border-box;
@@ -310,7 +371,8 @@
     box-shadow 180ms ease;
 }
 
-.botao-sair:hover {
+.botao-sair:hover,
+.botao-trocar-senha:hover {
   background: #c9574f;
   color: #ffffff;
 
@@ -320,13 +382,14 @@
     0 7px 16px rgba(201, 87, 79, 0.22);
 }
 
-.botao-sair:active {
+.botao-sair:active,
+.botao-trocar-senha:active {
   transform: translateY(0);
 }
 
-.botao-sair:focus-visible {
-  outline: 3px solid
-    rgba(201, 87, 79, 0.25);
+.botao-sair:focus-visible,
+.botao-trocar-senha:focus-visible {
+  outline: 3px solid rgba(201, 87, 79, 0.25);
   outline-offset: 3px;
 }
 
@@ -338,10 +401,7 @@
 @media (max-width: 900px) {
   .configuracoes {
     padding:
-      50px
-      28px
-      50px
-      145px;
+      50px 28px 50px 145px;
   }
 }
 
@@ -351,12 +411,10 @@
     align-items: stretch;
 
     padding:
-      34px
-      20px
-      110px;
+      34px 20px 110px;
   }
 
-  .configuracoes > h1 {
+  .configuracoes>h1 {
     width: 100%;
 
     margin-bottom: 22px;
@@ -375,76 +433,105 @@
 
     padding: 19px;
   }
-<<<<<<< HEAD
-  
-  
+
+
   /* TEXTO */
-  
+
   .config-texto h2 {
     margin: 0 0 5px;
-  
+
     font-size: 18px;
-  
+
     color: #4b3529;
 
     letter-spacing: normal;
     word-spacing: normal;
-=======
 
-  .configuracoes .config-texto h2 {
-    font-size: 1.0625rem;
->>>>>>> origin/kauan
+    .configuracoes .config-texto h2 {
+      font-size: 1.0625rem;
+    }
+
+    .configuracoes .config-texto p {
+      font-size: 0.8125rem;
+    }
+
+    .config-seletor {
+      min-width: 105px;
+    }
   }
 
-  .configuracoes .config-texto p {
-    font-size: 0.8125rem;
+
+  @media (max-width: 430px) {
+    .config-card {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .switch,
+    .config-seletor,
+    .botao-sair {
+      align-self: flex-end;
+    }
+
+    .switch.ativo .switch-bolinha {
+      transform: translateX(25px);
+    }
   }
 
-  .config-seletor {
-    min-width: 105px;
-  }
-}
-
-
-@media (max-width: 430px) {
-  .config-card {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .switch,
-  .config-seletor,
-  .botao-sair {
-    align-self: flex-end;
-  }
-<<<<<<< HEAD
-  
-  .switch.ativo .switch-bolinha {
-    transform: translateX(25px);
-  }
-=======
-}
 
 
 
-
-/* ========================================
+  /* ========================================
    TAMANHO GLOBAL DOS TEXTOS
 ======================================== */
 
-html {
-  font-size: 16px;
+  html {
+    font-size: 16px;
+  }
+
+  html[data-tamanho-texto="pequeno"] {
+    font-size: 14px;
+  }
+
+  html[data-tamanho-texto="normal"] {
+    font-size: 16px;
+  }
+
+  html[data-tamanho-texto="grande"] {
+    font-size: 18px;
+  }
 }
 
-html[data-tamanho-texto="pequeno"] {
-  font-size: 14px;
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
-html[data-tamanho-texto="normal"] {
-  font-size: 16px;
+.modalTrocar {
+  height: 50vh;
+  width: 20vw;
+  background-color: white;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-html[data-tamanho-texto="grande"] {
-  font-size: 18px;
+.modalTrocar form {
+  display: flex;
+  flex-direction: column;
 }
->>>>>>> origin/kauan

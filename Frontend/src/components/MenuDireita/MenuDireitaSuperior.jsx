@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {nomePelaRota} from "../menuEsquerda/menuEsquerda";
 
 import "./MenuDireitaSuperior.css";
+import { useRef } from "react";
 
 function MenuDireitaSuperior({ draft }) {
     const [posicao, setPosicao] = useState(null);
@@ -71,11 +72,24 @@ function MenuDireitaSuperior({ draft }) {
 
     }, [draft?.id]);
 
+    const [anuncioAtual, setAnuncioAtual] = useState(0);
+
+    useEffect(() => {
+        const intervalo = setInterval(() => {
+            setAnuncioAtual(atual => (atual + 1) % 2);
+        }, 5000);
+
+        return () => clearInterval(intervalo);
+    }, []);
+
     return (
         <section
             className="menuDireita-card menuDireitaSuperior"
             aria-labelledby="menuDireita-divisao-titulo"
         >
+            <div className="streakEnergia">
+                <h4>🔥Sequência: {draft.streak} dias <br />🔋Energia: {draft.energia}</h4>
+            </div>
             <div className="menuDireita-cabecalho">
                 <h3 id="menuDireita-divisao-titulo">
                     Sua posição no ranking
@@ -102,6 +116,27 @@ function MenuDireitaSuperior({ draft }) {
             >
                 VER RANKING
             </Link>
+            
+            <h3 className="parceiros">Descubra nossos parceiros</h3>
+
+            <div className="ad">
+                {anuncioAtual === 0 ? (
+                    <img
+                        key="anuncio-1"
+                        src="/ads/VIDA-TERRESTRE.png"
+                        alt="Publicidade sobre vida terrestre"
+                        onClick={() => window.location.href="https://www.bing.com/"}
+                    />
+                ) : (
+                    <img
+                        key="anuncio-2"
+                        src="/ads/peak.jpeg"
+                        alt="Publicidade"
+                        onClick={() => window.location.href="https://peak.squareweb.app/"}
+                    />
+                )}
+            </div>
+
         </section>
     );
 }

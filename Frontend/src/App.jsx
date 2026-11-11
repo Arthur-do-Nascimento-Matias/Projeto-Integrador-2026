@@ -26,6 +26,7 @@ import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
+import RedefinirSenha from './components/recuperarSenha/redefinirSenha';
 
 export function alternarTema(setTema) {
     setTema(anterior =>
@@ -61,6 +62,7 @@ function ConteudoApp({
   const estaNoLogin = location.pathname === '/login';
   const estaNoInstagram = location.pathname === "/instagram";
   const estaNoGit = location.pathname === "/Git";
+  const estaNaRedefinicaoSenha = location.pathname === "/redefinir-senha";
 
   const [draft, setDraft] = useState({
     id: '',
@@ -69,13 +71,15 @@ function ConteudoApp({
     bio: '',
     photo: null,
     atividadesConcluidas: [],
-    total_perguntas: ''
+    total_perguntas: '',
+    streak: null,
+    energia: null
   });
 
 
   useEffect(() => {
 
-    if (estaNoLogin || estaNoIndex) return;
+    if (estaNoLogin || estaNoIndex || estaNaRedefinicaoSenha) return;
 
     async function carregarUsuario() {
 
@@ -125,7 +129,9 @@ function ConteudoApp({
             Number(usuario.atvidades_concluidas_ingles) || 0,
           ],
 
-          total_perguntas: usuario.total_perguntas
+          total_perguntas: usuario.total_perguntas,
+          streak: usuario.streak,
+          energia: usuario.energia
         });
 
       } catch (erro) {
@@ -137,7 +143,13 @@ function ConteudoApp({
 
     carregarUsuario();
 
-  }, [estaNoLogin, estaNoIndex, navigate]);
+  }, [
+    estaNoLogin,
+    estaNoIndex,
+    estaNoInstagram,
+    estaNoGit,
+    navigate
+]);
 
   const [mode, setMode] = useState('login')
 
@@ -184,7 +196,6 @@ function ConteudoApp({
 
     <main className={estaNoIndex ? 'index-page' : 'auth-page'}>
 
-      {/* FUNDO DA FLORESTA - NÃO APARECE NO INDEX */}
 
       {!estaNoIndex && (
         <>
@@ -203,7 +214,7 @@ function ConteudoApp({
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
 
-      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && (
+      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && !estaNaRedefinicaoSenha &&(
         <MenuEsquerda />
       )}
 
@@ -211,6 +222,13 @@ function ConteudoApp({
       {/* ROTAS */}
 
       <Routes>
+
+          <Route 
+            path="/redefinir-senha"
+            element={
+              <RedefinirSenha />
+            }
+          />
 
         {/* PÁGINA INICIAL PÚBLICA */}
 

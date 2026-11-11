@@ -27,7 +27,7 @@ class Login {
                     email,
                     senha,
                     foto_perfil,
-                    vidas,
+                    energia,
                     streak,
                     xp,
                     xp_semanal,

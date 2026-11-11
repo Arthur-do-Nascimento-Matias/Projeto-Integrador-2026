@@ -1,4 +1,7 @@
-/* CABEÇALHO */
+.menuDireitaInferior {
+  transform: scale(0.8);
+  margin-top: -10vh;
+}
 
 .menuDireitaInferior-verTodas {
   padding: 8px 0;
@@ -385,4 +388,10 @@
 .menuDireitaInferior-modal button:focus-visible {
   outline: 2px solid #ffe1a0;
   outline-offset: 4px;
+}
+
+@media(max-width: 1366px) {
+  .menuDireitaInferior {
+    margin-top: -16vh;
+  }
 }

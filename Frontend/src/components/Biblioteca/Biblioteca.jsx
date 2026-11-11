@@ -6,6 +6,19 @@ import {
     registrarLeitura
 } from "../utils/missoes";
 
+function normalizarBusca(texto) {
+    return String(texto || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ");
+}
+
+const titulosAlternativos = {
+    "a alegoria da caverna": ["O Mito da Caverna"],
+    "o mito da caverna": ["A Alegoria da Caverna"],
+};
 
 function Biblioteca() {
     const [capas, setCapas] = useState([]);
@@ -15,12 +28,12 @@ function Biblioteca() {
 
 
         registrarVisitaBiblioteca()
-    .catch((erro) => {
-        console.error(
-            "Erro ao registrar visita à biblioteca:",
-            erro
-        );
-    });
+            .catch((erro) => {
+                console.error(
+                    "Erro ao registrar visita à biblioteca:",
+                    erro
+                );
+            });
 
         fetch("http://localhost:3000/livros")
             .then((resp) => resp.json())
@@ -31,65 +44,71 @@ function Biblioteca() {
                 console.error("Erro ao carregar os livros:", erro);
             });
     }, []);
-function abrirLivro(id) {
-    const novaAba = window.open(
-        `http://localhost:3000/abrirLivro?id=${id}`,
-        "_blank"
-    );
+    function abrirLivro(id) {
+        const novaAba = window.open(
+            `http://localhost:3000/abrirLivro?id=${id}`,
+            "_blank"
+        );
 
-    if (!novaAba) return;
+        if (!novaAba) return;
 
-    novaAba.opener = null;
+        novaAba.opener = null;
 
-    registrarLivroAberto(id)
-        .catch((erro) => {
-            console.error(
-                "Erro ao registrar livro aberto:",
-                erro
-            );
-        });
+        registrarLivroAberto(id)
+            .catch((erro) => {
+                console.error(
+                    "Erro ao registrar livro aberto:",
+                    erro
+                );
+            });
 
-    const sessaoLeitura = crypto.randomUUID();
-    let pulso = 0;
+        const sessaoLeitura = crypto.randomUUID();
+        let pulso = 0;
 
-    registrarLeitura(sessaoLeitura, pulso)
-        .catch((erro) => {
-            console.error(
-                "Erro ao iniciar leitura:",
-                erro
-            );
-        });
+        registrarLeitura(sessaoLeitura, pulso)
+            .catch((erro) => {
+                console.error(
+                    "Erro ao iniciar leitura:",
+                    erro
+                );
+            });
 
-    const acompanhamento = setInterval(() => {
-        if (novaAba.closed) {
-            clearInterval(acompanhamento);
-            return;
-        }
+        const acompanhamento = setInterval(() => {
+            if (novaAba.closed) {
+                clearInterval(acompanhamento);
+                return;
+            }
 
-        pulso += 1;
+            pulso += 1;
 
-        registrarLeitura(
-            sessaoLeitura,
-            pulso
-        ).catch((erro) => {
-            console.error(
-                "Erro ao registrar tempo de leitura:",
-                erro
-            );
-        });
+            registrarLeitura(
+                sessaoLeitura,
+                pulso
+            ).catch((erro) => {
+                console.error(
+                    "Erro ao registrar tempo de leitura:",
+                    erro
+                );
+            });
 
-    }, 15000);
-}
+        }, 15000);
+    }
 
-    const livrosFiltrados = capas.filter((capa) =>
-        String(capa.titulo || "")
-            .toLowerCase()
-            .includes(busca.toLowerCase()) ||
+    const termoBusca = normalizarBusca(busca);
 
-        String(capa.autorLivro || "")
-            .toLowerCase()
-            .includes(busca.toLowerCase())
-    );
+    const livrosFiltrados = capas.filter((capa) => {
+        const titulo = normalizarBusca(capa.titulo);
+
+        const alternativas = titulosAlternativos[titulo] || [];
+
+        return [
+            capa.titulo,
+            capa.autorLivro,
+            ...alternativas,
+        ].some((texto) =>
+            normalizarBusca(texto).includes(termoBusca)
+        );
+    });
 
     return (
         <div className="container">
@@ -103,7 +122,7 @@ function abrirLivro(id) {
                 <div className="biblioteca-identidade">
 
                     <span className="biblioteca-label">
-                         ACERVO
+                        ACERVO
                     </span>
 
                     <h1>

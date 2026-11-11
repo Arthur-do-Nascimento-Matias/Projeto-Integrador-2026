@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 import FeedDetalhe from './FeedDetalhe'
+import FeedDenuncia from './FeedDenuncia'
+import FeedAcoesAutor from './FeedAcoesAutor'
 import FeedLateral from './FeedLateral'
 import FeedModeracao from './FeedModeracao'
 
@@ -8,25 +11,31 @@ import './Feed.css'
 
 const API_URL = 'http://localhost:3000'
 
-function Avatar({ foto, nome }) {
-    const iniciais = (nome || 'SL')
-        .split(' ')
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(parte => parte[0])
-        .join('')
-        .toUpperCase()
+const fotosPerfil = {
+    moki: '/avatares-simio/moki.png',
+    zoro: '/avatares-simio/zoro.png',
+    miro: '/avatares-simio/miro.png',
+    bimo: '/avatares-simio/bimo.png',
+    ibra: '/avatares-simio/ibra.png',
+    mika: '/avatares-simio/mika.png',
+    kimo: '/avatares-simio/kimo.png',
+    tuki: '/avatares-simio/tuki.png',
+    nala: '/avatares-simio/nala.png',
+}
+
+function Avatar({ foto, nome, corFundo }) {
+    const imagem = fotosPerfil[String(foto || 'moki').trim().toLowerCase()] || fotosPerfil.moki
 
     return (
-        <div className="feed-avatar">
-            {foto ? (
-                <img
-                    src={foto}
-                    alt={`Foto de ${nome}`}
-                />
-            ) : (
-                <span>{iniciais}</span>
-            )}
+        <div
+            className="feed-avatar"
+            style={{ backgroundColor: corFundo || '#B4CFA8' }}
+        >
+            <img
+                src={imagem}
+                alt={`Avatar de ${nome || 'Explorador'}`}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
         </div>
     )
 }
@@ -68,7 +77,27 @@ function Feed() {
 })
 
     const [ehAdmin, setEhAdmin] = useState(false)
+    const [usuarioAtualId, setUsuarioAtualId] = useState(null)
     const [moderacaoAberta, setModeracaoAberta] = useState(false)
+    const [alvoDenuncia, setAlvoDenuncia] = useState(null)
+    const [avisoFeed, setAvisoFeed] = useState(null)
+
+    useEffect(() => {
+        if (!avisoFeed || avisoFeed.tipo !== 'sucesso') return
+        const timer = setTimeout(() => setAvisoFeed(null), 3500)
+        return () => clearTimeout(timer)
+    }, [avisoFeed])
+
+    async function compartilharPost(idPost) {
+        const url = `${window.location.origin}/feed?post=${idPost}`
+        try {
+            await navigator.clipboard.writeText(url)
+            setAvisoFeed({ tipo: 'sucesso', titulo: 'Link copiado!', texto: 'Agora é só compartilhar com a turma.' })
+        } catch {
+            setAvisoFeed({ tipo: 'erro', titulo: 'Copie o link abaixo', texto: 'Não foi possível copiar automaticamente.', url })
+        }
+    }
+
 
     function cabecalhos() {
         const token = localStorage.getItem('token')
@@ -115,9 +144,8 @@ function Feed() {
                 params.set('comunidade', comunidadeAtiva)
             }
 
-            if (ordem === 'emAlta') {
-                params.set('ordem', 'emAlta')
-            }
+
+            if (ordem === 'emAlta') params.set('ordem', 'emAlta')
 
             const sufixo = params.toString()
                 ? `?${params.toString()}`
@@ -147,6 +175,11 @@ function Feed() {
         }
     }
 
+    async function atualizarFeed() {
+        await carregarPosts()
+        await carregarComunidades()
+    }
+
     async function carregarPermissao() {
     try {
         const resposta = await fetch(`${API_URL}/perfil`, {
@@ -164,6 +197,7 @@ function Feed() {
         }
 
         setEhAdmin(Number(dados.usuario?.adm) === 1)
+        setUsuarioAtualId(Number(dados.usuario?.id_usuario) || null)
     } catch (erroAtual) {
         console.error(
             'Erro ao verificar administrador:',
@@ -171,6 +205,7 @@ function Feed() {
         )
 
         setEhAdmin(false)
+        setUsuarioAtualId(null)
     }
 }
 
@@ -260,10 +295,17 @@ useEffect(() => {
         }
     }
 
+    function denunciarPost(idPost) {
+        setAlvoDenuncia({ id_post: idPost, id_comentario: null })
+    }
+
+    function notificarDenuncia() {
+        setAvisoFeed({ tipo: 'sucesso', titulo: 'Denúncia enviada!', texto: 'O conteúdo foi encaminhado para análise.' })
+    }
+
     return (
         <main className="feed-page">
             <div className="feed-layout">
-            <section className="feed-content">
                 <header className="feed-header">
                     <div>
                         <span className="feed-kicker">
@@ -279,94 +321,52 @@ useEffect(() => {
                         </p>
                     </div>
 
-                    <div className="feed-header-actions">
-    {ehAdmin && (
-        <button
-            className="feed-admin-button"
-            type="button"
-            onClick={() => setModeracaoAberta(true)}
-        >
-            <span>⚑</span>
-            Denúncias
-        </button>
-    )}
-
-    <button
-        className="feed-new-post"
-        type="button"
-        onClick={() => setCriandoPost(true)}
-    >
-        <span>＋</span>
-        Criar publicação
-    </button>
-</div>
                 </header>
 
-                <section className="feed-filters">
-                    <div className="feed-filter-scroll">
-                        <button
-                            className={
-                                !comunidadeAtiva
-                                    ? 'feed-community active'
-                                    : 'feed-community'
-                            }
-                            type="button"
-                            onClick={() => setComunidadeAtiva('')}
-                        >
-                            Todas
+                <div className="feed-compose-row">
+                    <div className="feed-header-actions">
+                        <button className="feed-new-post" type="button" onClick={() => setCriandoPost(true)}>
+                            <span>＋</span>
+                            Criar publicação
                         </button>
-
-                        {comunidades.map(comunidade => (
-                            <button
-                                key={comunidade.id_comunidade}
-                                className={
-                                    comunidadeAtiva === comunidade.slug
-                                        ? 'feed-community active'
-                                        : 'feed-community'
-                                }
-                                type="button"
-                                onClick={() => {
-                                    setComunidadeAtiva(comunidade.slug)
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        background: comunidade.cor
-                                    }}
-                                />
-
-                                {comunidade.nome}
+                        {ehAdmin && (
+                            <button className="feed-admin-button" type="button" onClick={() => setModeracaoAberta(true)}>
+                                <span>⚑</span>
+                                Denúncias
                             </button>
-                        ))}
+                        )}
                     </div>
-
-                    <div className="feed-order">
+                    <div className="feed-order" aria-label="Ordenar publicações">
                         <button
-                            className={
-                                ordem === 'recentes'
-                                    ? 'active'
-                                    : ''
-                            }
                             type="button"
+                            className={ordem === 'recentes' ? 'active' : ''}
+                            aria-pressed={ordem === 'recentes'}
                             onClick={() => setOrdem('recentes')}
                         >
                             Recentes
                         </button>
-
                         <button
-                            className={
-                                ordem === 'emAlta'
-                                    ? 'active'
-                                    : ''
-                            }
                             type="button"
+                            className={ordem === 'emAlta' ? 'active' : ''}
+                            aria-pressed={ordem === 'emAlta'}
                             onClick={() => setOrdem('emAlta')}
                         >
                             Em alta
                         </button>
                     </div>
-                </section>
 
+                    <label className="feed-mobile-community">
+                        <span>Comunidade</span>
+                        <select value={comunidadeAtiva} onChange={event => setComunidadeAtiva(event.target.value)}>
+                            <option value="">Todas as comunidades</option>
+                            {comunidades.map(comunidade => (
+                                <option key={comunidade.id_comunidade} value={comunidade.slug}>{comunidade.nome}</option>
+                            ))}
+                        </select>
+                    </label>
+                </div>
+
+            <section className="feed-content">
                 {erro && (
                     <div className="feed-error">
                         {erro}
@@ -431,12 +431,32 @@ useEffect(() => {
                                     >
                                         ▼
                                     </button>
+
+                                    {usuarioAtualId && Number(post.id_usuario) === usuarioAtualId && (
+                                        <FeedAcoesAutor tipo="post" item={post} aoAtualizar={atualizarFeed} />
+                                    )}
+
+                                    {!ehAdmin && Number(post.id_usuario) !== usuarioAtualId && (
+                                        <button
+                                            className="feed-post-report feed-detail-report"
+                                            type="button"
+                                            disabled={alvoDenuncia !== null}
+                                            onClick={() => denunciarPost(post.id_post)}
+                                            aria-label="Denunciar publicação"
+                                            title="Denunciar publicação"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                <path d="M5 21V3m0 1c5-4 9 4 14 0v10c-5 4-9-4-14 0" />
+                                            </svg>
+                                        </button>
+                                    )}
                                 </div>
 
                                 <div className="feed-post-body">
                                     <div className="feed-post-meta">
                                         <Avatar
                                             foto={post.foto_perfil}
+                                            corFundo={post.cor_fundo}
                                             nome={post.nome_de_exibicao}
                                         />
 
@@ -481,18 +501,9 @@ useEffect(() => {
                                     💬 {post.total_comentarios} comentários
                                 </button>
 
-                                       <button
-    type="button"
-    onClick={() => {
-        const url = `${window.location.origin}/feed?post=${post.id_post}`
-
-        navigator.clipboard.writeText(url)
-            .then(() => window.alert('Link copiado!'))
-            .catch(() => window.alert(url))
-    }}
->
-    ↗ Compartilhar
-</button>
+                                        <button type="button" onClick={() => compartilharPost(post.id_post)}>
+                                            ↗ Compartilhar
+                                        </button>
                                     </div>
                                 </div>
                             </article>
@@ -600,7 +611,8 @@ useEffect(() => {
                 <FeedDetalhe
                     idPost={postAberto}
                     aoFechar={() => setPostAberto(null)}
-                    aoAtualizar={carregarPosts}
+                    aoAtualizar={atualizarFeed}
+                    aoDenunciaEnviada={notificarDenuncia}
                 />
             )}
 
@@ -611,6 +623,34 @@ useEffect(() => {
     />
 )}
 
+            {alvoDenuncia && (
+                <FeedDenuncia
+                    alvo={alvoDenuncia}
+                    aoFechar={() => setAlvoDenuncia(null)}
+                    aoEnviado={() => { setAlvoDenuncia(null); notificarDenuncia() }}
+                />
+            )}
+            {avisoFeed && createPortal(
+                <div
+                    className={`feed-share-toast${avisoFeed.tipo === 'erro' ? ' feed-share-toast--erro' : ''}`}
+                    role={avisoFeed.tipo === 'erro' ? 'alert' : 'status'}
+                    aria-live={avisoFeed.tipo === 'erro' ? 'assertive' : 'polite'}
+                    aria-atomic="true"
+                >
+                    <span className="feed-share-toast-icon" aria-hidden="true">
+                        {avisoFeed.tipo === 'sucesso' ? '✓' : '!'}
+                    </span>
+                    <div className="feed-share-toast-copy">
+                        <strong>{avisoFeed.titulo}</strong>
+                        <p>{avisoFeed.texto}</p>
+                        {avisoFeed.url && (
+                            <input aria-label="Link da publicação" value={avisoFeed.url} readOnly onFocus={event => event.currentTarget.select()} />
+                        )}
+                    </div>
+                    <button type="button" onClick={() => setAvisoFeed(null)} aria-label="Fechar notificação">×</button>
+                </div>,
+                document.body
+            )}
         </main>
     )
 }

@@ -391,6 +391,16 @@ function Login({ draft, setDraft, mode, setMode }) {
     }
 
     setRecoverSent(true)
+
+    fetch("http://localhost:3000/recover", {
+      method: "POST",
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({
+        email: recoverEmail
+      })
+    })
   }
 
   function closeRecover() {

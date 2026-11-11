@@ -1,10 +1,11 @@
 import "./Configuracoes.css";
 import { alternarTema } from "../../App";
 import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 import {
   executarTransicaoLogin
 } from "../TransicaoLogin/TransicaoLogin";
+import { createPortal } from "react-dom";
 
 
 function Configuracoes({
@@ -13,8 +14,13 @@ function Configuracoes({
   tema,
   setTema
 }) {
+
+  const [modalAberto, setModalAberto] = useState(false);
   const navigate = useNavigate();
 
+  function trocarSenha() {
+    setModalAberto(true);
+  }
 
   async function sairDaConta() {
     const confirmar = window.confirm(
@@ -34,11 +40,61 @@ function Configuracoes({
 
 
   return (
+    <>
     <div className="configuracoes">
 
       <h1>Configurações</h1>
 
       <div className="config-lista">
+
+        <div className="config-card">
+
+          
+          <div className="config-texto">
+            <h2>Aparência</h2>
+            <p>Alterne entre o modo claro e escuro.</p>
+          </div>
+
+          <button
+            type="button"
+            className="simio-tema"
+            role="switch"
+            aria-label="Modo escuro"
+            aria-checked={tema === "escuro"}
+            onClick={() => alternarTema(setTema)}
+          >
+            <svg
+              className="simio-tema-lua"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"
+                fill="currentColor"
+              />
+            </svg>
+
+            <svg
+              className="simio-tema-sol"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" fill="currentColor" />
+              <path
+                d="M12 2v2m0 16v2M2 12h2m16 0h2
+         M5 5l1.5 1.5m11 11L19 19
+         M5 19l1.5-1.5m11-11L19 5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+
+            <span className="simio-tema-bolinha" aria-hidden="true" />
+          </button>
+        </div>
+
 
         <div className="config-card">
 
@@ -52,9 +108,8 @@ function Configuracoes({
 
           <button
             type="button"
-            className={`switch ${
-              folhasAtivas ? "ativo" : ""
-            }`}
+            className={`switch ${folhasAtivas ? "ativo" : ""
+              }`}
             onClick={() =>
               alterarFolhas(!folhasAtivas)
             }
@@ -63,12 +118,22 @@ function Configuracoes({
             <span className="switch-bolinha" />
           </button>
 
-          <button onClick={() => alternarTema(setTema)}>
-              {tema === "claro" ? "🌙 Modo escuro" : "☀️ Modo claro"}
-          </button>
-
         </div>
 
+        <div className="config-card config-password">
+          <div className="config-texto">
+            <h2>Trocar senha</h2>
+
+            <p>Troque sua senha atual</p>
+          </div>
+          <button
+            type="button"
+            className="botao-trocar-senha"
+            onClick={trocarSenha}
+          >
+            Trocar senha
+          </button>
+        </div>
 
         <div className="config-card config-card-conta">
 
@@ -93,6 +158,47 @@ function Configuracoes({
       </div>
 
     </div>
+
+        {modalAberto && createPortal(
+          <div className="modal-overlay">
+          <div className="modalTrocar">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <input
+                type="password"
+                id="senhaAtual"
+                placeholder="Digite a senha atual"
+                required
+              />
+
+              <input
+                type="password"
+                id="senhaNova"
+                placeholder="Digite sua nova senha"
+                required
+              />
+
+              <input
+                type="password"
+                id="confirmarSenhaNova"
+                placeholder="Confirme sua senha nova"
+                required
+              />
+
+              <button type="submit">Trocar senha</button>
+
+              <button
+                type="button"
+                onClick={() => setModalAberto(false)}
+              >
+                Cancelar
+              </button>
+            </form>
+          </div>
+          </div>,
+          document.body
+        )}
+
+    </>
   );
 }
 

@@ -143,6 +143,10 @@ function Materias({
         if (trilha.materiaId !== materiaAtiva.id || trilha.carregando) return;
         const proximaAtividade = trilha.concluidas + 1;
         if (id === proximaAtividade) {
+            if(draft.energia <= 0) {
+                alert("Energia insuficiente")
+                return
+            }
             setAtividadeAtual(id);
             if (refTrilha.current) refTrilha.current.style.opacity = "0";
             if (refAtividade.current) refAtividade.current.style.transform = "translateX(0)";
