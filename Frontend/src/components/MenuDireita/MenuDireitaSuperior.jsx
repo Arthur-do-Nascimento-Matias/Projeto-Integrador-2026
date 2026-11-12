@@ -76,7 +76,7 @@ function MenuDireitaSuperior({ draft }) {
 
     useEffect(() => {
         const intervalo = setInterval(() => {
-            setAnuncioAtual(atual => (atual + 1) % 2);
+            setAnuncioAtual(atual => (atual + 1) % 4);
         }, 5000);
 
         return () => clearInterval(intervalo);
@@ -120,21 +120,41 @@ function MenuDireitaSuperior({ draft }) {
             <h3 className="parceiros">Descubra nossos parceiros</h3>
 
             <div className="ad">
-                {anuncioAtual === 0 ? (
-                    <img
-                        key="anuncio-1"
-                        src="/ads/VIDA-TERRESTRE.png"
-                        alt="Publicidade sobre vida terrestre"
-                        onClick={() => window.location.href="https://www.bing.com/"}
-                    />
-                ) : (
-                    <img
-                        key="anuncio-2"
-                        src="/ads/peak.jpeg"
-                        alt="Publicidade"
-                        onClick={() => window.location.href="https://peak.squareweb.app/"}
-                    />
-                )}
+                <a
+                    href="https://www.bing.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={anuncioAtual === 0 ? "ad-ativo" : ""}
+                >
+                    <img src="/ads/VIDA-TERRESTRE.png" alt="Vida terrestre" />
+                </a>
+
+                <a
+                    href="https://peak.squareweb.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={anuncioAtual === 1 ? "ad-ativo" : ""}
+                >
+                    <img src="/ads/peak.jpeg" alt="Peak" />
+                </a>
+
+                <a
+                    href="https://exemplo.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={anuncioAtual === 2 ? "ad-ativo" : ""}
+                >
+                    <img src="/ads/pjHelper.png" alt="PJ Helper" />
+                </a>
+
+                <a
+                    href="https://exemplo.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={anuncioAtual === 3 ? "ad-ativo" : ""}
+                >
+                    <img src="/ads/boaTur.jpeg" alt="BoaTur" />
+                </a>
             </div>
 
         </section>

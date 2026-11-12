@@ -15,12 +15,7 @@ function Configuracoes({
   setTema
 }) {
 
-  const [modalAberto, setModalAberto] = useState(false);
   const navigate = useNavigate();
-
-  function trocarSenha() {
-    setModalAberto(true);
-  }
 
   async function sairDaConta() {
     const confirmar = window.confirm(
@@ -119,22 +114,7 @@ function Configuracoes({
           </button>
 
         </div>
-
-        <div className="config-card config-password">
-          <div className="config-texto">
-            <h2>Trocar senha</h2>
-
-            <p>Troque sua senha atual</p>
-          </div>
-          <button
-            type="button"
-            className="botao-trocar-senha"
-            onClick={trocarSenha}
-          >
-            Trocar senha
-          </button>
-        </div>
-
+        
         <div className="config-card config-card-conta">
 
           <div className="config-texto">
@@ -158,45 +138,6 @@ function Configuracoes({
       </div>
 
     </div>
-
-        {modalAberto && createPortal(
-          <div className="modal-overlay">
-          <div className="modalTrocar">
-            <form onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="password"
-                id="senhaAtual"
-                placeholder="Digite a senha atual"
-                required
-              />
-
-              <input
-                type="password"
-                id="senhaNova"
-                placeholder="Digite sua nova senha"
-                required
-              />
-
-              <input
-                type="password"
-                id="confirmarSenhaNova"
-                placeholder="Confirme sua senha nova"
-                required
-              />
-
-              <button type="submit">Trocar senha</button>
-
-              <button
-                type="button"
-                onClick={() => setModalAberto(false)}
-              >
-                Cancelar
-              </button>
-            </form>
-          </div>
-          </div>,
-          document.body
-        )}
 
     </>
   );

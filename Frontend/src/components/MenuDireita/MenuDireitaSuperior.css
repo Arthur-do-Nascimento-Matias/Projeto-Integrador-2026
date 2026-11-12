@@ -116,16 +116,6 @@
 :root[data-tema="escuro"] .ad::before {
     color: #c5bba9;
 }
-.ad img {
-    transition: all 800ms ease;
-
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-
-    animation: aparecerAd 1.5s ease both;
-}
 
 .ad:hover {
   cursor: pointer;
@@ -142,4 +132,48 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+.ad {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.ad a {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+
+    pointer-events: none;
+}
+
+.ad a.ad-ativo {
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+.ad img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    display: block;
+    transition: all 800ms ease;
+
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+
+    animation: aparecerAd 1.5s ease both;
 }
