@@ -32,7 +32,7 @@ export async function carregarMissoes() {
     }
 
     const resposta = await fetch(
-        `${API}/missoes/hoje`,
+        `http://localhost:3000/missoes/hoje`,
         {
             method: 'GET',
             headers: {
@@ -72,7 +72,7 @@ function registrar(evento) {
         }
 
         const resposta = await fetch(
-            `${API}/missoes/evento`,
+            `http://localhost:3000/missoes/evento`,
             {
                 method: 'POST',
                 keepalive: true,

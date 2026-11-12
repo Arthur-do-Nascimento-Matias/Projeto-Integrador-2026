@@ -15,26 +15,29 @@ class Provas {
 
             connection.connect()
 
-            const sql = `
-                SELECT
-                    idProva,
-                    NomeProva,
-                    fonteProva,
-                    materia,
-                    tipoProva,
-                    anoProva,
+           console.log('redação')
+          const sql = `
+                        SELECT
+                            s.id_simulado AS idProva,
+                            s.titulo AS NomeProva,
+                            s.ano_escolar AS anoProva,
+                            CASE s.id_materia
+                                WHEN 1 THEN 'matematica'
+                                WHEN 2 THEN 'portugues'
+                                WHEN 3 THEN 'historia'
+                                WHEN 4 THEN 'geografia'
+                                WHEN 5 THEN 'ciencias'
+                                WHEN 6 THEN 'ingles'
+                            END AS materia,
+                            'simulado' AS tipoProva,
+                            'SimioLab' AS fonteProva,
+                            0 AS temCapa
+                        FROM simulados s
+                    WHERE s.pdf_simulado IS NOT NULL
+                    AND s.ano_escolar IS NOT NULL
+                    ORDER BY s.id_simulado ASC
+                    `;
 
-                    CASE
-                        WHEN capaProva IS NOT NULL
-                        AND LENGTH(capaProva) > 0
-                        THEN 1
-                        ELSE 0
-                    END AS temCapa
-
-                FROM provas
-
-                ORDER BY idProva DESC
-            `
 
             connection.query(sql, function(error, results) {
 
@@ -87,11 +90,11 @@ class Provas {
 
             const idProva = param.id
 
-            const sql = `
-                SELECT pdfProva
-                FROM provas
-                WHERE idProva = ?
-            `
+const sql = `
+    SELECT pdf_simulado AS pdfProva
+    FROM simulados
+    WHERE id_simulado = ?
+`
 
             connection.query(
                 sql,

@@ -1,3 +1,4 @@
+import Moki from "../../assets/MOKI.png";
 import { useEffect, useMemo, useState } from "react";
 import "./RedacaoEditor.css";
 
@@ -178,9 +179,15 @@ function RedacaoEditor({ tema, aoVoltar }) {
                     </div>
 
                     <div className="editorMokiCard">
-                        <div className="editorMokiAvatar">🐵</div>
+  <div className="editorMokiAvatar">
+    <img
+        src={Moki}
+        alt="Moki"
+        className="editorMokiImagem"
+    />
+</div>
                         <div className="editorMokiFala">
-                            <strong>Dica do Moki</strong>
+                            <strong>teste 123</strong>
                             <p>
                                 {estatisticas.palavras < 50
                                     ? "Comece apresentando o tema no 1º parágrafo!"

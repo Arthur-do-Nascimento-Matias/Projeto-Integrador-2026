@@ -1,18 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import "./simulados.css";
 import RedacaoEditor from "./RedacaoEditor";
-import RedacoesReferencia from "./RedacoesReferencia";
-
 
 const FILTROS = [
-    { valor: "todos", nome: "Todos" },
     { valor: "portugues", nome: "Português" },
     { valor: "matematica", nome: "Matemática" },
     { valor: "historia", nome: "História" },
     { valor: "geografia", nome: "Geografia" },
     { valor: "ciencias", nome: "Ciências" },
-    { valor: "ingles", nome: "Inglês" },
-    { valor: "geral", nome: "Geral" }
+    { valor: "ingles", nome: "Inglês" }
 ];
 
 const NOMES_MATERIAS = {
@@ -30,7 +26,8 @@ function Simulados() {
 
     const [provas, setProvas] = useState([]);
     const [pesquisa, setPesquisa] = useState("");
-    const [filtro, setFiltro] = useState("todos");
+    const [filtro, setFiltro] = useState("matematica");
+    const [anoSelecionado, setAnoSelecionado] = useState(6);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
 
@@ -83,7 +80,8 @@ function Simulados() {
             const fonte = prova.fonteProva || "";
             const tipo = prova.tipoProva || "";
 
-            const correspondeMateria = filtro === "todos" || materia === filtro;
+            const correspondeMateria = materia === filtro;
+            const correspondeAno = Number(prova.anoProva) === anoSelecionado;
             const textoPesquisa = pesquisa.toLowerCase().trim();
 
             const correspondePesquisa =
@@ -92,9 +90,9 @@ function Simulados() {
                 tipo.toLowerCase().includes(textoPesquisa) ||
                 (NOMES_MATERIAS[materia] || "").toLowerCase().includes(textoPesquisa);
 
-            return correspondeMateria && correspondePesquisa;
+            return correspondeMateria && correspondeAno && correspondePesquisa;
         });
-    }, [provas, pesquisa, filtro]);
+    }, [provas, pesquisa, filtro, anoSelecionado]);
 
     function abrirProva(idProva) {
         window.open(`http://localhost:3000/abrirProva?id=${idProva}`, "_blank");
@@ -171,14 +169,6 @@ function Simulados() {
             {abaAtiva === "provas" && (
                 <>
                     <section className="simuladosPesquisa">
-                        <div className="simuladosCampoPesquisa">
-                            <input
-                                type="text"
-                                placeholder="Pesquisar provas e simulados..."
-                                value={pesquisa}
-                                onChange={(e) => setPesquisa(e.target.value)}
-                            />
-                        </div>
 
                         <div className="simuladosFiltros">
                             {FILTROS.map((item) => (
@@ -189,13 +179,26 @@ function Simulados() {
                                             ? "simuladosFiltro ativo"
                                             : "simuladosFiltro"
                                     }
-                                    onClick={() => setFiltro(item.valor)}
+                                    onClick={() => { setFiltro(item.valor); setAnoSelecionado(6); }}
                                 >
                                     {item.nome}
                                 </button>
                             ))}
                         </div>
                     </section>
+
+                    <div className="simuladosAnos" style={{ display: "flex", gap: "12px", flexWrap: "wrap", margin: "20px 0" }}>
+                        {[6, 7, 8].map((ano) => (
+                            <button
+                                key={ano}
+                                type="button"
+                                className={anoSelecionado === ano ? "simuladosFiltro ativo" : "simuladosFiltro"}
+                                onClick={() => setAnoSelecionado(ano)}
+                            >
+                                {ano}º ano
+                            </button>
+                        ))}
+                    </div>
 
                     <section className="simuladosCatalogo">
                         {!carregando && !erro && provasFiltradas.length > 0 && (
@@ -360,7 +363,6 @@ function Simulados() {
                             </div>
                         )}
                     </div>
-                    <RedacoesReferencia />
                 </section>
             )}
         </main>

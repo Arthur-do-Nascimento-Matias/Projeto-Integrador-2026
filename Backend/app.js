@@ -10,13 +10,15 @@ import ChatBot from './ChatBot.js'
 import Email from './Email.js'
 import Cadastro from './Cadastro.js'
 import Login from './Login.js'
-import Provas from './Provas.js'
 import Redacoes from './Redacoes.js'
 import Http from './utils/http.js'
 import Feed from './Feed.js'
 import Missoes from './Missoes.js'
+import Provas from './Provas.js'
+
 import { error } from 'console'
 import { json } from 'stream/consumers'
+
 // As duas rotas da trilha usam a mesma consulta e o mesmo formato de resposta.
 async function responderTrilha(dados, res) {
     const idMateria = Number(dados?.id);
@@ -44,13 +46,25 @@ async function responderTrilha(dados, res) {
     }
 }
 const callback = async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    res.setHeader('Access-Control-Allow-Headers', '*')
+    res.setHeader(
+        'Access-Control-Allow-Origin',
+        'http://localhost:5173'
+    );
+
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, OPTIONS'
+    );
+
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization'
+    );
+
     if (req.method === 'OPTIONS') {
-        res.writeHead(204)
-        res.end()
-        return
+        res.writeHead(204);
+        res.end();
+        return;
     }
     const rota = url.parse(req.url, true)
     const param = rota.query
@@ -409,6 +423,184 @@ const callback = async (req, res) => {
         return
     }
     if (req.method == 'GET') {
+
+    // =========================
+        // ABRIR PROVA
+        // =========================
+        if (rota.pathname == '/abrirProva') {
+            Provas.abrirProva(param)
+                .then(resp => {
+                    if (!resp) {
+                        res.writeHead(404, {
+                            'Content-Type':
+                                'application/json; charset=utf-8'
+                        })
+                        res.end(JSON.stringify({
+                            erro: 'Prova não encontrada.'
+                        }))
+                        return
+                    }
+                    res.writeHead(200, {
+                        'Content-Type': 'application/pdf',
+                        'Content-Disposition':
+                            'inline; filename="prova.pdf"'
+                    })
+                    res.end(resp)
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO ABRIR PROVA:',
+                        error
+                    )
+                    res.writeHead(500, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        erro: error.message
+                    }))
+                })
+            return
+        }
+        
+
+       // =========================
+        // BAIXAR SIMULADO
+        // =========================
+        if (rota.pathname === '/baixarProva') {
+            Provas.abrirProva(param)
+                .then(pdf => {
+                    if (!pdf) {
+                        Http.responderJson(res, 404, {
+                            erro: 'Simulado não encontrado.'
+                        })
+                        return
+                    }
+
+                    res.writeHead(200, {
+                        'Content-Type': 'application/pdf',
+                        'Content-Disposition':
+                            'attachment; filename="simulado.pdf"'
+                    })
+
+                    res.end(pdf)
+                })
+                .catch(error => {
+                    console.error('ERRO AO BAIXAR SIMULADO:', error)
+
+                    Http.responderJson(res, 500, {
+                        erro: 'Não foi possível baixar o simulado.'
+                    })
+                })
+
+            return
+        }
+
+
+       if (
+            rota.pathname === '/redacoes/historico' &&
+            req.method === 'GET'
+        ) {
+            const idUsuario = Number(param.id_usuario)
+            if (!idUsuario) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe um id_usuario válido.'
+                })
+                return
+            }
+            Redacoes.listarHistorico(idUsuario)
+                .then(historico => {
+                    Http.responderJson(res, 200, {
+                        historico
+                    })
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR HISTÓRICO:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+
+      if (
+            rota.pathname === '/redacoes/referencias' &&
+            req.method === 'GET'
+        ) {
+            Redacoes.listarReferencias()
+                .then(referencias => {
+                    Http.responderJson(res, 200, {
+                        referencias
+                    })
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO BUSCAR REDAÇÕES DE REFERÊNCIA:',
+                        error
+                    )
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+
+        if (
+            rota.pathname === '/redacoes/rascunho' &&
+            req.method === 'GET'
+        ) {
+            const idUsuario = Number(param.id_usuario)
+            const idTema = Number(param.id_tema)
+            if (!idUsuario || !idTema) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe id_usuario e id_tema válidos.'
+                })
+                return
+            }
+            Redacoes.buscarRascunho(idUsuario, idTema)
+                .then(rascunho => {
+                    Http.responderJson(res, 200, {
+                        rascunho
+                    })
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR RASCUNHO:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+    
+        // =========================
+        // ABRIR LIVRO
+        // =========================
+        if (rota.pathname == '/abrirLivro') {
+            res.writeHead(200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'inline; filename="livro.pdf"'
+            })
+            Livros.openBook(param)
+                .then(resp => {
+                    res.end(resp)
+                })
+            return  // retorna pra minha, vda
+        }
+
+        // =========================
+        // LIVROS
+        // =========================
+        if (rota.pathname == '/livros') {
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+            Livros.booksSearch()
+                .then(resp => {
+                    res.end(JSON.stringify(resp))
+                })
+            return
+        }
+
         if (rota.pathname == '/atividades') {
             res.writeHead(200, {
                 'Content-Type': 'application/json; charset=utf-8'
@@ -577,6 +769,31 @@ const callback = async (req, res) => {
                 })
             return
         }
+
+       if (rota.pathname == '/provas') {
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+            Provas.provasSearch()
+                .then(resp => {
+                    res.end(JSON.stringify(resp))
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO BUSCAR PROVAS:',
+                        error
+                    )
+                    res.writeHead(500, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        erro: error.message
+                    }))
+                })
+            return
+        }
+
         // =========================
         // REDAÇÃO VV
         // =========================
@@ -625,27 +842,7 @@ const callback = async (req, res) => {
                 })
             return
         }
-        if (
-            rota.pathname === '/redacoes/referencias' &&
-            req.method === 'GET'
-        ) {
-            Redacoes.listarReferencias()
-                .then(referencias => {
-                    Http.responderJson(res, 200, {
-                        referencias
-                    })
-                })
-                .catch(error => {
-                    console.error(
-                        'ERRO AO BUSCAR REDAÇÕES DE REFERÊNCIA:',
-                        error
-                    )
-                    Http.responderJson(res, 500, {
-                        erro: error.message
-                    })
-                })
-            return
-        }
+     
         if (
             rota.pathname === '/redacoes/rascunho' &&
             req.method === 'POST'
@@ -681,51 +878,8 @@ const callback = async (req, res) => {
                 })
             return
         }
-        if (
-            rota.pathname === '/redacoes/rascunho' &&
-            req.method === 'GET'
-        ) {
-            const idUsuario = Number(param.id_usuario)
-            const idTema = Number(param.id_tema)
-            if (!idUsuario || !idTema) {
-                Http.responderJson(res, 400, {
-                    erro: 'Informe id_usuario e id_tema válidos.'
-                })
-                return
-            }
-            Redacoes.buscarRascunho(idUsuario, idTema)
-                .then(rascunho => {
-                    Http.responderJson(res, 200, {
-                        rascunho
-                    })
-                })
-                .catch(error => {
-                    console.error('ERRO AO BUSCAR RASCUNHO:', error)
-                    Http.responderJson(res, 500, {
-                        erro: error.message
-                    })
-                })
-            return
-        }
-        if (
-            rota.pathname === '/redacoes/historico' &&
-            req.method === 'GET'
-        ) {
-            const idUsuario = Number(param.id_usuario)
-
-            if (!idUsuario) {
-                Http.responderJson(res, 400, {
-                    erro: 'Informe um id_usuario válido.'
-                })
-                return
-            }
-
-            // Implementação do histórico pendente.
-            Http.responderJson(res, 501, {
-                erro: 'Histórico ainda não implementado.'
-            })
-            return
-        }
+     
+ 
     // =========================
     // CHATBOT
     // =========================
@@ -799,98 +953,7 @@ else if (req.method == 'POST') {
 
             return
         }
-       
-        // =========================
-        // LIVROS
-        // =========================
-        if (rota.pathname == '/livros') {
-            res.writeHead(200, {
-                'Content-Type': 'application/json; charset=utf-8'
-            })
-            Livros.booksSearch()
-                .then(resp => {
-                    res.end(JSON.stringify(resp))
-                })
-            return
-        }
-        // =========================
-        // ABRIR LIVRO
-        // =========================
-        if (rota.pathname == '/abrirLivro') {
-            res.writeHead(200, {
-                'Content-Type': 'application/pdf',
-                'Content-Disposition': 'inline; filename="livro.pdf"'
-            })
-            Livros.openBook(param)
-                .then(resp => {
-                    res.end(resp)
-                })
-            return  // retorna pra minha, vda
-        }
-        // =========================
-        // PROVAS
-        // =========================
-        if (rota.pathname == '/provas') {
-            res.writeHead(200, {
-                'Content-Type': 'application/json; charset=utf-8'
-            })
-            Provas.provasSearch()
-                .then(resp => {
-                    res.end(JSON.stringify(resp))
-                })
-                .catch(error => {
-                    console.error(
-                        'ERRO AO BUSCAR PROVAS:',
-                        error
-                    )
-                    res.writeHead(500, {
-                        'Content-Type':
-                            'application/json; charset=utf-8'
-                    })
-                    res.end(JSON.stringify({
-                        erro: error.message
-                    }))
-                })
-            return
-        }
-        // =========================
-        // ABRIR PROVA
-        // =========================
-        if (rota.pathname == '/abrirProva') {
-            Provas.abrirProva(param)
-                .then(resp => {
-                    if (!resp) {
-                        res.writeHead(404, {
-                            'Content-Type':
-                                'application/json; charset=utf-8'
-                        })
-                        res.end(JSON.stringify({
-                            erro: 'Prova não encontrada.'
-                        }))
-                        return
-                    }
-                    res.writeHead(200, {
-                        'Content-Type': 'application/pdf',
-                        'Content-Disposition':
-                            'inline; filename="prova.pdf"'
-                    })
-                    res.end(resp)
-                })
-                .catch(error => {
-                    console.error(
-                        'ERRO AO ABRIR PROVA:',
-                        error
-                    )
-                    res.writeHead(500, {
-                        'Content-Type':
-                            'application/json; charset=utf-8'
-                    })
-                    res.end(JSON.stringify({
-                        erro: error.message
-                    }))
-                })
-            return
-        }
+
         // =========================
         // CHATBOT
         // =========================
