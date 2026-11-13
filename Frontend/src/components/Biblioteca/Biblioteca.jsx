@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { apiFetch } from "../utils/api";
 import "../Biblioteca/Biblioteca.css";
 import {
     registrarLivroAberto,
@@ -35,7 +36,7 @@ function Biblioteca() {
                 );
             });
 
-        fetch("http://localhost:3000/livros")
+        apiFetch("/livros")
             .then((resp) => resp.json())
             .then((data) => {
                 setCapas(data);
@@ -46,7 +47,7 @@ function Biblioteca() {
     }, []);
     function abrirLivro(id) {
         const novaAba = window.open(
-            `http://localhost:3000/abrirLivro?id=${id}`,
+            `/abrirLivro?id=${id}`,
             "_blank"
         );
 

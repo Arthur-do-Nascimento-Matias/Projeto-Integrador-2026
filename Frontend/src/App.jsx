@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react'
-
+import { apiFetch } from '/src/components/utils/api'
 import {
   BrowserRouter,
   Routes,
@@ -91,8 +91,8 @@ function ConteudoApp({
 
       try {
 
-        const resposta = await fetch(
-          'http://localhost:3000/perfil',
+        const resposta = await apiFetch(
+          '/perfil',
           {
             headers: {
               Authorization: `Bearer ${token}`,

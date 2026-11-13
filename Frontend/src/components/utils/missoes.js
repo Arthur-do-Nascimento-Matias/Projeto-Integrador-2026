@@ -1,5 +1,5 @@
 import { prepararSons, tocarSom } from "./sons"
-
+import { apiFetch } from "./api";
 export const EVENTO_MISSOES =
     'moki:missoes-atualizadas'
 
@@ -31,8 +31,8 @@ export async function carregarMissoes() {
         )
     }
 
-    const resposta = await fetch(
-        `http://localhost:3000/missoes/hoje`,
+    const resposta = await apiFetch(
+        `/missoes/hoje`,
         {
             method: 'GET',
             headers: {
@@ -71,8 +71,8 @@ function registrar(evento) {
             )
         }
 
-        const resposta = await fetch(
-            `http://localhost:3000/missoes/evento`,
+        const resposta = await apiFetch(
+            `/missoes/evento`,
             {
                 method: 'POST',
                 keepalive: true,

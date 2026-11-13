@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom"
+import { apiFetch } from "../utils/api";
 import { useEffect, useState } from 'react'
 import FeedAcoesAutor from './FeedAcoesAutor'
 import FeedDenuncia from './FeedDenuncia'
@@ -87,7 +88,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
 
     async function carregarPermissao() {
         try {
-            const resposta = await fetch(`${API_URL}/perfil`, {
+            const resposta = await apiFetch(`/perfil`, {
                 headers: cabecalhos()
             })
 
@@ -121,8 +122,8 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
         setErro('')
 
         try {
-            const resposta = await fetch(
-                `${API_URL}/feed/post?id_post=${idPost}`,
+            const resposta = await apiFetch(
+                `/feed/post?id_post=${idPost}`,
                 {
                     headers: cabecalhos()
                 }
@@ -162,8 +163,8 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
         setErro('')
 
         try {
-            const resposta = await fetch(
-                `${API_URL}/feed/comentarios`,
+            const resposta = await apiFetch(
+                `/feed/comentarios`,
                 {
                     method: 'POST',
                     headers: cabecalhos(),
@@ -196,8 +197,8 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
 
     async function votar(tipo) {
         try {
-            const resposta = await fetch(
-                `${API_URL}/feed/voto`,
+            const resposta = await apiFetch(
+                `/feed/voto`,
                 {
                     method: 'POST',
                     headers: cabecalhos(),
@@ -246,8 +247,8 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
         setErro('')
 
         try {
-            const resposta = await fetch(
-                `${API_URL}/feed/ocultar`,
+            const resposta = await apiFetch(
+                `/feed/ocultar`,
                 {
                     method: 'POST',
                     headers: cabecalhos(),

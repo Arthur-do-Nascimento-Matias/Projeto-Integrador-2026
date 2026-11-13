@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { executarTransicaoLogin } from '../TransicaoLogin/TransicaoLogin'
+import { apiFetch } from "../utils/api";
 
 import './Login.css'
 
@@ -147,7 +148,7 @@ function Login({ draft, setDraft, mode, setMode }) {
   let loginConcluido = false
 
   try {
-    const resposta = await fetch('http://localhost:3000/login', {
+    const resposta = await apiFetch('/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -260,7 +261,7 @@ function Login({ draft, setDraft, mode, setMode }) {
     // NÃO cadastra no banco ainda.
     // Apenas pede ao backend para enviar o código.
 
-    fetch('http://localhost:3000/cadastro', {
+    apiFetch('/cadastro', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -329,7 +330,7 @@ function Login({ draft, setDraft, mode, setMode }) {
       return
     }
 
-    fetch('http://localhost:3000/cadastro/verificar', {
+    apiFetch('/cadastro/verificar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -392,7 +393,7 @@ function Login({ draft, setDraft, mode, setMode }) {
 
     setRecoverSent(true)
 
-    fetch("http://localhost:3000/recover", {
+    apiFetch("/recover", {
       method: "POST",
       headers: {
         'Content-Type': "application/json"

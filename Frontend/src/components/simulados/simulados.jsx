@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./simulados.css";
 import RedacaoEditor from "./RedacaoEditor";
-
+import { apiFetch } from "../utils/api";
 const FILTROS = [
     { valor: "portugues", nome: "Português" },
     { valor: "matematica", nome: "Matemática" },
@@ -45,7 +45,7 @@ function Simulados() {
         try {
             setCarregando(true);
             setErro("");
-            const resposta = await fetch("http://localhost:3000/provas");
+            const resposta = await apiFetch("/provas");
             if (!resposta.ok) throw new Error("Erro ao carregar provas.");
             const dados = await resposta.json();
             setProvas(Array.isArray(dados) ? dados : []);
@@ -61,7 +61,7 @@ function Simulados() {
         try {
             setCarregandoTemas(true);
             setErroTemas("");
-            const resposta = await fetch("http://localhost:3000/temasRedacao");
+            const resposta = await apiFetch("/temasRedacao");
             if (!resposta.ok) throw new Error("Erro ao carregar temas.");
             const dados = await resposta.json();
             setTemas(Array.isArray(dados) ? dados : []);

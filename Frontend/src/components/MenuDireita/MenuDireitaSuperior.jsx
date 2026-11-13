@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {nomePelaRota} from "../menuEsquerda/menuEsquerda";
+import { apiFetch } from "../utils/api";
 
 import "./MenuDireitaSuperior.css";
 import { useRef } from "react";
@@ -16,8 +17,8 @@ function MenuDireitaSuperior({ draft }) {
 
         async function buscarPosicao() {
             try {
-                const resp = await fetch(
-                    "http://localhost:3000/ranking",
+                const resp = await apiFetch(
+                    "/ranking",
                     { signal: controller.signal }
                 );
 

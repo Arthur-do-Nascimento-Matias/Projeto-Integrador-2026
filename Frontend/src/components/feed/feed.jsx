@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { apiFetch } from "../utils/api";
 
 import FeedDetalhe from './FeedDetalhe'
 import FeedDenuncia from './FeedDenuncia'
@@ -109,8 +110,8 @@ function Feed() {
     }
 
     async function carregarComunidades() {
-        const resposta = await fetch(
-            `${API_URL}/comunidades`,
+        const resposta = await apiFetch(
+            `/comunidades`,
             {
                 headers: cabecalhos()
             }
@@ -151,8 +152,8 @@ function Feed() {
                 ? `?${params.toString()}`
                 : ''
 
-            const resposta = await fetch(
-                `${API_URL}/feed${sufixo}`,
+            const resposta = await apiFetch(
+                `/feed${sufixo}`,
                 {
                     headers: cabecalhos()
                 }
@@ -182,7 +183,7 @@ function Feed() {
 
     async function carregarPermissao() {
     try {
-        const resposta = await fetch(`${API_URL}/perfil`, {
+        const resposta = await apiFetch(`/perfil`, {
             headers: cabecalhos()
         })
 
@@ -232,8 +233,8 @@ useEffect(() => {
         setErro('')
 
         try {
-            const resposta = await fetch(
-                `${API_URL}/feed`,
+            const resposta = await apiFetch(
+                `/feed`,
                 {
                     method: 'POST',
                     headers: cabecalhos(),
@@ -268,8 +269,8 @@ useEffect(() => {
 
     async function votarPost(idPost, tipo) {
         try {
-            const resposta = await fetch(
-                `${API_URL}/feed/voto`,
+            const resposta = await apiFetch(
+                `/feed/voto`,
                 {
                     method: 'POST',
                     headers: cabecalhos(),

@@ -9,6 +9,7 @@ const nala = "/avatares-simio/nala.png";
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from "react-dom";
 import { useParams } from 'react-router-dom'
+import { apiFetch } from "../utils/api";
 import './Perfil.css'
 
 const fotosPerfil = {
@@ -163,8 +164,8 @@ function Perfil({ draft, setDraft }) {
           return
         }
 
-        const resposta = await fetch(
-          'http://localhost:3000/perfil',
+        const resposta = await apiFetch(
+          '/perfil',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -244,8 +245,8 @@ function Perfil({ draft, setDraft }) {
     async function enviar(rota, dados) {
         console.log(`[Perfil] Enviando para /${rota}`, dados.id);
 
-        const resposta = await fetch(
-            `http://localhost:3000/${rota}`,
+        const resposta = await apiFetch(
+            `/${rota}`,
             {
                 method: "POST",
                 headers: {

@@ -1,7 +1,7 @@
 import Moki from "../../assets/MOKI.png";
 import { useEffect, useMemo, useState } from "react";
 import "./RedacaoEditor.css";
-
+import { apiFetch } from "../utils/api";
 // teste 
 const ID_USUARIO_ATUAL = 22;
 
@@ -32,8 +32,8 @@ function RedacaoEditor({ tema, aoVoltar }) {
             setCarregandoRascunho(true);
             setErro("");
 
-            const url = `http://localhost:3000/redacoes/rascunho?id_usuario=${ID_USUARIO_ATUAL}&id_tema=${idTema}`;
-            const resposta = await fetch(url);
+            const url = `/redacoes/rascunho?id_usuario=${ID_USUARIO_ATUAL}&id_tema=${idTema}`;
+            const resposta = await apiFetch(url);
 
             if (!resposta.ok) return;
 
@@ -64,8 +64,8 @@ function RedacaoEditor({ tema, aoVoltar }) {
             setErro("");
             setStatusSalvamento("Salvando...");
 
-            const resposta = await fetch(
-                "http://localhost:3000/redacoes/rascunho",
+            const resposta = await apiFetch(
+                "/redacoes/rascunho",
                 {
                  method: "POST",
                     headers: { "Content-Type": "application/json" },

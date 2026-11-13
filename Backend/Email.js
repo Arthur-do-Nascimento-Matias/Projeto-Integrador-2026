@@ -2,14 +2,15 @@ import nodemailer from 'nodemailer'
 import mysql from 'mysql';
 import bcrypt from 'bcrypt';
 import crypto from 'node:crypto';
+import 'dotenv/config';
 
 class Email {
 
     static pool = mysql.createPool({
-        host: '127.0.0.1',
-        user: 'root',
-        password: '',
-        database: 'integrador',
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
 
         connectionLimit: 10,
         waitForConnections: true,
@@ -241,10 +242,10 @@ class Email {
         family: 4,
 
         auth: {
-            user: 'projetointegradoratgk@gmail.com',
-            pass: 'bwtx nzyn utwh ftkm'
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS
         }
-    })
+    });
 
     static async enviarCodigo(email, codigo) {
 
@@ -252,7 +253,7 @@ class Email {
 
             const resultado = await this.transporter.sendMail({
 
-                from: 'projetointegradoratgk@gmail.com',
+                from: process.env.SMTP_USER,
 
                 to: email,
 

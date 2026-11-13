@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
+import { apiFetch } from "../utils/api";
 import {
   registrarMensagemMoki
 } from '../utils/missoes'
@@ -79,8 +80,8 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
 
     try {
 
-        const resposta = await fetch(
-            `http://localhost:3000/chatBot`, {
+        const resposta = await apiFetch(
+            `/chatBot`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'

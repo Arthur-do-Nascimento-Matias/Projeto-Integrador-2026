@@ -5,6 +5,7 @@ import { prepararSons, tocarSom } from "../utils/sons";
 import LicaoConcluida from "./LicaoConcluida";
 import { resumirLicao } from "./resultadoLicao.js";
 import { registrarResposta, registrarAtividadeConcluida } from "../utils/missoes";
+import { apiFetch } from "../utils/api.js";
 // indiceQuestao é a ordem da pergunta dentro da matéria (começa em 1).
 export async function criarAtividade(
     draft, refAtividade, refEnunciado, indiceQuestao, materiaAtual,
@@ -18,7 +19,7 @@ export async function criarAtividade(
         energia: String(draft.energia),
         id: String(draft.id)
     });
-    const resposta = await fetch(`http://localhost:3000/atividades?${parametros}`, {
+    const resposta = await apiFetch(`/atividades?${parametros}`, {
         cache: "no-store",
         signal: controle.signal
     });
@@ -218,7 +219,7 @@ function Atividades({
         const token = localStorage.getItem("token");
         try {
             if (!token || !draft?.id) throw new Error("Faça login novamente para salvar a atividade.");
-            const resposta = await fetch("http://localhost:3000/concluirAtividade", {
+            const resposta = await apiFetch("/concluirAtividade", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -248,7 +249,7 @@ function Atividades({
                 .then(() => registrarAtividadeConcluida(materiaAtual, atividadeAtual))
                 .catch(erro => console.error("Atividade salva, mas houve erro ao atualizar missões:", erro));
             // Preserva a atualização de sequência do código original.
-            fetch("http://localhost:3000/sequencia", {
+            apiFetch("/sequencia", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

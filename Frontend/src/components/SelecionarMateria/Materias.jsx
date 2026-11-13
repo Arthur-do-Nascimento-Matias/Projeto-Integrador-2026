@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./Materias.css";
 
+import { apiFetch } from "../utils/api";
 import brIcon from "../../assets/materias/brasil.svg";
 import enIcon from "../../assets/materias/ingles.svg";
 import cienciaIcon from "../../assets/materias/ciencia.svg";
@@ -132,8 +133,8 @@ function Materias({
 
         async function carregarTrilha() {
             try {
-                const resposta = await fetch(
-                    "http://localhost:3000/criarTrilha",
+                const resposta = await apiFetch(
+                    "/criarTrilha",
                     {
                         method: "POST",
                         headers: {

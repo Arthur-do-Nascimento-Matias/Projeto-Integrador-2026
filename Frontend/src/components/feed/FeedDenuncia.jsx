@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { apiFetch } from "../utils/api";
 
 const API_URL = 'http://localhost:3000'
 const motivos = [
@@ -33,7 +34,7 @@ export default function FeedDenuncia({ alvo, aoFechar, aoEnviado }) {
         setEnviando(true)
         setErro('')
         try {
-            const resposta = await fetch(`${API_URL}/feed/denuncias`, {
+            const resposta = await apiFetch(`/feed/denuncias`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

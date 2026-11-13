@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { apiFetch } from "../utils/api";
 import "./RedefinirSenha.css";
 
 function RedefinirSenha() {
@@ -40,8 +41,8 @@ function RedefinirSenha() {
         setCarregando(true);
 
         try {
-            const resposta = await fetch(
-                "http://localhost:3000/redefinirSenha",
+            const resposta = await apiFetch(
+                "/redefinirSenha",
                 {
                     method: "POST",
                     headers: {

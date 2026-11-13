@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
+import { apiFetch } from "../utils/api";
 import Moki from "../../assets/MOKI.png";
 import "./Ranking.css";
 
@@ -115,10 +115,10 @@ export default function Ranking({ usuarioId }) {
       setErro("");
 
       try {
-        const endpoint = `${API_URL}/ranking`;
+        const endpoint = `/ranking`;
         console.log("[Ranking] Buscando:", endpoint);
 
-        const resposta = await fetch(endpoint, {
+        const resposta = await apiFetch(endpoint, {
           method: "GET",
           cache: "no-store",
           signal: controller.signal,

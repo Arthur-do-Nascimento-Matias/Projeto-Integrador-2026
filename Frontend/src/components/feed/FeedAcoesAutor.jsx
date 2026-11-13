@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { apiFetch } from "../utils/api";
 
 const API_URL = 'http://localhost:3000'
 
 async function alterarConteudo(acao, tipo, item, campos = {}) {
-    const resposta = await fetch(`${API_URL}/feed/conteudo/${acao}`, {
+    const resposta = await apiFetch(`/feed/conteudo/${acao}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
