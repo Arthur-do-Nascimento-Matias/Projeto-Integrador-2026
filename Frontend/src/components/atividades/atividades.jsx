@@ -195,7 +195,6 @@ function Atividades({
                 indiceAtv.current += 1;
                 await carregarPergunta(indiceAtv.current, versao);
             } else {
-                draft.id = draft.id - 1
                 sairAtividade(refAtividade);
                 setResultado(resumirLicao(respostas.current, 3, 50));
             }
