@@ -1,4 +1,4 @@
-import ChatBot from "../components/chatBot/ChatBot"
+import ChatBot from "../components/chatBot/chatBot"
 import { useRef, useState } from 'react'
 
 function Painel() {
