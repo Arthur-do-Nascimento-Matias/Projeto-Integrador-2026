@@ -1,4 +1,4 @@
-import Feed from '../components/feed/Feed'
+import Feed from '../components/feed/feed'
 
 function PainelFeed() {
     return <Feed />
