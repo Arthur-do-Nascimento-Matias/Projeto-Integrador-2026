@@ -20,7 +20,7 @@ import PainelBiblioteca from "./pages/PainelBiblioteca";
 import PainelPerfil from "./pages/PainelPerfil";
 import Configuracoes from "./components/Configuracoes/Configuracoes";
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
-import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
+import MenuEsquerda from "./components/menuEsquerda/menuEsquerda";
 import Ranking from "./components/ranking/ranking";
 import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
