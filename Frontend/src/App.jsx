@@ -26,7 +26,7 @@ import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
-import RedefinirSenha from './components/recuperarSenha/redefinirSenha';
+import RedefinirSenha from './components/recuperarSenha/RedefinirSenha';
 
 export function alternarTema(setTema) {
     setTema(anterior =>
