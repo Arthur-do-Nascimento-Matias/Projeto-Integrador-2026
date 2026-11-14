@@ -1,5 +1,4 @@
-import MenuEsquerda from "../components/MenuEsquerda/MenuEsquerda";
-import ChatBot from "../components/ChatBot/ChatBot"
+import ChatBot from "../components/chatBot/ChatBot"
 import { useRef, useState } from 'react'
 
 function Painel() {
