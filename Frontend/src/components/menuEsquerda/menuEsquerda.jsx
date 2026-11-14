@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { useLocation, useNavigate } from 'react-router-dom'
 import { flushSync, createPortal } from 'react-dom'
 
-import './MenuEsquerda.css'
+import './menuEsquerda.css'
 
 import Moki from '../../assets/MOKI.png'
 
