@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { apiFetch } from "../utils/api";
 import Moki from "../../assets/MOKI.png";
-import "./Ranking.css";
+import "./ranking.css";
 
 const moki = "/avatares-simio/moki.png";
 const zoro = "/avatares-simio/zoro.png";
