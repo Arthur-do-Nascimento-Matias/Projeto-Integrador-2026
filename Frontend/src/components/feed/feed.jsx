@@ -8,7 +8,7 @@ import FeedAcoesAutor from './FeedAcoesAutor'
 import FeedLateral from './FeedLateral'
 import FeedModeracao from './FeedModeracao'
 
-import './Feed.css'
+import './feed.css'
 
 const API_URL = 'http://localhost:3000'
 
