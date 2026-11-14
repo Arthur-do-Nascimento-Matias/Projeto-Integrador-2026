@@ -1,5 +1,5 @@
-import MenuDireita from "../components/MenuDireita/MenuDireita";
-import Atividades from "../components/Atividades/Atividades";
+import MenuDireita from "../components/MenuDireita/menuDireita";
+import Atividades from "../components/atividades/atividades";
 import Materias from "../components/SelecionarMateria/Materias";
 import { useRef, useState } from 'react'
 
