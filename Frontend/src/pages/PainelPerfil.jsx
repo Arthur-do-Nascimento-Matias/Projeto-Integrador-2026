@@ -1,4 +1,4 @@
-import Perfil from "../components/Perfil/Perfil"
+import Perfil from "../components/perfil/perfil"
 
 function PainelPerfil({ draft, setDraft }) {
     return(
