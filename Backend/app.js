@@ -48,7 +48,7 @@ async function responderTrilha(dados, res) {
 const callback = async (req, res) => {
     res.setHeader(
         'Access-Control-Allow-Origin',
-        'http://localhost:5173'
+        '*'
     );
 
     res.setHeader(
