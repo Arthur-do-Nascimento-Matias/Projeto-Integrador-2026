@@ -1212,7 +1212,11 @@ else if (req.method == 'POST') {
         }
     }}
 
-const server = http.createServer(callback)
-server.listen(3000)
-console.log('Server iniciado')
-console.log('Porta 3000')
+const server = http.createServer(callback);
+
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, '0.0.0.0', () => {
+    console.log('Server iniciado');
+    console.log(`Porta ${PORT}`);
+});
