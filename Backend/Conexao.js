@@ -1,16 +1,23 @@
 
 import { rejects } from 'assert';
 import { error } from 'console';
-import mysql from 'mysql';
+import mysql from 'mysql2';
 import { resolve } from 'nodemailer/lib/shared/url.js';
 class Conexao {
     static connect() {
         const connection = mysql.createConnection({
-            host: '127.0.0.1',
-            user: 'root',
-            password: '',
-            database: 'integrador'
-        });
+                host: process.env.DB_HOST || '127.0.0.1',
+                port: Number(process.env.DB_PORT || 3306),
+                user: process.env.DB_USER || 'root',
+                password: process.env.DB_PASSWORD || '',
+                database: process.env.DB_NAME || 'integrador',
+
+                ...(process.env.DB_HOST && {
+                    ssl: {
+                        minVersion: 'TLSv1.2'
+                    }
+                })
+            });
         connection.connect();
         return connection;
     }

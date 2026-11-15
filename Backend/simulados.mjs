@@ -2,20 +2,26 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import mysql from "mysql";
+import mysql from "mysql2";
 
 const raiz = path.dirname(fileURLToPath(import.meta.url));
 
 const materia = "historia";
 const idMateria = 3;
 
-const conexao = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "",
-  database: "bancointegrador_novo",
-  connectTimeout: 10000
-});
+      const connection = mysql.createConnection({
+            host: process.env.DB_HOST || '127.0.0.1',
+            port: Number(process.env.DB_PORT || 3306),
+            user: process.env.DB_USER || 'root',
+            password: process.env.DB_PASSWORD || '',
+            database: process.env.DB_NAME || 'integrador',
+
+            ...(process.env.DB_HOST && {
+                ssl: {
+                    minVersion: 'TLSv1.2'
+                }
+            })
+        });
 
 function consultar(sql, valores = []) {
   return new Promise((resolve, reject) => {

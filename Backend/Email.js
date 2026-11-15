@@ -1,23 +1,38 @@
-import nodemailer from 'nodemailer'
-import mysql from 'mysql';
+
+import nodemailer from 'nodemailer';
+import mysql from 'mysql2';
 import bcrypt from 'bcrypt';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import 'dotenv/config';
 
 class Email {
-
+    // Conexão com o banco de dados
     static pool = mysql.createPool({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
+        host: process.env.DB_HOST || '127.0.0.1',
+        port: Number(process.env.DB_PORT || 3306),
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'integrador',
 
         connectionLimit: 10,
         waitForConnections: true,
         queueLimit: 0,
-        connectTimeout: 10000
+        connectTimeout: 10000,
+
+        ...(process.env.DB_HOST && {
+            ssl: {
+                ca: fs.readFileSync(
+                    process.env.DB_SSL_CA || '/etc/secrets/ca.pem',
+                    'utf8'
+                ),
+                minVersion: 'TLSv1.2',
+                rejectUnauthorized: true
+            }
+        })
     });
 
+    // Obter conexão do pool
     static connect() {
         return new Promise((resolve, reject) => {
             Email.pool.getConnection((erro, connection) => {
@@ -31,6 +46,7 @@ class Email {
         });
     }
 
+    // Executar consultas SQL
     static consultar(connection, sql, parametros = []) {
         return new Promise((resolve, reject) => {
             connection.query(sql, parametros, (erro, resultados) => {
@@ -43,6 +59,7 @@ class Email {
         });
     }
 
+    // Redefinir senha
     static async redefinirSenha(token, novaSenha) {
         if (
             typeof token !== 'string' ||
@@ -59,6 +76,7 @@ class Email {
         }
 
         const connection = await Email.connect();
+        let transacaoIniciada = false;
 
         try {
             const tokenHash = crypto
@@ -66,10 +84,11 @@ class Email {
                 .update(token)
                 .digest('hex');
 
-            // Iniciar transação para impedir reutilização do token
+            // Iniciar transação
             await new Promise((resolve, reject) => {
                 connection.beginTransaction(erro => {
                     if (erro) return reject(erro);
+                    transacaoIniciada = true;
                     resolve();
                 });
             });
@@ -94,23 +113,24 @@ class Email {
 
             const email = registros[0].email;
 
-            // Criptografar a nova senha
+            // Criptografar nova senha
             const senhaHash = await bcrypt.hash(novaSenha, 12);
 
-            // Atualizar usuário
+            // Atualizar senha do usuário
             await Email.consultar(
                 connection,
                 'UPDATE usuarios SET senha = ? WHERE email = ?',
                 [senhaHash, email]
             );
 
-            // Invalidar os tokens do usuário
+            // Invalidar tokens anteriores
             await Email.consultar(
                 connection,
                 'DELETE FROM verificacaotrocarsenha WHERE email = ?',
                 [email]
             );
 
+            // Confirmar transação
             await new Promise((resolve, reject) => {
                 connection.commit(erro => {
                     if (erro) return reject(erro);
@@ -118,15 +138,19 @@ class Email {
                 });
             });
 
+            transacaoIniciada = false;
+
             return {
                 sucesso: true,
                 mensagem: 'Senha redefinida com sucesso!'
             };
 
         } catch (erro) {
-            await new Promise(resolve => {
-                connection.rollback(() => resolve());
-            });
+            if (transacaoIniciada) {
+                await new Promise(resolve => {
+                    connection.rollback(() => resolve());
+                });
+            }
 
             throw erro;
 
@@ -135,42 +159,44 @@ class Email {
         }
     }
 
+    // Recuperação de senha por e-mail
     static async recover(dados) {
         const connection = await Email.connect();
 
         try {
             const email = dados.email.trim().toLowerCase();
 
-            // 1. Verificar se o usuário existe
+            // Verificar se o usuário existe
             const usuarios = await Email.consultar(
                 connection,
                 'SELECT id_usuario FROM usuarios WHERE email = ? LIMIT 1',
                 [email]
             );
 
-            const mensagem = 'Se o e-mail estiver cadastrado, você receberá um link de recuperação.';
+            const mensagem =
+                'Se o e-mail estiver cadastrado, você receberá um link de recuperação.';
 
             if (usuarios.length === 0) {
                 return { mensagem };
             }
 
-            // 2. Gerar token aleatório
+            // Gerar token aleatório
             const token = crypto.randomBytes(32).toString('hex');
 
-            // 3. Gerar o hash que será armazenado no banco
+            // Gerar hash do token
             const tokenHash = crypto
                 .createHash('sha256')
                 .update(token)
                 .digest('hex');
 
-            // 4. Apagar solicitações anteriores
+            // Apagar solicitações anteriores
             await Email.consultar(
                 connection,
                 'DELETE FROM verificacaotrocarsenha WHERE email = ?',
                 [email]
             );
 
-            // 5. Salvar token e data de criação
+            // Salvar token e data
             const sqlVerificacao = `
                 INSERT INTO verificacaotrocarsenha
                     (email, token, data)
@@ -184,7 +210,7 @@ class Email {
                 [email, tokenHash]
             );
 
-            // 6. Criar link de recuperação
+            // Criar link de recuperação
             const link = new URL(
                 '/redefinir-senha',
                 process.env.FRONTEND_URL || 'http://localhost:5173'
@@ -192,7 +218,7 @@ class Email {
 
             link.searchParams.set('token', token);
 
-            // 7. Enviar e-mail
+            // Enviar e-mail
             await Email.transporter.sendMail({
                 from: process.env.SMTP_USER,
                 to: email,
@@ -234,11 +260,11 @@ class Email {
         }
     }
 
+    // Configuração do Nodemailer
     static transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
         secure: false,
-
         family: 4,
 
         auth: {
@@ -247,16 +273,12 @@ class Email {
         }
     });
 
+    // Enviar código de verificação
     static async enviarCodigo(email, codigo) {
-
         try {
-
             const resultado = await this.transporter.sendMail({
-
                 from: process.env.SMTP_USER,
-
                 to: email,
-
                 subject: 'Código de verificação - SimioLAB',
 
                 html: `
@@ -268,18 +290,17 @@ class Email {
 
                     <p>Esse código expira em 10 minutos.</p>
                 `
-            })
+            });
 
-            return resultado
+            return resultado;
 
         } catch (erro) {
+            console.error('ERRO AO ENVIAR EMAIL:');
+            console.error(erro);
 
-            console.error('ERRO AO ENVIAR EMAIL:')
-            console.error(erro)
-
-            throw erro
+            throw erro;
         }
     }
 }
 
-export default Email
+export default Email;

@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql from "mysql2";
 
 function formatarData(data) {
     const ano = data.getFullYear();
@@ -13,13 +13,19 @@ class Sequencia {
     static streak(idUser) {
         return new Promise((resolve, reject) => {
 
-            const connection = mysql.createConnection({
-                host: "127.0.0.1",
-                user: "root",
-                password: "",
-                database: "integrador",
-                dateStrings: true
-            });
+      const connection = mysql.createConnection({
+            host: process.env.DB_HOST || '127.0.0.1',
+            port: Number(process.env.DB_PORT || 3306),
+            user: process.env.DB_USER || 'root',
+            password: process.env.DB_PASSWORD || '',
+            database: process.env.DB_NAME || 'integrador',
+
+            ...(process.env.DB_HOST && {
+                ssl: {
+                    minVersion: 'TLSv1.2'
+                }
+            })
+        });
 
             const hoje = formatarData(new Date());
 
