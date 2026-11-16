@@ -17,7 +17,6 @@ class Cadastro {
             user: process.env.DB_USER || 'root',
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'integrador',
-
         });
 
             connection.connect()
