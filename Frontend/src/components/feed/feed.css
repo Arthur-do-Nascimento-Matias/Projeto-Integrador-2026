@@ -1768,3 +1768,473 @@ body:has(.feed-page .feed-confirm-dialog[open]) .simio-sidebar-layer { display: 
 html:has(.feed-page .feed-report-dialog[open]),
 body:has(.feed-page .feed-report-dialog[open]) { overflow: hidden !important; overscroll-behavior: none; }
 body:has(.feed-page .feed-report-dialog[open]) .simio-sidebar-layer { display: none !important; }
+
+/* =========================================================
+   RESPONSIVIDADE FINAL — IPAD A16
+   Mantém o desktop intacto e reserva espaço para o menu.
+   ========================================================= */
+
+@media (min-width: 701px) and (max-width: 900px) {
+    .feed-page {
+        min-height: 100dvh;
+        padding: 38px 26px 76px 140px;
+    }
+
+    .feed-page .feed-layout {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        max-width: 720px;
+        column-gap: 0;
+    }
+
+    .feed-page .feed-layout > .feed-header {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .feed-page .feed-layout > .feed-compose-row {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .feed-page .feed-layout > .feed-content {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    .feed-page .feed-sidebar {
+        display: none;
+    }
+
+    .feed-page .feed-header {
+        margin-bottom: 24px;
+    }
+
+    .feed-page .feed-header h1 {
+        font-size: clamp(32px, 5vw, 40px);
+    }
+
+    .feed-page .feed-compose-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        margin-bottom: 26px;
+        gap: 14px;
+    }
+
+    .feed-page .feed-compose-row .feed-header-actions {
+        grid-column: 1;
+        grid-row: 1;
+        width: auto;
+        margin: 0;
+    }
+
+    .feed-page .feed-compose-row .feed-order {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        margin: 0;
+    }
+
+    .feed-page .feed-mobile-community {
+        display: grid;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+    }
+
+    .feed-page .feed-post {
+        grid-template-columns: 64px minmax(0, 1fr);
+    }
+
+    .feed-page .feed-post-body {
+        padding: 21px;
+    }
+
+    .feed-page .feed-votes {
+        padding: 20px 8px;
+    }
+
+    .feed-page .feed-detail-backdrop,
+    .feed-page .feed-modal-backdrop,
+    .feed-page .feed-moderation-backdrop {
+        padding: 24px;
+    }
+
+    .feed-page .feed-detail {
+        width: min(100%, 760px);
+    }
+
+    .feed-page .feed-editor-dialog,
+    .feed-page .feed-report-dialog {
+        width: min(620px, calc(100% - 48px));
+    }
+}
+
+/* =========================================================
+   RESPONSIVIDADE FINAL — SAMSUNG S24 E IPHONE 15
+   ========================================================= */
+
+@media (max-width: 700px) {
+    .feed-page {
+        min-height: 100dvh;
+        padding:
+            26px
+            12px
+            calc(105px + env(safe-area-inset-bottom));
+    }
+
+    .feed-page .feed-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        column-gap: 0;
+    }
+
+    .feed-page .feed-layout > .feed-header {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .feed-page .feed-layout > .feed-compose-row {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .feed-page .feed-layout > .feed-content {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    .feed-page .feed-sidebar {
+        display: none;
+    }
+
+    .feed-page .feed-header {
+        display: block;
+        margin-bottom: 21px;
+    }
+
+    .feed-page .feed-header > div:first-child {
+        width: 100%;
+    }
+
+    .feed-page .feed-kicker {
+        margin-bottom: 7px;
+        font-size: 10px;
+        letter-spacing: 1.2px;
+    }
+
+    .feed-page .feed-header h1 {
+        font-size: clamp(29px, 8.5vw, 34px);
+        line-height: 1.12;
+        letter-spacing: -1px;
+    }
+
+    .feed-page .feed-header p {
+        margin-top: 10px;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .feed-page .feed-compose-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        width: 100%;
+        margin-bottom: 23px;
+        gap: 12px;
+    }
+
+    .feed-page .feed-compose-row .feed-header-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+        margin: 0;
+        gap: 9px;
+    }
+
+    .feed-page .feed-new-post,
+    .feed-page .feed-admin-button {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 10px 12px;
+    }
+
+    .feed-page .feed-compose-row .feed-order {
+        display: flex;
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: stretch;
+        width: 100%;
+        margin: 0;
+    }
+
+    .feed-page .feed-order button {
+        flex: 1;
+    }
+
+    .feed-page .feed-mobile-community {
+        display: grid;
+        grid-column: 1;
+        grid-row: 3;
+        width: 100%;
+    }
+
+    .feed-page .feed-mobile-community select {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .feed-page .feed-posts {
+        gap: 23px;
+    }
+
+    .feed-page .feed-post,
+    .feed-page .feed-detail-post {
+        grid-template-columns: 46px minmax(0, 1fr);
+        border-radius: 20px;
+        box-shadow: 0 7px 0 var(--feed-shadow);
+    }
+
+    .feed-page .feed-votes {
+        padding: 15px 3px;
+        gap: 7px;
+    }
+
+    .feed-page .feed-votes button,
+    .feed-page .feed-votes strong {
+        width: 38px;
+    }
+
+    .feed-page .feed-votes button {
+        height: 42px;
+    }
+
+    .feed-page .feed-votes button svg {
+        width: 21px;
+        height: 21px;
+    }
+
+    .feed-page .feed-post-body,
+    .feed-page .feed-detail-body {
+        padding: 16px 13px;
+    }
+
+    .feed-page .feed-post-meta {
+        gap: 13px 9px;
+    }
+
+    .feed-page .feed-author {
+        max-width: 100%;
+        gap: 9px;
+    }
+
+    .feed-page .feed-avatar {
+        width: 44px;
+        height: 44px;
+        border-width: 2px;
+    }
+
+    .feed-page .feed-post-meta strong {
+        font-size: 13px;
+    }
+
+    .feed-page .feed-post-community {
+        max-width: 100%;
+        min-height: 32px;
+        padding: 7px 9px;
+        font-size: 10px;
+    }
+
+    .feed-page .feed-post h2,
+    .feed-page .feed-post-content h2 {
+        font-size: 19px;
+        line-height: 1.35;
+    }
+
+    .feed-page .feed-post-text {
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    .feed-page .feed-post-actions {
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .feed-page .feed-post-actions button {
+        min-height: 40px;
+        padding: 9px 10px;
+        gap: 6px;
+        font-size: 11px;
+    }
+
+    .feed-page .feed-post-actions button svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .feed-page .feed-post .feed-post-meta > time {
+        right: 13px;
+        bottom: 14px;
+        font-size: 10px;
+    }
+
+    .feed-page .feed-post:has(.feed-post-meta > time) .feed-post-actions {
+        padding-right: 0;
+        padding-bottom: 24px;
+    }
+
+    .feed-page .feed-owner-actions {
+        gap: 7px;
+    }
+
+    .feed-page .feed-owner-actions > button,
+    .feed-page .feed-votes .feed-owner-actions > button {
+        width: 38px;
+        height: 40px;
+    }
+
+    .feed-page .feed-modal-backdrop,
+    .feed-page .feed-detail-backdrop,
+    .feed-page .feed-moderation-backdrop {
+        padding:
+            10px
+            8px
+            calc(20px + env(safe-area-inset-bottom));
+    }
+
+    .feed-page .feed-modal-backdrop > .feed-modal,
+    .feed-page .feed-modal {
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100dvh - 30px);
+        padding: 19px 16px;
+        border-radius: 20px;
+    }
+
+    .feed-page .feed-modal .feed-modal-header h2 {
+        font-size: 20px;
+    }
+
+    .feed-page .feed-modal input,
+    .feed-page .feed-modal select,
+    .feed-page .feed-modal textarea,
+    .feed-page .feed-comment-form textarea {
+        font-size: 16px;
+    }
+
+    .feed-page .feed-modal-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .feed-page .feed-editor-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
+
+    .feed-page .feed-editor-buttons > button {
+        width: 100%;
+    }
+
+    .feed-page .feed-detail {
+        width: 100%;
+        margin: 0;
+        border-radius: 19px;
+    }
+
+    .feed-page .feed-detail-header {
+        padding: 16px;
+    }
+
+    .feed-page .feed-detail-body h1 {
+        margin-top: 18px;
+        font-size: 22px;
+    }
+
+    .feed-page .feed-comments,
+    .feed-page .feed-reports-list {
+        padding: 17px 13px;
+    }
+
+    .feed-page .feed-comment {
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 9px;
+    }
+
+    .feed-page .feed-comment .feed-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .feed-page .feed-comment-content {
+        padding: 11px;
+    }
+
+    .feed-page .feed-comment header time {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .feed-page .feed-editor-dialog,
+    .feed-page .feed-report-dialog,
+    .feed-page .feed-confirm-dialog {
+        width: calc(100% - 20px);
+        max-height: calc(100dvh - 24px);
+    }
+
+    .feed-page .feed-confirm-dialog {
+        padding: 18px 20px 24px;
+    }
+
+    .feed-page .feed-confirm-dialog > h2 {
+        font-size: 21px;
+    }
+
+    .feed-page .feed-confirm-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Ajustes extras para a largura do Samsung S24. */
+@media (max-width: 390px) {
+    .feed-page {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .feed-page .feed-header h1 {
+        font-size: 29px;
+    }
+
+    .feed-page .feed-post,
+    .feed-page .feed-detail-post {
+        grid-template-columns: 44px minmax(0, 1fr);
+    }
+
+    .feed-page .feed-votes button,
+    .feed-page .feed-votes strong,
+    .feed-page .feed-owner-actions > button,
+    .feed-page .feed-votes .feed-owner-actions > button {
+        width: 36px;
+    }
+
+    .feed-page .feed-post-body,
+    .feed-page .feed-detail-body {
+        padding-right: 11px;
+        padding-left: 11px;
+    }
+
+    .feed-page .feed-confirm-buttons,
+    .feed-page .feed-editor-buttons {
+        gap: 8px;
+    }
+}

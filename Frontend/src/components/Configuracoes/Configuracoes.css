@@ -1,6 +1,7 @@
 .configuracoes {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
 
   box-sizing: border-box;
 
@@ -8,15 +9,12 @@
   flex-direction: column;
   align-items: center;
 
-  padding:
-    clamp(55px, 8vh, 95px) 40px 60px 180px;
+  padding: clamp(55px, 8vh, 95px) 40px 60px 180px;
 
   font-family: "Rubik", sans-serif;
 }
 
-
-
-.configuracoes>h1 {
+.configuracoes > h1 {
   width: min(100%, 560px);
 
   margin: 0 0 28px;
@@ -33,7 +31,6 @@
   text-align: left;
 }
 
-
 /* ========================================
    LISTA
 ======================================== */
@@ -44,100 +41,6 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-}
-
-.simio-tema {
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-  margin-left: auto;
-
-  width: 80px;
-  height: 44px;
-  padding: 0;
-
-  border: 0;
-  border-radius: 999px;
-
-  background: #96b77d;
-  box-shadow: 0 4px 0 #62794b;
-
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-
-  transition:
-    background-color 300ms ease,
-    box-shadow 300ms ease;
-}
-
-.simio-tema-bolinha {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  z-index: 2;
-
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-
-  background: #fff8ed;
-  box-shadow: 0 2px 3px #00000026;
-
-  transition: transform 350ms cubic-bezier(.22, 1, .36, 1);
-}
-
-.simio-tema-sol,
-.simio-tema-lua {
-  position: absolute;
-  top: 10px;
-
-  width: 24px;
-  height: 24px;
-  pointer-events: none;
-}
-
-.simio-tema-sol {
-  right: 10px;
-  color: #ffb238;
-  animation: simioSolGirar 20s linear infinite;
-}
-
-.simio-tema-lua {
-  left: 10px;
-  color: #f1dfc0;
-  transform: rotate(-15deg);
-}
-
-.simio-tema[aria-checked="true"] {
-  background: #203d2c;
-  box-shadow: 0 4px 0 #122619;
-}
-
-.simio-tema[aria-checked="true"] .simio-tema-bolinha {
-  transform: translateX(36px);
-}
-
-.simio-tema:focus-visible {
-  outline: 3px solid #ffb238;
-  outline-offset: 6px;
-}
-
-@keyframes simioSolGirar {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .simio-tema,
-  .simio-tema-bolinha {
-    transition: none;
-  }
-
-  .simio-tema-sol {
-    animation: none;
-  }
 }
 
 /* ========================================
@@ -161,19 +64,17 @@
 
   background: rgba(255, 255, 255, 0.94);
 
-  box-shadow:
-    0 12px 32px rgba(57, 39, 29, 0.1);
-
   box-shadow: 0 6px 0 #b8bdb9;
 
   transition:
     transform 180ms ease,
-    scale 220ms ease
+    box-shadow 180ms ease;
 }
 
-.config-card:hover {
-  transform: translateY(-2px);
-  scale: 1.05;
+@media (hover: hover) and (pointer: fine) {
+  .config-card:hover {
+    transform: translateY(-2px) scale(1.05);
+  }
 }
 
 .config-texto {
@@ -234,8 +135,107 @@
   transform: none;
 }
 
+/* ========================================
+   BOTÃO DE TEMA
+======================================== */
+
+.simio-tema {
+  position: relative;
+
+  display: inline-block;
+  flex-shrink: 0;
+
+  width: 80px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #96b77d;
+  box-shadow: 0 4px 0 #62794b;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.simio-tema-bolinha {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+
+  background: #fff8ed;
+  box-shadow: 0 2px 3px #00000026;
+
+  transition: transform 350ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.simio-tema-sol,
+.simio-tema-lua {
+  position: absolute;
+  top: 10px;
+
+  width: 24px;
+  height: 24px;
+
+  pointer-events: none;
+}
+
+.simio-tema-sol {
+  right: 10px;
+
+  color: #ffb238;
+
+  animation: simioSolGirar 20s linear infinite;
+}
+
+.simio-tema-lua {
+  left: 10px;
+
+  color: #f1dfc0;
+
+  transform: rotate(-15deg);
+}
+
+.simio-tema[aria-checked="true"] {
+  background: #203d2c;
+  box-shadow: 0 4px 0 #122619;
+}
+
+.simio-tema[aria-checked="true"] .simio-tema-bolinha {
+  transform: translateX(36px);
+}
+
+.simio-tema:focus-visible {
+  outline: 3px solid #ffb238;
+  outline-offset: 6px;
+}
+
+@keyframes simioSolGirar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   SWITCH
+======================================== */
+
 .switch {
   position: relative;
+
+  flex-shrink: 0;
 
   width: 55px;
   min-width: 55px;
@@ -251,13 +251,12 @@
   cursor: pointer;
 
   transition:
-    background 200ms ease,
+    background-color 200ms ease,
     box-shadow 200ms ease;
 }
 
 .switch:hover {
-  box-shadow:
-    0 0 0 4px rgba(89, 115, 52, 0.1);
+  box-shadow: 0 0 0 4px rgba(89, 115, 52, 0.1);
 }
 
 .switch:focus-visible {
@@ -267,24 +266,20 @@
 
 .switch-bolinha {
   position: absolute;
+  top: 4px;
+  left: 4px;
 
   width: 22px;
   height: 22px;
-
-  top: 4px;
-  left: 4px;
 
   border-radius: 50%;
 
   background: #ffffff;
 
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
 
-  transition:
-    transform 220ms ease;
+  transition: transform 220ms ease;
 }
-
 
 .switch.ativo {
   background: #597334;
@@ -294,8 +289,13 @@
   transform: translateX(25px);
 }
 
+/* ========================================
+   SELETOR
+======================================== */
 
 .config-seletor {
+  flex-shrink: 0;
+
   min-width: 118px;
 
   box-sizing: border-box;
@@ -321,28 +321,31 @@
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
-    background 180ms ease;
+    background-color 180ms ease;
 }
 
 .config-seletor:hover {
   border-color: #9a826f;
-  background: #ffffff;
+  background-color: #ffffff;
 }
 
 .config-seletor:focus {
   border-color: #597334;
-
-  box-shadow:
-    0 0 0 3px rgba(89, 115, 52, 0.15);
+  box-shadow: 0 0 0 3px rgba(89, 115, 52, 0.15);
 }
 
+/* ========================================
+   CONTA E BOTÕES
+======================================== */
+
 .config-card-conta {
-  border-color:
-    rgba(184, 67, 67, 0.14);
+  border-color: rgba(184, 67, 67, 0.14);
 }
 
 .botao-sair,
 .botao-trocar-senha {
+  flex-shrink: 0;
+
   min-width: 90px;
 
   box-sizing: border-box;
@@ -365,7 +368,7 @@
   cursor: pointer;
 
   transition:
-    background 180ms ease,
+    background-color 180ms ease,
     color 180ms ease,
     transform 180ms ease,
     box-shadow 180ms ease;
@@ -378,8 +381,7 @@
 
   transform: translateY(-1px);
 
-  box-shadow:
-    0 7px 16px rgba(201, 87, 79, 0.22);
+  box-shadow: 0 7px 16px rgba(201, 87, 79, 0.22);
 }
 
 .botao-sair:active,
@@ -393,114 +395,9 @@
   outline-offset: 3px;
 }
 
-
 /* ========================================
-   RESPONSIVIDADE
+   MODAL
 ======================================== */
-
-@media (max-width: 900px) {
-  .configuracoes {
-    padding:
-      50px 28px 50px 145px;
-  }
-}
-
-
-@media (max-width: 700px) {
-  .configuracoes {
-    align-items: stretch;
-
-    padding:
-      34px 20px 110px;
-  }
-
-  .configuracoes>h1 {
-    width: 100%;
-
-    margin-bottom: 22px;
-
-    font-size: 1.75rem;
-  }
-
-  .config-lista {
-    width: 100%;
-  }
-
-  .config-card {
-    min-height: 88px;
-
-    gap: 18px;
-
-    padding: 19px;
-  }
-
-
-  /* TEXTO */
-
-  .config-texto h2 {
-    margin: 0 0 5px;
-
-    font-size: 18px;
-
-    color: #4b3529;
-
-    letter-spacing: normal;
-    word-spacing: normal;
-
-    .configuracoes .config-texto h2 {
-      font-size: 1.0625rem;
-    }
-
-    .configuracoes .config-texto p {
-      font-size: 0.8125rem;
-    }
-
-    .config-seletor {
-      min-width: 105px;
-    }
-  }
-
-
-  @media (max-width: 430px) {
-    .config-card {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-
-    .switch,
-    .config-seletor,
-    .botao-sair {
-      align-self: flex-end;
-    }
-
-    .switch.ativo .switch-bolinha {
-      transform: translateX(25px);
-    }
-  }
-
-
-
-
-  /* ========================================
-   TAMANHO GLOBAL DOS TEXTOS
-======================================== */
-
-  html {
-    font-size: 16px;
-  }
-
-  html[data-tamanho-texto="pequeno"] {
-    font-size: 14px;
-  }
-
-  html[data-tamanho-texto="normal"] {
-    font-size: 16px;
-  }
-
-  html[data-tamanho-texto="grande"] {
-    font-size: 18px;
-  }
-}
 
 .modal-overlay {
   position: fixed;
@@ -508,30 +405,347 @@
   z-index: 99998;
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  padding: 24px;
 
   background: rgba(0, 0, 0, 0.25);
+
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
 
 .modalTrocar {
-  height: 50vh;
-  width: 20vw;
-  background-color: white;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
+  width: min(420px, 100%);
+  min-height: 360px;
+
+  box-sizing: border-box;
+
+  padding: 34px;
+
+  border-radius: 24px;
+
+  background-color: #ffffff;
+
+  box-shadow: 0 24px 60px rgba(57, 39, 29, 0.22);
 }
 
 .modalTrocar form {
   display: flex;
   flex-direction: column;
+  gap: 14px;
+
+  width: 100%;
+}
+
+.modalTrocar input {
+  width: 100%;
+  min-height: 48px;
+
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #d8cec7;
+  border-radius: 12px;
+  outline: none;
+
+  background: #fdfaf7;
+  color: #4b3529;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 1rem;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.modalTrocar input:focus {
+  border-color: #597334;
+  box-shadow: 0 0 0 3px rgba(89, 115, 52, 0.15);
+}
+
+.modalTrocar button {
+  min-height: 46px;
+
+  box-sizing: border-box;
+
+  padding: 11px 18px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: #597334;
+  color: #ffffff;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.modalTrocar button:last-child {
+  border: 1px solid #d8cec7;
+
+  background: #fdfaf7;
+  color: #4b3529;
+}
+
+/* ========================================
+   IPAD A16 — 820 × 1180
+======================================== */
+
+@media (min-width: 701px) and (max-width: 900px) {
+  .configuracoes {
+    align-items: center;
+
+    padding:
+      clamp(48px, 7vh, 75px)
+      28px
+      60px
+      145px;
+  }
+
+  .configuracoes > h1 {
+    width: min(100%, 560px);
+
+    margin-bottom: 26px;
+
+    font-size: 1.9rem;
+  }
+
+  .config-lista {
+    width: min(100%, 560px);
+    gap: 17px;
+  }
+
+  .config-card {
+    min-height: 92px;
+
+    gap: 22px;
+
+    padding: 21px 24px;
+  }
+
+  .modalTrocar {
+    width: min(420px, calc(100vw - 80px));
+  }
+}
+
+/* ========================================
+   S24 E IPHONE 15
+======================================== */
+
+@media (max-width: 700px) {
+  .configuracoes {
+    align-items: stretch;
+
+    padding:
+      32px
+      16px
+      calc(110px + env(safe-area-inset-bottom));
+  }
+
+  .configuracoes > h1 {
+    width: 100%;
+    max-width: 560px;
+
+    margin: 0 auto 22px;
+
+    font-size: 1.75rem;
+  }
+
+  .config-lista {
+    width: 100%;
+    max-width: 560px;
+
+    margin: 0 auto;
+
+    gap: 15px;
+  }
+
+  .config-card {
+    min-height: 86px;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 0 #b8bdb9;
+  }
+
+  .configuracoes .config-texto h2 {
+    font-size: 1.0625rem;
+  }
+
+  .configuracoes .config-texto p {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .config-seletor {
+    min-width: 105px;
+    padding: 10px 30px 10px 12px;
+
+    font-size: 1rem;
+  }
+
+  .botao-sair,
+  .botao-trocar-senha {
+    min-width: 82px;
+
+    padding: 10px 14px;
+  }
+
+  .modal-overlay {
+    align-items: center;
+
+    padding:
+      20px
+      16px
+      calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .modalTrocar {
+    width: 100%;
+    min-height: 0;
+
+    padding: 26px 20px;
+
+    border-radius: 20px;
+  }
+}
+
+/* Ajuste para a largura do Samsung S24 */
+@media (max-width: 390px) {
+  .configuracoes {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .configuracoes > h1 {
+    font-size: 1.65rem;
+  }
+
+  .config-card {
+    gap: 12px;
+
+    padding: 17px 15px;
+  }
+
+  .configuracoes .config-texto h2 {
+    font-size: 1rem;
+  }
+
+  .configuracoes .config-texto p {
+    font-size: 0.78rem;
+  }
+
+  .simio-tema {
+    width: 72px;
+    height: 40px;
+  }
+
+  .simio-tema-bolinha {
+    width: 32px;
+    height: 32px;
+  }
+
+  .simio-tema-sol,
+  .simio-tema-lua {
+    top: 9px;
+
+    width: 22px;
+    height: 22px;
+  }
+
+  .simio-tema-sol {
+    right: 9px;
+  }
+
+  .simio-tema-lua {
+    left: 9px;
+  }
+
+  .simio-tema[aria-checked="true"] .simio-tema-bolinha {
+    transform: translateX(32px);
+  }
+
+  .botao-sair,
+  .botao-trocar-senha {
+    min-width: 74px;
+
+    padding: 9px 12px;
+
+    font-size: 0.8125rem;
+  }
+}
+
+/* Segurança para celulares muito estreitos */
+@media (max-width: 330px) {
+  .config-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .simio-tema,
+  .switch,
+  .config-seletor,
+  .botao-sair,
+  .botao-trocar-senha {
+    align-self: flex-end;
+  }
+}
+
+/* ========================================
+   TAMANHO GLOBAL DOS TEXTOS
+======================================== */
+
+html {
+  font-size: 16px;
+}
+
+html[data-tamanho-texto="pequeno"] {
+  font-size: 14px;
+}
+
+html[data-tamanho-texto="normal"] {
+  font-size: 16px;
+}
+
+html[data-tamanho-texto="grande"] {
+  font-size: 18px;
+}
+
+/* ========================================
+   MOVIMENTO REDUZIDO
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .simio-tema,
+  .simio-tema-bolinha,
+  .switch,
+  .switch-bolinha,
+  .config-card,
+  .botao-sair,
+  .botao-trocar-senha {
+    transition: none;
+  }
+
+  .simio-tema-sol {
+    animation: none;
+  }
 }

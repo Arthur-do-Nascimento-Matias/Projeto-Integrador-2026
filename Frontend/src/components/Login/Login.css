@@ -403,3 +403,283 @@
   .toggle-left, .auth-container.is-register .toggle-right { opacity: 1; visibility: visible; }
   .active-form .stagger-1, .active-form .stagger-2, .active-form .stagger-3, .active-form .stagger-4, .active-form .stagger-5, .active-form .stagger-6, .active-form .stagger-7, .active-form .stagger-8 { opacity: 1; }
 }
+/* ==========================================================================
+   RESPONSIVIDADE ESPECÍFICA: iPad A16 (820x1180) & Galaxy S24 (360x780)
+   Cole este bloco no final do seu Login.css
+   ========================================================================== */
+
+/* 1. iPad A16 - Modo Paisagem (1180x820) e Telas Intermediárias */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .auth-page {
+    min-height: 100dvh;
+    padding: 24px;
+  }
+
+  .auth-container {
+    width: min(940px, 100%);
+    height: min(620px, calc(100dvh - 48px));
+  }
+
+  .form-box {
+    padding: 36px 42px;
+  }
+}
+
+/* 2. iPad A16 - Modo Retrato (820x1180) */
+@media (min-width: 721px) and (max-width: 900px) {
+  .auth-page {
+    min-height: 100dvh;
+    padding: 20px;
+  }
+
+  .auth-container {
+    width: 100%;
+    max-width: 780px;
+    height: 600px;
+    border-radius: 28px;
+  }
+
+  /* Reduz paddings laterais para caberem os 2 lados em 820px */
+  .form-box {
+    padding: 28px 30px;
+  }
+
+  .toggle-panel {
+    padding: 32px 26px;
+  }
+
+  .form-box h1,
+  .toggle-panel h2 {
+    font-size: 32px;
+  }
+
+  .form-intro {
+    font-size: 13px;
+    margin: 8px 0 18px;
+  }
+
+  /* Empilha Nome e Usuário no cadastro para não espremer os inputs em 350px */
+  .register-grid {
+    grid-template-columns: 1fr;
+    row-gap: 2px;
+  }
+
+  .register-form .auth-field {
+    margin-bottom: 8px;
+  }
+
+  .register-form .auth-field input {
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .register-form .password-toggle {
+    top: 2px;
+  }
+
+  .brand-lockup {
+    top: 24px;
+    left: 28px;
+  }
+
+  .toggle-right .brand-lockup {
+    left: auto;
+    right: 28px;
+  }
+
+  .transition-simio {
+    width: 54px;
+    bottom: 22px;
+  }
+
+  .transition-simio.to-left {
+    left: 28px;
+  }
+
+  .transition-simio.to-right {
+    left: calc(100% - 82px);
+  }
+}
+
+/* 3. Ajustes Gerais Mobile + Samsung Galaxy S24 (360x780) */
+@media (max-width: 720px) {
+  .auth-page {
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  .form-box form {
+    width: 100%;
+  }
+
+  /* Ativa e estiliza o botão de alternância mobile que já existe no seu JSX */
+  .mobile-switch {
+    display: block;
+    margin: 14px 0 0;
+    text-align: center;
+    color: var(--brown);
+    font: 13px 'Space Mono', monospace;
+  }
+
+  .mobile-switch button {
+    border: 0;
+    padding: 0;
+    margin-left: 5px;
+    background: transparent;
+    color: var(--orange-dark);
+    font: 700 15px 'Kalam', cursive;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+/* 4. Foco Exclusivo no Viewport do Galaxy S24 (360x780) e similares */
+@media (max-width: 460px) {
+  .auth-container {
+    height: 100dvh;
+    min-height: 640px;
+  }
+
+  /* Compacta o painel verde para 23% para dar 77% de espaço ao formulário */
+  .toggle-panel {
+    height: 23%;
+    padding: 12px 16px;
+    justify-content: center;
+  }
+
+  .toggle-left {
+    top: 0;
+  }
+
+  .auth-container.is-register .toggle-left {
+    top: -23%;
+  }
+
+  .toggle-right {
+    bottom: -23%;
+  }
+
+  .auth-container.is-register .toggle-right {
+    bottom: 0;
+  }
+
+  .toggle-box::before {
+    top: -277%;
+  }
+
+  .auth-container.is-register .toggle-box::before {
+    top: 77%;
+  }
+
+  .form-box {
+    height: 77%;
+    padding: 16px 20px;
+    align-items: center;
+    overflow-y: auto;
+  }
+
+  .auth-container.is-register .form-box {
+    bottom: 23%;
+  }
+
+  /* Posiciona o macaquinho no canto no S24 para não cobrir o texto central */
+  .transition-simio {
+    width: 42px;
+    left: 16px !important;
+    margin-left: 0;
+  }
+
+  .transition-simio.to-left {
+    top: 14px;
+    bottom: auto;
+  }
+
+  .transition-simio.to-right {
+    top: calc(100% - 56px);
+    bottom: auto;
+  }
+
+  .toggle-panel h2 {
+    font-size: 21px;
+    margin: 2px 0 6px;
+  }
+
+  .toggle-panel > button {
+    min-width: 115px;
+    min-height: 34px;
+    font-size: 14px;
+  }
+
+  /* Otimização dos 5 campos de Cadastro para caberem sem cortar em 360x780 */
+  .register-form {
+    padding-top: 12px;
+  }
+
+  .register-form h1 {
+    font-size: 25px;
+    margin-bottom: 8px;
+  }
+
+  .register-form .auth-field {
+    margin-bottom: 6px;
+  }
+
+  .register-form label {
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+
+  .register-form .auth-field input {
+    height: 38px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .register-form .password-toggle {
+    top: 1px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .primary-button {
+    min-height: 44px;
+    font-size: 16px;
+    margin-top: 4px;
+  }
+
+  .forgot-button {
+    margin: -2px 0 12px auto;
+  }
+
+  /* Ajuste dos Modais (Recuperação e Código de 6 dígitos) em 360px */
+  .modal-backdrop {
+    padding: 14px;
+  }
+
+  .recover-modal {
+    padding: 24px 18px 20px;
+    border-radius: 18px;
+  }
+
+  .recover-modal h2 {
+    font-size: 24px;
+  }
+
+  .recover-modal strong {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--forest);
+    font: 700 13px 'Space Mono', monospace;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* 5. Dispositivos Touch (Remove bugs de duplo toque em hover no iPad e S24) */
+@media (hover: none) and (pointer: coarse) {
+  .primary-button:hover,
+  .toggle-panel > button:hover,
+  .password-toggle:hover,
+  .forgot-button:hover {
+    transform: none;
+  }
+}
