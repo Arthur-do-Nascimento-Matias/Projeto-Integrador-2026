@@ -50,6 +50,7 @@ function Materias({
     setMateriaAtual,
     onChange
 }) {
+    const requisicaoAtual = useRef(0);
     const [aberto, setAberto] = useState(false);
     const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
     const [materiaHover, setMateriaHover] = useState(null);
@@ -173,9 +174,16 @@ function Materias({
                     carregando: false
                 });
             } catch (erro) {
-                if (erro.name !== "AbortError") {
+                if (
+                    erro.name !== "AbortError" &&
+                    numeroRequisicao === requisicaoAtual.current
+                ) {
                     console.error("Erro ao carregar trilha:", erro);
-                    setTrilha(anterior => ({ ...anterior, carregando: false }));
+
+                    setTrilha(anterior => ({
+                        ...anterior,
+                        carregando: false
+                    }));
                 }
             }
         }

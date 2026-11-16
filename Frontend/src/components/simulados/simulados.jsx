@@ -3,7 +3,19 @@ import "./simulados.css";
 import RedacaoEditor from "./RedacaoEditor";
 import { apiFetch } from "../utils/api";
 
-import Miro from "../../assets/Miro/miro-biblioteca.png"
+import Moki from "../../assets/simio-provas-moki.png";
+import Miro from "../../assets/simio-provas-miro.png";
+import Bimo from "../../assets/simio-provas-bimo.png";
+import Ibra from "../../assets/simio-provas-ibra.png";
+import Nala from "../../assets/simio-provas-nala.png";
+import Kimo from "../../assets/simio-provas-kimo.png";
+import Zoro from "../../assets/simio-provas-zoro.png";
+import portuguesIcone from "../../assets/materias/brasil.svg";
+import matematicaIcone from "../../assets/materias/matematica.svg";
+import historiaIcone from "../../assets/materias/historia.svg";
+import geografiaIcone from "../../assets/materias/geografia.svg";
+import cienciasIcone from "../../assets/materias/ciencia.svg";
+import inglesIcone from "../../assets/materias/ingles.svg";
     
 const FILTROS = [
     { valor: "portugues", nome: "Português" },

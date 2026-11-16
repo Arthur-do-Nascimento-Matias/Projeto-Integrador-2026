@@ -1,9 +1,12 @@
-import ollama from 'ollama'
+
+import Groq from "groq-sdk";
+
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY
+});
 
 class ChatBot {
-
     static async resposta(mensagem) {
-
         const personalidade = `
 Você é o Simio, o tutor virtual da plataforma SimioLab.
 
@@ -19,24 +22,26 @@ Regras:
 - Use exemplos.
 - Responda em português do Brasil.
 - Use emojis ocasionalmente.
-`
+`;
 
-        const response = await ollama.chat({
-            model: 'gemma4:31b:cloud',
+        const response = await groq.chat.completions.create({
+            model: "openai/gpt-oss-20b",
             messages: [
                 {
-                    role: 'system',
+                    role: "system",
                     content: personalidade
                 },
                 {
-                    role: 'user',
+                    role: "user",
                     content: mensagem
                 }
-            ]
-        })
+            ],
+            temperature: 0.7,
+            max_completion_tokens: 2048
+        });
 
-        return response.message.content
+        return response.choices[0]?.message?.content || "";
     }
 }
 
-export default ChatBot
+export default ChatBot;

@@ -182,7 +182,7 @@ function MenuDireitaSuperior({ draft, compacto = false }) {
                 </a>
 
                 <a
-                    href="https://exemplo.com/"
+                    href="https://pj-helper.gwbd.workers.dev/homepage.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={anuncioAtual === 2 ? "ad-ativo" : ""}
