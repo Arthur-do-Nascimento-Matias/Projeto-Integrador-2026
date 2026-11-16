@@ -81,52 +81,52 @@ export default function ChatBot({ mascoteSrc = mascotePadrao, endpoint = 'http:/
 
     try {
 
-        const resposta = await apiFetch(
-            `/chatBot`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                mensagem: mensagem,
-                memoria: memoria.slice(-10)
-              })
-            }
+      const resposta = await apiFetch(
+        `/chatBot`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          mensagem: mensagem,
+          memoria: memoria.slice(-10)
+        })
+      }
+      )
+
+      const dados = await resposta.json()
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.erro || 'Erro no servidor'
         )
+      }
 
-        const dados = await resposta.json()
+      if (!dados.resposta) {
+        throw new Error('Resposta vazia')
+      }
 
-        if (!resposta.ok) {
-            throw new Error(
-                dados.erro || 'Erro no servidor'
-            )
+      const html = DOMPurify.sanitize(
+        marked.parse(dados.resposta)
+      )
+
+      memoria.push(mensagem)
+
+      setMensagens(prev => [
+        ...prev,
+        {
+          tipo: 'ia',
+          texto: html
         }
+      ])
 
-        if (!dados.resposta) {
-            throw new Error('Resposta vazia')
-        }
-
-        const html = DOMPurify.sanitize(
-            marked.parse(dados.resposta)
-        )
-
-        memoria.push(mensagem)
-
-        setMensagens(prev => [
-            ...prev,
-            {
-                tipo: 'ia',
-                texto: html
-            }
-        ])
-        
-        registrarMensagemMoki()
-    .catch((erroMissao) => {
-        console.error(
+      registrarMensagemMoki()
+        .catch((erroMissao) => {
+          console.error(
             'Erro ao registrar mensagem na missão:',
             erroMissao
-        )
-    })
+          )
+        })
 
 
 

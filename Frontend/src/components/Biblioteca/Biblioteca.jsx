@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { apiFetch } from "../utils/api";
-import "../Biblioteca/Biblioteca.css";
 import "./Biblioteca.css";
 import "../estadoCatalogo.css";
+import { apiFetch } from "../utils/api";
 import {
     registrarLivroAberto,
     registrarVisitaBiblioteca,
@@ -10,7 +9,7 @@ import {
 } from "../utils/missoes";
 
 import miroBiblioteca from '../../assets/Miro/miro-biblioteca.png';
-
+const API_URL = import.meta.env.VITE_API_URL;
 function normalizarBusca(texto) {
     return String(texto || "")
         .normalize("NFD")
@@ -33,7 +32,7 @@ function Biblioteca() {
     async function carregarLivros() {
         setEstado("carregando");
         try {
-            const resposta = await fetch("http://localhost:3000/livros", { signal: AbortSignal.timeout(20000) });
+            const resposta = await apiFetch("/livros", { signal: AbortSignal.timeout(20000) });
             if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
             const dados = await resposta.json();
             if (!Array.isArray(dados)) throw new Error("Resposta de livros inválida.");
@@ -54,18 +53,11 @@ function Biblioteca() {
                 );
             });
 
-        apiFetch("/livros")
-            .then((resp) => resp.json())
-            .then((data) => {
-                setCapas(data);
-            })
-            .catch((erro) => {
-                console.error("Erro ao carregar os livros:", erro);
-            });
+        carregarLivros();
     }, []);
     function abrirLivro(id) {
         const novaAba = window.open(
-            `/abrirLivro?id=${id}`,
+            `${API_URL}/abrirLivro?id=${id}`,
             "_blank"
         );
 

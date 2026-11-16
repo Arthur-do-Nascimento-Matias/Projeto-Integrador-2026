@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { apiFetch } from "../utils/api";
-
 const API_URL = 'http://localhost:3000'
 
 async function alterarConteudo(acao, tipo, item, campos = {}) {

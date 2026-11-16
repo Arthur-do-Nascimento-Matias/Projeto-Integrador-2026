@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigationType } from "react-router-dom";
 import { apiFetch } from "../utils/api";
+import { EVENTO_MISSOES } from "../utils/missoes";
 import Moki from "../../assets/MOKI.png";
 import "./ranking.css";
+import "./ranking-transicao.css";
 
 const moki = "/avatares-simio/moki.png";
 const zoro = "/avatares-simio/zoro.png";
@@ -161,9 +164,8 @@ export default function Ranking({ usuarioId }) {
       }, 20000);
 
       try {
-        const endpoint = `${API_URL}/ranking`;
 
-        const resposta = await fetch(endpoint, {
+        const resposta = await apiFetch('/ranking', {
           method: "GET",
           cache: "no-store",
           signal: controller.signal,

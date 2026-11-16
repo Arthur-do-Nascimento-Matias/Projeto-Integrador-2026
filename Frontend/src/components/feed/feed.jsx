@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { apiFetch } from "../utils/api";
-
 import FeedDetalhe from './FeedDetalhe'
 import FeedDenuncia from './FeedDenuncia'
 import FeedAcoesAutor from './FeedAcoesAutor'
 import FeedLateral from './FeedLateral'
 import FeedModeracao from './FeedModeracao'
 
-import './feed.css'
+import './Feed.css'
 
 const API_URL = 'http://localhost:3000'
 

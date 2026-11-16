@@ -296,5 +296,4 @@ function RedacaoEditor({ tema, aoVoltar }) {
     );
 }
 
-
 export default RedacaoEditor;

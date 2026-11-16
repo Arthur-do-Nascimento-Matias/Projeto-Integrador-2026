@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { apiFetch } from "../utils/api";
-
 const API_URL = 'http://localhost:3000'
 
 const nomesMotivos = {
@@ -46,7 +45,7 @@ function FeedModeracao({ aoFechar, aoAtualizarFeed }) {
 
         try {
             const resposta = await apiFetch(
-                `/feed/denuncias`,
+                `${API_URL}/feed/denuncias`,
                 {
                     headers: cabecalhos()
                 }
@@ -94,7 +93,7 @@ function FeedModeracao({ aoFechar, aoAtualizarFeed }) {
 
         try {
             const resposta = await apiFetch(
-                `/feed/denuncias/resolver`,
+                `${API_URL}/feed/denuncias/resolver`,
                 {
                     method: 'POST',
                     headers: cabecalhos(),

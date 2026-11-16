@@ -92,11 +92,11 @@ class Provas {
 
             const idProva = param.id
 
-const sql = `
-    SELECT pdf_simulado AS pdfProva
-    FROM simulados
-    WHERE id_simulado = ?
-`
+            const sql = `
+                SELECT pdf_simulado AS pdfProva
+                FROM simulados
+                WHERE id_simulado = ?
+            `
 
             connection.query(
                 sql,

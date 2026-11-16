@@ -1,9 +1,8 @@
-import { createPortal } from "react-dom"
-import { apiFetch } from "../utils/api";
+import { createPortal } from 'react-dom'
 import { useEffect, useState } from 'react'
 import FeedAcoesAutor from './FeedAcoesAutor'
 import FeedDenuncia from './FeedDenuncia'
-
+import { apiFetch } from "../utils/api";
 const API_URL = 'http://localhost:3000'
 
 const MOTIVOS_DENUNCIA = [

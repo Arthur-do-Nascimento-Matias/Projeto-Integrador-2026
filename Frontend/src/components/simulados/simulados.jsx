@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import "./simulados.css";
 import RedacaoEditor from "./RedacaoEditor";
 import { apiFetch } from "../utils/api";
-
+const API_URL = import.meta.env.VITE_API_URL;
 import Moki from "../../assets/simio-provas-moki.png";
 import Miro from "../../assets/simio-provas-miro.png";
 import Bimo from "../../assets/simio-provas-bimo.png";
@@ -112,11 +112,11 @@ function Simulados() {
     }), [provas, filtro, anoSelecionado]);
 
     function abrirProva(idProva) {
-        window.open(`/abrirProva?id=${idProva}`, "_blank", "noopener");
+        window.open(`${API_URL}/abrirProva?id=${idProva}`, "_blank", "noopener");
     }
 
     function baixarProva(idProva) {
-        window.open(`/baixarProva?id=${idProva}`, "_blank", "noopener");
+        window.open(`${API_URL}/baixarProva?id=${idProva}`, "_blank", "noopener");
     }
 
     function obterCapa(prova) {
