@@ -450,3 +450,31 @@ body:has(.pagina-github) {
   min-width: 0;
   overflow-wrap: anywhere;
 }
+/* Enquadramento das fotos da equipe */
+:is(.pagina-github, .pagina-instagram) .foto img {
+  scale: var(--zoom-foto, 1.27);
+  transform-origin: center bottom;
+}
+
+/* Arthur */
+:is(.pagina-github, .pagina-instagram) .card:nth-child(2) {
+  --zoom-foto: 1.42;
+}
+
+/* Guilherme Simão */
+:is(.pagina-github, .pagina-instagram) .card:nth-child(4) {
+  --zoom-foto: 1.34;
+}
+
+.pagina-github .card-equipe-completa {
+  grid-column: 1 / -1;
+  padding: 12px;
+}
+
+.pagina-github .card-equipe-completa img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: contain;
+}

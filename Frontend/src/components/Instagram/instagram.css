@@ -468,3 +468,16 @@ body:has(.pagina-instagram) {
     margin-bottom: 28px;
   }
 }
+
+.pagina-instagram .card-equipe-completa {
+  grid-column: 1 / -1;
+  padding: 12px;
+}
+
+.pagina-instagram .card-equipe-completa img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: contain;
+}

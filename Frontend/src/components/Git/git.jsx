@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 
-import Theo from "../../assets/nos/img/luciano.jpg";
-import Arthur from "../../assets/nos/img/calleri.jpg";
-import Kauan from "../../assets/nos/img/lucas.jpg";
-import Simao from "../../assets/nos/img/rafael.jpg";
+import Theo from "../../assets/nos/img/theo.jpeg";
+import Arthur from "../../assets/nos/img/arthur.jfif";
+import Kauan from "../../assets/nos/img/kauan.jfif";
+import Simao from "../../assets/nos/img/simao.jfif";
+import EquipeCompleta from "../../assets/nos/img/equipe-completa.png";
 
 import "./git.css";
 
@@ -66,7 +67,6 @@ function Github() {
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M19 12H5m7-7-7 7 7 7" />
           </svg>
-
           Voltar ao site
         </Link>
       </header>
@@ -74,10 +74,13 @@ function Github() {
       <main className="pagina">
         <section className="equipe" aria-labelledby="equipe-titulo">
           <h1 id="equipe-titulo">
-            <svg className="titulo-github__icone" viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+              className="titulo-github__icone"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <use href="#icone-github" />
             </svg>
-
             Nosso GitHub
           </h1>
 
@@ -93,7 +96,6 @@ function Github() {
 
                 <div className="card__conteudo">
                   <span className="card__cargo">DESENVOLVEDOR</span>
-
                   <h2>{pessoa.nome}</h2>
 
                   <ul className="card__funcoes">
@@ -112,9 +114,7 @@ function Github() {
                     <svg className="github__icone" aria-hidden="true">
                       <use href="#icone-github" />
                     </svg>
-
                     <span>Ver GitHub</span>
-
                     <svg className="github__seta" aria-hidden="true">
                       <use href="#icone-seta" />
                     </svg>
@@ -122,6 +122,13 @@ function Github() {
                 </div>
               </article>
             ))}
+
+            <article className="card card-equipe-completa">
+              <img
+                src={EquipeCompleta}
+                alt="Foto de toda a equipe SimioLab"
+              />
+            </article>
           </div>
         </section>
       </main>

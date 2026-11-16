@@ -19,7 +19,7 @@ import PainelBiblioteca from "./pages/PainelBiblioteca";
 import PainelPerfil from "./pages/PainelPerfil";
 import Configuracoes from "./components/Configuracoes/Configuracoes";
 import FolhasCaindo from "./components/FolhasCaindo/FolhasCaindo";
-import MenuEsquerda from "./components/menuEsquerda/menuEsquerda";
+import MenuEsquerda from "./components/MenuEsquerda/MenuEsquerda";
 import Ranking from "./components/ranking/ranking";
 import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
@@ -60,7 +60,7 @@ function ConteudoApp({
   const estaNoIndex = location.pathname === '/';
   const estaNoLogin = location.pathname === '/login';
   const estaNoInstagram = location.pathname === "/instagram";
-  const estaNoGit = location.pathname === "/Git";
+  const estaNoGit = location.pathname.toLowerCase().replace(/\/+$/, "") === "/github";
   const estaNaRedefinicaoSenha = location.pathname === "/redefinir-senha";
 
   const [draft, setDraft] = useState({
@@ -78,7 +78,7 @@ function ConteudoApp({
 
   useEffect(() => {
 
-    if (estaNoLogin || estaNoIndex || estaNaRedefinicaoSenha) return;
+    if (estaNoLogin || estaNoIndex || estaNaRedefinicaoSenha || estaNoInstagram || estaNoGit) return;
 
     async function carregarUsuario() {
 
