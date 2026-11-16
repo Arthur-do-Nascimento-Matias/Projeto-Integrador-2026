@@ -20,11 +20,6 @@ class Sequencia {
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'integrador',
 
-            ...(process.env.DB_HOST && {
-                ssl: {
-                    minVersion: 'TLSv1.2'
-                }
-            })
         });
 
             const hoje = formatarData(new Date());

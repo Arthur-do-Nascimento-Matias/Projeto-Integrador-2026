@@ -68,6 +68,40 @@ const callback = async (req, res) => {
     }
     const rota = url.parse(req.url, true)
     const param = rota.query
+
+if (rota.pathname === '/redacoes/rascunho' && req.method === 'POST') {
+    Http.lerCorpo(req)
+        .then(dados => {
+            const idUsuario = Number(dados.id_usuario)
+            const idTema = Number(dados.id_tema)
+
+            if (!idUsuario || !idTema) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe id_usuario e id_tema válidos.'
+                })
+                return null
+            }
+
+            return Redacoes.salvarRascunho(dados)
+        })
+        .then(resultado => {
+            if (!resultado) return
+
+            Http.responderJson(res, 200, {
+                mensagem: resultado.criado
+                    ? 'Rascunho criado.'
+                    : 'Rascunho atualizado.',
+                ...resultado
+            })
+        })
+        .catch(error => {
+            console.error('ERRO AO SALVAR RASCUNHO:', error)
+            Http.responderJson(res, 500, { erro: error.message })
+        })
+
+    return
+}
+
     if (rota.pathname === '/mudarAparencia') {
         if (req.method !== 'POST') {
             Http.responderJson(res, 405, { ok: false, message: 'Método não permitido.' });
@@ -878,8 +912,52 @@ const callback = async (req, res) => {
                 })
             return
         }
-     
- 
+        if (
+            rota.pathname === '/redacoes/rascunho' &&
+            req.method === 'GET'
+        ) {
+            const idUsuario = Number(param.id_usuario)
+            const idTema = Number(param.id_tema)
+            if (!idUsuario || !idTema) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe id_usuario e id_tema válidos.'
+                })
+                return
+            }
+            Redacoes.buscarRascunho(idUsuario, idTema)
+                .then(rascunho => {
+                    Http.responderJson(res, 200, {
+                        rascunho
+                    })
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR RASCUNHO:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+        if (
+            rota.pathname === '/redacoes/historico' &&
+            req.method === 'GET'
+        ) {
+            const idUsuario = Number(param.id_usuario)
+
+            if (!idUsuario) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe um id_usuario válido.'
+                })
+                return
+            }
+
+            // Implementação do histórico pendente.
+            Http.responderJson(res, 501, {
+                erro: 'Histórico ainda não implementado.'
+            })
+            return
+        }
+        
     // =========================
     // CHATBOT
     // =========================

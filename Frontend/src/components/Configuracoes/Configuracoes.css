@@ -34,7 +34,6 @@
   text-align: left;
 }
 
-
 /* ========================================
    LISTA
 ======================================== */
@@ -45,100 +44,6 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-}
-
-.simio-tema {
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-  margin-left: auto;
-
-  width: 80px;
-  height: 44px;
-  padding: 0;
-
-  border: 0;
-  border-radius: 999px;
-
-  background: #96b77d;
-  box-shadow: 0 4px 0 #62794b;
-
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-
-  transition:
-    background-color 300ms ease,
-    box-shadow 300ms ease;
-}
-
-.simio-tema-bolinha {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  z-index: 2;
-
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-
-  background: #fff8ed;
-  box-shadow: 0 2px 3px #00000026;
-
-  transition: transform 350ms cubic-bezier(.22, 1, .36, 1);
-}
-
-.simio-tema-sol,
-.simio-tema-lua {
-  position: absolute;
-  top: 10px;
-
-  width: 24px;
-  height: 24px;
-  pointer-events: none;
-}
-
-.simio-tema-sol {
-  right: 10px;
-  color: #ffb238;
-  animation: simioSolGirar 20s linear infinite;
-}
-
-.simio-tema-lua {
-  left: 10px;
-  color: #f1dfc0;
-  transform: rotate(-15deg);
-}
-
-.simio-tema[aria-checked="true"] {
-  background: #203d2c;
-  box-shadow: 0 4px 0 #122619;
-}
-
-.simio-tema[aria-checked="true"] .simio-tema-bolinha {
-  transform: translateX(36px);
-}
-
-.simio-tema:focus-visible {
-  outline: 3px solid #ffb238;
-  outline-offset: 6px;
-}
-
-@keyframes simioSolGirar {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .simio-tema,
-  .simio-tema-bolinha {
-    transition: none;
-  }
-
-  .simio-tema-sol {
-    animation: none;
-  }
 }
 
 /* ========================================
@@ -162,19 +67,17 @@
 
   background: rgba(255, 255, 255, 0.94);
 
-  box-shadow:
-    0 12px 32px rgba(57, 39, 29, 0.1);
-
   box-shadow: 0 6px 0 #b8bdb9;
 
   transition:
     transform 180ms ease,
-    scale 220ms ease
+    box-shadow 180ms ease;
 }
 
-.config-card:hover {
-  transform: translateY(-2px);
-  scale: 1.05;
+@media (hover: hover) and (pointer: fine) {
+  .config-card:hover {
+    transform: translateY(-2px) scale(1.05);
+  }
 }
 
 .config-texto {
@@ -235,8 +138,107 @@
   transform: none;
 }
 
+/* ========================================
+   BOTÃO DE TEMA
+======================================== */
+
+.simio-tema {
+  position: relative;
+
+  display: inline-block;
+  flex-shrink: 0;
+
+  width: 80px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #96b77d;
+  box-shadow: 0 4px 0 #62794b;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.simio-tema-bolinha {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+
+  background: #fff8ed;
+  box-shadow: 0 2px 3px #00000026;
+
+  transition: transform 350ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.simio-tema-sol,
+.simio-tema-lua {
+  position: absolute;
+  top: 10px;
+
+  width: 24px;
+  height: 24px;
+
+  pointer-events: none;
+}
+
+.simio-tema-sol {
+  right: 10px;
+
+  color: #ffb238;
+
+  animation: simioSolGirar 20s linear infinite;
+}
+
+.simio-tema-lua {
+  left: 10px;
+
+  color: #f1dfc0;
+
+  transform: rotate(-15deg);
+}
+
+.simio-tema[aria-checked="true"] {
+  background: #203d2c;
+  box-shadow: 0 4px 0 #122619;
+}
+
+.simio-tema[aria-checked="true"] .simio-tema-bolinha {
+  transform: translateX(36px);
+}
+
+.simio-tema:focus-visible {
+  outline: 3px solid #ffb238;
+  outline-offset: 6px;
+}
+
+@keyframes simioSolGirar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   SWITCH
+======================================== */
+
 .switch {
   position: relative;
+
+  flex-shrink: 0;
 
   width: 55px;
   min-width: 55px;
@@ -253,7 +255,7 @@
   cursor: pointer;
 
   transition:
-    background 200ms ease,
+    background-color 200ms ease,
     box-shadow 200ms ease;
 }
 
@@ -269,24 +271,20 @@
 
 .switch-bolinha {
   position: absolute;
+  top: 4px;
+  left: 4px;
 
   width: 22px;
   height: 22px;
-
-  top: 4px;
-  left: 4px;
 
   border-radius: 50%;
 
   background: #ffffff;
 
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
 
-  transition:
-    transform 220ms ease;
+  transition: transform 220ms ease;
 }
-
 
 .switch.ativo {
   background: #203D2C;
@@ -297,8 +295,13 @@
   transform: translateX(25px);
 }
 
+/* ========================================
+   SELETOR
+======================================== */
 
 .config-seletor {
+  flex-shrink: 0;
+
   min-width: 118px;
 
   box-sizing: border-box;
@@ -324,28 +327,31 @@
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
-    background 180ms ease;
+    background-color 180ms ease;
 }
 
 .config-seletor:hover {
   border-color: #9a826f;
-  background: #ffffff;
+  background-color: #ffffff;
 }
 
 .config-seletor:focus {
   border-color: #597334;
-
-  box-shadow:
-    0 0 0 3px rgba(89, 115, 52, 0.15);
+  box-shadow: 0 0 0 3px rgba(89, 115, 52, 0.15);
 }
 
+/* ========================================
+   CONTA E BOTÕES
+======================================== */
+
 .config-card-conta {
-  border-color:
-    rgba(184, 67, 67, 0.14);
+  border-color: rgba(184, 67, 67, 0.14);
 }
 
 .botao-sair,
 .botao-trocar-senha {
+  flex-shrink: 0;
+
   min-width: 90px;
 
   box-sizing: border-box;
@@ -368,7 +374,7 @@
   cursor: pointer;
 
   transition:
-    background 180ms ease,
+    background-color 180ms ease,
     color 180ms ease,
     transform 180ms ease,
     box-shadow 180ms ease;
@@ -381,8 +387,7 @@
 
   transform: translateY(-1px);
 
-  box-shadow:
-    0 7px 16px rgba(201, 87, 79, 0.22);
+  box-shadow: 0 7px 16px rgba(201, 87, 79, 0.22);
 }
 
 .botao-sair:active,
@@ -432,7 +437,7 @@
 }
 
 /* ========================================
-   RESPONSIVIDADE
+   MODAL
 ======================================== */
 
 /* A rota centraliza a lista na área útil. */
