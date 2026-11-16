@@ -1,0 +1,701 @@
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { flushSync, createPortal } from 'react-dom'
+
+import './menuEsquerda.css'
+
+import Moki from '../../assets/MOKI.png'
+
+const itensPrincipais = [
+
+  { nome: 'Aprender', rota: '/painel' },
+
+  { nome: 'Simulados', rota: '/simulados' },
+
+  { nome: 'Ranking', rota: '/ranking' },
+
+  { nome: 'Biblioteca', rota: '/biblioteca' },
+
+  { nome: 'SimAI', rota: '/chatBot', lightning: true },
+
+  { nome: 'Feed', rota: '/feed' },
+
+]
+
+const itensSecundarios = [
+
+  { nome: 'Perfil', rota: '/perfil' },
+
+  { nome: 'Configurações', rota: '/configuracoes' },
+
+]
+
+const fxMap = {
+
+  Aprender: 'fx-home',
+
+  Simulados: 'fx-activities',
+
+  Ranking: 'fx-trophy',
+
+  Biblioteca: 'fx-book',
+
+  SimAI: 'fx-simia',
+
+  Feed: 'fx-feed',
+
+  Perfil: 'fx-profile',
+
+  Configurações: 'fx-settings',
+
+}
+
+
+export function nomePelaRota(pathname) {
+    const rota = (pathname || "/")
+        .replace(/\/+$/, "")
+        .toLowerCase() || "/";
+
+    if (rota === "/" || rota === "/painel") return "Aprender";
+    if (rota === "/simulados") return "Simulados";
+    if (rota === "/ranking") return "Ranking";
+    if (rota === "/biblioteca") return "Biblioteca";
+    if (rota === "/chatbot") return "SimAI";
+    if (rota === "/feed") return "Feed";
+    if (rota === "/perfil" || rota.startsWith("/perfil/")) return "Perfil";
+    if (rota === "/configuracoes") return "Configurações";
+
+    return "Aprender";
+}
+
+function Icone({ nome }) {
+
+  if (nome === 'Aprender') {
+
+    return (
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M3 10.7 12 3l9 7.7" />
+
+        <path d="M5.5 9.5V21h13V9.5" />
+
+        <path d="M9.5 21v-6h5v6" />
+
+      </svg>
+
+    )
+
+  }
+
+  if (nome === 'Simulados') {
+
+    return (
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M9 4h6" />
+
+        <path d="M9 2h6v4H9z" />
+
+        <rect x="5" y="5" width="14" height="17" rx="2" />
+
+        <path d="M8 10h8M8 14h8M8 18h6" />
+
+      </svg>
+
+    )
+
+  }
+
+  if (nome === 'Ranking') {
+
+    return (
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M8 4h8v4a4 4 0 0 1-8 0V4Z" />
+
+        <path d="M8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4" />
+
+        <path d="M12 12v5M8 21h8M9 17h6v4" />
+
+        <path d="m12 6 .7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2L12 6Z" />
+
+      </svg>
+
+    )
+
+  }
+
+  if (nome === 'Biblioteca') {
+
+    return (
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M12 6.5c-1.4-1.4-3.2-2.1-5.5-2.1H4.5v13.8h2c2.2 0 4 .7 5.5 2" />
+
+        <path d="M12 6.5c1.4-1.4 3.2-2.1 5.5-2.1h2v13.8h-2c-2.2 0-4 .7-5.5 2" />
+
+        <path d="M12 6.5v13.7" />
+
+        <path d="M7.2 8.2h2.2M14.6 8.2h2.2" />
+
+      </svg>
+
+    )
+
+  }
+
+  if (nome === 'SimAI') {
+
+    return (
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M13.3 2 5 13h6l-1 9 9-12h-6l.3-8Z" />
+
+      </svg>
+
+    )
+
+  }
+
+  if (nome === 'Feed') {
+
+    return (
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M5 5h14" />
+
+        <path d="M5 10h14" />
+
+        <path d="M5 15h9" />
+
+        <path d="M5 20h6" />
+
+      </svg>
+
+    )
+
+  }
+
+  if (nome === 'Perfil') {
+
+    return (
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <circle cx="12" cy="8" r="3.5" />
+
+        <path d="M5 21a7 7 0 0 1 14 0" />
+
+      </svg>
+
+    )
+
+  }
+
+  return (
+
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+
+      <circle cx="12" cy="12" r="3" />
+
+      <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.1A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.1A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.1A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1v4h-.1a1.7 1.7 0 0 0-1.7.6Z" />
+
+    </svg>
+
+  )
+
+}
+
+function MenuEsquerda() {
+
+  const [mobile, setMobile] = useState(() =>
+    window.matchMedia('(max-width: 1100px), (max-width: 1400px) and (pointer: coarse)').matches)
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1100px), (max-width: 1400px) and (pointer: coarse)')
+    const atualizar = () => { setMobile(media.matches); setMenuAberto(false) }
+    media.addEventListener('change', atualizar)
+    return () => media.removeEventListener('change', atualizar)
+  }, [])
+  const principais = mobile
+    ? itensPrincipais.filter(item => !['Ranking', 'Feed'].includes(item.nome))
+    : itensPrincipais
+  const secundarios = mobile
+    ? [...itensPrincipais.filter(item => ['Ranking', 'Feed'].includes(item.nome)), ...itensSecundarios]
+    : itensSecundarios
+
+  const calcularEscalaDesktop = () => Math.max(0.5,
+    Math.min(window.innerWidth / 1920, (window.innerHeight - 180) / 680, 2.5))
+  const [escalaDesktop, setEscalaDesktop] = useState(calcularEscalaDesktop)
+  useEffect(() => {
+    const atualizar = () => setEscalaDesktop(calcularEscalaDesktop())
+    window.addEventListener('resize', atualizar)
+    return () => window.removeEventListener('resize', atualizar)
+  }, [])
+
+  const navigate = useNavigate()
+
+  const location = useLocation()
+
+  const sidebarRef = useRef(null)
+
+  const shellRef = useRef(null)
+
+  const railRef = useRef(null)
+
+  const itemRefs = useRef(new Map())
+
+  const fxTimerRef = useRef(null)
+
+  const ativoDaRota = nomePelaRota(location.pathname)
+
+    const itemMenuInferior =
+
+    ativoDaRota === 'Perfil' ||
+
+    ativoDaRota === 'Configurações'
+
+  const [itemAtivo, setItemAtivo] = useState(ativoDaRota)
+
+  const [menuAberto, setMenuAberto] = useState(!mobile && itemMenuInferior)
+
+  const [efeitoAtivo, setEfeitoAtivo] = useState('')
+
+  const [itemComEfeito, setItemComEfeito] = useState('')
+
+  const [touchLike, setTouchLike] = useState(false)
+  const [mouseNaSidebar, setMouseNaSidebar] = useState(false)
+  const fecharHoverRef = useRef(null)
+
+  useEffect(() => {
+      setItemAtivo(ativoDaRota);
+    if (mobile) setMenuAberto(false)
+  }, [ativoDaRota, mobile]);
+
+  useEffect(() => () => clearTimeout(fecharHoverRef.current), [])
+
+  function aoEntrarNaSidebar(event) {
+    if (event.pointerType !== 'mouse') return
+
+    clearTimeout(fecharHoverRef.current)
+    setMouseNaSidebar(true)
+  }
+
+  function aoSairDaSidebar(event) {
+    if (event.pointerType !== 'mouse') return
+
+    clearTimeout(fecharHoverRef.current)
+    fecharHoverRef.current = setTimeout(() => setMouseNaSidebar(false), 90)
+  }
+
+  useEffect(() => {
+
+    setItemAtivo(ativoDaRota)
+
+    if (
+
+      !mobile && (ativoDaRota === 'Perfil' || ativoDaRota === 'Configurações')
+
+    ) {
+
+      setMenuAberto(true)
+
+    }
+
+    if (mobile) setMenuAberto(false)
+  }, [ativoDaRota, mobile])
+
+  useEffect(() => {
+
+    const media = window.matchMedia('(hover: none), (pointer: coarse)')
+
+    const atualizar = () => setTouchLike(media.matches)
+
+    atualizar()
+
+    media.addEventListener?.('change', atualizar)
+
+    return () => media.removeEventListener?.('change', atualizar)
+
+  }, [])
+
+  const posicionarRail = useCallback(() => {
+
+    const shell = shellRef.current
+
+    const rail = railRef.current
+
+    const item = itemRefs.current.get(itemAtivo)
+
+    if (!shell || !rail || !item) return
+
+    const shellRect = shell.getBoundingClientRect()
+
+    const itemRect = item.getBoundingClientRect()
+
+    const escala = shellRect.height / shell.offsetHeight || 1
+    const top = (itemRect.top - shellRect.top) / escala
+      + (itemRect.height / escala - rail.offsetHeight) / 2 - shell.clientTop
+
+    rail.style.top = `${top}px`
+
+  }, [itemAtivo])
+
+  useLayoutEffect(() => {
+
+    const frame = requestAnimationFrame(posicionarRail)
+
+    return () => cancelAnimationFrame(frame)
+
+  }, [posicionarRail, menuAberto, escalaDesktop, mobile])
+
+  useEffect(() => {
+
+    const aoRedimensionar = () => requestAnimationFrame(posicionarRail)
+
+    window.addEventListener('resize', aoRedimensionar)
+
+    return () => window.removeEventListener('resize', aoRedimensionar)
+
+  }, [posicionarRail])
+
+  useEffect(() => {
+
+    const aoPressionarTecla = (event) => {
+
+      if (event.key === 'Escape') setMenuAberto(false)
+
+    }
+
+    const aoClicarFora = (event) => {
+
+      if ((!touchLike && !mobile) || !menuAberto) return
+
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+
+        setMenuAberto(false)
+
+      }
+
+    }
+
+    document.addEventListener('keydown', aoPressionarTecla)
+
+    document.addEventListener('pointerdown', aoClicarFora)
+
+    return () => {
+
+      document.removeEventListener('keydown', aoPressionarTecla)
+
+      document.removeEventListener('pointerdown', aoClicarFora)
+
+    }
+
+  }, [menuAberto, touchLike, mobile])
+
+  useEffect(() => () => clearTimeout(fxTimerRef.current), [])
+
+  function criarRipple(target, event) {
+
+    const ripple = document.createElement('span')
+
+    ripple.className = 'ripple'
+
+    const rect = target.getBoundingClientRect()
+
+    const x = event.clientX ? event.clientX - rect.left : rect.width / 2
+
+    const y = event.clientY ? event.clientY - rect.top : rect.height / 2
+
+    ripple.style.left = `${x}px`
+
+    ripple.style.top = `${y}px`
+
+    target.appendChild(ripple)
+
+    ripple.addEventListener('animationend', () => ripple.remove(), { once: true })
+
+  }
+
+  function iniciarEfeito(nome) {
+
+    const efeito = fxMap[nome]
+
+    if (!efeito) return
+
+    clearTimeout(fxTimerRef.current)
+
+    setItemComEfeito('')
+
+    setEfeitoAtivo('')
+
+    requestAnimationFrame(() => {
+
+      requestAnimationFrame(() => {
+
+        setItemComEfeito(nome)
+
+        setEfeitoAtivo(efeito)
+
+      })
+
+    })
+
+    fxTimerRef.current = setTimeout(() => {
+
+      setItemComEfeito('')
+
+      setEfeitoAtivo('')
+
+    }, 980)
+
+  }
+
+function aoSelecionar(item, event) {
+    event.preventDefault()
+    if (mobile) setMenuAberto(false)
+    criarRipple(event.currentTarget, event)
+    setItemAtivo(item.nome)
+    iniciarEfeito(item.nome)
+
+    if (!item.rota || location.pathname === item.rota) return
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        flushSync(() => {
+          navigate(item.rota)
+        })
+      })
+    } else {
+      navigate(item.rota)
+    }
+  }
+
+  function aoMoverPonteiro(event) {
+
+    if (touchLike) return
+
+    const icon = event.currentTarget.querySelector('.icon-wrap')
+
+    if (!icon) return
+
+    const rect = event.currentTarget.getBoundingClientRect()
+
+    const x = (event.clientX - rect.left) / rect.width - 0.5
+
+    const y = (event.clientY - rect.top) / rect.height - 0.5
+
+    icon.style.setProperty('--mx', `${x * 7}px`)
+
+    icon.style.setProperty('--my', `${y * 5}px`)
+
+  }
+
+  function aoSairPonteiro(event) {
+
+    const icon = event.currentTarget.querySelector('.icon-wrap')
+
+    if (!icon) return
+
+    icon.style.setProperty('--mx', '0px')
+
+    icon.style.setProperty('--my', '0px')
+
+  }
+
+  function renderItem(item) {
+
+    const classes = [
+
+      'nav-item',
+
+      item.nome === itemAtivo ? 'active' : '',
+
+      item.lightning ? 'lightning' : '',
+
+      item.nome === itemComEfeito ? efeitoAtivo : '',
+
+    ].filter(Boolean).join(' ')
+
+    return (
+
+      <a
+
+        key={item.nome}
+
+        ref={(elemento) => {
+
+          if (elemento) itemRefs.current.set(item.nome, elemento)
+
+          else itemRefs.current.delete(item.nome)
+
+        }}
+
+        className={classes}
+
+        href={item.rota || '#'}
+
+        data-name={item.nome}
+
+        aria-label={item.nome}
+
+        aria-current={item.rota === location.pathname ? 'page' : undefined}
+
+        onClick={(event) => aoSelecionar(item, event)}
+
+        onPointerMove={aoMoverPonteiro}
+
+        onPointerLeave={aoSairPonteiro}
+
+      >
+
+        <span className="icon-wrap">
+
+          <Icone nome={item.nome} />
+
+        </span>
+
+        <span className="label">{item.nome}</span>
+
+        {item.nome === 'SimAI' && <span className="ia-badge">IA</span>}
+
+      </a>
+
+    )
+
+  }
+
+  return createPortal(
+
+    <div className={`simio-sidebar-layer${mobile ? ' mobile-nav' : ''}`} style={{ "--desktop-scale": escalaDesktop }} aria-label="Navegação SimioLab">
+
+      <div className="scene">
+
+        <div className="ambient" aria-hidden="true" />
+
+        <div className="simio-logo" aria-label="SimioLab">
+
+        <img src={Moki} className="mascote" alt="Mascote SimioLab" />
+
+        <div className="logo-box">
+
+          <div className="simio">Simio</div>
+
+          <div className="lab"><span>LAB</span></div>
+
+        </div>
+
+      </div>
+
+      <aside
+
+        className={`sidebar${menuAberto ? ' more-open' : ''}${
+          (touchLike ? menuAberto : mouseNaSidebar) ? ' pin-open' : ''
+        }`}
+        onPointerEnter={aoEntrarNaSidebar}
+        onPointerLeave={aoSairDaSidebar}
+
+        ref={sidebarRef}
+
+      >
+
+        <div
+          className="shell"
+          ref={shellRef}
+          onTransitionEnd={(event) => {
+            if (event.target === event.currentTarget && event.propertyName === 'height') {
+              posicionarRail()
+            }
+          }}
+        >
+
+          <div className="active-rail" ref={railRef} aria-hidden="true" />
+
+          <nav aria-label="Menu principal">
+
+            <div className="main-menu">
+
+              {principais.map(renderItem)}
+
+            </div>
+
+            <div className="lower">
+
+              <div className="divider" />
+
+              <div className="more-menu" id="moreMenu" inert={mobile && !menuAberto ? true : undefined}>
+
+                <div className="more-menu-inner">
+
+                  {secundarios.map(renderItem)}
+
+                </div>
+
+              </div>
+
+              <button
+
+                className={`menu-toggle${mobile && secundarios.some(item => item.nome === itemAtivo) ? ' active' : ''}`}
+
+                type="button"
+
+                aria-expanded={menuAberto}
+
+                aria-controls="moreMenu"
+
+                aria-label={menuAberto ? 'Fechar menu secundário' : 'Abrir menu secundário'}
+
+                onClick={(event) => {
+
+                  criarRipple(event.currentTarget, event)
+
+                  setMenuAberto((aberto) => !aberto)
+
+                }}
+
+                onPointerMove={aoMoverPonteiro}
+
+                onPointerLeave={aoSairPonteiro}
+
+              >
+
+                <span className="icon-wrap" aria-hidden="true">
+
+                  <span className="hamburger">
+
+                    <span />
+
+                    <span />
+
+                    <span />
+
+                  </span>
+
+                </span>
+
+                <span className="label">{mobile ? (menuAberto ? 'Fechar' : 'Mais') : (menuAberto ? 'Fechar menu' : 'Mais opções')}</span>
+
+              </button>
+
+            </div>
+
+          </nav>
+
+        </div>
+
+        </aside>
+
+      </div>
+
+    </div>,
+    document.body
+  )
+
+}
+
+export default MenuEsquerda

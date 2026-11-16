@@ -1,0 +1,213 @@
+import "./Configuracoes.css";
+import { alternarTema } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import {
+  executarTransicaoLogin
+} from "../TransicaoLogin/TransicaoLogin";
+import { createPortal } from "react-dom";
+
+
+function Configuracoes({
+  folhasAtivas,
+  alterarFolhas,
+  tema,
+  setTema
+}) {
+
+  const [modalAberto, setModalAberto] = useState(false);
+  const navigate = useNavigate();
+
+  function trocarSenha() {
+    setModalAberto(true);
+  }
+
+  async function sairDaConta() {
+    const confirmar = window.confirm(
+      "Deseja realmente sair da sua conta?"
+    );
+
+    if (!confirmar) return;
+
+    await executarTransicaoLogin(() => {
+      localStorage.removeItem("token");
+
+      navigate("/login", {
+        replace: true
+      });
+    });
+  }
+
+
+  return (
+    <>
+      <div className="configuracoes">
+
+        <h1>Configurações</h1>
+
+        <div className="config-lista">
+
+          <div className="config-card">
+
+
+            <div className="config-texto">
+              <h2>Aparência</h2>
+              <p>Alterne entre o modo claro e escuro.</p>
+            </div>
+
+            <button
+              type="button"
+              className="simio-tema"
+              role="switch"
+              aria-label="Modo escuro"
+              aria-checked={tema === "escuro"}
+              onClick={() => alternarTema(setTema)}
+            >
+              <svg
+                className="simio-tema-lua"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"
+                  fill="currentColor"
+                />
+              </svg>
+
+              <svg
+                className="simio-tema-sol"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                <path
+                  d="M12 2v2m0 16v2M2 12h2m16 0h2
+         M5 5l1.5 1.5m11 11L19 19
+         M5 19l1.5-1.5m11-11L19 5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              <span className="simio-tema-bolinha" aria-hidden="true" />
+            </button>
+          </div>
+
+
+          <div className="config-card">
+
+            <div className="config-texto">
+              <h2>Folhas caindo</h2>
+
+              <p>
+                Exibir folhas caindo na tela inicial.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className={`switch ${folhasAtivas ? "ativo" : ""
+                }`}
+              onClick={() =>
+                alterarFolhas(!folhasAtivas)
+              }
+              role="switch"
+              aria-label="Folhas caindo"
+              aria-checked={Boolean(folhasAtivas)}
+            >
+              <span className="switch-bolinha" aria-hidden="true" />
+            </button>
+
+          </div>
+
+          <div className="config-card config-password">
+            <div className="config-texto">
+              <h2>Trocar senha</h2>
+
+              <p>Troque sua senha atual</p>
+            </div>
+            <button
+              type="button"
+              className="botao-trocar-senha"
+              onClick={trocarSenha}
+            >
+              Trocar senha
+            </button>
+          </div>
+
+          <div className="config-card config-card-conta">
+
+            <div className="config-texto">
+              <h2>Sair da conta</h2>
+
+              <p>
+                Encerre sua sessão neste dispositivo.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="botao-sair"
+              onClick={sairDaConta}
+            >
+              Sair
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+      {createPortal(
+        <span className="config-versao" data-tema={tema}>
+          Versão 1.0.0
+        </span>,
+        document.body
+      )}
+
+      {modalAberto && createPortal(
+        <div className="modal-overlay">
+          <div className="modalTrocar">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <input
+                type="password"
+                id="senhaAtual"
+                placeholder="Digite a senha atual"
+                required
+              />
+
+              <input
+                type="password"
+                id="senhaNova"
+                placeholder="Digite sua nova senha"
+                required
+              />
+
+              <input
+                type="password"
+                id="confirmarSenhaNova"
+                placeholder="Confirme sua senha nova"
+                required
+              />
+
+              <button type="submit">Trocar senha</button>
+
+              <button
+                type="button"
+                onClick={() => setModalAberto(false)}
+              >
+                Cancelar
+              </button>
+            </form>
+          </div>
+        </div>,
+        document.body
+      )}
+
+    </>
+  );
+}
+
+export default Configuracoes;

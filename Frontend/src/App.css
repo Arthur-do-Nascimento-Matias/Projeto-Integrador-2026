@@ -1,0 +1,813 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root[data-tema="escuro"]{
+  /* Paleta baseada no mascote (macaco laranja) */
+    --cor-creme: #FFF8ED;
+    --cor-laranja-claro: #FFB238;
+    --cor-laranja: #FF9E1F;
+    --cor-laranja-escuro: #E07A00;
+    --cor-marrom: #6B4630;
+    --cor-marrom-escuro: #4A3020;
+    --cor-coral: #F2545B;
+    --cor-coral-escuro: #D63E45;
+    --cor-branco: #FFFFFF;
+}
+
+
+:root{
+    /* Paleta baseada no mascote (macaco laranja) */
+    --cor-creme: #FFF8ED;
+    --cor-laranja-claro: #FFB238;
+    --cor-laranja: #FF9E1F;
+    --cor-laranja-escuro: #E07A00;
+    --cor-marrom: #6B4630;
+    --cor-marrom-escuro: #4A3020;
+    --cor-coral: #F2545B;
+    --cor-coral-escuro: #D63E45;
+    --cor-branco: #FFFFFF;
+}
+html,
+body,
+#root {
+    margin: 0;
+    min-height: 100%;
+    min-width: 100%;
+    font-family: Kalam;
+    overflow-x: hidden;
+}
+
+#root {
+    min-height: 100vh;
+}
+.counter {
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 24px;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.hero {
+  position: relative;
+
+  .base,
+  .framework,
+  .vite {
+    inset-inline: 0;
+    margin: 0 auto;
+  }
+
+  .base {
+    width: 170px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .framework,
+  .vite {
+    position: absolute;
+  }
+
+  .framework {
+    z-index: 1;
+    top: 34px;
+    height: 28px;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
+      scale(1.4);
+  }
+
+  .vite {
+    z-index: 0;
+    top: 107px;
+    height: 26px;
+    width: auto;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
+      scale(0.8);
+  }
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+#next-steps {
+  display: flex;
+  border-top: 1px solid var(--border);
+  text-align: left;
+
+  & > div {
+    flex: 1 1 0;
+    padding: 32px;
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+    }
+  }
+
+  .icon {
+    margin-bottom: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#docs {
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+#next-steps ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  margin: 32px 0 0;
+
+  .logo {
+    height: 18px;
+  }
+
+  a {
+    color: var(--text-h);
+    font-size: 16px;
+    border-radius: 6px;
+    background: var(--social-bg);
+    display: flex;
+    padding: 6px 12px;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: var(--shadow);
+    }
+    .button-icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      flex: 1 1 calc(50% - 8px);
+    }
+
+    a {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+  }
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+  @media (max-width: 1024px) {
+    height: 48px;
+  }
+}
+
+.ticks {
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4.5px;
+    border: 5px solid transparent;
+  }
+
+  &::before {
+    left: 0;
+    border-left-color: var(--border);
+  }
+  &::after {
+    right: 0;
+    border-right-color: var(--border);
+  }
+}
+
+
+
+
+/* Variáveis Iniciais e Estrutura - PALETA FLORESTA VIVA */
+:root[data-tema="escuro"] .auth-page {
+  /* Tons de Vegetação */
+  --forest-light: #181713;
+  --forest: #181713;      
+  --forest-dark: #0f3521;  
+ 
+  /* Tons de Madeira/Terra */
+  --brown: #181713;        
+  --brown-dark: #322114;  
+ 
+  /* Frutas Tropicais / Luz */
+  --orange: #232B33;      
+  --orange-dark: #34485c;  
+ 
+  /* Fundo do ambiente */
+  --cream: #232B33;        
+  --cream-dark: #232B33;  
+  --cream-light: #232B33;
+
+  background:
+    radial-gradient(circle at 12% 18%, rgba(72, 126, 92, 0.25) 0 8%, transparent 8.3%),
+    radial-gradient(circle at 87% 80%, rgba(46, 78, 58, 0.25) 0 11%, transparent 11.3%),
+    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, var(--cream-light));
+}
+
+.auth-page {
+  /* Tons de Vegetação */
+  --forest-light: #487e5c;
+  --forest: #225a3d;      
+  --forest-dark: #0f3521;  
+ 
+  /* Tons de Madeira/Terra */
+  --brown: #543b27;        
+  --brown-dark: #322114;  
+ 
+  /* Frutas Tropicais / Luz */
+  --orange: #f28b18;      
+  --orange-dark: #cc6d00;  
+ 
+  /* Fundo do ambiente */
+  --cream: #f7f5ee;        
+  --cream-dark: #e8e2d2;  
+  --cream-light: #ded5c2;
+
+  --transition-smooth: 0.85s cubic-bezier(0.68, -0.15, 0.265, 1.15);
+  --transition-fast: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+ 
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 30px;
+  color: var(--brown-dark);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(72, 126, 92, 0.25) 0 8%, transparent 8.3%),
+    radial-gradient(circle at 87% 80%, rgba(242, 139, 24, 0.15) 0 11%, transparent 11.3%),
+    linear-gradient(135deg, var(--cream-dark), var(--cream) 45%, var(--cream-light));
+  font-family: 'Kalam', cursive;
+  animation: pageEnter 0.8s ease-out forwards;
+}
+ 
+
+.auth-page *, .auth-page *::before, .auth-page *::after { box-sizing: border-box; }
+
+ 
+/* Fundo Animado (Profundidade e Ambiente) */
+.ambient-elements {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+ 
+.particle {
+  position: absolute;
+  background: var(--forest);
+  border-radius: 50%;
+  opacity: 0.15;
+  filter: blur(1px);
+  animation: particleFloat 12s infinite ease-in-out alternate;
+}
+.p-1 { width: 12px; height: 12px; top: 20%; left: 15%; animation-duration: 15s; }
+.p-2 { width: 8px; height: 8px; top: 70%; left: 10%; animation-duration: 11s; animation-delay: -2s; }
+.p-3 { width: 18px; height: 18px; top: 15%; right: 12%; animation-duration: 18s; animation-delay: -5s; background: var(--orange); }
+.p-4 { width: 10px; height: 10px; top: 80%; right: 20%; animation-duration: 14s; }
+ 
+.forest-shape { position: absolute; pointer-events: none; opacity: .12; background: var(--forest); border-radius: 100% 0 100% 0; }
+.forest-shape-one { width: 340px; height: 180px; top: -55px; left: -90px; transform: rotate(32deg); animation: shapeSway 10s ease-in-out infinite alternate; }
+.forest-shape-two { width: 380px; height: 200px; right: -130px; bottom: -75px; transform: rotate(215deg); animation: shapeSway 12s ease-in-out infinite alternate-reverse; }
+ 
+/* Container Principal */
+
+::view-transition-old(root) {
+  animation: shared-page-out 0.32s ease forwards;
+}
+
+::view-transition-new(root) {
+  animation: shared-page-in 0.38s ease forwards;
+}
+
+::view-transition-group(simio-logo) {
+  animation-duration: 0.65s;
+  animation-timing-function: cubic-bezier(.16, 1, .3, 1);
+}
+
+::view-transition-old(simio-logo),
+::view-transition-new(simio-logo) {
+  height: 100%;
+}
+
+@keyframes shared-page-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.35;
+  }
+}
+
+@keyframes shared-page-in {
+  from {
+    opacity: 0.35;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+:root[data-tema="escuro"] #inicio-titulo,
+:root[data-tema="escuro"] .inicio-descricao,
+:root[data-tema="escuro"] .inicio-materias li,
+:root[data-tema="escuro"] .wordsChange,
+:root[data-tema="escuro"] .recover-success p,
+:root[data-tema="escuro"] .recover-success strong,
+:root[data-tema="escuro"] .titulo-gamificacao,
+:root[data-tema="escuro"] .gamificacao-descricao,
+:root[data-tema="escuro"] .recurso-gamificacao strong,
+:root[data-tema="escuro"] .recurso-gamificacao p,
+:root[data-tema="escuro"] #biblioteca-home-titulo,
+:root[data-tema="escuro"] .biblioteca-home-descricao,
+:root[data-tema="escuro"] .biblioteca-home-recursos li,
+:root[data-tema="escuro"] .simio-ai,
+:root[data-tema="escuro"] .simia-apresentacao-subtitulo,
+:root[data-tema="escuro"] .simia-apresentacao-descricao,
+:root[data-tema="escuro"] .inicio-explorar,
+:root[data-tema="escuro"] .familia-simio__descricao,
+:root[data-tema="escuro"] #familia-titulo,
+:root[data-tema="escuro"] .familia-simio__nota,
+:root[data-tema="escuro"] form p,
+:root[data-tema="escuro"] .rk-sobrancelha,
+:root[data-tema="escuro"] #rk-titulo,
+:root[data-tema="escuro"] #recover-title,
+:root[data-tema="escuro"] .rk-titulo-bloco,
+:root[data-tema="escuro"] .rankingIntro,
+:root[data-tema="escuro"] #rk-titulo em,
+:root[data-tema="escuro"] .rk-nome-podio,
+:root[data-tema="escuro"] .rk-xp-podio,
+:root[data-tema="escuro"] .learn-together,
+:root[data-tema="escuro"] .ask-help-discover,
+:root[data-tema="escuro"] .stats strong, 
+:root[data-tema="escuro"] .stats span,
+:root[data-tema="escuro"] .estatisticas h2,
+:root[data-tema="escuro"] .auth-page .toggle-panel,
+:root[data-tema="escuro"] .progresso h2,
+:root[data-tema="escuro"] .progress-footer,
+:root[data-tema="escuro"] .subject strong,
+:root[data-tema="escuro"] .subject span,
+:root[data-tema="escuro"] .profile-panel-heading h2,
+:root[data-tema="escuro"] .form-intro,
+:root[data-tema="escuro"] .stagger-2,
+:root[data-tema="escuro"] .auth-field label,
+:root[data-tema="escuro"] .forgot-button:hover,
+:root[data-tema="escuro"] .progress-percentage,
+:root[data-tema="escuro"] #edit-profile-title,
+:root[data-tema="escuro"] .configuracoes h1,
+:root[data-tema="escuro"] .profile-field span, 
+:root[data-tema="escuro"] .profile-field small,
+:root[data-tema="escuro"] .rk-classificacao, 
+:root[data-tema="escuro"] .rk-classificacao p, 
+:root[data-tema="escuro"] .rk-classificacao strong,
+:root[data-tema="escuro"] .rk-classificacao small,
+:root[data-tema="escuro"] .rk-classificacao span {
+    color: #ffffff !important;
+}
+
+:root[data-tema="escuro"] .recent-item:hover {
+  background: #232B33;
+}
+
+:root[data-tema="escuro"] .profile-stat-card,
+:root[data-tema="escuro"] .profile-panel,
+:root[data-tema="escuro"] .auth-container,
+:root[data-tema="escuro"] .profile-edit-modal,
+:root[data-tema="escuro"] .rk-classificacao {
+  background-color: #39453D !important;
+}
+
+:root[data-tema="escuro"] #moki-parallax .stage::after {
+  background: linear-gradient(
+    to bottom,
+    #31303000 0%,
+    #3130309d 25%,
+    #313030a2 45%,
+    #232B33 65%,
+    #232B33 82%,
+    #232B33 93%,
+    #232B33 100%
+  );
+}
+
+:root[data-tema="escuro"] .inicio,
+:root[data-tema="escuro"] .gamificacao,
+:root[data-tema="escuro"] .biblioteca-home,
+:root[data-tema="escuro"] .simia-apresentacao,
+:root[data-tema="escuro"] .familia-simio,
+:root[data-tema="escuro"] .simio-rodape,
+:root[data-tema="escuro"] .form-message,
+:root[data-tema="escuro"] .recover-modal,
+:root[data-tema="escuro"] .rk-linha:nth-child(odd) {
+  background-color: #232B33 !important;
+}
+:root[data-tema="escuro"] .rk-linha.rk-linha--eu {
+  background-color: #483e2c !important;
+}
+:root[data-tema="escuro"] .rk-linha:hover {
+  background-color: #4b5e50 !important;
+}
+
+
+:root[data-tema="escuro"] .rk-pagina .rk-linha:hover {
+  background: #4b5e50 !important;
+}
+
+:root[data-tema="escuro"] .rk-pagina .rk-linha:nth-child(odd):hover {
+  background: #1a2229 !important;
+}
+
+:root[data-tema="escuro"] .inicio-materias {
+  background: #31303080 !important;
+  border-top: transparent;
+  border-bottom: transparent;
+}
+
+:root[data-tema="escuro"] .gamificacao::before {
+  background: #536574;
+}
+
+:root[data-tema="escuro"] .biblioteca-home::before {
+  background: #584044;
+}
+:root[data-tema="escuro"] .simia-apresentacao::before {
+  background: #344B54;
+}
+
+:root[data-tema="escuro"] .stage {
+    background: #192d24 !important;
+}
+
+:root[data-tema="escuro"] .form-box {
+    background-color: #39453D;
+}
+
+:root[data-tema="escuro"] .simio-rodape__corpo {
+  background-color: #8eac84;
+}
+
+:root[data-tema="escuro"] section.familia-simio {
+    background: #232B33 !important;
+    background-image: none !important;
+}
+
+:root[data-tema="escuro"] .simio-rodape .simio-rodape__onda {
+    fill: #8eac84 !important;
+}
+/* Feed — modo escuro controlado exclusivamente pelo tema do App. */
+:root[data-tema="escuro"] .feed-page {
+    --feed-surface: #343c45;
+    --feed-surface-alt: #2b333b;
+    --feed-border: #4a5561;
+    --feed-shadow: #171d23;
+    --feed-text: #eaecea;
+    --feed-copy: #c9d0d5;
+    --feed-muted: #aab5be;
+    --feed-green: #98b97f;
+    --feed-green-dark: #bdd0ac;
+    color-scheme: dark;
+}
+
+/* Estes textos já participam de uma regra global com !important acima. */
+:root[data-tema="escuro"] .feed-page .learn-together {
+    color: var(--feed-text) !important;
+}
+
+:root[data-tema="escuro"] .feed-page .ask-help-discover,
+:root[data-tema="escuro"] .feed-page form p {
+    color: var(--feed-copy) !important;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-kicker,
+:root[data-tema="escuro"] .feed-page .feed-header h1 em,
+:root[data-tema="escuro"] .feed-page .feed-side-title > div > span,
+:root[data-tema="escuro"] .feed-page .feed-modal-header span,
+:root[data-tema="escuro"] .feed-page .feed-detail-header > span,
+:root[data-tema="escuro"] .feed-page .feed-moderation-header span {
+    color: #edb263;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-admin-button {
+    border-color: #75584e;
+    background: #493d3b;
+    box-shadow: 0 4px 0 #252228;
+    color: #e4b3a6;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-filter-scroll {
+    scrollbar-color: #66795b transparent;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-community {
+    background: #39434d;
+    color: #c8d1d7;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-community:hover,
+:root[data-tema="escuro"] .feed-page .feed-community.active {
+    border-color: #82956b;
+    background: #506449;
+    color: #f1eee3;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-order {
+    background: #2b333b;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-order button {
+    color: #abb8b4;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-order button.active {
+    background: #4a5662;
+    box-shadow: 0 2px 0 #1d252c;
+    color: #e7ece5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button:hover {
+    background: #414b55;
+    color: var(--feed-text);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button.positive {
+    border-color: #d99b3f;
+    background: #f5b452;
+    box-shadow: 0 3px 0 #9d6923;
+    color: #50381a;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button.negative {
+    border-color: #ad99be;
+    background: #cebbdf;
+    box-shadow: 0 3px 0 #735c88;
+    color: #523d63;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes button:active {
+    box-shadow: none;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-votes .feed-post-report:hover,
+:root[data-tema="escuro"] .feed-page .feed-votes .feed-detail-report:hover {
+    background: #563f3d;
+    color: #f0b4a2;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-avatar {
+    border-color: #5a6570;
+    box-shadow: 0 4px 0 #20272f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-comment .feed-avatar {
+    box-shadow: 0 3px 0 #20272f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-community {
+    border-color: color-mix(in srgb, var(--topic-color, var(--community-color, #62824b)) 35%, #47515b);
+    background: color-mix(in srgb, var(--topic-color, var(--community-color, #62824b)) 17%, #343c45);
+    box-shadow: 0 3px 0 #20272f;
+    color: color-mix(in srgb, var(--topic-color, var(--community-color, #62824b)) 18%, #e4ece6);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions {
+    border-top-color: var(--feed-border);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions button {
+    border-color: #58616b;
+    background: #414b55;
+    box-shadow: 0 4px 0 #20272f;
+    color: var(--feed-text);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions button:hover {
+    background: #4c5762;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-post-actions button:active {
+    box-shadow: none;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-communities article:hover,
+:root[data-tema="escuro"] .feed-page .feed-side-communities article:focus-visible {
+    background: #414e42;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-community-position {
+    color: #abbfa0;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-communities article > div strong {
+    color: #dce5d5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-communities article > div span {
+    color: #aebba5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-tip {
+    border-color: #6b5b42;
+    background: #3d3931;
+    box-shadow: 0 5px 0 #24221e;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-tip strong {
+    color: #e7b968;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-tip p {
+    color: #d4c5aa;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-state {
+    border-color: #64705f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-loader {
+    border-color: #4b5b4a;
+    border-top-color: #98b97f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-error {
+    border-color: #805343;
+    background: #49352f;
+    color: #f1bca5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal-backdrop,
+:root[data-tema="escuro"] .feed-page .feed-detail-backdrop,
+:root[data-tema="escuro"] .feed-page .feed-moderation-backdrop {
+    background: #11171dd6;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal,
+:root[data-tema="escuro"] .feed-page .feed-detail,
+:root[data-tema="escuro"] .feed-page .feed-moderation-panel {
+    box-shadow: 0 9px 0 #151b21;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal-header > button,
+:root[data-tema="escuro"] .feed-page .feed-detail-header > button,
+:root[data-tema="escuro"] .feed-page .feed-moderation-header > button {
+    border-color: #5a6670;
+    background: #404b54;
+    color: #dbe4d5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal input,
+:root[data-tema="escuro"] .feed-page .feed-modal select,
+:root[data-tema="escuro"] .feed-page .feed-modal textarea,
+:root[data-tema="escuro"] .feed-page .feed-comment-form textarea {
+    border-color: #56616b;
+    background: #29323a;
+    color: var(--feed-text);
+}
+
+:root[data-tema="escuro"] .feed-page .feed-modal input::placeholder,
+:root[data-tema="escuro"] .feed-page .feed-modal textarea::placeholder,
+:root[data-tema="escuro"] .feed-page .feed-comment-form textarea::placeholder {
+    color: #a4b0ba;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-comment-content {
+    background: #2d363f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-moderation-actions button {
+    border-color: #746343;
+    background: #443e31;
+    color: #e6c583;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-moderation-actions .feed-action-hide {
+    border-color: #7c5548;
+    background: #483632;
+    color: #e9b5a5;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report {
+    background: #2d363f;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-type {
+    background: #354a56;
+    color: #c6dce7;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-type--comentario {
+    background: #443b50;
+    color: #c8b5dc;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-reason > strong {
+    color: #efb19c;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-content {
+    background: #263039;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-actions button {
+    border-color: #5c6b54;
+    background: #3c493a;
+    color: #cbdcbe;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-report-actions .feed-report-hide {
+    border-color: #b86a56;
+    background: #9d493b;
+    color: #f6e8df;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-moderation-empty-icon {
+    background: #3e5036;
+    color: #c0d5ac;
+}
+
+/* Feed — ações de autoria no tema escuro do App. */
+:root[data-tema="escuro"] .feed-page .feed-votes .feed-owner-delete:hover,
+:root[data-tema="escuro"] .feed-page .feed-comment-side .feed-owner-delete:hover,
+:root[data-tema="escuro"] .feed-page .feed-comment-report:hover {
+    background: #563f3d;
+    color: #f0b4a2;
+}
+:root[data-tema="escuro"] .feed-page .feed-editor-dialog::backdrop { background: #11171dd6; }
+:root[data-tema="escuro"] .feed-page .feed-editor-cancel {
+    border-color: #58616b;
+    background: #414b55;
+    box-shadow: 0 3px 0 #20272f;
+}
+:root[data-tema="escuro"] .feed-page .feed-editor-cancel:hover { background: #4c5762; }
+:root[data-tema="escuro"] .feed-page .feed-editor-cancel:active { box-shadow: none; }
+
+/* Comunidades — filtro lateral e seletor compacto no tema escuro. */
+:root[data-tema="escuro"] .feed-page .feed-sidebar .feed-communities-heading > span { color: #edb263; }
+:root[data-tema="escuro"] .feed-page .feed-mobile-community select { background: #2b333b; }
+:root[data-tema="escuro"] .feed-page .feed-choice-total { background: #2b333b; color: #b6c1b2; }
+:root[data-tema="escuro"] .feed-page .feed-community-choice[aria-pressed="true"] { border-color: #7d9366; background: #43553e; color: #e5ecdd; }
+:root[data-tema="escuro"] .feed-page .feed-community-choice[aria-pressed="true"] .feed-choice-total { background: #2e3d29; color: #cbdcba; }
+
+/* Feed — confirmação de exclusão no tema escuro. */
+:root[data-tema="escuro"] .feed-page .feed-confirm-header > span { color: #edb263; }
+:root[data-tema="escuro"] .feed-page .feed-confirm-icon { border-color: #785447; background: #503b35; box-shadow: 0 4px 0 #2e2320; color: #efb7a4; }
+:root[data-tema="escuro"] .feed-page .feed-confirm-delete { box-shadow: 0 4px 0 #592a23; }
+:root[data-tema="escuro"] .feed-page .feed-confirm-delete:active { box-shadow: none; }
+
+/* Compartilhamento — notificação verde no tema escuro. */
+:root[data-tema="escuro"] .feed-share-toast { border-color: #64865a; background: #31482f; box-shadow: 0 5px 0 #1b2b19; color: #dce9d2; }
+:root[data-tema="escuro"] .feed-share-toast > button:hover { background: #48633d; }
+:root[data-tema="escuro"] .feed-share-toast--erro { border-color: #826b46; background: #493d2c; box-shadow: 0 5px 0 #2d251b; color: #ead7b5; }

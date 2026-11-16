@@ -1,0 +1,400 @@
+:root {
+  color-scheme: dark;
+
+  --verde-escuro: #f0f3f6;
+  --texto: #a5afb9;
+  --creme: #161b22;
+  --borda: #30363d;
+  --github: #242d27;
+  --github-hover: #303e34;
+  --github-sombra: #080c09;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-y: hidden;
+
+  background: linear-gradient(
+    to bottom,
+    #0d1117 0%,
+    #11171c 65%,
+    #17221c 100%
+  );
+
+  color: var(--verde-escuro);
+  font-family: "Rubik", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible {
+  outline: 3px solid #a7cf98;
+  outline-offset: 6px;
+}
+
+.icones {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: min(1440px, calc(100% - 48px));
+  margin-inline: auto;
+  padding-block: 20px;
+}
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  background: var(--creme);
+  color: #dce3e9;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 180ms ease;
+}
+
+.voltar svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.voltar:hover {
+  background: #242c35;
+}
+
+.pagina {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.equipe {
+  width: min(1200px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 8px 0 48px;
+  margin-top: -25px;
+}
+
+.equipe > h1 {
+  margin: 0 0 36px;
+  color: var(--verde-escuro);
+  text-align: center;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+}
+
+.equipe > h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.titulo-github__icone {
+  display: block;
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+  fill: currentColor;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--borda);
+  border-radius: 25px;
+  background: var(--creme);
+
+  box-shadow:
+    0 5px 0 #080c10,
+    0 14px 25px rgb(0 0 0 / 20%);
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.foto {
+  aspect-ratio: 1.12;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #21262d;
+}
+
+.foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 400ms ease;
+}
+
+.card__conteudo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 19px 6px 8px;
+}
+
+.card__cargo {
+  display: block;
+  margin-bottom: 10px;
+  color: #9fc89d;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 1.2px;
+}
+
+.card h2 {
+  margin: 0;
+  color: var(--verde-escuro);
+  font-size: clamp(18px, 1.7vw, 23px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+
+.card__funcoes {
+  display: grid;
+  gap: 22px;
+  width: 100%;
+  margin: 34px 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.card__funcoes li {
+  color: #b7c0c9;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.github {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid #405548;
+  border-radius: 13px;
+  background: var(--github);
+  box-shadow: 0 4px 0 var(--github-sombra);
+  color: #f0f6f1;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.github svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.github__icone {
+  width: 20px;
+  height: 20px;
+}
+
+.github__seta {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  transition: transform 180ms ease;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: #506453;
+
+    box-shadow:
+      0 7px 0 #080c10,
+      0 20px 30px rgb(0 0 0 / 30%);
+  }
+
+  .card:hover .foto img {
+    transform: scale(1.035);
+  }
+
+  .github:hover {
+    border-color: #739779;
+    background: var(--github-hover);
+  }
+
+  .github:hover .github__seta {
+    transform: translate(2px, -2px);
+  }
+}
+
+.github:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--github-sombra);
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  width: min(1200px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 23px 0;
+  border-top: 1px solid #303b33;
+  color: #a5b5a8;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1000px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 650px;
+  }
+
+  .card h2 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 650px) {
+  .cabecalho,
+  .equipe,
+  .rodape {
+    width: calc(100% - 36px);
+  }
+
+  .cabecalho {
+    padding-block: 16px;
+  }
+
+  .equipe > h1 {
+    margin-bottom: 28px;
+  }
+
+  .cards {
+    gap: 16px;
+  }
+
+  .card {
+    padding: 9px;
+    border-radius: 20px;
+  }
+
+  .card__conteudo {
+    padding-inline: 3px;
+  }
+
+  .card h2 {
+    font-size: 18px;
+  }
+
+  .card__funcoes {
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .card__funcoes li {
+    font-size: 12px;
+  }
+
+  .rodape {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .cards {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+    gap: 24px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .foto {
+    aspect-ratio: 1.3;
+  }
+
+  .card h2 {
+    font-size: 23px;
+  }
+
+  .card__funcoes li {
+    font-size: 14px;
+  }
+
+  .github {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .foto img,
+  .github,
+  .github__seta,
+  .voltar {
+    transition: none;
+  }
+}
+

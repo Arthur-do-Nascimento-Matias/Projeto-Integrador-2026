@@ -1,0 +1,616 @@
+.configuracoes {
+  width: 100%;
+  min-height: 100dvh;
+  --config-largura: 680px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding:
+    clamp(40px, 7dvh, 110px) clamp(24px, 2.8vw, 96px) 68px clamp(174px, 11vw, 440px);
+
+  font-family: "Rubik", sans-serif;
+}
+
+
+
+.configuracoes>h1 {
+  width: min(100%, var(--config-largura));
+
+  margin: 0 0 28px;
+
+  color: #4b3529;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+
+  text-align: left;
+}
+
+
+/* ========================================
+   LISTA
+======================================== */
+
+.config-lista {
+  width: min(100%, var(--config-largura));
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.simio-tema {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  margin-left: auto;
+
+  width: 80px;
+  height: 44px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #96b77d;
+  box-shadow: 0 4px 0 #62794b;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.simio-tema-bolinha {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  background: #fff8ed;
+  box-shadow: 0 2px 3px #00000026;
+
+  transition: transform 350ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.simio-tema-sol,
+.simio-tema-lua {
+  position: absolute;
+  top: 10px;
+
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.simio-tema-sol {
+  right: 10px;
+  color: #ffb238;
+  animation: simioSolGirar 20s linear infinite;
+}
+
+.simio-tema-lua {
+  left: 10px;
+  color: #f1dfc0;
+  transform: rotate(-15deg);
+}
+
+.simio-tema[aria-checked="true"] {
+  background: #203d2c;
+  box-shadow: 0 4px 0 #122619;
+}
+
+.simio-tema[aria-checked="true"] .simio-tema-bolinha {
+  transform: translateX(36px);
+}
+
+.simio-tema:focus-visible {
+  outline: 3px solid #ffb238;
+  outline-offset: 6px;
+}
+
+@keyframes simioSolGirar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .simio-tema,
+  .simio-tema-bolinha {
+    transition: none;
+  }
+
+  .simio-tema-sol {
+    animation: none;
+  }
+}
+
+/* ========================================
+   CARD
+======================================== */
+
+.config-card {
+  width: 100%;
+  min-height: 94px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+
+  padding: 22px 26px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  box-shadow:
+    0 12px 32px rgba(57, 39, 29, 0.1);
+
+  box-shadow: 0 6px 0 #b8bdb9;
+
+  transition:
+    transform 180ms ease,
+    scale 220ms ease
+}
+
+.config-card:hover {
+  transform: translateY(-2px);
+  scale: 1.05;
+}
+
+.config-texto {
+  min-width: 0;
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.configuracoes .config-texto h2 {
+  position: static;
+
+  width: auto;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  color: #4b3529;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: 0;
+
+  text-align: left;
+  white-space: normal;
+
+  transform: none;
+}
+
+.configuracoes .config-texto p {
+  position: static;
+
+  width: auto;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  color: #88756a;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+
+  text-align: left;
+  white-space: normal;
+
+  transform: none;
+}
+
+.switch {
+  position: relative;
+
+  width: 55px;
+  min-width: 55px;
+  height: 30px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #b8b8b8;
+  box-shadow: 0 4px 0 #7f7f7f;
+
+  cursor: pointer;
+
+  transition:
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.switch:hover {
+  background: #a0a0a0;
+  box-shadow: 0 4px 0 #747474;
+}
+
+.switch:focus-visible {
+  outline: 3px solid rgba(89, 115, 52, 0.28);
+  outline-offset: 3px;
+}
+
+.switch-bolinha {
+  position: absolute;
+
+  width: 22px;
+  height: 22px;
+
+  top: 4px;
+  left: 4px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.22);
+
+  transition:
+    transform 220ms ease;
+}
+
+
+.switch.ativo {
+  background: #203D2C;
+  box-shadow: 0 4px 0 #122619;
+}
+
+.switch.ativo .switch-bolinha {
+  transform: translateX(25px);
+}
+
+
+.config-seletor {
+  min-width: 118px;
+
+  box-sizing: border-box;
+
+  padding: 11px 34px 11px 14px;
+
+  border: 1px solid #d8cec7;
+  border-radius: 12px;
+
+  background-color: #fdfaf7;
+  color: #4b3529;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0;
+
+  cursor: pointer;
+  outline: none;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.config-seletor:hover {
+  border-color: #9a826f;
+  background: #ffffff;
+}
+
+.config-seletor:focus {
+  border-color: #597334;
+
+  box-shadow:
+    0 0 0 3px rgba(89, 115, 52, 0.15);
+}
+
+.config-card-conta {
+  border-color:
+    rgba(184, 67, 67, 0.14);
+}
+
+.botao-sair,
+.botao-trocar-senha {
+  min-width: 90px;
+
+  box-sizing: border-box;
+
+  padding: 11px 20px;
+
+  border: 1px solid #d66a62;
+  border-radius: 12px;
+
+  background: #fff4f2;
+  color: #a63f38;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.botao-sair:hover,
+.botao-trocar-senha:hover {
+  background: #c9574f;
+  color: #ffffff;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 16px rgba(201, 87, 79, 0.22);
+}
+
+.botao-sair:active,
+.botao-trocar-senha:active {
+  transform: translateY(0);
+}
+
+.botao-sair:focus-visible,
+.botao-trocar-senha:focus-visible {
+  outline: 3px solid rgba(201, 87, 79, 0.25);
+  outline-offset: 3px;
+}
+
+.config-versao {
+  position: fixed;
+  right: 20px;
+  bottom: 0;
+  z-index: 10;
+  padding: 5px 12px 6px;
+  border-radius: 8px 8px 0 0;
+  background: #eae9e3;
+  color: #4b3529;
+  font: 500 0.75rem/1.3 "Rubik", sans-serif;
+}
+
+.config-versao[data-tema="escuro"] {
+  background: #343c45;
+  color: #f4f1e8;
+}
+
+.configuracoes .config-card button.switch {
+  position: relative;
+}
+
+.configuracoes .config-card .switch > .switch-bolinha {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.configuracoes .config-card .switch.ativo > .switch-bolinha {
+  transform: translateX(25px);
+}
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+/* A rota centraliza a lista na área útil. */
+.auth-page:has(> .configuracoes) {
+  inset-inline: 0;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  margin-inline: 0;
+  padding: 0;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+}
+
+.auth-page:has(> .configuracoes) > .configuracoes {
+  inset: auto;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  transform: none;
+  translate: none;
+}
+
+.configuracoes .config-card > :is(button, select) {
+  flex-shrink: 0;
+  max-width: 100%;
+}
+
+.configuracoes .config-texto { overflow-wrap: anywhere; }
+
+@media (min-width: 2300px) {
+  .configuracoes { --config-largura: 800px; }
+  .configuracoes > :is(h1, .config-lista) { zoom: 1.5; }
+  .modal-overlay > .modalTrocar { zoom: 1.2; }
+  .config-versao { font-size: 1rem; }
+}
+
+@media (min-width: 3200px) {
+  .configuracoes { --config-largura: 900px; }
+  .configuracoes > :is(h1, .config-lista) { zoom: 2; }
+  .modal-overlay > .modalTrocar { zoom: 1.5; }
+  .config-versao { font-size: 1.25rem; }
+}
+
+@media (max-width: 1100px), (max-width: 1400px) and (pointer: coarse) {
+  body:has(.configuracoes) .auth-page:has(> .configuracoes) { padding: 0; }
+
+  .auth-page:has(> .configuracoes) > .configuracoes,
+  .configuracoes {
+    --config-nav: calc(82px + env(safe-area-inset-bottom, 0px));
+    --config-lateral: max(clamp(12px, 3vw, 28px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    padding: max(28px, env(safe-area-inset-top, 0px)) var(--config-lateral) calc(var(--config-nav) + 54px);
+  }
+
+  .config-versao {
+    right: max(14px, env(safe-area-inset-right, 0px));
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 700px) {
+  .configuracoes > h1 { margin-bottom: 22px; font-size: 1.75rem; }
+  .configuracoes .config-lista { gap: 14px; }
+  .configuracoes .config-card { min-height: 82px; gap: 12px; padding: 16px; }
+  .configuracoes .config-texto h2 { font-size: 1.0625rem; }
+  .configuracoes .config-texto p { font-size: .8125rem; }
+  .configuracoes :is(.botao-sair, .botao-trocar-senha) { min-height: 44px; }
+
+  html { font-size: 16px; }
+  html[data-tamanho-texto="pequeno"] { font-size: 14px; }
+  html[data-tamanho-texto="normal"] { font-size: 16px; }
+  html[data-tamanho-texto="grande"] { font-size: 18px; }
+}
+
+@media (max-width: 400px) {
+  .configuracoes :is(.config-password, .config-card-conta) {
+    flex-wrap: wrap;
+  }
+
+  .configuracoes :is(.config-password, .config-card-conta) .config-texto { flex-basis: 100%; }
+  .configuracoes :is(.botao-sair, .botao-trocar-senha) { margin-inline-start: auto; }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .configuracoes .config-card:hover { scale: 1; transform: none; }
+}
+
+.modal-overlay:has(> .modalTrocar) {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  box-sizing: border-box;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top, 0px))
+           max(16px, env(safe-area-inset-right, 0px))
+           max(16px, env(safe-area-inset-bottom, 0px))
+           max(16px, env(safe-area-inset-left, 0px));
+  background: rgba(0, 0, 0, .4);
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay > .modalTrocar {
+  position: relative;
+  inset: auto;
+  width: min(100%, clamp(400px, 26vw, 720px));
+  height: auto;
+  max-height: 100%;
+  box-sizing: border-box;
+  padding: clamp(16px, 3vw, 28px);
+  border-radius: 20px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  transform: none;
+  background: #fffdfa;
+  color: #4b3529;
+  font-family: "Rubik", sans-serif;
+}
+
+.modal-overlay > .modalTrocar form { display: grid; gap: 12px; min-width: 0; }
+.modal-overlay > .modalTrocar :is(input, button) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid #d8cec7;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #faf7f2;
+  color: inherit;
+  font: inherit;
+  font-size: 16px;
+}
+.modal-overlay > .modalTrocar button { cursor: pointer; font-weight: 700; }
+.modal-overlay > .modalTrocar button[type="submit"] {
+  background: #f5a035;
+  border-color: transparent;
+  color: #322114;
+}
+.modal-overlay > .modalTrocar :is(input, button):focus-visible { outline: 2px solid #e38c26; outline-offset: 2px; }
+
+:root[data-tema="escuro"] .modal-overlay > .modalTrocar {
+  color-scheme: dark;
+  background: #343c45;
+  color: #f4f1e8;
+}
+:root[data-tema="escuro"] .modal-overlay > .modalTrocar :is(input, button[type="button"]) {
+  border-color: #64717c;
+  background: #282f36;
+}
+
+/* Tema escuro das Configurações */
+.configuracoes:has(.simio-tema[aria-checked="true"]) .config-card {
+  background: #343c45;
+  box-shadow: 0 6px 0 #192320;
+}
+
+.configuracoes:has(.simio-tema[aria-checked="true"]) .config-texto h2 {
+  color: #f4f1e8;
+}
+
+.configuracoes:has(.simio-tema[aria-checked="true"]) .config-texto p {
+  color: #c4cec8;
+}
+
+.configuracoes:has(.simio-tema[aria-checked="true"]) :is(.botao-sair, .botao-trocar-senha) {
+  background: #382b2b;
+  border-color: #e88980;
+  color: #ffaaa1;
+}
+
+.configuracoes:has(.simio-tema[aria-checked="true"]) :is(.botao-sair, .botao-trocar-senha):hover {
+  background: #4b3433;
+}
+
+.configuracoes:has(.simio-tema[aria-checked="true"]) :is(.botao-sair, .botao-trocar-senha):focus-visible {
+  outline-color: #ffaaa1;
+}

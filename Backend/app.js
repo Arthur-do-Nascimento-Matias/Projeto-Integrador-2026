@@ -1,0 +1,1227 @@
+import http from 'http'
+import url from 'url'
+import formidable from 'formidable'
+import fs from 'fs'
+import { buscarUsuarioAutenticado } from './utils/autenticacao.js'
+import Sequencia from './Sequencia.js'
+import Conexao from './Conexao.js'
+import Livros from './Livros.js'
+import ChatBot from './ChatBot.js'
+import Email from './Email.js'
+import Cadastro from './Cadastro.js'
+import Login from './Login.js'
+import Redacoes from './Redacoes.js'
+import Http from './utils/http.js'
+import Feed from './Feed.js'
+import Missoes from './Missoes.js'
+import Provas from './Provas.js'
+
+import { error } from 'console'
+import { json } from 'stream/consumers'
+
+// As duas rotas da trilha usam a mesma consulta e o mesmo formato de resposta.
+async function responderTrilha(dados, res) {
+    const idMateria = Number(dados?.id);
+    const idUser = Number(dados?.idUser);
+    if (!Number.isInteger(idMateria) || idMateria <= 0 ||
+        !Number.isInteger(idUser) || idUser <= 0) {
+        Http.responderJson(res, 400, {
+            ok: false,
+            erro: 'Informe id (matéria) e idUser válidos.'
+        });
+        return;
+    }
+    try {
+        const con = await Conexao.criarTrilha(idMateria, idUser);
+        if (!Array.isArray(con?.indices)) {
+            throw new Error('A consulta da trilha não retornou a lista de perguntas.');
+        }
+        Http.responderJson(res, 200, { nome: con.indices });
+    } catch (erro) {
+        console.error('Erro ao carregar trilha:', erro);
+        Http.responderJson(res, 500, {
+            ok: false,
+            erro: 'Não foi possível carregar a trilha.'
+        });
+    }
+}
+const callback = async (req, res) => {
+    res.setHeader(
+        'Access-Control-Allow-Origin',
+        'http://localhost:5173'
+    );
+
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, OPTIONS'
+    );
+
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization'
+    );
+
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
+    }
+    const rota = url.parse(req.url, true)
+    const param = rota.query
+    if (rota.pathname === '/mudarAparencia') {
+        if (req.method !== 'POST') {
+            Http.responderJson(res, 405, { ok: false, message: 'Método não permitido.' });
+            return;
+        }
+        const idUsuario = buscarUsuarioAutenticado(req);
+        if (!idUsuario) {
+            Http.responderJson(res, 401, { ok: false, message: 'Faça login novamente.' });
+            return;
+        }
+        try {
+            const dados = await Http.lerCorpo(req);
+            const fotos = ['', 'moki', 'zoro', 'miro', 'ibra', 'mika', 'kimo', 'tuki', 'nala'];
+            const cores = ['#B4CFA8', '#F1DFC0', '#B8D5E5', '#D4C0E4', '#F0C3A7', '#E8BDCB'];
+            if (!dados || !fotos.includes(dados.foto) || !cores.includes(dados.cor_fundo)) {
+                Http.responderJson(res, 400, { ok: false, message: 'Escolha um mascote e uma cor válidos.' });
+                return;
+            }
+            const resultado = await Conexao.atualizarAparencia({
+                id: idUsuario, foto: dados.foto, cor_fundo: dados.cor_fundo
+            });
+            if (!resultado.affectedRows) {
+                Http.responderJson(res, 404, { ok: false, message: 'Usuário não encontrado.' });
+                return;
+            }
+            Http.responderJson(res, 200, { ok: true, mensagem: 'Aparência atualizada!' });
+        } catch (erro) {
+            console.error('Erro ao atualizar aparência:', erro);
+            Http.responderJson(res, erro.status || 500, {
+                ok: false, message: 'Não foi possível salvar a aparência.'
+            });
+        }
+        return;
+    }
+    if (
+        rota.pathname === '/missoes/hoje' ||
+        rota.pathname === '/missoes/evento'
+    ) {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                erro: 'Faça login novamente.'
+            })
+            return
+        }
+        const consulta =
+            rota.pathname === '/missoes/hoje' &&
+            req.method === 'GET'
+        const registro =
+            rota.pathname === '/missoes/evento' &&
+            req.method === 'POST'
+        if (!consulta && !registro) {
+            Http.responderJson(res, 405, {
+                erro: 'Método não permitido.'
+            })
+            return
+        }
+        async function atenderMissoes() {
+            try {
+                const evento = registro
+                    ? await Http.lerCorpo(req)
+                    : null
+                const dados = await Missoes.processar(
+                    idUsuario,
+                    evento
+                )
+                Http.responderJson(res, 200, dados)
+            } catch (erro) {
+                console.error('Erro nas missões:', erro)
+                Http.responderJson(
+                    res,
+                    erro.status || 500,
+                    { erro: erro.message }
+                )
+            }
+        }
+        atenderMissoes()
+        return
+    }
+    if (['/feed/conteudo/editar', '/feed/conteudo/excluir'].includes(rota.pathname)) {
+        if (req.method !== 'POST') {
+            Http.responderJson(res, 405, { ok: false, erro: 'Método não permitido.' })
+            return
+        }
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, { ok: false, erro: 'Faça login novamente.' })
+            return
+        }
+        try {
+            const dados = await Http.lerCorpo(req)
+            if (!dados || typeof dados !== 'object' || Array.isArray(dados)) {
+                Http.responderJson(res, 400, { ok: false, erro: 'Dados inválidos.' })
+                return
+            }
+            const resultado = await Feed.alterarConteudoProprio({
+                ...dados,
+                id_usuario: idUsuario,
+                acao: rota.pathname.endsWith('/editar') ? 'editar' : 'excluir'
+            })
+            Http.responderJson(res, 200, resultado)
+        } catch (erro) {
+            const status = erro.status || 500
+            if (status >= 500) console.error('Erro ao alterar conteúdo próprio:', erro)
+            Http.responderJson(res, status, {
+                ok: false,
+                erro: status >= 500 ? 'Não foi possível alterar o conteúdo.' : erro.message
+            })
+        }
+        return
+    }
+    if (req.method === 'GET' && rota.pathname === '/comunidades') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        Feed.listarComunidades()
+            .then(comunidades => {
+                Http.responderJson(res, 200, {
+                    comunidades
+                })
+            })
+            .catch(error => {
+                console.error(
+                    'ERRO AO BUSCAR COMUNIDADES:',
+                    error
+                )
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method === 'GET' && rota.pathname === '/feed/post') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        const idPost = Number(param.id_post)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        if (!idPost) {
+            Http.responderJson(res, 400, {
+                erro: 'Informe um id_post válido.'
+            })
+            return
+        }
+        Feed.buscarPost(idPost, idUsuario)
+            .then(resultado => {
+                if (!resultado) {
+                    Http.responderJson(res, 404, {
+                        erro: 'Post não encontrado.'
+                    })
+                    return
+                }
+                Http.responderJson(res, 200, resultado)
+            })
+            .catch(error => {
+                console.error(
+                    'ERRO AO BUSCAR POST:',
+                    error
+                )
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method === 'GET' && rota.pathname === '/feed') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        Feed.listarPosts(idUsuario, {
+            comunidade: param.comunidade,
+            ordem: param.ordem
+        })
+            .then(posts => {
+                Http.responderJson(res, 200, {
+                    posts
+                })
+            })
+            .catch(error => {
+                console.error(
+                    'ERRO AO BUSCAR FEED:',
+                    error
+                )
+                Http.responderJson(res, 500, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method === 'POST' && rota.pathname === '/feed') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        Http.lerCorpo(req)
+            .then(dados => Feed.criarPost({
+                ...dados,
+                id_usuario: idUsuario,
+                id_comunidade: Number(dados.id_comunidade)
+            }))
+            .then(resultado => {
+                Http.responderJson(res, 201, {
+                    ok: true,
+                    ...resultado
+                })
+            })
+            .catch(error => {
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method === 'POST' && rota.pathname === '/feed/voto') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        Http.lerCorpo(req)
+            .then(dados => Feed.votarPost(
+                Number(dados.id_post),
+                idUsuario,
+                dados.tipo
+            ))
+            .then(() => {
+                Http.responderJson(res, 200, {
+                    ok: true
+                })
+            })
+            .catch(error => {
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method === 'POST' && rota.pathname === '/feed/comentarios') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        Http.lerCorpo(req)
+            .then(dados => Feed.criarComentario({
+                ...dados,
+                id_usuario: idUsuario,
+                id_post: Number(dados.id_post)
+            }))
+            .then(resultado => {
+                Http.responderJson(res, 201, {
+                    ok: true,
+                    ...resultado
+                })
+            })
+            .catch(error => {
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method === 'POST' && rota.pathname === '/feed/denuncias') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        Http.lerCorpo(req)
+            .then(dados => Feed.denunciar({
+                ...dados,
+                id_usuario: idUsuario,
+                id_post: Number(dados.id_post) || null,
+                id_comentario: Number(dados.id_comentario) || null
+            }))
+            .then(() => {
+                Http.responderJson(res, 201, {
+                    ok: true
+                })
+            })
+            .catch(error => {
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method === 'POST' && rota.pathname === '/feed/ocultar') {
+        const idUsuario = buscarUsuarioAutenticado(req)
+        if (!idUsuario) {
+            Http.responderJson(res, 401, {
+                ok: false,
+                erro: 'Usuário não autenticado.'
+            })
+            return
+        }
+        Http.lerCorpo(req)
+            .then(async dados => {
+                const ehAdmin = await Feed.usuarioEhAdmin(idUsuario)
+                if (!ehAdmin) {
+                    throw new Error(
+                        'Apenas administradores podem ocultar conteúdo.'
+                    )
+                }
+                if (!['post', 'comentario'].includes(dados.tipo)) {
+                    throw new Error('Tipo de conteúdo inválido.')
+                }
+                if (!Number(dados.id)) {
+                    throw new Error('Informe um id válido.')
+                }
+                return Feed.ocultarConteudo({
+                    tipo: dados.tipo,
+                    id: Number(dados.id)
+                })
+            })
+            .then(() => {
+                Http.responderJson(res, 200, {
+                    ok: true
+                })
+            })
+            .catch(error => {
+                Http.responderJson(res, 400, {
+                    erro: error.message
+                })
+            })
+        return
+    }
+    if (req.method == 'GET') {
+
+        // =========================
+        // ABRIR PROVA
+        // =========================
+        if (rota.pathname == '/abrirProva') {
+            Provas.abrirProva(param)
+                .then(resp => {
+                    if (!resp) {
+                        res.writeHead(404, {
+                            'Content-Type':
+                                'application/json; charset=utf-8'
+                        })
+                        res.end(JSON.stringify({
+                            erro: 'Prova não encontrada.'
+                        }))
+                        return
+                    }
+                    res.writeHead(200, {
+                        'Content-Type': 'application/pdf',
+                        'Content-Disposition':
+                            'inline; filename="prova.pdf"'
+                    })
+                    res.end(resp)
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO ABRIR PROVA:',
+                        error
+                    )
+                    res.writeHead(500, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        erro: error.message
+                    }))
+                })
+            return
+        }
+
+
+        // =========================
+        // BAIXAR SIMULADO
+        // =========================
+        if (rota.pathname === '/baixarProva') {
+            Provas.abrirProva(param)
+                .then(pdf => {
+                    if (!pdf) {
+                        Http.responderJson(res, 404, {
+                            erro: 'Simulado não encontrado.'
+                        })
+                        return
+                    }
+
+                    res.writeHead(200, {
+                        'Content-Type': 'application/pdf',
+                        'Content-Disposition':
+                            'attachment; filename="simulado.pdf"'
+                    })
+
+                    res.end(pdf)
+                })
+                .catch(error => {
+                    console.error('ERRO AO BAIXAR SIMULADO:', error)
+
+                    Http.responderJson(res, 500, {
+                        erro: 'Não foi possível baixar o simulado.'
+                    })
+                })
+
+            return
+        }
+
+
+        if (
+            rota.pathname === '/redacoes/historico' &&
+            req.method === 'GET'
+        ) {
+            const idUsuario = Number(param.id_usuario)
+            if (!idUsuario) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe um id_usuario válido.'
+                })
+                return
+            }
+            Redacoes.listarHistorico(idUsuario)
+                .then(historico => {
+                    Http.responderJson(res, 200, {
+                        historico
+                    })
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR HISTÓRICO:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+
+        if (
+            rota.pathname === '/redacoes/referencias' &&
+            req.method === 'GET'
+        ) {
+            Redacoes.listarReferencias()
+                .then(referencias => {
+                    Http.responderJson(res, 200, {
+                        referencias
+                    })
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO BUSCAR REDAÇÕES DE REFERÊNCIA:',
+                        error
+                    )
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+
+        if (
+            rota.pathname === '/redacoes/rascunho' &&
+            req.method === 'GET'
+        ) {
+            const idUsuario = Number(param.id_usuario)
+            const idTema = Number(param.id_tema)
+            if (!idUsuario || !idTema) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe id_usuario e id_tema válidos.'
+                })
+                return
+            }
+            Redacoes.buscarRascunho(idUsuario, idTema)
+                .then(rascunho => {
+                    Http.responderJson(res, 200, {
+                        rascunho
+                    })
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR RASCUNHO:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+
+        // =========================
+        // ABRIR LIVRO
+        // =========================
+        if (rota.pathname == '/abrirLivro') {
+            res.writeHead(200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'inline; filename="livro.pdf"'
+            })
+            Livros.openBook(param)
+                .then(resp => {
+                    res.end(resp)
+                })
+            return  // retorna pra minha, vda
+        }
+
+        // =========================
+        // LIVROS
+        // =========================
+        if (rota.pathname == '/livros') {
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+            Livros.booksSearch()
+                .then(resp => {
+                    res.end(JSON.stringify(resp))
+                })
+            return
+        }
+
+        if (rota.pathname == '/atividades') {
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+            Conexao.getAtividades(param)
+                .then(con => {
+                    if (con.concluido) {
+                        res.end(JSON.stringify({
+                            concluido: 'concluido'
+                        }))
+                        return
+                    }
+                    res.end(JSON.stringify({
+                        pergunta: con.perguntas[0].enunciado,
+                        alternativa1: con.alternativas[0],
+                        alternativa2: con.alternativas[1],
+                        alternativa3: con.alternativas[2],
+                        alternativa4: con.alternativas[3]
+                    }))
+                })
+            return
+        }
+
+        // Compatibilidade com Materias.jsx que consulta GET /nome?id=...&idUser=...
+        if (rota.pathname === '/nome') {
+            await responderTrilha(param, res);
+            return;
+        }
+        if (rota.pathname == "/posicao") {
+            try {
+                console.log('posicao')
+                let posicao = await Conexao.getPosicao(param.idUser)
+                console.log(posicao)
+                res.writeHead(200, {
+                    "Content-Type": "application/json; charset=utf-8"
+                });
+                res.end(JSON.stringify(posicao));
+            }
+            catch (error) {
+                throw error
+            }
+        }
+        if (rota.pathname === "/ranking") {
+            console.log('ranking')
+            Conexao.getRanking()
+                .then((ranking) => {
+                    const participantes = ranking.map((usuario) => ({
+                        id: usuario.id_usuario,
+                        nome: usuario.nome_de_exibicao,
+                        username: usuario.nome_de_usuario,
+                        xp: Number(usuario.xp_semanal) || 0,
+                        foto: usuario.foto,
+                        cor_fundo: usuario.cor_fundo || "#B4CFA8"
+                    }));
+                    res.writeHead(200, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: true,
+                        participantes
+                    }));
+                })
+                .catch((erro) => {
+                    console.error("Erro ao carregar ranking:", erro);
+                    res.writeHead(500, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: "Erro ao carregar ranking."
+                    }));
+                });
+            return;
+        }
+        // =========================
+        // MISSOES #VV
+        // =========================
+        if (rota.pathname == '/missoes/hoje') {
+            const idUsuario = Number(param.id_usuario)
+            if (!idUsuario) {
+                res.writeHead(400, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+                res.end(JSON.stringify({
+                    erro: 'Informe um id_usuario válido.'
+                }))
+                return
+            }
+            Conexao.buscarOuCriarMissoes(idUsuario)
+                .then(con => {
+                    res.writeHead(200, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify(con))
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO BUSCAR MISSÕES:',
+                        error
+                    )
+                    res.writeHead(500, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        erro: error.message
+                    }))
+                })
+            return
+        }
+        if (rota.pathname == '/perfil') {
+            const autorizacao = req.headers.authorization
+            if (!autorizacao) {
+                res.writeHead(401, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                })
+                res.end(JSON.stringify({
+                    ok: false,
+                    message: 'Usuário não autenticado'
+                }))
+                return
+            }
+            const token = autorizacao.replace('Bearer ', '')
+            const idUsuario = Login.autenticar(token)
+            if (!idUsuario) {
+                res.writeHead(401, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                })
+                res.end(JSON.stringify({
+                    ok: false,
+                    message: 'Sessão inválida ou expirada'
+                }))
+                return
+            }
+            Conexao.getPerfil(idUsuario)
+                .then(usuario => {
+                    if (!usuario) {
+                        res.writeHead(404, {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        })
+                        res.end(JSON.stringify({
+                            ok: false,
+                            message: 'Usuário não encontrado'
+                        }))
+                        return
+                    }
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        ok: true,
+                        usuario
+                    }))
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR PERFIL:', error)
+                    res.writeHead(500, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: 'Erro ao buscar perfil'
+                    }))
+                })
+            return
+        }
+
+        if (rota.pathname == '/provas') {
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+            Provas.provasSearch()
+                .then(resp => {
+                    res.end(JSON.stringify(resp))
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO BUSCAR PROVAS:',
+                        error
+                    )
+                    res.writeHead(500, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        erro: error.message
+                    }))
+                })
+            return
+        }
+
+        // =========================
+        // REDAÇÃO VV
+        // =========================
+        if (
+            rota.pathname === '/temasRedacao' &&
+            req.method === 'GET'
+        ) {
+            Redacoes.listarTemas()
+                .then(temas => {
+                    Http.responderJson(res, 200, temas)
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR TEMAS:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+        if (
+            rota.pathname === '/temaRedacao' &&
+            req.method === 'GET'
+        ) {
+            const idTema = Number(param.id_tema)
+            if (!idTema) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe um id_tema válido.'
+                })
+                return
+            }
+            Redacoes.buscarTema(idTema)
+                .then(tema => {
+                    if (!tema) {
+                        Http.responderJson(res, 404, {
+                            erro: 'Tema não encontrado.'
+                        })
+                        return
+                    }
+                    Http.responderJson(res, 200, tema)
+                })
+                .catch(error => {
+                    console.error('ERRO AO BUSCAR TEMA:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+
+        if (
+            rota.pathname === '/redacoes/rascunho' &&
+            req.method === 'POST'
+        ) {
+            Http.lerCorpo(req)
+                .then(dados => {
+                    const idUsuario = Number(dados.id_usuario)
+                    const idTema = Number(dados.id_tema)
+                    if (!idUsuario || !idTema) {
+                        Http.responderJson(res, 400, {
+                            erro: 'Informe id_usuario e id_tema válidos.'
+                        })
+                        return null
+                    }
+                    return Redacoes.salvarRascunho(dados)
+                })
+                .then(resultado => {
+                    if (!resultado) {
+                        return
+                    }
+                    Http.responderJson(res, 200, {
+                        mensagem: resultado.criado
+                            ? 'Rascunho criado.'
+                            : 'Rascunho atualizado.',
+                        ...resultado
+                    })
+                })
+                .catch(error => {
+                    console.error('ERRO AO SALVAR RASCUNHO:', error)
+                    Http.responderJson(res, 500, {
+                        erro: error.message
+                    })
+                })
+            return
+        }
+
+
+        // =========================
+        // CHATBOT
+        // =========================
+    }
+    else if (req.method == 'POST') {
+        let body = ''
+        req.on('data', chunk => {
+            body += chunk
+        })
+
+        if (rota.pathname === "/recover") {
+            req.on('end', async () => {
+                try {
+                    const dados = JSON.parse(body)
+                    await Email.recover(dados)
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        }
+
+        if (req.method === 'POST' && rota.pathname === '/redefinirSenha') {
+            console.log('REQUISIÇÃO DE REDEFINIÇÃO RECEBIDA');
+
+            try {
+                const dados = await Http.lerCorpo(req);
+
+                console.log('Corpo recebido, iniciando atualização.');
+
+                const resultado = await Email.redefinirSenha(
+                    dados.token,
+                    dados.novaSenha
+                );
+
+                console.log('SENHA ATUALIZADA COM SUCESSO');
+
+                Http.responderJson(res, 200, {
+                    ok: true,
+                    ...resultado
+                });
+
+            } catch (erro) {
+                console.error('ERRO NA REDEFINIÇÃO:', erro);
+
+                Http.responderJson(res, 500, {
+                    ok: false,
+                    erro: 'Não foi possível redefinir a senha.'
+                });
+            }
+
+            return;
+        }
+
+        if (rota.pathname === '/criarTrilha') {
+            req.on('end', async () => {
+                let dados
+
+                try {
+                    dados = JSON.parse(body)
+                } catch {
+                    Http.responderJson(res, 400, {
+                        ok: false,
+                        erro: 'Envie um JSON válido.'
+                    })
+                    return
+                }
+
+                await responderTrilha(dados, res)
+            })
+
+            return
+        }
+
+        // =========================
+        // CHATBOT
+        // =========================
+
+
+        if (rota.pathname === '/criarTrilha') {
+            req.on('end', async () => {
+                let dados;
+                try {
+                    dados = JSON.parse(body);
+                } catch {
+                    Http.responderJson(res, 400, {
+                        ok: false,
+                        erro: 'Envie um JSON válido.'
+                    });
+                    return;
+                }
+                await responderTrilha(dados, res);
+            });
+            return;
+        }
+        if (rota.pathname === "/sequencia") {
+            req.on("end", async () => {
+                try {
+                    const dados = JSON.parse(body);
+                    const resultado = await Sequencia.streak(dados.idUser);
+                    Http.responderJson(res, 200, {
+                        ok: true,
+                        ...resultado
+                    });
+                } catch (erro) {
+                    console.error("Erro na sequência:", erro);
+                    Http.responderJson(res, 500, {
+                        ok: false,
+                        erro: "Não foi possível atualizar a sequência."
+                    });
+                }
+            });
+            return;
+        }
+        if (rota.pathname == '/concluirAtividade') {
+            req.on('end', async () => {
+                try {
+                    const dados = JSON.parse(body)
+                    const idUsuario = buscarUsuarioAutenticado(req)
+                    if (!idUsuario) {
+                        Http.responderJson(res, 401, {
+                            ok: false,
+                            message: 'Faça login novamente.'
+                        })
+                        return
+                    }
+
+                    console.log('[concluirAtividade]', {
+                        idEnviado: dados.id,
+                        idAutenticado: idUsuario,
+                        materia: dados.materia,
+                        atividade: dados.atividade
+                    });
+                    
+                    const resultado = await Conexao.atualizarAtividade({
+                        ...dados,
+                        id: idUsuario
+                    })
+                    Http.responderJson(res, 200, {
+                        ok: true,
+                        ...resultado
+                    })
+                } catch (erro) {
+                    console.error(erro)
+                    res.writeHead(erro.status || 500, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: erro.status ? erro.message : 'Não foi possível concluir a atividade.'
+                    }))
+                }
+            })
+        }
+        if (rota.pathname == '/cadastro/verificar') {
+            req.on('end', async () => {
+                try {
+                    const dados = JSON.parse(body)
+                    const resposta = await Cadastro.verificarCodigo(dados)
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify(resposta))
+                } catch (erro) {
+                    console.error(erro)
+                    res.writeHead(500, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: 'Erro ao verificar código'
+                    }))
+                }
+            })
+        }
+        if (rota.pathname == '/cadastro') {
+            req.on('end', async () => {
+                try {
+                    const dados = JSON.parse(body)
+                    let resposta = await Cadastro.cadastrar(dados)
+                    res.end(JSON.stringify(resposta))
+                }
+                catch (erro) {
+                    console.error(erro)
+                    res.end(JSON.stringify({ ok: false }))
+                }
+            })
+        }
+        if (rota.pathname == '/login') {
+            req.on('end', async () => {
+                try {
+                    const dados = JSON.parse(body)
+                    let resposta = await Login.login(dados)
+                    res.end(JSON.stringify(resposta))
+                }
+                catch (erro) {
+                    console.error(erro)
+                    res.end(JSON.stringify({ ok: false }))
+                }
+            })
+        }
+        if (rota.pathname == '/chatBot') {
+            req.on('end', async () => {
+                try {
+                    const dados = JSON.parse(body)
+                    const resposta = await ChatBot.resposta(dados.mensagem, dados.memoria)
+                    console.log('Ollama respondeu')
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        resposta: resposta
+                    }))
+                } catch (error) {
+                    console.error('ERRO NO CHATBOT:', error)
+                    res.writeHead(500, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        erro: error.message
+                    }))
+                }
+            })
+            return
+        }
+        if (rota.pathname === "/trocarNomeUsuario") {
+            req.on("end", async () => {
+                try {
+                    const dados = JSON.parse(body);
+                    await Conexao.mudarNome(dados);
+                    res.writeHead(200, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: true,
+                        mensagem: "Nome de usuário atualizado!"
+                    }));
+                } catch (error) {
+                    console.error("Erro ao alterar nome:", error);
+                    res.writeHead(500, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: "Não foi possível atualizar o nome."
+                    }));
+                }
+            });
+            return;
+        }
+        if (rota.pathname === "/mudarBio") {
+            req.on("end", async () => {
+                try {
+                    const dados = JSON.parse(body);
+                    await Conexao.mudarPerfil(dados);
+                    res.writeHead(200, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: true,
+                        mensagem: "Bio atualizada com sucesso!"
+                    }));
+                } catch (erro) {
+                    console.error("Erro ao atualizar bio:", erro);
+                    res.writeHead(500, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: "Não foi possível atualizar a bio."
+                    }));
+                }
+            });
+            return;
+        }
+        if (rota.pathname === "/mudarFoto") {
+            req.on("end", async () => {
+                try {
+                    const dados = JSON.parse(body);
+                    await Conexao.atualizarFoto(dados);
+                    res.writeHead(200, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: true,
+                        mensagem: "Foto atualizada com sucesso!"
+                    }));
+                } catch (erro) {
+                    console.error("Erro ao salvar foto:", erro);
+                    res.writeHead(500, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+                    res.end(JSON.stringify({
+                        ok: false,
+                        message: "Não foi possível atualizar a foto."
+                    }));
+                }
+            });
+            return;
+        }
+        // =========================
+        // MISSOES #VV
+        // =========================
+        if (rota.pathname == '/missoes/hoje') {
+            const idUsuario = Number(param.id_usuario)
+            if (!idUsuario) {
+                res.writeHead(400, {
+                    'Content-Type':
+                        'application/json; charset=utf-8'
+                })
+                res.end(JSON.stringify({
+                    erro: 'Informe um id_usuario válido.'
+                }))
+                return
+            }
+            Conexao.buscarOuCriarMissoes(idUsuario)
+                .then(con => {
+                    res.writeHead(200, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify(con))
+                })
+                .catch(error => {
+                    console.error(
+                        'ERRO AO BUSCAR MISSÕES:',
+                        error
+                    )
+                    res.writeHead(500, {
+                        'Content-Type':
+                            'application/json; charset=utf-8'
+                    })
+                    res.end(JSON.stringify({
+                        erro: error.message
+                    }))
+                })
+            return
+        }
+    }
+}
+
+const server = http.createServer(callback)
+server.listen(3000)
+console.log('Server iniciado')
+console.log('Porta 3000')

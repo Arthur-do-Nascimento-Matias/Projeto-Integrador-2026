@@ -1,0 +1,862 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.google-sans{
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.rubik {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.poppins-thin-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.poppins-extralight-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.poppins-light-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.poppins-regular-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.poppins-medium-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poppins-semibold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poppins-bold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poppins-extrabold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.poppins-black-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+
+.materias-container {
+  --materia-unidade: clamp(1px, min(0.052083333vw, 0.1dvh), 2px);
+  --materia-roda-maxima: calc(410 * var(--materia-unidade));
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+
+  top: calc(25 * var(--materia-unidade));
+
+  z-index: 30;
+}
+
+
+/* =========================================
+   BOTÃO
+========================================= */
+
+.materias-botao {
+  box-sizing: border-box;
+  width: min(100%, calc(460 * var(--materia-unidade)));
+  min-height: calc(84 * var(--materia-unidade));
+
+  position: relative;
+  z-index: 31;
+
+  padding: 8px calc(24 * var(--materia-unidade));
+
+  border: 1px solid rgba(108, 67, 40, 0.65);
+  border-radius: calc(28 * var(--materia-unidade));
+
+  background:
+    linear-gradient(
+      180deg,
+      #f39a3f 0%,
+      #e77a24 100%
+    );
+
+  display: grid;
+  grid-template-columns: calc(56 * var(--materia-unidade)) minmax(0, 1fr) calc(56 * var(--materia-unidade));
+  gap: 8px;
+  align-items: center;
+
+  color: #fff8ef;
+
+  font-family: "Google Sans", sans-serif;
+  font-size: 23px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 0 #a95e2d,
+    0 12px 26px rgba(68, 47, 33, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
+}
+
+
+/* HOVER */
+
+.materias-botao:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.025);
+
+  box-shadow:
+    0 7px 0 #a95e2d,
+    0 16px 28px rgba(68, 47, 33, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+
+/* CLIQUE */
+
+.materias-botao:active {
+  transform: translateY(2px);
+
+  box-shadow:
+    0 2px 0 #a95e2d,
+    0 7px 15px rgba(68, 47, 33, 0.14);
+}
+
+
+/* =========================================
+   IMAGEM / ÍCONE DO BOTÃO
+========================================= */
+
+.materias-botao-icone {
+  width: calc(56 * var(--materia-unidade));
+  height: calc(56 * var(--materia-unidade));
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: rgba(255, 243, 226, 0.20);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+
+.materias-botao-img {
+  width: calc(47 * var(--materia-unidade));
+  height: calc(47 * var(--materia-unidade));
+
+  object-fit: contain;
+}
+
+
+/* =========================================
+   NOME DA MATÉRIA
+========================================= */
+
+.materias-botao-nome {
+  min-width: 0;
+  text-align: center;
+
+  margin: 0;
+
+  font-size: calc(22 * var(--materia-unidade));
+  font-weight: 600;
+
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+}
+
+
+/* =========================================
+   SETA
+========================================= */
+
+.materias-seta {
+  width: calc(40 * var(--materia-unidade));
+  height: calc(40 * var(--materia-unidade));
+
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(83, 51, 32, 0.10);
+
+  color: #fff8ef;
+
+  font-size: calc(20 * var(--materia-unidade));
+
+  transition:
+    transform 0.3s ease,
+    background 0.2s ease;
+}
+
+
+.materias-botao:hover .materias-seta {
+  background: rgba(83, 51, 32, 0.16);
+}
+
+
+.materias-botao.aberto .materias-seta {
+  transform: rotate(180deg);
+
+  background: rgba(83, 51, 32, 0.18);
+}
+
+
+/* =========================================
+   IMAGENS
+========================================= */
+
+.materias-centro-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  object-fit: contain;
+}
+
+
+.materia-icone-img-svg {
+  pointer-events: none;
+}
+
+
+/* =========================================
+   CONTAINER DA RODA
+========================================= */
+
+.materias-roda-container {
+  position: absolute;
+
+  /* Fica atrás do botão durante a entrada */
+  z-index: 30;
+
+  top: calc(100% + clamp(12px, 4dvh, 50px));
+  width: min(calc(100% - 24px), var(--materia-roda-maxima));
+  max-width: max(180px, calc(100dvh - 235px));
+  left: 50%;
+
+  transform:
+    translateX(-50%)
+    translateY(-82px)
+    scale(0.88);
+
+  opacity: 0;
+
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.32s ease,
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.62s;
+}
+
+
+/* RODA ABERTA */
+
+.materias-roda-container.visivel {
+  opacity: 1;
+
+  visibility: visible;
+  pointer-events: auto;
+
+  transform:
+    translateX(-50%)
+    translateY(0)
+    scale(1);
+
+  transition:
+    opacity 0.28s ease,
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s;
+}
+
+
+/* =========================================
+   RODA
+========================================= */
+
+.materias-roda-container .materias-roda {
+  position: relative;
+
+  container-type: inline-size;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+
+  filter:
+    drop-shadow(
+      0 15px 18px rgba(63, 46, 30, 0.22)
+    );
+}
+
+
+.materias-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+}
+
+
+/* =========================================
+   FATIAS
+========================================= */
+
+.materia-fatia {
+  cursor: pointer;
+
+  transform-box: fill-box;
+  transform-origin: center;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+
+.materia-fatia path {
+  stroke: #f5eee4;
+
+  stroke-width: 4px;
+
+  transition:
+    filter 0.2s ease,
+    stroke 0.2s ease;
+}
+
+
+/* hover */
+
+.materia-fatia:hover {
+  transform: scale(1.26);
+
+  filter:
+    brightness(1.1)
+    drop-shadow(
+      0 6px 4px rgba(54, 35, 17, 0.15)
+    );
+}
+
+
+/* matéria atual */
+
+.materia-fatia.ativa path {
+  stroke: #ff9b32;
+
+  stroke-width: 6px;
+
+  filter:
+    brightness(1.08)
+    drop-shadow(
+      0 4px 5px rgba(255, 120, 10, 0.3)
+    );
+}
+
+
+/* =========================================
+   TEXTO DAS FATIAS
+========================================= */
+
+.materia-icone-svg {
+  fill: white;
+
+  text-anchor: middle;
+
+  dominant-baseline: middle;
+
+  font-family: "Rubik", sans-serif;
+
+  font-size: 22px;
+  font-weight: 800;
+
+  pointer-events: none;
+
+  text-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.15);
+}
+
+
+.materia-nome-svg {
+  fill: white;
+
+  text-anchor: middle;
+
+  dominant-baseline: middle;
+
+  font-family: "Rubik", sans-serif;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   CENTRO
+========================================= */
+
+.materias-centro {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  box-sizing: border-box;
+  width: 42%;
+  height: 42%;
+  padding: 4%;
+  text-align: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffdf8,
+      #f3e8d8
+    );
+
+  border: 2px solid rgba(88, 62, 41, 0.18);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+
+  box-shadow:
+    inset 0 0 0 6px rgba(255, 255, 255, 0.4),
+    0 6px 20px rgba(71, 51, 32, 0.13);
+}
+
+
+/* ícone central */
+
+.materias-centro-icone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 14.6cqi;
+  height: 14.6cqi;
+  flex-shrink: 0;
+
+  margin-bottom: 1.7cqi;
+
+  border-radius: 15px;
+
+  background: #e77a24;
+
+  color: white;
+
+  font-size: 21px;
+  font-weight: 900;
+
+  box-shadow:
+    0 5px 0 #a95e2d;
+
+  animation:
+    materiaCentroEntrar 0.25s ease;
+}
+
+
+.materias-centro strong {
+  font-family: "Rubik", sans-serif;
+  font-size: clamp(10px, 4.4cqi, 34px);
+  line-height: 1.15;
+  font-weight: 800;
+
+  color: #382b23;
+}
+
+
+.materias-centro span {
+  margin-top: 4px;
+
+  font-family: "Rubik", sans-serif;
+  font-size: clamp(8px, 2.7cqi, 20px);
+  line-height: 1.2;
+
+  color: #847264;
+}
+
+:root[data-tema="escuro"] .materia-fatia:not(.ativa) path {
+  stroke: #9f8e77;
+}
+
+:root[data-tema="escuro"] .materias-centro {
+  background: linear-gradient(145deg, #3b3026, #2b241e);
+  border-color: #75614c;
+  box-shadow:
+    inset 0 0 0 6px rgba(255, 244, 226, 0.08),
+    0 6px 20px rgba(71, 51, 32, 0.13);
+}
+
+:root[data-tema="escuro"] .materias-centro strong {
+  color: #fff4e4;
+}
+
+:root[data-tema="escuro"] .materias-centro span {
+  color: #d0baa4;
+}
+
+/* =========================================
+   ANIMAÇÃO DO CENTRO
+========================================= */
+
+@keyframes materiaCentroEntrar {
+
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  70% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* =========================================
+   OVERLAY
+========================================= */
+
+@keyframes overlayEntrar {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+.materias-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(236, 228, 215, 0.24) 45%,
+      rgba(220, 210, 195, 0.34) 100%
+    );
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  z-index: 15;
+
+  animation:
+    overlayEntrar 0.25s ease;
+}
+
+body:has(.materias-container > .materias-overlay)
+  :is(.simio-sidebar-layer, .menuLateralDireita, .menuDireitaProgresso) {
+  filter: blur(8px);
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+body:has(.materias-container > .materias-overlay) .menuDireitaProgresso {
+  pointer-events: none;
+}
+
+@media (max-width: 1100px), (max-width: 1400px) and (pointer: coarse) {
+  .materias-container {
+    --materia-unidade: 1px;
+  }
+
+  .materias-container .materias-botao {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    min-height: 62px;
+    height: auto;
+    padding: 8px 12px;
+  }
+
+  .materias-botao-icone {
+    width: 40px;
+    height: 40px;
+  }
+
+  .materias-botao-img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .materias-botao-nome {
+    font-size: clamp(16px, 4.7vw, 22px);
+  }
+
+  .materias-seta {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+@media (hover: none) {
+  .materia-fatia:hover {
+    transform: none;
+  }
+}
+
+/* ===== Trilha de atividades ===== */
+.trilha{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20vh;
+    transition: all 200ms ease;
+    z-index: 5;
+    padding-bottom: 15px;
+}
+
+.botaoAtividade{
+    width: 90px;
+    height: 90px;
+    border-radius: 100px;
+    border: none;
+    transition: all 200ms ease;
+    background: var(--cor-laranja-claro);
+    box-shadow: 0 6px 0 var(--cor-laranja-escuro), 0 8px 14px rgba(0,0,0,.12);
+    position: relative;
+}
+.botaoAtividade:hover{
+  cursor: pointer;
+  filter: brightness(103%);
+  transform: translateY(-2px);
+}
+.botaoAtividade:active{
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 var(--cor-laranja-escuro);
+}
+.botaoAtividade.par{ margin-left: 3vw; }
+.botaoAtividade.impar{ margin-right: 3vw; }
+
+/* Atividade já concluída: cor distinta (marrom do mascote) */
+.botaoAtividade.concluida{
+    background: var(--cor-marrom);
+    box-shadow: 0 6px 0 var(--cor-marrom-escuro), 0 8px 14px rgba(0,0,0,.12);
+}
+.botaoAtividade.concluida::after{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--cor-creme);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Atividade atual: cor de destaque (coral), com pulso */
+.botaoAtividade.atual{
+    background: var(--cor-coral);
+    box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 8px rgba(242,84,91,.25);
+    animation: pulsarAtual 1.6s ease-in-out infinite;
+}
+@keyframes pulsarAtual{
+    0%, 100% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 8px rgba(242,84,91,.25); }
+    50% { box-shadow: 0 6px 0 var(--cor-coral-escuro), 0 0 0 14px rgba(242,84,91,.1); }
+}
+
+ 
+
+
+/* No celular, a roda fica entre o seletor e a navegação inferior. */
+@media (max-width: 700px) {
+  .materias-container:has(> .materias-botao.aberto) > .materias-roda-container {
+    --roda-topo: calc(178px + max(8px, env(safe-area-inset-top, 0px)));
+    --roda-reserva-inferior: calc(90px + env(safe-area-inset-bottom, 0px));
+    position: fixed;
+    top: var(--roda-topo);
+    left: 50%;
+    width: min(410px, calc(100vw - 32px));
+    max-width: calc(100dvh - var(--roda-topo) - var(--roda-reserva-inferior));
+    margin: 0;
+  }
+}
+
+@media (max-width: 700px) and (max-height: 460px) {
+  .materias-container:has(> .materias-botao.aberto) > .materias-roda-container {
+    --roda-topo: max(12px, env(safe-area-inset-top, 0px));
+    z-index: 32;
+  }
+}
+
+/* Tablet com navegação inferior: o painel usa o mesmo eixo da faixa fixa. */
+@media (min-width: 701px) {
+  body:has(> .menuDireitaProgresso) .auth-page:has(> .menuDireitaProgresso-espaco) {
+    --aprender-reserva-inferior: calc(96px + env(safe-area-inset-bottom, 0px));
+    /* Limpa o recuo lateral do layout com sidebar vertical. */
+    position: absolute;
+    inset-inline: 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin-inline: 0;
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: clamp(16px, 3vw, 32px);
+    padding-bottom: var(--aprender-reserva-inferior);
+    animation: none;
+    transform: none;
+  }
+
+  body:has(> .menuDireitaProgresso) .auth-page:has(> .menuDireitaProgresso-espaco) > :is(.materias-container, .trilha) {
+    inset-inline: auto;
+    margin-inline: auto;
+    justify-self: center;
+    translate: none;
+  }
+
+  body:has(> .menuDireitaProgresso) .auth-page:has(> .menuDireitaProgresso-espaco) > .trilha {
+    margin-top: clamp(56px, 9dvh, 104px);
+  }
+
+  .menuDireitaProgresso-espaco + .materias-container > .materias-roda-container.visivel {
+    --roda-topo: calc(196px + max(8px, env(safe-area-inset-top, 0px)));
+    position: fixed;
+    top: var(--roda-topo);
+    left: 50%;
+    width: min(410px, calc(100vw - 48px));
+    max-width: calc(100dvh - var(--roda-topo) - var(--aprender-reserva-inferior, 96px));
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+@media (min-width: 701px) and (max-height: 460px) {
+  .menuDireitaProgresso-espaco + .materias-container > .materias-roda-container.visivel {
+    --roda-topo: max(12px, env(safe-area-inset-top, 0px));
+    z-index: 32;
+  }
+}

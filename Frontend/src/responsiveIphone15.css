@@ -1,0 +1,219 @@
+/* iPhone 15 Pro — 393 x 852 */
+@media (min-width: 381px) and (max-width: 430px) {
+  :root {
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  body,
+  #root {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Espaço para o menu inferior */
+  .auth-page,
+  .main-content,
+  .conteudo-principal {
+    padding-bottom: calc(86px + var(--safe-bottom));
+  }
+
+  /* Menu lateral vira barra inferior */
+  .menuLateral {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: calc(76px + var(--safe-bottom));
+    padding: 8px 10px calc(8px + var(--safe-bottom));
+    border-radius: 18px 18px 0 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--sidebar-bg, #f4ebdc);
+    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.14);
+  }
+
+  .menuLateral:hover {
+    width: 100%;
+  }
+
+  .menuLateral .logo,
+  .menuLateral .titulo,
+  .menuLateral .texto-menu,
+  .menuLateral .sair-texto {
+    display: none;
+  }
+
+  .menuLateral ul,
+  .menuLateral .menu,
+  .menuLateral .itens-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menuLateral li,
+  .menuLateral a,
+  .menuLateral button {
+    flex: 0 0 auto;
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    margin: 0;
+    padding: 0;
+    border-radius: 14px;
+    justify-content: center;
+  }
+
+  /* Aprende */
+  .materias-container {
+    width: calc(100% - 24px);
+    margin: 0 auto;
+    padding: 18px 12px 105px;
+  }
+
+  .trilha {
+    width: 100%;
+    transform: none;
+  }
+
+  .menuLateralDireita {
+    position: static;
+    width: 100%;
+    margin: 20px 0 0;
+  }
+
+  /* Atividades */
+  .atividades-container,
+  .atividade-container {
+    width: calc(100% - 24px);
+    margin: 0 auto;
+    padding: 20px 14px 105px;
+  }
+
+  .pergunta,
+  .enunciado {
+    font-size: 1rem;
+  }
+
+  .alternativas {
+    grid-template-columns: 1fr;
+  }
+
+  /* Biblioteca */
+  .container {
+    position: relative;
+    left: auto;
+    width: calc(100% - 24px);
+    height: auto;
+    min-height: 680px;
+    margin: 16px auto 105px;
+    padding: 18px 14px;
+    transform: none;
+    scale: 1;
+  }
+
+  .biblioteca-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .biblioteca-grid,
+  .livros-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+  }
+
+  /* SimIA */
+  .chatIA,
+  .chat-container {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: calc(100% - 24px);
+    height: calc(100dvh - 120px);
+    min-height: 600px;
+    margin: 12px auto 105px;
+    padding: 14px;
+  }
+
+  /* Ranking */
+  .ranking-container,
+  .ranking-page {
+    width: calc(100% - 24px);
+    margin: 16px auto 105px;
+    padding: 18px 12px;
+  }
+
+  .ranking-item {
+    grid-template-columns: 38px 44px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 10px 8px;
+  }
+
+  /* Perfil */
+  .perfil-container,
+  .profile-container {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: calc(100% - 24px);
+    margin: 16px auto 105px;
+    padding: 20px 14px;
+    transform: none;
+  }
+
+  /* Configurações */
+  .config-container,
+  .configuracoes-container {
+    width: calc(100% - 24px);
+    margin: 16px auto 105px;
+    padding: 18px 14px;
+  }
+
+  /* Feed */
+  .feed-page,
+  .feed-container {
+    padding: 14px 12px 105px;
+  }
+
+  .feed-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .feed-sidebar,
+  .comunidades-container {
+    display: none;
+  }
+
+  /* Simulados */
+  .simulados-container,
+  .provas-container {
+    width: calc(100% - 24px);
+    margin: 16px auto 105px;
+    padding: 18px 14px;
+  }
+
+  .filtros,
+  .simulados-filtros {
+    flex-wrap: wrap;
+  }
+
+  /* Pop-ups */
+  .modal-content,
+  .popup-content {
+    width: calc(100% - 32px);
+    max-height: 80dvh;
+    overflow-y: auto;
+  }
+}

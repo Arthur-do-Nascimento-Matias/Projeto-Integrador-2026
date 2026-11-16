@@ -1,0 +1,658 @@
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
+
+import FeedDetalhe from './FeedDetalhe'
+import FeedDenuncia from './FeedDenuncia'
+import FeedAcoesAutor from './FeedAcoesAutor'
+import FeedLateral from './FeedLateral'
+import FeedModeracao from './FeedModeracao'
+
+import './Feed.css'
+
+const API_URL = 'http://localhost:3000'
+
+const fotosPerfil = {
+    moki: '/avatares-simio/moki.png',
+    zoro: '/avatares-simio/zoro.png',
+    miro: '/avatares-simio/miro.png',
+    bimo: '/avatares-simio/bimo.png',
+    ibra: '/avatares-simio/ibra.png',
+    mika: '/avatares-simio/mika.png',
+    kimo: '/avatares-simio/kimo.png',
+    tuki: '/avatares-simio/tuki.png',
+    nala: '/avatares-simio/nala.png',
+}
+
+function Avatar({ foto, nome, corFundo }) {
+    const imagem = fotosPerfil[String(foto || 'moki').trim().toLowerCase()] || fotosPerfil.moki
+
+    return (
+        <div
+            className="feed-avatar"
+            style={{ backgroundColor: corFundo || '#B4CFA8' }}
+        >
+            <img
+                src={imagem}
+                alt={`Avatar de ${nome || 'Explorador'}`}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+        </div>
+    )
+}
+
+function tempoRelativo(data) {
+    const agora = new Date()
+    const dataPost = new Date(data)
+    const diferenca = Math.max(0, agora - dataPost)
+
+    const minutos = Math.floor(diferenca / 60000)
+
+    if (minutos < 1) return 'agora'
+    if (minutos < 60) return `há ${minutos} min`
+
+    const horas = Math.floor(minutos / 60)
+
+    if (horas < 24) return `há ${horas} h`
+
+    const dias = Math.floor(horas / 24)
+
+    return `há ${dias} d`
+}
+
+function Feed() {
+    const [comunidades, setComunidades] = useState([])
+    const [posts, setPosts] = useState([])
+    const [carregando, setCarregando] = useState(true)
+    const [erro, setErro] = useState('')
+    const [comunidadeAtiva, setComunidadeAtiva] = useState('')
+    const [ordem, setOrdem] = useState('recentes')
+    const [criandoPost, setCriandoPost] = useState(false)
+    const [publicando, setPublicando] = useState(false)
+    const [titulo, setTitulo] = useState('')
+    const [conteudo, setConteudo] = useState('')
+    const [comunidadePost, setComunidadePost] = useState('')
+   const [postAberto, setPostAberto] = useState(() => {
+    const id = Number(new URLSearchParams(window.location.search).get('post'))
+    return Number.isSafeInteger(id) && id > 0 ? id : null
+})
+
+    const [ehAdmin, setEhAdmin] = useState(false)
+    const [usuarioAtualId, setUsuarioAtualId] = useState(null)
+    const [moderacaoAberta, setModeracaoAberta] = useState(false)
+    const [alvoDenuncia, setAlvoDenuncia] = useState(null)
+    const [avisoFeed, setAvisoFeed] = useState(null)
+
+    useEffect(() => {
+        if (!avisoFeed || avisoFeed.tipo !== 'sucesso') return
+        const timer = setTimeout(() => setAvisoFeed(null), 3500)
+        return () => clearTimeout(timer)
+    }, [avisoFeed])
+
+    async function compartilharPost(idPost) {
+        const url = `${window.location.origin}/feed?post=${idPost}`
+        try {
+            await navigator.clipboard.writeText(url)
+            setAvisoFeed({ tipo: 'sucesso', titulo: 'Link copiado!', texto: 'Agora é só compartilhar com a turma.' })
+        } catch {
+            setAvisoFeed({ tipo: 'erro', titulo: 'Copie o link abaixo', texto: 'Não foi possível copiar automaticamente.', url })
+        }
+    }
+
+
+    function cabecalhos() {
+        const token = localStorage.getItem('token')
+
+        return {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    async function carregarComunidades() {
+        const resposta = await fetch(
+            `${API_URL}/comunidades`,
+            {
+                headers: cabecalhos()
+            }
+        )
+
+        const dados = await resposta.json()
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.erro || 'Não foi possível carregar as comunidades.'
+            )
+        }
+
+        setComunidades(dados.comunidades || [])
+
+        if (!comunidadePost && dados.comunidades?.length) {
+            setComunidadePost(
+                String(dados.comunidades[0].id_comunidade)
+            )
+        }
+    }
+
+    async function carregarPosts() {
+        setCarregando(true)
+        setErro('')
+
+        try {
+            const params = new URLSearchParams()
+
+            if (comunidadeAtiva) {
+                params.set('comunidade', comunidadeAtiva)
+            }
+
+
+            if (ordem === 'emAlta') params.set('ordem', 'emAlta')
+
+            const sufixo = params.toString()
+                ? `?${params.toString()}`
+                : ''
+
+            const resposta = await fetch(
+                `${API_URL}/feed${sufixo}`,
+                {
+                    headers: cabecalhos()
+                }
+            )
+
+            const dados = await resposta.json()
+
+            if (!resposta.ok) {
+                throw new Error(
+                    dados.erro || 'Não foi possível carregar o feed.'
+                )
+            }
+
+            setPosts(dados.posts || [])
+
+        } catch (erroAtual) {
+            setErro(erroAtual.message)
+        } finally {
+            setCarregando(false)
+        }
+    }
+
+    async function atualizarFeed() {
+        await carregarPosts()
+        await carregarComunidades()
+    }
+
+    async function carregarPermissao() {
+    try {
+        const resposta = await fetch(`${API_URL}/perfil`, {
+            headers: cabecalhos()
+        })
+
+        const dados = await resposta.json()
+
+        if (!resposta.ok || !dados.ok) {
+            throw new Error(
+                dados.erro ||
+                    dados.message ||
+                    'Não foi possível verificar a permissão.'
+            )
+        }
+
+        setEhAdmin(Number(dados.usuario?.adm) === 1)
+        setUsuarioAtualId(Number(dados.usuario?.id_usuario) || null)
+    } catch (erroAtual) {
+        console.error(
+            'Erro ao verificar administrador:',
+            erroAtual
+        )
+
+        setEhAdmin(false)
+        setUsuarioAtualId(null)
+    }
+}
+
+useEffect(() => {
+    carregarComunidades().catch(erroAtual => {
+        setErro(erroAtual.message)
+    })
+
+    carregarPermissao()
+}, [])
+
+    useEffect(() => {
+        carregarPosts()
+    }, [comunidadeAtiva, ordem])
+
+    async function publicarPost(event) {
+        event.preventDefault()
+
+        if (!titulo.trim() || !conteudo.trim() || !comunidadePost) {
+            return
+        }
+
+        setPublicando(true)
+        setErro('')
+
+        try {
+            const resposta = await fetch(
+                `${API_URL}/feed`,
+                {
+                    method: 'POST',
+                    headers: cabecalhos(),
+                    body: JSON.stringify({
+                        id_comunidade: Number(comunidadePost),
+                        titulo,
+                        conteudo
+                    })
+                }
+            )
+
+            const dados = await resposta.json()
+
+            if (!resposta.ok) {
+                throw new Error(
+                    dados.erro || 'Não foi possível publicar o post.'
+                )
+            }
+
+            setTitulo('')
+            setConteudo('')
+            setCriandoPost(false)
+
+            await atualizarFeed()
+
+        } catch (erroAtual) {
+            setErro(erroAtual.message)
+        } finally {
+            setPublicando(false)
+        }
+    }
+
+    async function votarPost(idPost, tipo) {
+        try {
+            const resposta = await fetch(
+                `${API_URL}/feed/voto`,
+                {
+                    method: 'POST',
+                    headers: cabecalhos(),
+                    body: JSON.stringify({
+                        id_post: idPost,
+                        tipo
+                    })
+                }
+            )
+
+            const dados = await resposta.json()
+
+            if (!resposta.ok) {
+                throw new Error(
+                    dados.erro || 'Não foi possível registrar o voto.'
+                )
+            }
+
+            await carregarPosts()
+
+        } catch (erroAtual) {
+            setErro(erroAtual.message)
+        }
+    }
+
+    function denunciarPost(idPost) {
+        setAlvoDenuncia({ id_post: idPost, id_comentario: null })
+    }
+
+    function notificarDenuncia() {
+        setAvisoFeed({ tipo: 'sucesso', titulo: 'Denúncia enviada!', texto: 'O conteúdo foi encaminhado para análise.' })
+    }
+
+    return (
+        <main className="feed-page">
+            <div className="feed-layout">
+                <header className="feed-header">
+                    <div>
+                        <span className="feed-kicker">
+                            COMUNIDADE SIMIOLAB
+                        </span>
+
+                        <h1 className='learn-together'>
+                            Aprenda junto. <em>Compartilhe.</em>
+                        </h1>
+
+                        <p className='ask-help-discover'>
+                            Tire dúvidas, ajude a turma e descubra conteúdos novos.
+                        </p>
+                    </div>
+
+                </header>
+
+                <div className="feed-compose-row">
+                    <div className="feed-header-actions">
+                        <button className="feed-new-post" type="button" onClick={() => setCriandoPost(true)}>
+                            <span>＋</span>
+                            Criar publicação
+                        </button>
+                        {ehAdmin && (
+                            <button className="feed-admin-button" type="button" onClick={() => setModeracaoAberta(true)}>
+                                <span>⚑</span>
+                                Denúncias
+                            </button>
+                        )}
+                    </div>
+                    <div className="feed-order" aria-label="Ordenar publicações">
+                        <button
+                            type="button"
+                            className={ordem === 'recentes' ? 'active' : ''}
+                            aria-pressed={ordem === 'recentes'}
+                            onClick={() => setOrdem('recentes')}
+                        >
+                            Recentes
+                        </button>
+                        <button
+                            type="button"
+                            className={ordem === 'emAlta' ? 'active' : ''}
+                            aria-pressed={ordem === 'emAlta'}
+                            onClick={() => setOrdem('emAlta')}
+                        >
+                            Em alta
+                        </button>
+                    </div>
+
+                </div>
+
+                <FeedLateral
+                    comunidades={comunidades}
+                    comunidadeAtiva={comunidadeAtiva}
+                    setComunidadeAtiva={setComunidadeAtiva}
+                />
+
+            <section className="feed-content">
+                {erro && (
+                    <div className="feed-error">
+                        {erro}
+                    </div>
+                )}
+
+                {carregando ? (
+                    <section className="feed-state">
+                        <span className="feed-loader" />
+                        <p>Carregando a comunidade...</p>
+                    </section>
+                ) : posts.length === 0 ? (
+                    <section className="feed-state feed-empty">
+                        <span>🌿</span>
+                        <h2>A Selva ainda está quieta.</h2>
+                        <p>
+                            Seja a primeira pessoa a criar uma publicação.
+                        </p>
+                    </section>
+                ) : (
+                    <section className="feed-posts">
+                        {posts.map(post => (
+                            <article
+                                className="feed-post"
+                                key={post.id_post}
+                            >
+                                <div className="feed-votes">
+                                    <button
+                                        className={
+                                            post.meu_voto === 'positivo'
+                                                ? 'active positive'
+                                                : ''
+                                        }
+                                        type="button"
+                                        onClick={() => {
+                                            votarPost(
+                                                post.id_post,
+                                                'positivo'
+                                            )
+                                        }}
+                                        aria-label="Voto positivo"
+                                    >
+                                        ▲
+                                    </button>
+
+                                    <strong>{post.pontuacao}</strong>
+
+                                    <button
+                                        className={
+                                            post.meu_voto === 'negativo'
+                                                ? 'active negative'
+                                                : ''
+                                        }
+                                        type="button"
+                                        onClick={() => {
+                                            votarPost(
+                                                post.id_post,
+                                                'negativo'
+                                            )
+                                        }}
+                                        aria-label="Voto negativo"
+                                    >
+                                        ▼
+                                    </button>
+
+                                    {usuarioAtualId && Number(post.id_usuario) === usuarioAtualId && (
+                                        <FeedAcoesAutor tipo="post" item={post} aoAtualizar={atualizarFeed} />
+                                    )}
+
+                                    {!ehAdmin && Number(post.id_usuario) !== usuarioAtualId && (
+                                        <button
+                                            className="feed-post-report feed-detail-report"
+                                            type="button"
+                                            disabled={alvoDenuncia !== null}
+                                            onClick={() => denunciarPost(post.id_post)}
+                                            aria-label="Denunciar publicação"
+                                            title="Denunciar publicação"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                <path d="M5 21V3m0 1c5-4 9 4 14 0v10c-5 4-9-4-14 0" />
+                                            </svg>
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="feed-post-body">
+                                    <div className="feed-post-meta">
+                                        <Avatar
+                                            foto={post.foto_perfil}
+                                            corFundo={post.cor_fundo}
+                                            nome={post.nome_de_exibicao}
+                                        />
+
+                                        <span>
+                                            <strong>
+                                                {post.nome_de_exibicao}
+                                            </strong>
+
+                                            <small>
+                                                @{post.nome_de_usuario}
+                                            </small>
+                                        </span>
+
+                                        <i />
+
+                                        <span
+                                            className="feed-post-community"
+                                            style={{
+                                                '--community-color':
+                                                    post.comunidade_cor
+                                            }}
+                                        >
+                                            {post.comunidade_nome}
+                                        </span>
+
+                                        <time>
+                                            {tempoRelativo(post.criado_em)}
+                                            {post.editado_em && (
+                                                <span title={new Date(post.editado_em).toLocaleString('pt-BR', {
+                                                    dateStyle: 'short',
+                                                    timeStyle: 'short'
+                                                })}>
+                                                    {' · Editado'}
+                                                </span>
+                                            )}
+                                        </time>
+                                    </div>
+
+                                    <h2>{post.titulo}</h2>
+
+                                    <p className="feed-post-text">
+                                        {post.conteudo}
+                                    </p>
+
+                                    <div className="feed-post-actions">
+                                                                    <button
+                                    type="button"
+                                    onClick={() => setPostAberto(post.id_post)}
+                                >
+                                    💬 {post.total_comentarios} comentários
+                                </button>
+
+                                        <button type="button" onClick={() => compartilharPost(post.id_post)}>
+                                            ↗ Compartilhar
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+                    </section>
+                )}
+            </section>
+    </div>
+
+            {criandoPost && (
+                <div
+                    className="feed-modal-backdrop"
+                    onMouseDown={() => setCriandoPost(false)}
+                >
+                    <form
+                        className="feed-modal"
+                        onSubmit={publicarPost}
+                        onMouseDown={event => event.stopPropagation()}
+                    >
+                        <div className="feed-modal-header">
+                            <div>
+                                <span>NOVA PUBLICAÇÃO</span>
+                                <h2>Compartilhe com a comunidade</h2>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => setCriandoPost(false)}
+                                aria-label="Fechar"
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <label>
+                            Selva
+
+                            <select
+                                value={comunidadePost}
+                                onChange={event => {
+                                    setComunidadePost(event.target.value)
+                                }}
+                            >
+                                {comunidades.map(comunidade => (
+                                    <option
+                                        key={comunidade.id_comunidade}
+                                        value={comunidade.id_comunidade}
+                                    >
+                                        {comunidade.nome}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label>
+                            Título
+
+                            <input
+                                value={titulo}
+                                maxLength="160"
+                                onChange={event => {
+                                    setTitulo(event.target.value)
+                                }}
+                                placeholder="Dê um título para a sua publicação"
+                            />
+                        </label>
+
+                        <label>
+                            Conteúdo
+
+                            <textarea
+                                value={conteudo}
+                                maxLength="5000"
+                                onChange={event => {
+                                    setConteudo(event.target.value)
+                                }}
+                                placeholder="Escreva sua dúvida, dica ou descoberta..."
+                            />
+                        </label>
+
+                        <div className="feed-modal-footer">
+                            <span>
+                                {conteudo.length}/5000 caracteres
+                            </span>
+
+                            <button
+                                className="feed-publish"
+                                type="submit"
+                                disabled={publicando}
+                            >
+                                {publicando
+                                    ? 'Publicando...'
+                                    : 'Publicar'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
+                {postAberto && (
+                <FeedDetalhe
+                    idPost={postAberto}
+                    aoFechar={() => setPostAberto(null)}
+                    aoAtualizar={atualizarFeed}
+                    aoDenunciaEnviada={notificarDenuncia}
+                />
+            )}
+
+            {moderacaoAberta && (
+    <FeedModeracao
+        aoFechar={() => setModeracaoAberta(false)}
+        aoAtualizarFeed={atualizarFeed}
+    />
+)}
+
+            {alvoDenuncia && (
+                <FeedDenuncia
+                    alvo={alvoDenuncia}
+                    aoFechar={() => setAlvoDenuncia(null)}
+                    aoEnviado={() => { setAlvoDenuncia(null); notificarDenuncia() }}
+                />
+            )}
+            {avisoFeed && createPortal(
+                <div
+                    className={`feed-share-toast${avisoFeed.tipo === 'erro' ? ' feed-share-toast--erro' : ''}`}
+                    role={avisoFeed.tipo === 'erro' ? 'alert' : 'status'}
+                    aria-live={avisoFeed.tipo === 'erro' ? 'assertive' : 'polite'}
+                    aria-atomic="true"
+                >
+                    <span className="feed-share-toast-icon" aria-hidden="true">
+                        {avisoFeed.tipo === 'sucesso' ? '✓' : '!'}
+                    </span>
+                    <div className="feed-share-toast-copy">
+                        <strong>{avisoFeed.titulo}</strong>
+                        <p>{avisoFeed.texto}</p>
+                        {avisoFeed.url && (
+                            <input aria-label="Link da publicação" value={avisoFeed.url} readOnly onFocus={event => event.currentTarget.select()} />
+                        )}
+                    </div>
+                    <button type="button" onClick={() => setAvisoFeed(null)} aria-label="Fechar notificação">×</button>
+                </div>,
+                document.body
+            )}
+        </main>
+    )
+}
+
+export default Feed

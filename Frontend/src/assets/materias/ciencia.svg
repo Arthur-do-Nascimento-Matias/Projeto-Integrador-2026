@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="flaskClip">
+      <path d="
+        M26 10
+        H38
+        V24
+        L48 44
+        C51 49 47 56 40 56
+        H24
+        C17 56 13 49 16 44
+        L26 24
+        Z
+      "></path>
+    </clipPath>
+  </defs>
+
+  <!-- corpo do frasco -->
+  <path d="
+      M26 10
+      H38
+      V24
+      L48 44
+      C51 49 47 56 40 56
+      H24
+      C17 56 13 49 16 44
+      L26 24
+      Z
+    " fill="#EDE5D8"></path>
+
+  <!-- líquido -->
+  <g clip-path="url(#flaskClip)">
+    <path d="
+        M14 41
+        C20 37 27 44 33 40
+        C39 36 45 41 50 38
+        V60
+        H14
+        Z
+      " fill="#8BCF5B"></path>
+
+    <circle cx="24" cy="45" r="2.2" fill="#B7E685" opacity="0.9"></circle>
+    <circle cx="34" cy="49" r="1.8" fill="#B7E685" opacity="0.8"></circle>
+    <circle cx="40" cy="43" r="2.4" fill="#B7E685" opacity="0.85"></circle>
+  </g>
+
+  <!-- brilho -->
+  <path d="M24 18 C22 22, 21 28, 22 35" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.35"></path>
+
+  <!-- contorno leve -->
+  <path d="
+      M26 10
+      H38
+      V24
+      L48 44
+      C51 49 47 56 40 56
+      H24
+      C17 56 13 49 16 44
+      L26 24
+      Z
+    " fill="none" stroke="#A79B8B" stroke-width="1.2" opacity="0.55" stroke-linejoin="round"></path>
+</svg>

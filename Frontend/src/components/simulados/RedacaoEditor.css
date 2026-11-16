@@ -1,0 +1,359 @@
+.simulados .editorRedacaoAmbiente {
+    width: 100%;
+}
+
+.simulados .editorTopo,
+.simulados .folhaCabecalho,
+.simulados .folhaRodape {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.simulados .editorTopo {
+    margin-bottom: 18px;
+}
+
+.simulados .editorStatusTopo,
+.simulados .folhaContadores,
+.simulados .folhaBotoesAcao {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.simulados .editorBadgeXp,
+.simulados .editorBadgeSalvo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 9px;
+    color: var(--sim-verde);
+    background: var(--sim-verde-claro);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.simulados .editorBadgeXp {
+    color: #633803;
+    background: #ffe0ad;
+}
+
+.simulados .pontoVerde {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.simulados .editorGrid {
+    display: grid;
+    grid-template-columns: minmax(225px, .64fr) minmax(0, 1.36fr);
+    align-items: start;
+    gap: 22px;
+}
+
+.simulados .editorColunaApoio {
+    display: grid;
+    gap: 14px;
+}
+
+.simulados :is(.editorColunaApoio, .editorColunaFolha) {
+    min-width: 0;
+}
+
+.simulados :is(.editorCardTema, .editorMokiCard, .folhaRedacaoContainer) {
+    border: 1px solid var(--sim-borda);
+    border-radius: 20px;
+    background: var(--sim-superficie);
+    box-shadow: 0 5px 0 var(--sim-sombra);
+}
+
+.simulados .editorCardTema,
+.simulados .editorMokiCard {
+    padding: 18px;
+}
+
+.simulados .editorSubtag {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: var(--sim-verde);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.simulados .editorCardTema h2 {
+    margin-bottom: 10px;
+    font-size: clamp(22px, 2.5vw, 30px);
+    line-height: 1.17;
+    font-weight: 750;
+    letter-spacing: -.03em;
+}
+
+.simulados :is(.editorDescricaoTema, .editorTextoBloco p, .editorRegrasLista, .editorMokiFala p) {
+    color: var(--sim-secundario);
+    font-size: 14px;
+}
+
+.simulados .editorTextosMotivadores {
+    margin-top: 15px;
+    padding-top: 11px;
+    border-top: 1px solid var(--sim-borda);
+}
+
+.simulados .editorTextosMotivadores summary {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.simulados :is(.editorTextosMotivadores summary, .editorGuiaTitulo, .editorGuiaEtapas button):focus-visible {
+    outline: 3px solid #e99b30;
+    outline-offset: 3px;
+}
+
+.simulados .editorTextoBloco {
+    margin-top: 10px;
+    padding: 11px;
+    border-radius: 11px;
+    background: var(--sim-relevo);
+}
+
+.simulados .editorRegrasLista {
+    margin: 10px 0 0;
+    padding-inline-start: 20px;
+}
+
+.simulados .editorGuiaTitulo {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) 10px;
+    align-items: center;
+    gap: 11px;
+    color: var(--sim-verde);
+    cursor: pointer;
+    list-style: none;
+}
+
+.simulados .editorGuiaTitulo::-webkit-details-marker {
+    display: none;
+}
+
+.simulados .editorGuiaTitulo::after {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    content: "";
+}
+
+.simulados .editorMokiCard[open] .editorGuiaTitulo::after {
+    transform: rotate(225deg);
+}
+
+.simulados .editorMokiAvatar {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--sim-verde-claro);
+}
+
+.simulados .editorMokiImagem {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
+.simulados .editorGuiaEtapas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 14px 0 12px;
+}
+
+.simulados .editorGuiaEtapas button {
+    min-height: 44px;
+    padding: 6px;
+    border: 1px solid var(--sim-borda);
+    border-radius: 9px;
+    background: var(--sim-superficie);
+    color: var(--sim-texto);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.simulados .editorGuiaEtapas button:hover {
+    background: var(--sim-relevo);
+}
+
+.simulados .editorGuiaEtapas button[aria-pressed="true"] {
+    border-color: var(--sim-verde);
+    background: var(--sim-verde-claro);
+    color: var(--sim-verde);
+}
+
+.simulados .editorMokiFala {
+    padding: 11px 12px;
+    border-radius: 11px;
+    background: var(--sim-relevo);
+}
+
+.simulados .editorMokiFala .editorGuiaPergunta {
+    margin-top: 8px;
+    color: var(--sim-texto);
+    font-weight: 650;
+}
+
+.simulados .folhaRedacaoContainer {
+    --folha-linha: 28px;
+    overflow: hidden;
+}
+
+.simulados .folhaCabecalho,
+.simulados .folhaRodape {
+    padding: 14px 16px;
+}
+
+.simulados .folhaCabecalho {
+    background: var(--sim-verde-claro);
+    color: var(--sim-verde);
+}
+
+.simulados .folhaMarca {
+    display: block;
+    font-size: 18px;
+    font-weight: 750;
+}
+
+.simulados .folhaCabecalho small,
+.simulados .folhaContadores {
+    font-size: 12px;
+}
+
+.simulados .folhaTituloWrapper {
+    padding: 12px 16px 0;
+}
+
+.simulados :is(.folhaInputTitulo, .folhaTextarea) {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sim-texto);
+}
+
+.simulados :is(.folhaInputTitulo, .folhaTextarea)::placeholder {
+    color: var(--sim-secundario);
+    opacity: 1;
+}
+
+.simulados .folhaInputTitulo {
+    min-height: 44px;
+    padding: 0 6px;
+    border-bottom: 1px solid var(--sim-borda);
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: 650;
+}
+
+.simulados .folhaCorpoPautado {
+    display: grid;
+    grid-template-columns: 33px minmax(0, 1fr);
+    padding: 8px 16px 16px;
+}
+
+.simulados .folhaNumerosLinhas {
+    display: grid;
+    grid-auto-rows: var(--folha-linha);
+    border-right: 1px solid var(--sim-borda);
+    color: var(--sim-secundario);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    line-height: var(--folha-linha);
+}
+
+.simulados .folhaTextarea {
+    height: calc(30 * var(--folha-linha));
+    padding: 0 6px 0 10px;
+    border-radius: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--folha-linha) - 1px), var(--sim-borda) calc(var(--folha-linha) - 1px) var(--folha-linha));
+    font-size: 16px;
+    line-height: var(--folha-linha);
+    resize: none;
+}
+
+.simulados .folhaCarregando {
+    padding: 22px 16px;
+    color: var(--sim-secundario);
+}
+
+.simulados .folhaRodape {
+    justify-content: flex-end;
+    border-top: 1px solid var(--sim-borda);
+    background: var(--sim-superficie);
+}
+
+.simulados .folhaMensagemErro:not(:empty) {
+    flex: 1 1 180px;
+    color: var(--sim-erro);
+    font-size: 13px;
+}
+
+.simulados .folhaBotoesAcao button:disabled {
+    opacity: .55;
+}
+
+@media (max-width: 850px) {
+    .simulados .editorGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .simulados .editorColunaApoio {
+        display: contents;
+    }
+
+}
+
+@media (max-width: 500px) {
+    .simulados .folhaBotoesAcao {
+        width: 100%;
+    }
+
+    .simulados .folhaBotoesAcao button {
+        flex: 1 1 125px;
+    }
+}
+
+/* O guia fica acima da folha quando as duas colunas apertam. */
+@media (max-width: 850px) {
+    .simulados .editorColunaApoio {
+        display: grid;
+        gap: 14px;
+    }
+
+    .simulados .editorGrid { gap: 16px; }
+    .simulados :is(.editorCardTema, .editorMokiCard) { padding: clamp(14px, 3vw, 20px); }
+}
+
+@media (max-width: 500px) {
+    .simulados .folhaRedacaoContainer { --folha-linha: 26px; }
+    .simulados :is(.folhaCabecalho, .folhaRodape) { padding: 12px; }
+    .simulados .folhaTituloWrapper { padding-inline: 12px; }
+    .simulados .folhaCorpoPautado {
+        grid-template-columns: 23px minmax(0, 1fr);
+        padding-inline: 10px;
+    }
+    .simulados .folhaTextarea { padding-inline: 6px; }
+    .simulados .folhaBotoesAcao button { min-width: 0; }
+}

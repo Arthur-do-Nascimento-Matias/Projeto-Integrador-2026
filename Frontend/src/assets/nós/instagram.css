@@ -1,0 +1,414 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+:root {
+  --verde-escuro: #233e2d;
+  --verde: #347448;
+  --verde-vivo: #29894a;
+  --texto: #60715d;
+  --creme: #fffaf0;
+  --borda: #dbe3cb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+
+  background: linear-gradient(
+    to bottom,
+    #faf7ee 0%,
+    #f3f3e6 35%,
+    #e4ecd3 70%,
+    #c8d9ab 100%
+  );
+
+  color: var(--verde-escuro);
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.rubik {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible {
+  outline: 3px solid #c66e25;
+  outline-offset: 6px;
+}
+
+.icones {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: min(1440px, calc(100% - 48px));
+  margin-inline: auto;
+  padding-block: 20px;
+}
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid #d6dfc9;
+  border-radius: 14px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 180ms ease;
+}
+
+.voltar svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.voltar:hover {
+  background: #e7eedb;
+}
+
+.pagina {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.equipe {
+  width: min(1200px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 8px 0 48px;
+}
+
+.equipe > h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 0 32px;
+  text-align: center;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+}
+
+.titulo-instagram__icone {
+  display: block;
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--borda);
+  border-radius: 25px;
+  background: var(--creme);
+
+  box-shadow:
+    0 5px 0 #c4d2b3,
+    0 14px 25px rgb(35 62 45 / 5%);
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.foto {
+  position: relative;
+  aspect-ratio: 1.12;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #e9ebde;
+}
+
+.foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 400ms ease;
+}
+
+.foto__selo {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
+  background: var(--creme);
+  color: var(--verde-escuro);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.card__conteudo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 19px 6px 8px;
+}
+
+.card__cargo {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--texto);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 1.2px;
+}
+
+.card h2 {
+  margin: 0 0 24px;
+  font-size: clamp(18px, 1.7vw, 23px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+
+.instagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 46px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid #275d38;
+  border-radius: 13px;
+  background: var(--verde);
+  box-shadow: 0 4px 0 #234d30;
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.instagram svg {
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.instagram__icone {
+  width: 19px;
+  height: 19px;
+}
+
+.instagram__seta {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+      0 7px 0 #c4d2b3,
+      0 20px 30px rgb(35 62 45 / 9%);
+  }
+
+  .card:hover .foto img {
+    transform: scale(1.035);
+  }
+
+  .instagram:hover {
+    background: #3e8453;
+  }
+}
+
+.instagram:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #234d30;
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  width: min(1200px, calc(100% - 48px));
+  margin-inline: auto;
+  margin-top: auto;
+  padding: 23px 0;
+  border-top: 1px solid rgb(35 62 45 / 15%);
+  color: #4b6643;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.rodape p {
+  margin: 0;
+}
+
+@media (max-width: 1000px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 650px;
+  }
+
+  .card h2 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 650px) {
+  .cabecalho,
+  .equipe,
+  .rodape {
+    width: calc(100% - 36px);
+  }
+
+  .cabecalho {
+    padding-block: 16px;
+  }
+
+  .voltar {
+    font-size: 11px;
+  }
+
+  .equipe {
+    padding-top: 16px;
+    padding-bottom: 36px;
+  }
+
+  .equipe > h1 {
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+
+  .cards {
+    gap: 16px;
+  }
+
+  .card {
+    padding: 9px;
+    border-radius: 20px;
+  }
+
+  .card__conteudo {
+    padding-inline: 3px;
+  }
+
+  .card h2 {
+    font-size: 18px;
+  }
+
+  .instagram {
+    gap: 7px;
+    padding-inline: 8px;
+    font-size: 10px;
+  }
+
+  .instagram__seta {
+    display: none;
+  }
+
+  .rodape {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .cards {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+    gap: 24px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .foto {
+    aspect-ratio: 1.3;
+  }
+
+  .card h2 {
+    font-size: 23px;
+  }
+
+  .instagram {
+    padding-inline: 12px;
+    font-size: 12px;
+  }
+
+  .instagram__seta {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .foto img,
+  .instagram,
+  .voltar {
+    transition: none;
+  }
+}

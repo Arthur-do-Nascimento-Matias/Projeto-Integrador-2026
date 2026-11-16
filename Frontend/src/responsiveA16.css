@@ -1,0 +1,325 @@
+/* =========================================================
+   RESPONSIVIDADE — IPAD A16
+   Viewport: 820 x 1180
+   ========================================================= */
+
+@media (min-width: 701px) and (max-width: 900px) {
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  /* ---------- MENU LATERAL ---------- */
+
+  .simio-sidebar-layer .sidebar {
+    --collapsed: 88px;
+    --expanded: 245px;
+
+    left: 20px;
+    top: 50%;
+  }
+
+  .simio-sidebar-layer .simio-logo {
+    left: -18px;
+    top: -34px;
+    scale: 0.62;
+  }
+
+  .simio-sidebar-layer .shell {
+    border-radius: 32px;
+  }
+
+  .simio-sidebar-layer .sidebar.more-open .shell {
+    height: min(650px, calc(100dvh - 56px));
+  }
+
+  .simio-sidebar-layer .nav-item,
+  .simio-sidebar-layer .menu-toggle {
+    min-height: 58px;
+  }
+
+  .simio-sidebar-layer .icon-wrap {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+
+  .simio-sidebar-layer .label {
+    font-size: 14px;
+  }
+
+  .simio-sidebar-layer .ambient {
+    left: 20px;
+    width: 190px;
+  }
+
+  /* ---------- BASE DAS PÁGINAS INTERNAS ---------- */
+
+  .auth-page {
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ---------- PÁGINA APRENDER ---------- */
+
+  .materias-container {
+    top: 20px;
+    padding-left: 115px;
+    padding-right: 24px;
+  }
+
+  .materias-botao {
+    width: min(100%, 440px);
+  }
+
+  .trilha {
+    margin-top: 150px;
+    padding-left: 105px;
+  }
+
+  .menuLateralDireita {
+    position: relative;
+    top: auto;
+    right: auto;
+
+    width: min(100% - 150px, 620px);
+    max-height: none;
+
+    margin: 42px 24px 40px auto;
+
+    transform: none;
+    overflow: visible;
+  }
+
+  .menuDireita-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* ---------- ATIVIDADES ---------- */
+
+  .atividade {
+    min-height: 100dvh;
+    height: auto;
+
+    padding:
+      36px
+      42px
+      48px
+      92px;
+
+    overflow-y: auto;
+  }
+
+  .atividade::before {
+    left: 60px;
+  }
+
+  .enunciado {
+    width: 100%;
+    max-width: 620px;
+
+    margin-top: 36px;
+    margin-bottom: 32px;
+
+    font-size: 30px;
+  }
+
+  .alternativa1,
+  .alternativa2,
+  .alternativa3,
+  .alternativa4 {
+    max-width: 590px;
+  }
+
+  /* ---------- BIBLIOTECA ---------- */
+
+  .container {
+    position: relative;
+
+    width: calc(100% - 165px);
+    height: min(700px, calc(100dvh - 60px));
+
+    margin:
+      30px
+      24px
+      30px
+      140px;
+
+    scale: 1;
+  }
+
+  .biblioteca-header {
+    padding: 30px 34px 24px;
+  }
+
+  .biblioteca-conteudo {
+    padding:
+      0
+      34px
+      34px;
+  }
+
+  .biblioteca-header-direita {
+    gap: 12px;
+  }
+
+  .biblioteca-busca {
+    width: 210px;
+  }
+
+  .capas {
+    column-gap: 28px;
+    row-gap: 38px;
+  }
+
+  .livro {
+    width: 150px;
+  }
+
+  .livro-capa-wrap {
+    width: 150px;
+    height: 242px;
+  }
+
+  .livro-prateleira {
+    width: 172px;
+  }
+
+  /* ---------- SIMIA ---------- */
+
+  .chatIA {
+    left: auto;
+    top: auto;
+
+    width: calc(100% - 155px);
+    padding: 20px 0;
+
+    margin-left: 130px;
+  }
+
+  .chatIA .simia-container {
+    width: 100%;
+    height: min(720px, calc(100dvh - 60px));
+  }
+
+  /* ---------- RANKING ---------- */
+
+  .rk-pagina {
+    width: calc(100% - 165px);
+
+    margin:
+      0
+      24px
+      0
+      140px;
+
+    padding-top: 42px;
+  }
+
+  /* ---------- PERFIL ---------- */
+
+  .profile-page {
+    position: relative;
+    left: auto;
+    top: auto;
+
+    width: 100%;
+    min-height: 100dvh;
+
+    padding:
+      48px
+      30px
+      70px
+      140px;
+
+    transform: none;
+  }
+
+  .profile-hero {
+    grid-template-columns: 145px minmax(0, 1fr);
+  }
+
+  .profile-avatar-large {
+    width: 135px;
+    height: 135px;
+  }
+
+  /* ---------- CONFIGURAÇÕES ---------- */
+
+  .configuracoes {
+    padding:
+      55px
+      32px
+      70px
+      140px;
+  }
+
+  /* ---------- FEED ---------- */
+
+  .feed-page {
+    padding:
+      42px
+      26px
+      70px
+      140px;
+  }
+
+  .feed-page .feed-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .feed-page .feed-sidebar {
+    grid-column: 1;
+  }
+
+  /* ---------- SIMULADOS E REDAÇÕES ---------- */
+
+  .simulados {
+    padding:
+      45px
+      32px
+      90px
+      140px;
+  }
+
+  .simuladosGrade {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .redacoesConteudo {
+    grid-template-columns: 1fr;
+  }
+
+  .redacoesResumo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+
+  .editorGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .referenciasGrade,
+  .redacoesGradeTemas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* ---------- MODAIS ---------- */
+
+  .referenciaModalFundo,
+  .redacaoAvisoModal {
+    padding: 28px;
+  }
+
+  .referenciaModalCaixa {
+    max-width: 680px;
+    max-height: calc(100dvh - 56px);
+  }
+}

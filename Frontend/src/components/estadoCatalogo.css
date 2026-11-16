@@ -1,0 +1,62 @@
+.catalogo-estado {
+    position: relative;
+    z-index: 2;
+    padding: 16px;
+    margin: 0 0 12px;
+    border-radius: 16px;
+    background: #28231f;
+    color: #fff8ef;
+    text-align: center;
+}
+
+.catalogo-estado p {
+    margin: 0;
+}
+
+.catalogo-estado button {
+    margin-top: 12px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 10px;
+    background: #f4f1e8;
+    color: #28231f;
+    cursor: pointer;
+    font: inherit;
+}
+
+.catalogo-esqueleto,
+.simuladosCardCapa.catalogo-esqueleto {
+    background: #77726b;
+    animation: catalogo-pulso 1.4s ease-in-out infinite alternate;
+}
+
+.livro-capa-wrap.catalogo-esqueleto {
+    cursor: default;
+}
+
+.catalogo-card-vazio:hover {
+    transform: none;
+}
+
+.catalogo-linha {
+    height: 12px;
+    width: 72%;
+    border-radius: 6px;
+}
+
+.catalogo-linha + .catalogo-linha {
+    width: 42%;
+    margin-top: 14px;
+}
+
+@keyframes catalogo-pulso {
+    from { opacity: 0.55; }
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .catalogo-esqueleto,
+    .simuladosCardCapa.catalogo-esqueleto {
+        animation: none;
+    }
+}

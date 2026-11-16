@@ -1,0 +1,1068 @@
+    @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap"
+    );
+
+
+    /* =========================================================
+    CONTAINER PRINCIPAL
+    ========================================================= */
+
+    .container {
+
+        position: absolute;
+
+        z-index: 1;
+
+        width: 75%;
+        height: calc(700 * var(--biblioteca-unidade));
+
+        margin-top: calc(10 * var(--biblioteca-unidade));
+        margin-left: calc(165 * var(--biblioteca-unidade));
+
+        scale: 1.12;
+
+        display: flex;
+        flex-direction: column;
+
+        box-sizing: border-box;
+
+        border-radius: calc(46 * var(--biblioteca-unidade));
+
+        border:
+            calc(3 * var(--biblioteca-unidade)) solid #8A7662;
+
+        background:
+
+            linear-gradient(180deg,
+                #806e60 0%,
+                #766557 38%,
+                #62604a 68%,
+                #3e5529 100%);
+
+        box-shadow:
+
+            0 calc(28 * var(--biblioteca-unidade)) calc(60 * var(--biblioteca-unidade)) rgba(45, 33, 24, 0.38);
+
+        overflow: hidden;
+
+        font-family:
+            "Rubik",
+            sans-serif;
+
+    }
+
+
+    /* =========================================================
+    ESCURECIMENTO INFERIOR
+    ========================================================= */
+
+    .container::before {
+
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        z-index: 0;
+
+        border-radius: inherit;
+
+        background:
+
+            linear-gradient(to top,
+
+                rgba(0, 0, 0, 0.40) 0%,
+
+                rgba(0, 0, 0, 0.18) 30%,
+
+                transparent 64%);
+
+        pointer-events: none;
+
+    }
+
+
+    /* =========================================================
+    ILUMINAÇÃO DE FUNDO
+    ========================================================= */
+
+    .container::after {
+
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        z-index: 0;
+
+        background:
+
+            radial-gradient(circle at 17% 7%,
+                rgba(255, 255, 255, 0.055),
+                transparent 25%),
+
+            radial-gradient(circle at 82% 23%,
+                rgba(255, 255, 255, 0.025),
+                transparent 28%);
+
+        pointer-events: none;
+
+    }
+
+
+    /* =========================================================
+    HEADER
+    ========================================================= */
+
+    .biblioteca-header {
+
+        position: relative;
+
+        z-index: 5;
+
+        flex-shrink: 0;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding:
+
+            calc(38 * var(--biblioteca-unidade)) calc(54 * var(--biblioteca-unidade)) calc(27 * var(--biblioteca-unidade));
+
+    }
+
+
+    /* =========================================================
+    TÍTULO
+    ========================================================= */
+
+    .biblioteca-identidade {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: calc(4 * var(--biblioteca-unidade));
+
+    }
+
+    .biblioteca-marca {
+        display: flex;
+        align-items: center;
+        gap: calc(12 * var(--biblioteca-unidade));
+        padding-left: calc(25 * var(--biblioteca-unidade));
+    }
+
+    .biblioteca-miro {
+        display: block;
+        flex-shrink: 0;
+        width: calc(68 * var(--biblioteca-unidade));
+        height: auto;
+        scale: 1.70;
+    }
+
+    .biblioteca-miro-wrap {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .biblioteca-miro-nome {
+        position: absolute;
+        z-index: 1;
+        top: 12%;
+        right: calc(100% + calc(6 * var(--biblioteca-unidade)));
+        padding: calc(5 * var(--biblioteca-unidade)) calc(10 * var(--biblioteca-unidade));
+        border-radius: calc(8 * var(--biblioteca-unidade));
+        background: #fff2d7;
+        color: #4a3223;
+        font-size: calc(12 * var(--biblioteca-unidade));
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+        pointer-events: none;
+
+        opacity: 0;
+        transition: opacity 300ms ease-in-out;
+    }
+
+    .biblioteca-miro-nome::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: calc(100% - calc(1 * var(--biblioteca-unidade)));
+        transform: translateY(-50%);
+        border: calc(4 * var(--biblioteca-unidade)) solid transparent;
+        border-left-color: #fff2d7;
+    }
+
+    @media (hover: hover) {
+        .biblioteca-miro-wrap:hover .biblioteca-miro-nome {
+            opacity: 1;
+        }
+    }
+
+
+    .biblioteca-label {
+
+        color: #F5A035;
+
+        font-size: calc(10 * var(--biblioteca-unidade));
+
+        font-weight: 800;
+
+        letter-spacing: calc(2.2 * var(--biblioteca-unidade));
+
+    }
+
+
+    .biblioteca-identidade h1 {
+
+        margin: 0;
+
+        color: #FFF8EF;
+
+        font-size: calc(30 * var(--biblioteca-unidade));
+
+        line-height: 1;
+
+        font-weight: 700;
+
+        letter-spacing: calc(-0.8 * var(--biblioteca-unidade));
+
+    }
+
+
+    /* =========================================================
+    DIREITA DO HEADER
+    ========================================================= */
+
+    .biblioteca-header-direita {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: calc(17 * var(--biblioteca-unidade));
+
+    }
+
+
+    /* =========================================================
+    BUSCA
+    ========================================================= */
+
+    .biblioteca-busca {
+
+        width: calc(250 * var(--biblioteca-unidade));
+        height: calc(42 * var(--biblioteca-unidade));
+
+        display: flex;
+
+        align-items: center;
+
+        gap: calc(10 * var(--biblioteca-unidade));
+
+        padding:
+
+            0 calc(15 * var(--biblioteca-unidade));
+
+        box-sizing: border-box;
+
+        border-radius: calc(13 * var(--biblioteca-unidade));
+
+        border:
+
+            calc(1 * var(--biblioteca-unidade)) solid rgba(255, 255, 255, 0.10);
+
+        background:
+
+            rgba(42, 34, 27, 0.19);
+
+        box-shadow:
+
+            inset 0 calc(1 * var(--biblioteca-unidade)) 0 rgba(255, 255, 255, 0.035);
+
+        backdrop-filter:
+
+            blur(calc(8 * var(--biblioteca-unidade)));
+
+        transition:
+
+            border-color .25s ease,
+            background .25s ease,
+            box-shadow .25s ease;
+
+    }
+
+
+    .biblioteca-busca:hover {
+
+        background:
+
+            rgba(42, 34, 27, 0.25);
+
+    }
+
+
+    .biblioteca-busca:focus-within {
+
+        border-color:
+
+            rgba(245, 160, 53, 0.50);
+
+        background:
+
+            rgba(42, 34, 27, 0.31);
+
+        box-shadow:
+
+            0 0 0 calc(3 * var(--biblioteca-unidade)) rgba(245, 160, 53, 0.07);
+
+    }
+
+
+    .busca-icone {
+
+        width: calc(17 * var(--biblioteca-unidade));
+        height: calc(17 * var(--biblioteca-unidade));
+
+        flex-shrink: 0;
+
+        color:
+
+            rgba(255, 247, 235, 0.52);
+
+    }
+
+
+    .biblioteca-busca input {
+
+        width: 100%;
+
+        padding: 0;
+
+        border: none;
+
+        outline: none;
+
+        background: transparent;
+
+        color: #FFF7EC;
+
+        font-family:
+            "Rubik",
+            sans-serif;
+
+        font-size: calc(12 * var(--biblioteca-unidade));
+
+        font-weight: 400;
+
+    }
+
+
+    .biblioteca-busca input::placeholder {
+
+        color:
+
+            rgba(255, 247, 235, 0.42);
+
+    }
+
+
+    /* =========================================================
+    QUANTIDADE
+    ========================================================= */
+
+    .biblioteca-quantidade {
+
+        color:
+
+            rgba(255, 247, 235, 0.48);
+
+        font-size: calc(11 * var(--biblioteca-unidade));
+
+        font-weight: 500;
+
+        white-space: nowrap;
+
+    }
+
+
+    /* =========================================================
+    ÁREA INTERNA
+    ========================================================= */
+
+    .biblioteca-conteudo {
+
+        position: relative;
+
+        z-index: 3;
+
+        flex: 1;
+
+        min-height: 0;
+
+        box-sizing: border-box;
+
+        padding:
+
+            0 calc(54 * var(--biblioteca-unidade)) calc(42 * var(--biblioteca-unidade));
+
+        overflow-y: auto;
+
+        overflow-x: hidden;
+
+    }
+
+
+    /* =========================================================
+    SCROLLBAR
+    ========================================================= */
+
+    .biblioteca-conteudo::-webkit-scrollbar {
+
+        width: calc(7 * var(--biblioteca-unidade));
+
+    }
+
+
+    .biblioteca-conteudo::-webkit-scrollbar-track {
+
+        background: transparent;
+
+    }
+
+
+    .biblioteca-conteudo::-webkit-scrollbar-thumb {
+
+        border-radius: calc(20 * var(--biblioteca-unidade));
+
+        background:
+
+            rgba(255, 255, 255, 0.13);
+
+    }
+
+
+    .biblioteca-conteudo::-webkit-scrollbar-thumb:hover {
+
+        background:
+
+            rgba(245, 160, 53, 0.40);
+
+    }
+
+
+    /* =========================================================
+    SEÇÃO
+    ========================================================= */
+
+    .biblioteca-secao-topo {
+
+        width: 100%;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: calc(18 * var(--biblioteca-unidade));
+
+        margin-bottom: calc(28 * var(--biblioteca-unidade));
+
+    }
+
+
+    .secao-identidade {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: calc(9 * var(--biblioteca-unidade));
+
+        white-space: nowrap;
+
+    }
+
+
+    .secao-marcador {
+
+        width: calc(4 * var(--biblioteca-unidade));
+        height: calc(16 * var(--biblioteca-unidade));
+
+        border-radius: calc(10 * var(--biblioteca-unidade));
+
+        background: #F5A035;
+
+        box-shadow:
+
+            0 0 calc(12 * var(--biblioteca-unidade)) rgba(245, 160, 53, 0.30);
+
+    }
+
+
+    .biblioteca-secao-topo h2 {
+
+        margin: 0;
+
+        color:
+
+            rgba(255, 248, 239, 0.88);
+
+        font-size: calc(14 * var(--biblioteca-unidade));
+
+        font-weight: 600;
+
+    }
+
+
+    .biblioteca-linha {
+
+        height: calc(1 * var(--biblioteca-unidade));
+
+        flex: 1;
+
+        background:
+
+            linear-gradient(90deg,
+
+                rgba(255, 255, 255, 0.13),
+
+                rgba(255, 255, 255, 0));
+
+    }
+
+
+    /* =========================================================
+    GRID
+    ========================================================= */
+
+    .capas {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        column-gap: calc(48 * var(--biblioteca-unidade));
+        row-gap: calc(58 * var(--biblioteca-unidade));
+
+        box-sizing: border-box;
+        padding: calc(8 * var(--biblioteca-unidade)) 0 calc(40 * var(--biblioteca-unidade));
+    }
+
+
+    /* =========================================================
+    LIVRO
+    ========================================================= */
+
+    .livro {
+
+        position: relative;
+
+        width: calc(180 * var(--biblioteca-unidade));
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+    }
+
+
+    /* =========================================================
+    CAPA DO LIVRO
+    ========================================================= */
+
+    .livro-capa-wrap {
+
+        position: relative;
+
+        width: calc(180 * var(--biblioteca-unidade));
+        height: calc(290 * var(--biblioteca-unidade));
+
+        z-index: 2;
+
+        overflow: hidden;
+
+        border-radius: calc(7 * var(--biblioteca-unidade));
+
+        cursor: pointer;
+
+        box-shadow:
+
+            0 calc(13 * var(--biblioteca-unidade)) calc(24 * var(--biblioteca-unidade)) rgba(0, 0, 0, 0.28);
+
+        transform:
+
+            translateY(0) scale(1);
+
+        transition:
+
+            transform .32s cubic-bezier(.2, .8, .2, 1),
+
+            box-shadow .32s ease,
+
+            filter .32s ease;
+
+    }
+
+
+    /* =========================================================
+    ESCURECIMENTO DOS LIVROS NÃO SELECIONADOS
+    ========================================================= */
+
+    .livro-capa-wrap::before {
+
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        z-index: 4;
+
+        background:
+
+            rgba(18, 15, 11, 0.46);
+
+        opacity: 0;
+
+        pointer-events: none;
+
+        transition:
+
+            opacity .28s ease;
+
+    }
+
+
+    /* =========================================================
+    REFLEXO DA CAPA
+    ========================================================= */
+
+    .livro-capa-wrap::after {
+
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        z-index: 2;
+
+        background:
+
+            linear-gradient(115deg,
+
+                rgba(255, 255, 255, 0.09),
+
+                transparent 24%,
+
+                transparent 72%);
+
+        opacity: .55;
+
+        pointer-events: none;
+
+    }
+
+
+    /* =========================================================
+    IMAGEM
+    ========================================================= */
+
+    .capa {
+
+        width: 100%;
+        height: 100%;
+
+        display: block;
+
+        object-fit: cover;
+
+        transition:
+
+            filter .30s ease,
+            transform .30s ease;
+
+    }
+
+
+    /* =========================================================
+    ABRIR LIVRO
+    ========================================================= */
+
+    .livro-acao {
+
+        position: absolute;
+
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        z-index: 5;
+
+        height: calc(76 * var(--biblioteca-unidade));
+
+        display: flex;
+
+        align-items: flex-end;
+
+        justify-content: center;
+
+        box-sizing: border-box;
+
+        padding-bottom: calc(17 * var(--biblioteca-unidade));
+
+        background:
+
+            linear-gradient(to top,
+
+                rgba(18, 13, 9, 0.88),
+
+                rgba(18, 13, 9, 0));
+
+        color: #FFF4E7;
+
+        font-size: calc(12 * var(--biblioteca-unidade));
+
+        font-weight: 600;
+
+        letter-spacing: calc(.3 * var(--biblioteca-unidade));
+
+        opacity: 0;
+
+        transform:
+
+            translateY(calc(18 * var(--biblioteca-unidade)));
+
+        pointer-events: none;
+
+        transition:
+
+            opacity .28s ease,
+            transform .28s ease;
+
+    }
+
+
+    /* =========================================================
+    HOVER DO LIVRO
+    ========================================================= */
+
+    .livro:hover .livro-capa-wrap {
+
+        transform:
+
+            translateY(calc(-13 * var(--biblioteca-unidade))) scale(1.04);
+
+        box-shadow:
+
+            0 calc(27 * var(--biblioteca-unidade)) calc(38 * var(--biblioteca-unidade)) rgba(0, 0, 0, 0.38),
+
+            0 calc(7 * var(--biblioteca-unidade)) calc(17 * var(--biblioteca-unidade)) rgba(255, 145, 20, 0.18);
+
+    }
+
+
+    .livro:hover .capa {
+
+        filter:
+
+            brightness(1.06) saturate(1.04);
+
+    }
+
+
+    .livro:hover .livro-acao {
+
+        opacity: 1;
+
+        transform:
+
+            translateY(0);
+
+    }
+
+
+    /* =========================================================
+    QUANDO EXISTE HOVER EM ALGUM LIVRO
+    
+    ESCURECE TODOS OS OUTROS
+    ========================================================= */
+
+    .capas:has(.livro:hover) .livro:not(:hover) .livro-capa-wrap::before {
+
+        opacity: 1;
+
+    }
+
+
+    /* recuo sutil dos livros não selecionados */
+
+    .capas:has(.livro:hover) .livro:not(:hover) .livro-capa-wrap {
+
+        transform:
+
+            scale(.985);
+
+        filter:
+
+            saturate(.82);
+
+    }
+
+
+    /* =========================================================
+    PRATELEIRA
+    ========================================================= */
+
+    .livro-prateleira {
+
+        position: relative;
+
+        width: calc(206 * var(--biblioteca-unidade));
+        height: calc(12 * var(--biblioteca-unidade));
+
+        margin-top: calc(15 * var(--biblioteca-unidade));
+
+        border-radius:
+
+            calc(4 * var(--biblioteca-unidade)) calc(4 * var(--biblioteca-unidade)) calc(7 * var(--biblioteca-unidade)) calc(7 * var(--biblioteca-unidade));
+
+        background:
+
+            linear-gradient(180deg,
+
+                #815B40 0%,
+
+                #62412D 45%,
+
+                #442A1D 100%);
+
+        box-shadow:
+
+            0 calc(8 * var(--biblioteca-unidade)) calc(13 * var(--biblioteca-unidade)) rgba(0, 0, 0, 0.31);
+
+        transition:
+
+            box-shadow .30s ease,
+            transform .30s ease;
+
+    }
+
+
+    /* brilho superior */
+
+    .prateleira-luz {
+
+        position: absolute;
+
+        top: calc(1 * var(--biblioteca-unidade));
+        left: calc(8 * var(--biblioteca-unidade));
+        right: calc(8 * var(--biblioteca-unidade));
+
+        height: calc(2 * var(--biblioteca-unidade));
+
+        border-radius: calc(10 * var(--biblioteca-unidade));
+
+        background:
+
+            rgba(255, 220, 180, 0.17);
+
+    }
+
+
+    /* parte frontal */
+
+    .prateleira-frente {
+
+        position: absolute;
+
+        left: calc(4 * var(--biblioteca-unidade));
+        right: calc(4 * var(--biblioteca-unidade));
+
+        top: calc(5 * var(--biblioteca-unidade));
+
+        height: calc(9 * var(--biblioteca-unidade));
+
+        border-radius:
+
+            calc(2 * var(--biblioteca-unidade)) calc(2 * var(--biblioteca-unidade)) calc(6 * var(--biblioteca-unidade)) calc(6 * var(--biblioteca-unidade));
+
+        background:
+
+            linear-gradient(180deg,
+
+                #5D3C2A,
+
+                #40281C);
+
+        box-shadow:
+
+            inset 0 calc(1 * var(--biblioteca-unidade)) rgba(255, 255, 255, 0.07);
+
+    }
+
+
+    /* sombra aumenta quando livro sobe */
+
+    .livro:hover .livro-prateleira {
+
+        box-shadow:
+
+            0 calc(12 * var(--biblioteca-unidade)) calc(18 * var(--biblioteca-unidade)) rgba(0, 0, 0, 0.37);
+
+    }
+
+
+
+
+/* Desktop: composição de referência 1536 × 700, sempre seis capas.
+   A unidade acompanha largura e altura disponíveis sem distorcer o painel. */
+.container:has(> .biblioteca-header) {
+    --biblioteca-unidade: min(0.0546875vw, 0.12dvh);
+    position: fixed;
+    inset: auto;
+    left: 54vw;
+    top: 50%;
+    translate: -50% -50%;
+    transform: none;
+    scale: 1;
+    margin: 0;
+    width: calc(1536 * var(--biblioteca-unidade));
+    height: calc(700 * var(--biblioteca-unidade));
+}
+.biblioteca-conteudo { overscroll-behavior: contain; }
+.biblioteca-busca input { min-width: 0; }
+.container:has(> .biblioteca-header) .capas {
+    display: grid;
+    grid-template-columns: repeat(6, calc(180 * var(--biblioteca-unidade)));
+}
+
+/* Tablets: mantém espaço para o menu lateral e permite capas maiores. */
+@media (max-width: 1100px) {
+    .container:has(> .biblioteca-header) {
+        --biblioteca-unidade: 1px;
+        inset: 24px 18px 24px 128px;
+        translate: none;
+        width: auto;
+        height: auto;
+        border-radius: 32px;
+    }
+    .biblioteca-header { padding: 24px; gap: 20px; flex-wrap: wrap; }
+    .biblioteca-marca { padding-left: 16px; gap: 22px; }
+    .biblioteca-miro { width: 68px; scale: 1; }
+    .biblioteca-identidade h1 { font-size: 28px; }
+    .biblioteca-header-direita { flex: 1 1 260px; gap: 12px; }
+    .biblioteca-busca { flex: 1; width: auto; min-width: 0; height: 44px; }
+    .biblioteca-busca input { font-size: 16px; }
+    .biblioteca-conteudo { padding: 0 24px 24px; }
+    .container:has(> .biblioteca-header) .capas {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 36px 20px;
+    }
+    .container:has(> .biblioteca-header) .livro { width: 100%; min-width: 0; }
+    .container:has(> .biblioteca-header) .livro-capa-wrap {
+        width: calc(100% - 18px);
+        height: auto;
+        aspect-ratio: 18 / 29;
+    }
+    .livro-prateleira { width: 100%; height: 12px; margin-top: 14px; }
+}
+@media (min-width: 901px) and (max-width: 1100px) {
+    .container:has(> .biblioteca-header) .capas {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+/* Celulares: menu inferior, busca em linha própria e duas capas por linha. */
+@media (max-width: 700px) {
+    .container:has(> .biblioteca-header) {
+        inset: max(10px, env(safe-area-inset-top)) 10px
+               calc(88px + env(safe-area-inset-bottom));
+        border-radius: 24px;
+        border-width: 2px;
+    }
+    .biblioteca-header { padding: 20px 16px 16px; gap: 16px; }
+    .biblioteca-marca { gap: 14px; padding-left: 10px; }
+    .biblioteca-miro { width: 56px; }
+    .biblioteca-identidade h1 { font-size: 26px; }
+    .biblioteca-header-direita { flex-basis: 100%; gap: 10px; }
+    .biblioteca-quantidade { font-size: 11px; }
+    .biblioteca-conteudo { padding: 0 16px 24px; }
+    .biblioteca-secao-topo { margin-bottom: 20px; }
+    .container:has(> .biblioteca-header) .capas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 16px;
+    }
+    .biblioteca-miro-nome { right: auto; left: 0; top: 100%; }
+    .biblioteca-miro-nome::before { display: none; }
+}
+@media (hover: none) {
+    .container:has(> .biblioteca-header) .livro-capa-wrap,
+    .container:has(> .biblioteca-header) .livro:hover .capa {
+        transform: none;
+        filter: none;
+    }
+    .container:has(> .biblioteca-header) .livro-capa-wrap::before { opacity: 0; }
+    .container:has(> .biblioteca-header) .livro-acao { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .container:has(> .biblioteca-header) *,
+    .container:has(> .biblioteca-header) *::before { transition: none; }
+}
+
+/* Busca: permite que os filhos encolham dentro do cabeçalho. */
+@media (max-width: 1100px) {
+    .container > .biblioteca-header,
+    .container .biblioteca-header-direita {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .container .biblioteca-busca {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .container .biblioteca-busca input {
+        flex: 1 1 0;
+        width: 0;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+@media (max-width: 700px) {
+    .container > .biblioteca-header {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        padding: 20px 16px 16px;
+        gap: 16px;
+    }
+    .container .biblioteca-header-direita {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        flex: 0 0 auto;
+        width: 100%;
+        gap: 8px;
+    }
+    .container .biblioteca-busca {
+        flex: 0 0 auto;
+        width: 100%;
+        height: 44px;
+    }
+    .container .biblioteca-quantidade {
+        align-self: flex-end;
+    }
+}
