@@ -22,6 +22,16 @@ import { error } from 'console'
 import { json } from 'stream/consumers'
 
 
+console.log('[DIAGNÓSTICO DB]', {
+    DB_HOST: process.env.DB_HOST || 'NÃO DEFINIDA',
+    DB_PORT: process.env.DB_PORT || 'NÃO DEFINIDA',
+    DB_USER: process.env.DB_USER || 'NÃO DEFINIDA',
+    DB_NAME: process.env.DB_NAME || 'NÃO DEFINIDA',
+    DB_PASSWORD: process.env.DB_PASSWORD
+        ? `DEFINIDA (${process.env.DB_PASSWORD.length} caracteres)`
+        : 'VAZIA'
+});
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
