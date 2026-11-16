@@ -205,53 +205,39 @@ class Redacoes {
         })
     }
 
-    static buscarRascunho(idUsuario, idTema) {
-        return new Promise((resolve, reject) => {
+   static buscarRascunho(idUsuario, idTema) {
+    return new Promise((resolve, reject) => {
+        const connection = Conexao.connect()
 
-            const connection = Conexao.connect()
+        const sql = `
+            SELECT
+                id_redacao,
+                id_usuario,
+                id_tema,
+                titulo,
+                conteudo,
+                quantidade_palavras,
+                atualizada_em
+            FROM redacoes
+            WHERE id_usuario = ?
+              AND id_tema = ?
+              AND status = 'rascunho'
+            ORDER BY id_redacao DESC
+            LIMIT 1
+        `
 
-            const sql = `
-                SELECT
-                    r.id_redacao,
-                    r.id_usuario,
-                    r.id_tema,
-                    r.titulo,
-                    r.conteudo,
-                    r.quantidade_palavras,
-                    r.atualizada_em,
-                    t.titulo AS tema
+        connection.query(sql, [idUsuario, idTema], (error, rascunhos) => {
+            connection.end()
 
-                FROM redacoes AS r
+            if (error) {
+                reject(error)
+                return
+            }
 
-                INNER JOIN temas_redacao AS t
-                    ON t.id_tema = r.id_tema
-
-                WHERE r.id_usuario = ?
-                  AND r.id_tema = ?
-                  AND r.status = 'rascunho'
-
-                ORDER BY r.id_redacao DESC
-
-                LIMIT 1
-            `
-
-            connection.query(
-                sql,
-                [idUsuario, idTema],
-                (error, rascunhos) => {
-
-                    connection.end()
-
-                    if (error) {
-                        reject(error)
-                        return
-                    }
-
-                    resolve(rascunhos[0] || null)
-                }
-            )
+            resolve(rascunhos[0] || null)
         })
-    }
+    })
+}
 
     static listarHistorico(idUsuario) {
         return new Promise((resolve, reject) => {
@@ -354,8 +340,11 @@ class Redacoes {
 
                 resolve(referencias)
             })
+            
         })
     }
+    
 }
+
 
 export default Redacoes

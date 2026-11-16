@@ -54,6 +54,40 @@ const callback = async (req, res) => {
     }
     const rota = url.parse(req.url, true)
     const param = rota.query
+
+if (rota.pathname === '/redacoes/rascunho' && req.method === 'POST') {
+    Http.lerCorpo(req)
+        .then(dados => {
+            const idUsuario = Number(dados.id_usuario)
+            const idTema = Number(dados.id_tema)
+
+            if (!idUsuario || !idTema) {
+                Http.responderJson(res, 400, {
+                    erro: 'Informe id_usuario e id_tema válidos.'
+                })
+                return null
+            }
+
+            return Redacoes.salvarRascunho(dados)
+        })
+        .then(resultado => {
+            if (!resultado) return
+
+            Http.responderJson(res, 200, {
+                mensagem: resultado.criado
+                    ? 'Rascunho criado.'
+                    : 'Rascunho atualizado.',
+                ...resultado
+            })
+        })
+        .catch(error => {
+            console.error('ERRO AO SALVAR RASCUNHO:', error)
+            Http.responderJson(res, 500, { erro: error.message })
+        })
+
+    return
+}
+
     if (rota.pathname === '/mudarAparencia') {
         if (req.method !== 'POST') {
             Http.responderJson(res, 405, { ok: false, message: 'Método não permitido.' });
@@ -726,6 +760,7 @@ const callback = async (req, res) => {
             })
             return
         }
+        
     // =========================
     // CHATBOT
     // =========================
