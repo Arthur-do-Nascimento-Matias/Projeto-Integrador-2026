@@ -1,9 +1,10 @@
-import Moki from "../../assets/MOKI.png";
 import { useEffect, useMemo, useState } from "react";
 import "./RedacaoEditor.css";
-import { apiFetch } from "../utils/api";
-// teste 
+
+
+// teste
 const ID_USUARIO_ATUAL = 22;
+
 
 function RedacaoEditor({ tema, aoVoltar }) {
     const idTema = tema?.id_tema || tema?.idTema || 1;
@@ -12,35 +13,42 @@ function RedacaoEditor({ tema, aoVoltar }) {
         tema?.titulo_tema ||
         "Os impactos da tecnologia na educação contemporânea";
 
+
     const [idRedacao, setIdRedacao] = useState(null);
     const [tituloRedacao, setTituloRedacao] = useState("");
     const [textoRedacao, setTextoRedacao] = useState("");
-    const [etapaSelecionada, setEtapaSelecionada] = useState(0);
-    const etapa = ETAPAS_REDACAO[etapaSelecionada];
+
 
     const [carregandoRascunho, setCarregandoRascunho] = useState(true);
     const [salvando, setSalvando] = useState(false);
     const [statusSalvamento, setStatusSalvamento] = useState("");
     const [erro, setErro] = useState("");
 
+
     const [enviandoCorrecao, setEnviandoCorrecao] = useState(false);
+
 
     useEffect(() => {
         carregarRascunhoExistente();
     }, [idTema]);
+
 
     async function carregarRascunhoExistente() {
         try {
             setCarregandoRascunho(true);
             setErro("");
 
-            const url = `/redacoes/rascunho?id_usuario=${ID_USUARIO_ATUAL}&id_tema=${idTema}`;
-            const resposta = await apiFetch(url);
+
+            const url = `http://localhost:3000/redacoes/rascunho?id_usuario=${ID_USUARIO_ATUAL}&id_tema=${idTema}`;
+            const resposta = await fetch(url);
+
 
             if (!resposta.ok) return;
 
+
             const dados = await resposta.json();
             const rascunho = dados?.rascunho || dados;
+
 
             if (rascunho && (rascunho.conteudo || rascunho.titulo)) {
                 setIdRedacao(rascunho.id_redacao || rascunho.id || null);
@@ -55,19 +63,22 @@ function RedacaoEditor({ tema, aoVoltar }) {
         }
     }
 
+
     async function salvarRascunho() {
         if (!textoRedacao.trim() && !tituloRedacao.trim()) {
             setErro("Escreva pelo menos algumas palavras antes de salvar.");
             return null;
         }
 
+
         try {
             setSalvando(true);
             setErro("");
             setStatusSalvamento("Salvando...");
 
-            const resposta = await apiFetch(
-                "/redacoes/rascunho",
+
+            const resposta = await fetch(
+                "http://localhost:3000/redacoes/rascunho",
                 {
                  method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -80,21 +91,26 @@ function RedacaoEditor({ tema, aoVoltar }) {
                 }
             );
 
+
             const dados = await resposta.json();
+
 
             if (!resposta.ok) {
                 throw new Error(dados?.mensagem || "Erro ao salvar.");
             }
 
+
             if (dados.id_redacao) {
                 setIdRedacao(dados.id_redacao);
             }
+
 
             const horario = new Date().toLocaleTimeString("pt-BR", {
                 hour: "2-digit",
                 minute: "2-digit"
             });
             setStatusSalvamento(`Salvo às ${horario}`);
+
 
             return dados.id_redacao || idRedacao;
         } catch (err) {
@@ -107,15 +123,6 @@ function RedacaoEditor({ tema, aoVoltar }) {
         }
     }
 
-    // Parte q vai conectar ao Ollama depois
-    async function enviarParaCorrecao() {
-        const idAtual = await salvarRascunho();
-        if (!idAtual) return;
-
-        alert(
-            `Rascunho #${idAtual} salvo! A correção com IA (Ollama) será conectada aqui pelo seu amigo.`
-        );
-    }
 
     const estatisticas = useMemo(() => {
         const textoLimpo = textoRedacao.trim();
@@ -124,36 +131,40 @@ function RedacaoEditor({ tema, aoVoltar }) {
         const quebras = textoLimpo ? textoRedacao.split("\n").length : 0;
         const linhasEstimadas = Math.max(quebras, Math.ceil(caracteres / 70));
 
+
         return {
             palavras,
             linhas: Math.min(30, linhasEstimadas)
         };
     }, [textoRedacao]);
 
+
     return (
         <div className="editorRedacaoAmbiente">
             <header className="editorTopo">
-                <button type="button" className="simuladosBotao editorBotaoVoltar" onClick={aoVoltar}>
+                <button className="editorBotaoVoltar" onClick={aoVoltar}>
                     ← Voltar para temas
                 </button>
 
+
                 <div className="editorStatusTopo">
                     {statusSalvamento && (
-                        <span className="editorBadgeSalvo" role="status">
+                        <span className="editorBadgeSalvo">
                             <span className="pontoVerde" />
                             {statusSalvamento}
                         </span>
                     )}
-                    <span className="editorBadgeXp">+150 XP</span>
+                    <span className="editorBadgeXp">VALE +150 XP</span>
                 </div>
             </header>
+
 
             <div className="editorGrid">
                 {/* LADO ESQUERDO: TEMA E MOKI */}
                 <aside className="editorColunaApoio">
                     <div className="editorCardTema">
                         <span className="editorSubtag">
-                            Proposta de redação
+                            PROPOSTA DE REDAÇÃO • TEMA #{idTema}
                         </span>
                         <h2>{tituloTema}</h2>
                         <p className="editorDescricaoTema">
@@ -161,8 +172,9 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                 "A partir da leitura dos textos motivadores, redija um texto dissertativo-argumentativo em modalidade escrita formal da língua portuguesa."}
                         </p>
 
-                        <details className="editorTextosMotivadores">
-                            <summary>Textos motivadores e instruções</summary>
+
+                        <div className="editorTextosMotivadores">
+                            <h4>Textos motivadores e instruções</h4>
                             <div className="editorTextoBloco">
                                 <strong>Texto de apoio</strong>
                                 <p>
@@ -172,50 +184,41 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                 </p>
                             </div>
 
+
                             <ul className="editorRegrasLista">
                                 <li>Defenda um ponto de vista com argumentos claros.</li>
                                 <li>Apresente uma proposta de intervenção no final.</li>
                                 <li>Escreva entre <strong>7 e 30 linhas</strong>.</li>
                             </ul>
-                        </details>
+                        </div>
                     </div>
 
-                    <details className="editorMokiCard" open>
-                        <summary className="editorGuiaTitulo">
-                            <span className="editorMokiAvatar">
-                                <img src={Moki} alt="" className="editorMokiImagem" />
-                            </span>
-                            <strong>Guia de redação do Moki</strong>
-                        </summary>
-                        <div className="editorGuiaEtapas" role="group" aria-label="Partes da redação">
-                            {ETAPAS_REDACAO.map(({ nome }, indice) => (
-                                <button
-                                    key={nome}
-                                    type="button"
-                                    aria-pressed={etapaSelecionada === indice}
-                                    onClick={() => setEtapaSelecionada(indice)}
-                                >
-                                    {nome}
-                                </button>
-                            ))}
+
+                    <div className="editorMokiCard">
+                        <div className="editorMokiAvatar">🐵</div>
+                        <div className="editorMokiFala">
+                            <strong>Dica do Moki</strong>
+                            <p>
+                                {estatisticas.palavras < 50
+                                    ? "Comece apresentando o tema no 1º parágrafo!"
+                                    : "Ótimo ritmo! Lembre-se de salvar seu rascunho."}
+                            </p>
                         </div>
-                        <div className="editorMokiFala" aria-live="polite">
-                            <p>{etapa.dica}</p>
-                            <p className="editorGuiaPergunta">{etapa.pergunta}</p>
-                        </div>
-                    </details>
+                    </div>
                 </aside>
+
 
                 {/* LADO DIREITO: FOLHA PAUTADA */}
                 <section className="editorColunaFolha">
                     <div className="folhaRedacaoContainer">
                         <div className="folhaCabecalho">
                             <div>
-                                <span className="folhaMarca">Sua redação</span>
+                                <span className="folhaMarca">FOLHA OFICIAL • SIMIOLAB</span>
                                 <small>
                                     {idRedacao ? `Rascunho #${idRedacao}` : "Novo rascunho"}
                                 </small>
                             </div>
+
 
                             <div className="folhaContadores">
                                 <span>
@@ -228,9 +231,10 @@ function RedacaoEditor({ tema, aoVoltar }) {
                             </div>
                         </div>
 
+
                         {carregandoRascunho ? (
                             <div className="folhaCarregando">
-                                <p role="status">Buscando seu rascunho salvo…</p>
+                                <p>Buscando seu rascunho salvo...</p>
                             </div>
                         ) : (
                             <>
@@ -238,15 +242,15 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                     <input
                                         type="text"
                                         className="folhaInputTitulo"
-                                        aria-label="Título da redação"
                                         placeholder="Título da sua redação (opcional)"
                                         value={tituloRedacao}
                                         onChange={(e) => setTituloRedacao(e.target.value)}
                                     />
                                 </div>
 
+
                                 <div className="folhaCorpoPautado">
-                                    <div className="folhaNumerosLinhas" aria-hidden="true">
+                                    <div className="folhaNumerosLinhas">
                                         {Array.from({ length: 30 }, (_, idx) => (
                                             <span key={idx + 1}>
                                                 {String(idx + 1).padStart(2, "0")}
@@ -254,9 +258,9 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                         ))}
                                     </div>
 
+
                                     <textarea
                                         className="folhaTextarea"
-                                        aria-label="Texto da redação"
                                         placeholder="Comece a escrever sua redação aqui..."
                                         value={textoRedacao}
                                         onChange={(e) => setTextoRedacao(e.target.value)}
@@ -266,29 +270,23 @@ function RedacaoEditor({ tema, aoVoltar }) {
                             </>
                         )}
 
+
                         <footer className="folhaRodape">
                             <div className="folhaMensagemErro">
-                                {erro && <span role="alert">{erro}</span>}
+                                {erro && <span>⚠️ {erro}</span>}
                             </div>
+
 
                             <div className="folhaBotoesAcao">
                                 <button
                                     type="button"
-                                    className="simuladosBotao botaoSalvarRascunho"
+                                    className="botaoSalvarRascunho"
                                     onClick={salvarRascunho}
                                     disabled={salvando || carregandoRascunho}
                                 >
                                     {salvando ? "Salvando..." : "Salvar rascunho"}
                                 </button>
 
-                                <button
-                                    type="button"
-                                    className="simuladosBotao primario botaoEnviarCorrecao"
-                                    onClick={enviarParaCorrecao}
-                                    disabled={enviandoCorrecao || salvando || carregandoRascunho}
-                                >
-                                    Enviar para correção
-                                </button>
                             </div>
                         </footer>
                     </div>
@@ -297,5 +295,6 @@ function RedacaoEditor({ tema, aoVoltar }) {
         </div>
     );
 }
+
 
 export default RedacaoEditor;
