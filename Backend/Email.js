@@ -1,4 +1,4 @@
-/*import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 import mysql from 'mysql2';
 import bcrypt from 'bcrypt';
 import crypto from 'node:crypto';
@@ -18,17 +18,6 @@ class Email {
         waitForConnections: true,
         queueLimit: 0,
         connectTimeout: 10000,
-
-        ...(process.env.DB_HOST && {
-            ssl: {
-                ca: fs.readFileSync(
-                    process.env.DB_SSL_CA || '/etc/secrets/ca.pem',
-                    'utf8'
-                ),
-                minVersion: 'TLSv1.2',
-                rejectUnauthorized: true
-            }
-        })
     });
 
     // Obter conexão do pool
@@ -303,4 +292,3 @@ class Email {
 }
 
 export default Email;
-*/

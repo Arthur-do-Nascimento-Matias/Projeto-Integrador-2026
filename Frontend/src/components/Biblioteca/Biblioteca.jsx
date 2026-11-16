@@ -9,7 +9,7 @@ import {
 } from "../utils/missoes";
 
 import miroBiblioteca from '../../assets/Miro/miro-biblioteca.png';
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 function normalizarBusca(texto) {
     return String(texto || "")
         .normalize("NFD")
@@ -56,33 +56,23 @@ function Biblioteca() {
         carregarLivros();
     }, []);
     function abrirLivro(id) {
-        const novaAba = window.open(
-            `${API_URL}/abrirLivro?id=${id}`,
-            "_blank"
-        );
+        const url = `/api/abrirLivro?id=${encodeURIComponent(id)}`;
 
-        if (!novaAba) return;
+        console.log("Abrindo livro:", url);
 
-        novaAba.opener = null;
+        const novaAba = window.open(url, "_blank");
 
-        registrarLivroAberto(id)
-            .catch((erro) => {
-                console.error(
-                    "Erro ao registrar livro aberto:",
-                    erro
-                );
-            });
+        if (!novaAba) {
+            alert("O navegador bloqueou a abertura do livro.");
+            return;
+        }
+
+        registrarLivroAberto(id).catch(console.error);
 
         const sessaoLeitura = crypto.randomUUID();
         let pulso = 0;
 
-        registrarLeitura(sessaoLeitura, pulso)
-            .catch((erro) => {
-                console.error(
-                    "Erro ao iniciar leitura:",
-                    erro
-                );
-            });
+        registrarLeitura(sessaoLeitura, pulso).catch(console.error);
 
         const acompanhamento = setInterval(() => {
             if (novaAba.closed) {
@@ -90,18 +80,9 @@ function Biblioteca() {
                 return;
             }
 
-            pulso += 1;
+            pulso++;
 
-            registrarLeitura(
-                sessaoLeitura,
-                pulso
-            ).catch((erro) => {
-                console.error(
-                    "Erro ao registrar tempo de leitura:",
-                    erro
-                );
-            });
-
+            registrarLeitura(sessaoLeitura, pulso).catch(console.error);
         }, 15000);
     }
 

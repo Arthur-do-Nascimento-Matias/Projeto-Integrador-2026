@@ -1,4 +1,6 @@
 import http from 'http'
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import url from 'url'
 import formidable from 'formidable'
 import fs from 'fs'
@@ -18,6 +20,105 @@ import Provas from './Provas.js'
 
 import { error } from 'console'
 import { json } from 'stream/consumers'
+
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PUBLIC_DIR = path.join(__dirname, 'public');
+
+const TIPOS_ARQUIVO = {
+    '.html': 'text/html; charset=utf-8',
+    '.js': 'text/javascript; charset=utf-8',
+    '.mjs': 'text/javascript; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.svg': 'image/svg+xml',
+    '.webp': 'image/webp',
+    '.ico': 'image/x-icon',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
+    '.pdf': 'application/pdf'
+};
+
+async function servirFrontend(req, res, pathname) {
+    try {
+        let caminhoUrl = decodeURIComponent(pathname);
+
+        if (caminhoUrl === '/') {
+            caminhoUrl = '/index.html';
+        }
+
+        let arquivo = path.resolve(
+            PUBLIC_DIR,
+            `.${caminhoUrl}`
+        );
+
+        // Impede acesso a arquivos fora da pasta public.
+        if (
+            arquivo !== PUBLIC_DIR &&
+            !arquivo.startsWith(PUBLIC_DIR + path.sep)
+        ) {
+            res.writeHead(403);
+            res.end('Acesso negado');
+            return;
+        }
+
+        let stat;
+
+        try {
+            stat = await fs.promises.stat(arquivo);
+        } catch {
+            stat = null;
+        }
+
+        // Rotas do React, como /ranking e /biblioteca.
+        if (!stat && !path.extname(caminhoUrl)) {
+            arquivo = path.join(PUBLIC_DIR, 'index.html');
+
+            try {
+                stat = await fs.promises.stat(arquivo);
+            } catch {
+                stat = null;
+            }
+        }
+
+        if (!stat || !stat.isFile()) {
+            res.writeHead(404, {
+                'Content-Type': 'text/plain; charset=utf-8'
+            });
+            res.end('Arquivo não encontrado');
+            return;
+        }
+
+        const extensao = path.extname(arquivo).toLowerCase();
+
+        res.writeHead(200, {
+            'Content-Type':
+                TIPOS_ARQUIVO[extensao] || 'application/octet-stream',
+            'Content-Length': stat.size
+        });
+
+        if (req.method === 'HEAD') {
+            res.end();
+            return;
+        }
+
+        fs.createReadStream(arquivo).pipe(res);
+
+    } catch (erro) {
+        console.error('Erro ao servir frontend:', erro);
+
+        if (!res.headersSent) {
+            res.writeHead(500);
+        }
+
+        res.end('Erro interno ao carregar arquivo');
+    }
+}
+
 
 // As duas rotas da trilha usam a mesma consulta e o mesmo formato de resposta.
 async function responderTrilha(dados, res) {
@@ -66,8 +167,33 @@ const callback = async (req, res) => {
         res.end();
         return;
     }
-    const rota = url.parse(req.url, true)
-    const param = rota.query
+
+const rota = url.parse(req.url, true);
+const param = rota.query;
+
+const caminhoOriginal = rota.pathname || '/';
+
+const requisicaoAPI =
+    caminhoOriginal === '/api' ||
+    caminhoOriginal.startsWith('/api/');
+
+// Tudo que não for API é tratado como navegação do frontend.
+if (!requisicaoAPI) {
+    if (req.method === 'GET' || req.method === 'HEAD') {
+        await servirFrontend(req, res, caminhoOriginal);
+        return;
+    }
+
+    Http.responderJson(res, 404, {
+        ok: false,
+        erro: 'Rota não encontrada.'
+    });
+    return;
+}
+
+// Remove /api para reaproveitar as rotas atuais.
+rota.pathname = caminhoOriginal.slice(4) || '/';
+
 
 if (rota.pathname === '/redacoes/rascunho' && req.method === 'POST') {
     Http.lerCorpo(req)

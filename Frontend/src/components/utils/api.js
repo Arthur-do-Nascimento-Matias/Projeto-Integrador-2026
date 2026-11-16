@@ -1,10 +1,14 @@
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
 
 export const apiFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem("token");
 
-    return fetch(`${API_URL}${endpoint}`, {
+    const rota = endpoint.startsWith("/")
+        ? endpoint
+        : `/${endpoint}`;
+
+    return fetch(`${API_URL}${rota}`, {
         ...options,
         headers: {
             ...(options.headers || {}),
