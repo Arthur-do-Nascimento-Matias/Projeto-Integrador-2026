@@ -1,5 +1,4 @@
-
-import nodemailer from 'nodemailer';
+/*import nodemailer from 'nodemailer';
 import mysql from 'mysql2';
 import bcrypt from 'bcrypt';
 import crypto from 'node:crypto';
@@ -304,3 +303,4 @@ class Email {
 }
 
 export default Email;
+*/

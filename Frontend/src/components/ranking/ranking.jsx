@@ -1,17 +1,7 @@
-<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
 import { apiFetch } from "../utils/api";
 import Moki from "../../assets/MOKI.png";
 import "./ranking.css";
-=======
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigationType } from "react-router-dom";
-
-import { EVENTO_MISSOES } from "../utils/missoes";
-import Moki from "../../assets/MOKI.png";
-import "./Ranking.css";
-import "./ranking-transicao.css";
->>>>>>> origin/theo
 
 const moki = "/avatares-simio/moki.png";
 const zoro = "/avatares-simio/zoro.png";
@@ -37,14 +27,11 @@ const fotosPerfil = {
 
 const numero = new Intl.NumberFormat("pt-BR");
 const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
-<<<<<<< HEAD
-=======
 let ultimoRanking;
 
 function prefereMovimentoReduzido() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
->>>>>>> origin/theo
 
 // Próxima segunda-feira, às 00h, no horário do navegador.
 function proximaSegunda() {

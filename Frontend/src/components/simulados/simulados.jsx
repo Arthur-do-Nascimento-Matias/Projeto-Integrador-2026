@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import "./simulados.css";
 import RedacaoEditor from "./RedacaoEditor";
 import { apiFetch } from "../utils/api";
+
+import Miro from "../../assets/Miro/miro-biblioteca.png"
+    
 const FILTROS = [
     { valor: "portugues", nome: "Português" },
     { valor: "matematica", nome: "Matemática" },

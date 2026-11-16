@@ -1,6 +1,6 @@
 import mysql from 'mysql2'
 import bcrypt from 'bcrypt'
-import Email from './Email.js'
+//import Email from './Email.js'
 
 class Cadastro {
 
