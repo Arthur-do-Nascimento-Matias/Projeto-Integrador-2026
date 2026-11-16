@@ -9,6 +9,7 @@ import {
 import './chatBot.css'
 
 import mascotePadrao from '../../assets/MOKI.png'
+import mokiIA from '../../assets/MOKI/MOKIassistente.png'
 
 const sugestoes = [
   { icone: 'livro', titulo: 'Entender um conteúdo', detalhe: 'Uma explicação, passo a passo.', texto: 'Explique a diferença entre substantivo e adjetivo com exemplos simples.' },
@@ -54,7 +55,7 @@ export default function ChatBot({ mascoteSrc = mascotePadrao, endpoint = 'http:/
     if (historico && pertoDoFim.current) historico.scrollTop = historico.scrollHeight
   }, [mensagens, carregando, erro])
 
-async function enviarMensagem(mensagemBruta = texto, repetir = false) {
+  async function enviarMensagem(mensagemBruta = texto, repetir = false) {
 
     const mensagem = mensagemBruta.trim()
 
@@ -65,15 +66,15 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
     setUltimaMensagem(mensagem)
 
     if (!repetir) {
-        setMensagens(prev => [
-            ...prev,
-            {
-                tipo: 'usuario',
-                texto: mensagem
-            }
-        ])
+      setMensagens(prev => [
+        ...prev,
+        {
+          tipo: 'usuario',
+          texto: mensagem
+        }
+      ])
 
-        setTexto('')
+      setTexto('')
     }
 
     setCarregando(true)
@@ -131,18 +132,18 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
 
     } catch (error) {
 
-        console.error('Erro ao enviar mensagem:', error)
+      console.error('Erro ao enviar mensagem:', error)
 
-        setErro(
-            'Não consegui responder agora. Tente novamente.'
-        )
+      setErro(
+        'Não consegui responder agora. Tente novamente.'
+      )
 
     } finally {
 
-        ocupado.current = false
-        setCarregando(false)
+      ocupado.current = false
+      setCarregando(false)
     }
-}
+  }
 
 
   return <section className="chatIA" aria-label="Chat de estudos da SimIA">
@@ -153,10 +154,8 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
         pertoDoFim.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100
       }}>
         {mensagens.length === 0 ? <div className="simia-boas-vindas">
-          <Avatar src={mascoteSrc} grande />
-          <span className="simia-sobretitulo">UM PASSO DE CADA VEZ</span>
+          <Avatar src={mokiIA} grande />
           <h1>Qual dúvida vamos<br /><span>resolver hoje?</span></h1>
-          <p>Da primeira pergunta até aquele “agora entendi”.<br className="simia-quebra" /> Vamos aprender Português juntos.</p>
           <div className="simia-sugestoes">
             {sugestoes.map(item => <button type="button" key={item.titulo} onClick={() => enviarMensagem(item.texto)}>
               <span className="simia-icone-cartao"><Icone nome={item.icone} /></span>
@@ -166,13 +165,13 @@ async function enviarMensagem(mensagemBruta = texto, repetir = false) {
           <span className="simia-convite">Escolha um caminho ou escreva sua dúvida abaixo.</span>
         </div> : <div className="simia-historico" role="log" aria-label="Mensagens da conversa" aria-live="polite" aria-relevant="additions">
           {mensagens.map((mensagem, index) => <article className={`simia-mensagem simia-mensagem-${mensagem.tipo}`} key={index}>
-            {mensagem.tipo === 'ia' && <Avatar src={mascoteSrc} />}
+            {mensagem.tipo === 'ia' && <Avatar src={mokiIA} />}
             <div className="simia-corpo-mensagem"><span className="simia-autor">{mensagem.tipo === 'ia' ? 'SimIA' : 'Você'}</span>
               {mensagem.tipo === 'ia' ? <div className="simia-markdown" dangerouslySetInnerHTML={{ __html: mensagem.texto }} /> : <p className="simia-texto-usuario">{mensagem.texto}</p>}
             </div>
           </article>)}
         </div>}
-        {carregando && <div className="simia-pensando" role="status"><Avatar src={mascoteSrc} /><span>Preparando uma explicação</span><span className="simia-pontos" aria-hidden="true"><i /><i /><i /></span></div>}
+        {carregando && <div className="simia-pensando" role="status"><Avatar src={mokiIA} /><span>Preparando uma explicação</span><span className="simia-pontos" aria-hidden="true"><i /><i /><i /></span></div>}
         {erro && <div className="simia-erro"><p role="alert">{erro}</p><button type="button" onClick={() => enviarMensagem(ultimaMensagem, true)}>Tentar novamente</button></div>}
       </div>
 

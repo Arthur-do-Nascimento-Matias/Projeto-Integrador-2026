@@ -26,12 +26,12 @@ import Instagram from "./components/Instagram/instagram"
 import Github from './components/Git/git';
 import PainelFeed from './pages/PainelFeed'
 import NotFound from './pages/NotFound'
-import RedefinirSenha from './components/recuperarSenha/RedefinirSenha';
+import RedefinirSenha from './components/recuperarSenha/redefinirSenha';
 
 export function alternarTema(setTema) {
-    setTema(anterior =>
-        anterior === "claro" ? "escuro" : "claro"
-    );
+  setTema(anterior =>
+    anterior === "claro" ? "escuro" : "claro"
+  );
 }
 
 function RotaPrivada({ children }) {
@@ -149,47 +149,47 @@ function ConteudoApp({
     estaNoInstagram,
     estaNoGit,
     navigate
-]);
+  ]);
 
   const [mode, setMode] = useState('login')
 
 
   const [tema, setTema] = useState(() => {
-      const temaSalvo = localStorage.getItem("tema");
-      const escolhaManual = localStorage.getItem("temaManual");
+    const temaSalvo = localStorage.getItem("tema");
+    const escolhaManual = localStorage.getItem("temaManual");
 
-      if (escolhaManual === "true" && temaSalvo) {
-          return temaSalvo;
-      }
+    if (escolhaManual === "true" && temaSalvo) {
+      return temaSalvo;
+    }
 
-      return window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "escuro"
-          : "claro";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "escuro"
+      : "claro";
   });
 
   useEffect(() => {
-      document.documentElement.setAttribute("data-tema", tema);
-      localStorage.setItem("tema", tema);
+    document.documentElement.setAttribute("data-tema", tema);
+    localStorage.setItem("tema", tema);
   }, [tema]);
 
   useEffect(() => {
-      const mediaQuery = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-      );
+    const mediaQuery = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    );
 
-      function atualizarTema(evento) {
-          const escolhaManual = localStorage.getItem("temaManual");
+    function atualizarTema(evento) {
+      const escolhaManual = localStorage.getItem("temaManual");
 
-          if (escolhaManual !== "true") {
-              setTema(evento.matches ? "escuro" : "claro");
-          }
+      if (escolhaManual !== "true") {
+        setTema(evento.matches ? "escuro" : "claro");
       }
+    }
 
-      mediaQuery.addEventListener("change", atualizarTema);
+    mediaQuery.addEventListener("change", atualizarTema);
 
-      return () => {
-          mediaQuery.removeEventListener("change", atualizarTema);
-      };
+    return () => {
+      mediaQuery.removeEventListener("change", atualizarTema);
+    };
   }, []);
 
   return (
@@ -214,7 +214,7 @@ function ConteudoApp({
 
       {/* SIDEBAR FIXA ENTRE AS ROTAS */}
 
-      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && !estaNaRedefinicaoSenha &&(
+      {!estaNoLogin && !estaNoIndex && !estaNoInstagram && !estaNoGit && !estaNaRedefinicaoSenha && (
         <MenuEsquerda />
       )}
 
@@ -223,23 +223,23 @@ function ConteudoApp({
 
       <Routes>
 
-          <Route 
-            path="/redefinir-senha"
-            element={
-              <RedefinirSenha />
-            }
-          />
+        <Route
+          path="/redefinir-senha"
+          element={
+            <RedefinirSenha />
+          }
+        />
 
         {/* PÁGINA INICIAL PÚBLICA */}
 
         <Route
           path="/"
-          element={<PainelIndex 
-              mode={mode}
-              setMode={setMode}
-              tema={tema}
-              setTema={setTema}
-              alternarTema={alternarTema}
+          element={<PainelIndex
+            mode={mode}
+            setMode={setMode}
+            tema={tema}
+            setTema={setTema}
+            alternarTema={alternarTema}
           />}
         />
 
@@ -261,14 +261,14 @@ function ConteudoApp({
             </RotaPrivada>
           }
         />
-         {/* simulados */}
+        {/* simulados */}
         <Route
           path="/simulados"
           element={<Simulados />}
         />
 
-        <Route path="*" 
-          element={<NotFound />} 
+        <Route path="*"
+          element={<NotFound />}
         />
 
         {/* LOGIN */}
@@ -285,7 +285,7 @@ function ConteudoApp({
           }
         />
 
-         <Route
+        <Route
           path="/feed"
           element={
             <RotaPrivada>
@@ -300,7 +300,6 @@ function ConteudoApp({
             <Instagram />
           }
         />
-      
         <Route
           path="/github"
           element={
@@ -314,7 +313,7 @@ function ConteudoApp({
           path="/Ranking"
           element={
             <RotaPrivada>
-              <Ranking />
+              <Ranking usuarioId={draft.id} />
             </RotaPrivada>
           }
         />
@@ -359,9 +358,9 @@ function ConteudoApp({
         />
 
         <Route
-    path="/simulados"
-    element={<PainelSimulados />}
-/>
+          path="/simulados"
+          element={<PainelSimulados />}
+        />
 
 
         {/* CONFIGURAÇÕES */}
@@ -384,6 +383,29 @@ function ConteudoApp({
 
     </main>
   );
+}
+
+
+const titulosPorRota = {
+  "/": "SimioLab | Educação gamificada",
+  "/login": "Entrar | SimioLab",
+  "/simulados": "Simulados | SimioLab",
+  "/biblioteca": "Biblioteca | SimioLab",
+  "/ranking": "Ranking | SimioLab",
+  "/chatBot": "SimIA | SimioLab",
+  "/feed": "Feed | SimioLab",
+  "/perfil": "Perfil | SimioLab",
+  "/configuracoes": "Configurações | SimioLab",
+}
+
+function TituloDaAba() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    document.title = titulosPorRota[pathname] ?? titulosPorRota["/"]
+  }, [pathname])
+
+  return null
 }
 
 
@@ -413,6 +435,7 @@ function App() {
   return (
 
     <BrowserRouter>
+      <TituloDaAba />
 
       <ConteudoApp
         folhasAtivas={folhasAtivas}

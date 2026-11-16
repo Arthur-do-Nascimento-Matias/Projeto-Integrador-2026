@@ -1,10 +1,18 @@
-import MOKI from '../../assets/MOKI.png'
+import MOKIpolicial from '../../assets/MOKI/MOKIp.png'
 
 export default function FeedLateral({ comunidades, comunidadeAtiva, setComunidadeAtiva }) {
     const totalPublicacoes = comunidades.reduce((total, comunidade) => total + (Number(comunidade.total_posts) || 0), 0)
 
     return (
         <aside className="feed-sidebar">
+            <section className="feed-side-tip">
+                <span aria-hidden="true"><img src={MOKIpolicial} alt="" className="moki" /></span>
+                <div className="feed-tip-content">
+                    <strong>Recado do Moki!</strong>
+                    <p>Ajude alguém com uma resposta clara e <b>respeitosa.</b></p>
+                </div>
+            </section>
+
             <section className="feed-side-card feed-communities" aria-labelledby="feed-communities-heading">
                 <header className="feed-communities-heading">
                     <span>ENCONTRE SUA TRILHA</span>
@@ -43,13 +51,15 @@ export default function FeedLateral({ comunidades, comunidadeAtiva, setComunidad
                 </nav>
             </section>
 
-            <section className="feed-side-tip">
-                <span aria-hidden="true"><img src={MOKI} alt="" className="moki" /></span>
-                <div>
-                    <strong>Dica do Moki</strong>
-                    <p>Ajude alguém com uma resposta clara e respeitosa.</p>
-                </div>
-            </section>
+            <label className="feed-mobile-community">
+                <span>Comunidade</span>
+                <select value={comunidadeAtiva} onChange={event => setComunidadeAtiva(event.target.value)}>
+                    <option value="">Todas as comunidades</option>
+                    {comunidades.map(comunidade => (
+                        <option key={comunidade.id_comunidade} value={comunidade.slug}>{comunidade.nome}</option>
+                    ))}
+                </select>
+            </label>
         </aside>
     )
 }

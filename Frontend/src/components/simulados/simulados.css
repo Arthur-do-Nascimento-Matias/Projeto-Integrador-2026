@@ -1,1169 +1,691 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400..900&display=swap");
 
-.simulados {
+/* Os círculos usam a altura da tela, mesmo quando a lista de provas cresce. */
+:root main.auth-page:has(.simulados) {
+    background-size: 100% 100svh, 100% 100svh, 100% 100%;
+    background-repeat: no-repeat;
+}
+
+main.simulados {
+    --sim-texto: #303840;
+    --sim-secundario: #56616a;
+    --sim-destaque: #995608;
+    --sim-superficie: #f5f4ef;
+    --sim-relevo: #ebeae3;
+    --sim-borda: #d6d5ce;
+    --sim-sombra: #c6c5bd;
+    --sim-laranja: #f5a035;
+    --sim-laranja-sombra: #b76b22;
+    --sim-verde: #355d3d;
+    --sim-verde-claro: #e6efda;
+    --sim-erro: #a03c32;
+    --sim-materia: #4c7048;
+    --sim-tinta-materia: #335834;
+    --sim-fundo-materia: #e7eedc;
     width: 100%;
-    min-height: 100vh;
- 
-    padding: 55px 60px 110px;
- 
-    background: #f6f5ef;
- 
-    color: #252a24;
+    padding: clamp(32px, 3vw, 76px) clamp(24px, 3.2vw, 92px) 88px clamp(174px, 13vw, 308px);
+    color: var(--sim-texto);
+    font: 400 15px/1.55 "Rubik", sans-serif;
+    text-align: left;
+    color-scheme: light;
 }
- 
- 
-/* ==================================================
-   CABEÇALHO
-================================================== */
- 
-.simuladosCabecalho {
-    width: 100%;
-    max-width: 1400px;
- 
-    margin: 0 auto 45px;
+
+:root[data-tema="escuro"] .simulados {
+    --sim-texto: #fff5e9;
+    --sim-secundario: #c1c9cd;
+    --sim-destaque: #ffb453;
+    --sim-superficie: #303940;
+    --sim-relevo: #39444a;
+    --sim-borda: #4e5b61;
+    --sim-sombra: #181f23;
+    --sim-verde: #c0de9b;
+    --sim-verde-claro: #394e39;
+    --sim-erro: #ffafa0;
+    color-scheme: dark;
 }
- 
-.simuladosSubtitulo {
-    display: block;
- 
-    margin-bottom: 10px;
- 
-    color: #7d8875;
- 
-    font-size: 12px;
-    font-weight: 800;
- 
-    letter-spacing: 2px;
+
+.simulados,
+.simulados *,
+.simulados *::before,
+.simulados *::after {
+    box-sizing: border-box;
 }
- 
-.simuladosCabecalho h1 {
+
+.simuladosLayout {
+    width: min(100%, clamp(1760px, 78vw, 2240px));
+    margin-inline: auto;
+}
+
+.simulados :is(h1, h2, h3, h4, p) {
     margin: 0;
- 
-    color: #252a24;
- 
-    font-size: clamp(42px, 5vw, 70px);
-    font-weight: 800;
- 
-    line-height: 0.95;
- 
-    letter-spacing: -3px;
-}
- 
-.simuladosCabecalho p {
-    max-width: 650px;
- 
-    margin: 20px 0 0;
- 
-    color: #7d8178;
- 
-    font-size: 16px;
- 
-    line-height: 1.6;
-}
- 
- 
-/* ==================================================
-   PESQUISA
-================================================== */
- 
-.simuladosPesquisa {
-    width: 100%;
-    max-width: 1400px;
- 
-    margin: 0 auto 55px;
-}
- 
-.simuladosCampoPesquisa {
-    width: 100%;
-    height: 58px;
- 
-    display: flex;
-    align-items: center;
- 
-    gap: 13px;
- 
-    padding: 0 20px;
- 
-    background: #ffffff;
- 
-    border: 1px solid #e3e2da;
-    border-radius: 17px;
-}
- 
-.simuladosCampoPesquisa svg {
-    width: 21px;
-    height: 21px;
- 
-    flex-shrink: 0;
- 
-    color: #878c83;
-}
- 
-.simuladosCampoPesquisa input {
-    width: 100%;
- 
-    border: none;
-    outline: none;
- 
-    background: transparent;
- 
-    color: #31362f;
- 
+    color: inherit;
     font-family: inherit;
-    font-size: 15px;
+    overflow-wrap: anywhere;
 }
- 
-.simuladosCampoPesquisa input::placeholder {
-    color: #a1a49d;
-}
- 
- 
-/* ==================================================
-   FILTROS
-================================================== */
- 
-.simuladosFiltros {
-    display: flex;
-    flex-wrap: wrap;
- 
-    gap: 9px;
- 
-    margin-top: 18px;
-}
- 
-.simuladosFiltro {
-    padding: 10px 17px;
- 
-    border: 1px solid #deddd5;
-    border-radius: 100px;
- 
-    background: transparent;
- 
-    color: #71766d;
- 
+
+.simulados :is(button, input, textarea) {
     font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
- 
+}
+
+.simulados button:not(:disabled) {
     cursor: pointer;
- 
-    transition: 0.2s ease;
 }
- 
-.simuladosFiltro:hover {
-    background: #ebeae3;
+
+.simulados :is(button, input, textarea):focus-visible {
+    outline: 3px solid #e99b30;
+    outline-offset: 3px;
 }
- 
-.simuladosFiltro.ativo {
-    border-color: #293529;
- 
-    background: #293529;
- 
-    color: #ffffff;
-}
- 
-/* PAINEL NO ESTILO DA BIBLIOTECA */
- 
-.simulados {
-    position: relative;
-    z-index: 1;
- 
-    width: 75%;
-    height: 700px;
+
+.simulados :is(header, footer) {
+    position: static;
+    inset: auto;
+    width: auto;
     min-height: 0;
- 
-    margin-top: 10px;
-    margin-left: 165px;
-    padding: 38px 54px 42px;
- 
-    scale: 1.12;
-    box-sizing: border-box;
- 
-    border: 3px solid #8A7662;
-    border-radius: 46px;
- 
-    background: linear-gradient(
-        180deg,
-        #806e60 0%,
-        #766557 38%,
-        #62604a 68%,
-        #3e5529 100%
-    ) !important;
- 
-    box-shadow: 0 28px 60px rgba(45, 33, 24, 0.38);
- 
-    color: #FFF8EF;
-    overflow-y: auto;
-    overflow-x: hidden;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
 }
- 
+
+.simulados .simuladosCabecalho,
+.simuladosTituloSecao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.simulados .simuladosCabecalho {
+    margin-bottom: clamp(22px, 2.4vw, 42px);
+}
+
 .simuladosCabecalho h1 {
-    color: #FFF8EF;
+    font-size: clamp(32px, 3.85vw, 68px);
+    font-weight: 800;
+    line-height: 1.09;
+    letter-spacing: -.045em;
 }
- 
-.simuladosSubtitulo {
-    color: #F5A035;
+
+.simuladosCabecalho h1 em {
+    color: var(--sim-destaque);
+    font-style: normal;
 }
- 
+
 .simuladosCabecalho p {
-    color: rgba(255, 248, 239, 0.75);
+    margin-top: 10px;
+    color: var(--sim-secundario);
+    font-size: clamp(15px, 1.3vw, 20px);
 }
- 
-.simuladosCampoPesquisa {
-    background: rgba(42, 34, 27, 0.19);
-    border-color: rgba(255, 255, 255, 0.10);
+
+.simuladosAbas {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--sim-borda);
+    border-radius: 16px;
+    background: var(--sim-superficie);
+    box-shadow: 0 4px 0 var(--sim-sombra);
 }
- 
-.simuladosCampoPesquisa input {
-    color: #FFF8EF;
+
+.simuladosAbas button {
+    min-height: clamp(44px, 3vw, 58px);
+    padding: 8px clamp(16px, 1.45vw, 26px);
+    border: 0;
+    border-radius: 11px;
+    background: transparent;
+    color: var(--sim-secundario);
+    font-size: clamp(14px, 1vw, 17px);
+    font-weight: 700;
 }
- 
-.simuladosCampoPesquisa input::placeholder {
-    color: rgba(255, 248, 239, 0.5);
+
+.simuladosAbas button:hover {
+    background: var(--sim-relevo);
+    color: var(--sim-texto);
 }
- 
-.simuladosFiltro {
-    color: #FFF8EF;
-    border-color: rgba(255, 255, 255, 0.25);
+
+.simuladosAbas button[aria-pressed="true"] {
+    background: var(--sim-laranja);
+    box-shadow: inset 0 -2px 0 #ce7c27;
+    color: #392710;
 }
- 
-.simuladosFiltro.ativo {
-    background: #F5A035;
-    border-color: #F5A035;
-    color: #292e27;
+
+.simuladosPainel {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(142px, 20%, 300px);
+    align-items: center;
+    gap: 14px;
+    padding: clamp(18px, 2.6vw, 50px);
+    border: 1px solid #638255;
+    border-radius: 24px;
+    background:
+        radial-gradient(ellipse at 95% 10%, #6f8e55 0%, transparent 62%),
+        linear-gradient(120deg, #263e2c, #416440);
+    box-shadow: 0 6px 0 #1e3426;
+    color: #fff8e9;
+    overflow: hidden;
 }
-.simuladosCabecalho p {
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+
+.simuladosFiltrosPainel {
+    display: grid;
+    gap: clamp(15px, 1.35vw, 24px);
 }
- 
-/* CENTRALIZAR OS BOTÕES */
- 
+
+.simuladosGrupo > span {
+    display: block;
+    margin-bottom: 6px;
+    color: #e4ebd6;
+    font-size: clamp(13px, 1.05vw, 17px);
+    font-weight: 700;
+}
+
 .simuladosFiltros {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: clamp(7px, .65vw, 12px);
 }
- 
-/* CENTRALIZAR AS ABAS PROVAS E REDAÇÕES */
- 
-.simuladosAbas {
-    display: flex;
-    justify-content: center;
+
+.simuladosFiltro {
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
-}
- 
- 
-/* ===== REDAÇÕES: TEMA EM DESTAQUE ===== */
- 
-.redacoesConteudo {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    padding: 20px 0 40px;
-    text-align: left;
-}
- 
-.redacaoDestaque {
-    width: 100%;
-    padding: 30px;
-    background: rgba(48, 40, 33, 0.45);
-    border: 1px solid rgba(255, 248, 239, 0.15);
-    border-radius: 24px;
-    box-sizing: border-box;
-}
- 
-.redacaoDestaqueTopo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 22px;
-    color: #F5A035;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
- 
-.redacaoNivel {
-    padding: 8px 14px;
-    background: rgba(245, 160, 53, 0.15);
-    border-radius: 20px;
-    color: #F5A035;
-}
- 
-.redacaoDestaqueConteudo {
-    text-align: left;
-}
- 
-.redacaoDestaqueConteudo h3 {
-    margin: 12px 0;
-    color: #FFF8EF;
-    font-size: 26px;
-    line-height: 1.3;
-}
- 
-.redacaoDestaqueConteudo p {
-    color: #E2D7CA;
-    font-size: 15px;
-    line-height: 1.7;
-}
- 
-.redacaoTipo {
-    color: #F5A035;
-    font-size: 13px;
+    gap: 7px;
+    min-height: clamp(42px, 3.05vw, 57px);
+    padding: 7px clamp(11px, 1.2vw, 22px);
+    border: 1px solid #a6be8c77;
+    border-radius: 12px;
+    background: #172a204d;
+    color: #fff8e9;
+    font-size: clamp(13px, 1.05vw, 17px);
     font-weight: 600;
 }
- 
-.redacaoDestaqueRodape {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin-top: 24px;
-    flex-wrap: wrap;
+
+.simuladosFiltro[data-materia]::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--sim-materia);
 }
- 
- 
-/* BOTÃO DO TEMA EM DESTAQUE */
- 
-.redacaoDestaque button {
-    background: #F5A035;
-    color: #292E27;
-    border: none;
-    border-radius: 14px;
-    padding: 14px 22px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.25s ease;
+
+.simuladosFiltro:hover {
+    background: #172a20a8;
 }
- 
-.redacaoDestaque button:hover {
-    background: #FFB653;
-    transform: translateY(-2px);
+
+.simuladosFiltro[aria-pressed="true"] {
+    border-color: #f4c77d;
+    background: #ffdb9e;
+    color: #382814;
+    box-shadow: 0 2px 0 #a86829;
 }
- 
-/* BARRA DE ROLAGEM DO PAINEL */
- 
-.simulados {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 248, 239, 0.25) transparent;
+
+.simuladosAnos .simuladosFiltro {
+    min-width: 68px;
+    justify-content: center;
 }
- 
-.simulados::-webkit-scrollbar {
-    width: 6px;
-}
- 
-.simulados::-webkit-scrollbar-track {
-    background: transparent;
-}
- 
-.simulados::-webkit-scrollbar-thumb {
-    background: rgba(255, 248, 239, 0.25);
-    border-radius: 10px;
-}
- 
-/* ========================================
-   REDAÇÕES — CARDS DE RESUMO
-======================================== */
- 
-.redacoesResumo {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    width: 100%;
-    margin-top: 10px;
-}
- 
-.redacaoResumoCard {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 20px;
- 
-    padding: 26px;
-    min-width: 0;
-    border-radius: 22px;
- 
-    background: rgba(48, 40, 33, 0.45);
-    border: 1px solid rgba(255, 248, 239, 0.15);
-}
- 
-.redacaoResumoCard span {
-    display: block;
-    margin-bottom: 12px;
- 
-    color: #F5A035;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
- 
-.redacaoResumoCard h3 {
-    margin: 0 0 10px;
-    color: #FFF8EF;
-    font-size: 20px;
-    line-height: 1.3;
-}
- 
-.redacaoResumoCard p {
-    margin: 0;
-    color: #E2D7CA;
-    font-size: 13px;
-    line-height: 1.6;
-}
- 
-.redacaoResumoCard button {
-    align-self: flex-start;
-    padding: 12px 20px;
- 
-    border: none;
-    border-radius: 12px;
- 
-    background: #F5A035;
-    color: #30281F;
- 
-    font-family: "Rubik", sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
- 
-    transition: background 0.2s, transform 0.2s;
-}
- 
-.redacaoResumoCard button:hover {
-    background: #FFB653;
-    transform: translateY(-2px);
-}
- 
-@media (max-width: 850px) {
-    .redacoesResumo {
-        grid-template-columns: 1fr;
-    }
-}
- 
-/* CORREÇÃO DO TÍTULO — PROPOSTAS DISPONÍVEIS */
- 
-#secao-temas .simuladosTituloSecao {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    text-align: left !important;
-    margin-bottom: 24px !important;
-}
- 
-#secao-temas .simuladosTituloSecao span {
-    color: #F5A035 !important;
-    font-family: "Rubik", sans-serif !important;
-    font-size: 11px !important;
-    font-weight: 800 !important;
-    letter-spacing: 1.2px !important;
-}
- 
-#secao-temas .simuladosTituloSecao h2 {
-    font-family: "Rubik", sans-serif !important;
-    font-size: 25px !important;
-    font-weight: 700 !important;
-    line-height: 1.35 !important;
-    letter-spacing: normal !important;
- 
-    margin: 10px 0 0 !important;
-    padding: 0 !important;
- 
-    color: #FFF8EF !important;
-    text-align: left !important;
- 
-    transform: none !important;
-    scale: 1 !important;
-    text-shadow: none !important;
-}
- 
-/* =========================================
-   SIMIOLAB — CATÁLOGO DE SIMULADOS
-========================================= */
- 
-.simuladosCatalogo {
-    width: 100%;
-    margin-top: 28px;
-}
- 
-.simuladosGrade {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
-    width: 100%;
-}
- 
-.simuladosCard {
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid rgba(255, 248, 239, 0.16);
-    border-radius: 22px;
-    background: rgba(42, 34, 27, 0.48);
-    box-shadow: 0 12px 28px rgba(28, 24, 19, 0.15);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
- 
-.simuladosCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 36px rgba(28, 24, 19, 0.28);
-}
- 
-.simuladosCardCapa {
+
+.simuladosMoki {
     position: relative;
-    height: 150px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #9d7854, #4d6337);
+    isolation: isolate;
+    align-self: stretch;
+    display: grid;
+    place-items: center;
 }
- 
-.simuladosCardCapa img {
+
+.simuladosMoki::before {
+    position: absolute;
+    z-index: -1;
+    width: clamp(112px, 100%, 224px);
+    aspect-ratio: 1;
+    border: 1px solid #d7efaa55;
+    border-radius: 50%;
+    background: radial-gradient(circle at 41% 36%, #b6ce7688, #5c7d3a55 70%);
+    box-shadow: 0 0 0 15px #c5e39418, 0 0 0 37px #c5e39410, 0 0 0 62px #c5e3940c;
+    content: "";
+}
+
+.simuladosMoki img {
+    display: block;
+    width: min(100%, 220px);
+    height: clamp(115px, 13vw, 220px);
+    object-fit: contain;
+    filter: drop-shadow(0 9px 8px #18241966);
+}
+
+.simuladosCatalogo,
+.redacoesListaTemas {
+    margin-top: clamp(28px, 2.5vw, 48px);
+}
+
+.simuladosTituloSecao {
+    margin-bottom: clamp(14px, 1.1vw, 21px);
+}
+
+.simuladosTituloSecao h2 {
+    font-size: clamp(22px, 2.2vw, 36px);
+    line-height: 1.2;
+    font-weight: 750;
+    letter-spacing: -.03em;
+}
+
+.simuladosContagem {
+    padding: 3px 10px;
+    border: 1px solid var(--sim-borda);
+    border-radius: 9px;
+    background: var(--sim-relevo);
+    color: var(--sim-secundario);
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.simulados .simuladosGrade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: clamp(16px, 1.7vw, 34px);
+}
+
+.simuladosCard {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid var(--sim-borda);
+    border-radius: 20px;
+    background: var(--sim-superficie);
+    box-shadow: 0 5px 0 var(--sim-sombra);
+    overflow: hidden;
+}
+
+.simulados [data-materia="todas"] {
+    --sim-materia: #c4d6a6;
+}
+
+.simulados [data-materia="portugues"] {
+    --sim-materia: #e59483;
+    --sim-tinta-materia: #793a38;
+    --sim-fundo-materia: #f4dfd7;
+}
+
+.simulados [data-materia="matematica"] {
+    --sim-materia: #7da7d2;
+    --sim-tinta-materia: #2c4b75;
+    --sim-fundo-materia: #e0ebf7;
+}
+
+.simulados [data-materia="historia"] {
+    --sim-materia: #efac71;
+    --sim-tinta-materia: #804119;
+    --sim-fundo-materia: #f8e4d2;
+}
+
+.simulados [data-materia="geografia"] {
+    --sim-materia: #edc973;
+    --sim-tinta-materia: #6f501b;
+    --sim-fundo-materia: #f7edce;
+}
+
+.simulados [data-materia="ciencias"] {
+    --sim-materia: #a1c47b;
+}
+
+.simulados [data-materia="ingles"] {
+    --sim-materia: #b8a1d9;
+    --sim-tinta-materia: #563e7b;
+    --sim-fundo-materia: #eee4f6;
+}
+
+.simulados .simuladosCardCapa {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    min-height: clamp(108px, 9vw, 188px);
+    height: auto;
+    padding: clamp(14px, 1.4vw, 26px);
+    border-bottom: 1px solid color-mix(in srgb, var(--sim-tinta-materia) 20%, transparent);
+    background:
+        radial-gradient(circle at 92% 130%, transparent 24%, #ffffff63 24% 29%, transparent 29% 37%, #ffffff53 37% 42%, transparent 42%),
+        linear-gradient(115deg, var(--sim-fundo-materia), color-mix(in srgb, var(--sim-fundo-materia) 76%, var(--sim-materia)));
+    color: var(--sim-tinta-materia);
+}
+
+:root[data-tema="escuro"] .simuladosCardCapa:not(.catalogo-esqueleto) {
+    color: var(--sim-fundo-materia);
+    background:
+        radial-gradient(circle at 92% 130%, transparent 24%, #ffffff18 24% 29%, transparent 29% 37%, #ffffff15 37% 42%, transparent 42%),
+        linear-gradient(115deg, #222c34, color-mix(in srgb, #222c34 72%, var(--sim-materia)));
+    border-color: var(--sim-borda);
+}
+
+.simuladosCapaImagem {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center top;
 }
- 
-.simuladosCardSemCapa {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 10px;
-    height: 100%;
-    padding: 24px;
-    box-sizing: border-box;
-}
- 
-.simuladosCardSemCapa span {
-    color: #f5a035;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 2px;
-}
- 
-.simuladosCardSemCapa strong {
-    color: #fff8ef;
-    font-size: 24px;
-    font-weight: 800;
-}
- 
+
+.simuladosCardSimbolo,
 .simuladosCardTipo {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    padding: 7px 11px;
-    border-radius: 30px;
-    background: rgba(36, 31, 25, 0.7);
-    color: #fff8ef;
-    font-size: 11px;
-    font-weight: 700;
-}
- 
-.simuladosCardConteudo {
-    padding: 22px;
-    text-align: left;
-}
- 
-.simuladosCardMateria {
-    color: #f5a035;
-    font-size: 12px;
-    font-weight: 700;
-}
- 
-.simuladosCardConteudo h3 {
-    margin: 10px 0 22px;
-    color: #fff8ef;
-    font-size: 21px;
-    font-weight: 700;
-    line-height: 1.35;
-}
- 
-.simuladosCardAcoes {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
- 
-.simuladosBotaoAbrir,
-.simuladosBotaoBaixar {
-    min-height: 42px;
-    border: 0;
-    border-radius: 12px;
-    font-family: inherit;
-    font-weight: 700;
-    cursor: pointer;
-}
- 
-.simuladosBotaoAbrir {
-    flex: 1;
-    padding: 10px 18px;
-    background: #f5a035;
-    color: #292e27;
-}
- 
-.simuladosBotaoBaixar {
-    width: 44px;
-    background: rgba(255, 248, 239, 0.14);
-    color: #fff8ef;
-}
- 
-.simuladosBotaoAbrir:disabled,
-.simuladosBotaoBaixar:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
- 
-@media (max-width: 1100px) {
-    .simuladosGrade {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
- 
-@media (max-width: 700px) {
-    .simuladosGrade {
-        grid-template-columns: 1fr;
-    }
-}
- 
-/* =========================================
-   SIMIOLAB — PAINEL COMPACTO E CENTRALIZADO
-========================================= */
- 
-.simulados {
-    height: auto !important;
-    min-height: calc(100vh - 48px) !important;
-    max-height: none !important;
- 
-    overflow: visible !important;
-    scale: 1 !important;
- 
-    padding: 32px 48px 42px !important;
-}
- 
-/* Cabeçalho mais compacto */
- 
-.simuladosCabecalho {
-    margin-bottom: 20px;
-    text-align: center;
-}
- 
-.simuladosCabecalho h1 {
-    font-size: clamp(36px, 4vw, 52px);
-    line-height: 1.1;
-    letter-spacing: -1.5px;
-}
- 
-.simuladosCabecalho p {
-    margin-top: 10px;
-    font-size: 14px;
-}
- 
-.simuladosAbas {
-    margin-top: 12px;
-}
- 
-/* Matérias e anos centralizados */
- 
-.simuladosPesquisa {
-    margin-bottom: 12px;
-}
- 
-.simuladosFiltros {
-    margin-top: 12px;
-    justify-content: center;
-}
- 
-.simuladosAnos {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center;
-    gap: 12px;
-    margin: 12px 0 20px !important;
-}
- 
-/* Cards mais compactos */
- 
-.simuladosCatalogo {
-    margin-top: 12px;
-}
- 
-.simuladosGrade {
-    gap: 18px;
-}
- 
-.simuladosCardCapa {
-    height: 115px;
-}
- 
-.simuladosCardConteudo {
-    padding: 18px;
-}
- 
-.simuladosCardConteudo h3 {
-    margin: 8px 0 14px;
-    font-size: 18px;
-}
- 
-/* Responsividade */
- 
-@media (max-width: 900px) {
-    .simulados {
-        padding: 28px 24px 36px !important;
-    }
-}
- 
-@media (max-width: 600px) {
-    .simulados {
-        padding: 24px 16px 30px !important;
-    }
- 
-    .simuladosGrade {
-        grid-template-columns: 1fr;
-    }
-}
- 
-/* ==========================================
-   SIMIOLAB — SIMULADOS SEM ROLAGEM NO DESKTOP
-========================================== */
- 
-@media (min-width: 1101px) and (min-height: 700px) {
- 
-    .simulados {
-        height: calc(100vh - 36px) !important;
-        min-height: 0 !important;
-        max-height: none !important;
-        padding: 22px 42px 26px !important;
-        overflow: hidden !important;
-        display: flex;
-        flex-direction: column;
-    }
- 
-    .simuladosCabecalho {
-        flex-shrink: 0;
-        margin-bottom: 8px !important;
-    }
- 
-    .simuladosSubtitulo {
-        margin-bottom: 5px;
-        font-size: 10px;
-    }
- 
-    .simuladosCabecalho h1 {
-        font-size: clamp(32px, 3.2vw, 46px) !important;
-        line-height: 1.05;
-        letter-spacing: -1px;
-    }
- 
-    .simuladosCabecalho p {
-        margin-top: 7px !important;
-        font-size: 12px;
-        line-height: 1.4;
-    }
- 
-    .simuladosAbas {
-        margin-top: 8px !important;
-    }
- 
-    .simuladosAbaBotao {
-        padding: 9px 17px;
-    }
- 
-    .simuladosPesquisa {
-        flex-shrink: 0;
-        margin-bottom: 4px !important;
-    }
- 
-    .simuladosFiltros {
-        margin-top: 6px !important;
-        gap: 8px;
-    }
- 
-    .simuladosFiltro {
-        padding: 8px 14px;
-        font-size: 12px;
-    }
- 
-    .simuladosAnos {
-        flex-shrink: 0;
-        margin: 6px 0 10px !important;
-    }
- 
-    .simuladosCatalogo {
-        flex: 1;
-        min-height: 0;
-        margin-top: 4px !important;
-    }
- 
-    .simuladosGrade {
-        gap: 14px;
-    }
- 
-    .simuladosCardCapa {
-        height: 90px !important;
-    }
- 
-    .simuladosCardSemCapa {
-        padding: 15px;
-        gap: 5px;
-    }
- 
-    .simuladosCardSemCapa strong {
-        font-size: 18px;
-    }
- 
-    .simuladosCardConteudo {
-        padding: 14px !important;
-    }
- 
-    .simuladosCardConteudo h3 {
-        margin: 5px 0 10px !important;
-        font-size: 16px !important;
-    }
- 
-    .simuladosBotaoAbrir,
-    .simuladosBotaoBaixar {
-        min-height: 36px;
-    }
-}
- 
-/* LETRAS MAIORES — SIMULADOS */
- 
-@media (min-width: 1101px) and (min-height: 700px) {
- 
-    .simuladosCabecalho h1 {
-        font-size: 50px !important;
-    }
- 
-    .simuladosCabecalho p {
-        font-size: 14px !important;
-    }
- 
-    .simuladosAbaBotao {
-        font-size: 14px !important;
-    }
- 
-    .simuladosFiltro {
-        font-size: 14px !important;
-    }
- 
-    .simuladosCardSemCapa strong {
-        font-size: 21px !important;
-    }
- 
-    .simuladosCardMateria {
-        font-size: 13px !important;
-    }
- 
-    .simuladosCardConteudo h3 {
-        font-size: 19px !important;
-    }
- 
-    .simuladosBotaoAbrir,
-    .simuladosBotaoBaixar {
-        font-size: 14px !important;
-    }
-}
- 
-/* SIMULADOS — TIPOGRAFIA MAIOR */
- 
-@media (min-width: 1101px) and (min-height: 700px) {
- 
-    .simuladosCabecalho h1 {
-        font-size: 58px !important;
-    }
- 
-    .simuladosCabecalho p {
-        font-size: 17px !important;
-    }
- 
-    .simuladosAbaBotao {
-        font-size: 17px !important;
-    }
- 
-    .simuladosFiltro {
-        font-size: 17px !important;
-    }
- 
-    .simuladosCardSemCapa span,
-    .simuladosCardTipo {
-        font-size: 13px !important;
-    }
- 
-    .simuladosCardSemCapa strong {
-        font-size: 25px !important;
-    }
- 
-    .simuladosCardMateria {
-        font-size: 16px !important;
-    }
- 
-    .simuladosCardConteudo h3 {
-        font-size: 23px !important;
-    }
- 
-    .simuladosBotaoAbrir,
-    .simuladosBotaoBaixar {
-        font-size: 17px !important;
-    }
-}
- 
-/* =========================================
-   SIMIOLAB — REDAÇÕES SEM CONTEÚDO CORTADO
-========================================= */
- 
-.simulados:has(.redacoesConteudo) {
-    height: auto !important;
-    min-height: calc(100vh - 80px) !important;
-    max-height: none !important;
- 
-    overflow: visible !important;
- 
-    display: block !important;
-    padding-bottom: 55px !important;
-}
- 
-.simulados:has(.redacoesConteudo) .simuladosCabecalho {
-    margin-bottom: 24px !important;
-}
- 
-.simulados:has(.redacoesConteudo) .redacoesConteudo {
-    width: 100%;
-    overflow: visible;
-}
- 
-.simulados:has(.redacoesConteudo) .redacaoDestaque,
-.simulados:has(.redacoesConteudo) .redacaoResumoCard {
-    height: auto;
-    min-height: 0;
-}
- 
-/* ==========================================
-   SIMIOLAB — PROPOSTAS DE REDAÇÃO
-========================================== */
- 
-.redacoesListaTemas {
-    width: 100%;
-    margin-top: 35px;
-}
- 
-.redacoesGradeTemas {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
-    margin-top: 24px;
-    align-items: stretch;
+    place-items: center;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--sim-fundo-materia) 90%, white);
+    color: var(--sim-tinta-materia);
+    font-weight: 750;
 }
- 
+
+.simuladosCardSimbolo {
+    width: clamp(54px, 4.2vw, 82px);
+    aspect-ratio: 1;
+    border: 1px solid #ffffffa8;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--sim-tinta-materia) 24%, transparent);
+    font-size: 21px;
+}
+
+.simuladosCardSimbolo img {
+    width: clamp(30px, 2.55vw, 50px);
+    aspect-ratio: 1;
+    object-fit: contain;
+}
+
+.simuladosCardTipo {
+    align-self: flex-start;
+    padding: 3px 9px;
+    border: 1px solid color-mix(in srgb, var(--sim-tinta-materia) 18%, transparent);
+    font-size: clamp(11px, .85vw, 14px);
+}
+
+.simuladosCardConteudo,
 .redacaoCardTema {
     display: flex;
+    flex: 1;
     flex-direction: column;
-    align-items: flex-start;
-    min-width: 0;
-    padding: 25px;
-    border: 1px solid rgba(255, 248, 239, 0.16);
-    border-radius: 22px;
-    background: rgba(48, 40, 33, 0.48);
-    box-shadow: 0 12px 28px rgba(28, 24, 19, 0.12);
-    text-align: left;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    gap: clamp(8px, .8vw, 16px);
+    padding: clamp(16px, 1.65vw, 32px);
 }
- 
-.redacaoCardTema:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 35px rgba(28, 24, 19, 0.25);
-}
- 
-.redacaoCardTema h3 {
-    margin: 0 0 14px;
-    color: #FFF8EF;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.4;
-}
- 
+
+.simulados .simuladosCardMateria,
 .redacaoCardTema p {
-    margin: 0 0 24px;
-    color: #E2D7CA;
-    font-size: 14px;
-    line-height: 1.7;
+    color: var(--sim-secundario);
+    font-size: clamp(13px, 1.02vw, 16px);
 }
- 
-.redacaoBotaoEscrever {
-    margin-top: auto;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 12px;
-    background: #F5A035;
-    color: #292E27;
-    font-family: "Rubik", sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+
+.simuladosCard h3 {
+    font-size: clamp(17px, 1.6vw, 29px);
+    line-height: 1.25;
+    font-weight: 750;
+    letter-spacing: -.02em;
 }
- 
-.redacaoBotaoEscrever:hover {
-    background: #FFB653;
-    transform: translateY(-2px);
-}
- 
-/* RESPONSIVIDADE */
- 
-@media (max-width: 1100px) {
-    .redacoesGradeTemas {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
- 
-@media (max-width: 700px) {
-    .redacoesGradeTemas {
-        grid-template-columns: 1fr;
-    }
- 
-    .redacaoCardTema {
-        padding: 20px;
-    }
-}
- 
-/* =========================================
-   PAINEL QUANDO O EDITOR ESTIVER ABERTO
-========================================= */
- 
-.simulados:has(.editorRedacaoAmbiente) {
-    height: auto !important;
-    min-height: calc(100vh - 40px) !important;
-    max-height: none !important;
-    overflow: visible !important;
-    padding-bottom: 50px !important;
-}
- 
-.redacaoResumoCard button:disabled {
-    background: #F5A035;
-    color: #30281F;
-    opacity: 0.75;
-    cursor: not-allowed;
-    transform: none;
-}
- 
-.simuladosSemResultados {
-    width: 100%;
-    padding: 55px 20px;
-    text-align: center;
-    box-sizing: border-box;
-}
- 
-.simuladosSemResultados h3 {
-    color: #fff8ef;
-    font-size: 23px;
-    margin: 0 0 12px;
-}
- 
-.simuladosSemResultados p {
-    color: #e2d7ca;
-    font-size: 15px;
-    line-height: 1.6;
-    margin: 0;
-}
-.redacoesHistorico {
-    padding: 35px;
-    color: #fff8ef;
-}
- 
-.redacoesHistoricoTopo {
+
+.simuladosCardAcoes,
+.redacaoDestaqueAcoes {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.simuladosCardAcoes,
+.redacaoCardTema .simuladosBotao {
+    margin-top: auto;
+}
+
+.simuladosCardAcoes {
+    padding-top: 5px;
+}
+
+.simuladosBotao {
+    display: inline-flex;
+    justify-content: center;
     align-items: center;
-    gap: 24px;
-    margin-bottom: 30px;
-}
- 
-.redacoesHistoricoTopo span {
-    color: #f5a035;
-    font-size: 12px;
+    gap: 8px;
+    min-height: clamp(44px, 3vw, 57px);
+    padding: 8px clamp(13px, 1.15vw, 22px);
+    border: 1px solid var(--sim-borda);
+    border-radius: 11px;
+    background: var(--sim-relevo);
+    box-shadow: inset 0 -2px 0 var(--sim-borda);
+    color: var(--sim-texto);
+    font-size: clamp(13px, 1.02vw, 17px);
     font-weight: 700;
-    letter-spacing: 2px;
-}
- 
-.redacoesHistoricoTopo h2 {
-    font-size: 32px;
-    margin: 10px 0;
-}
- 
-.redacoesHistoricoTopo p {
-    color: #e2d7ca;
-}
- 
-.redacoesHistoricoTopo button {
-    background: #f5a035;
-    color: #33291e;
-    border: none;
-    border-radius: 12px;
-    padding: 14px 20px;
-    cursor: pointer;
-    font-weight: 700;
-}
- 
-.redacoesHistoricoVazio {
-    background: #594b40;
-    border-radius: 22px;
-    padding: 55px 25px;
+    line-height: 1.3;
     text-align: center;
 }
- 
-.redacoesHistoricoVazio h3 {
-    margin-bottom: 12px;
+
+.simuladosBotao:hover:not(:disabled) {
+    filter: brightness(1.08);
 }
- 
-.redacoesHistoricoVazio p {
-    color: #e2d7ca;
+
+.simuladosBotao.primario {
+    border-color: #d3892e;
+    background: var(--sim-laranja);
+    box-shadow: inset 0 -2px 0 var(--sim-laranja-sombra);
+    color: #392710;
 }
- 
-@media (max-width: 768px) {
-    .redacoesHistorico {
-        padding: 20px;
-    }
- 
-    .redacoesHistoricoTopo {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+
+.simuladosCardAcoes .primario {
+    flex: 1;
+    justify-content: space-between;
 }
-/* ==================================
-   FONTE RUBIK — SIMULADOS E REDAÇÕES
-================================== */
- 
-.simuladosPagina,
-.simuladosPagina * {
-    font-family: 'Rubik', sans-serif !important;
-    font-style: normal;
+
+.simuladosBotaoBaixar {
+    min-width: 44px;
+    font-size: 20px;
 }
-/* RUBIK — SIMULADOS E REDAÇÕES */
- 
-.simuladosCatalogo,
-.simuladosCatalogo *,
-.redacoesResumo,
-.redacoesResumo *,
-.redacoesHistorico,
-.redacoesHistorico *,
-.redacoesListaTemas,
-.redacoesListaTemas *,
-.simuladosAbas,
-.simuladosAbas * {
-    font-family: 'Rubik', sans-serif !important;
-    font-style: normal !important;
+
+.simuladosEstado {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 26px 16px;
+    border: 1px solid var(--sim-borda);
+    border-radius: 19px;
+    background: var(--sim-superficie);
+    color: var(--sim-secundario);
+    text-align: center;
 }
-.editorMokiAvatar {
+
+.simuladosLeitor {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
     overflow: hidden;
 }
- 
-.editorMokiImagem {
+
+.simulados .catalogo-esqueleto {
+    background: var(--sim-relevo);
+}
+
+.redacaoDestaqueConteudo {
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+}
+
+.redacaoDestaqueEtiqueta {
+    padding: 3px 9px;
+    border-radius: 8px;
+    background: #263e2c;
+    color: #e9f4d4;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.redacaoDestaque h2 {
+    max-width: 26ch;
+    font-size: clamp(24px, 3.25vw, 47px);
+    font-weight: 760;
+    line-height: 1.14;
+    letter-spacing: -.035em;
+}
+
+.redacaoDestaque p {
+    max-width: 62ch;
+    color: #f2f4e4;
+    font-size: clamp(14px, 1.2vw, 18px);
+}
+
+.redacaoDestaqueAcoes {
+    margin-top: 4px;
+}
+
+.redacaoCardTema p {
+    margin-bottom: 5px;
+}
+
+.redacaoCardTema .simuladosBotao {
+    align-self: flex-start;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .simuladosCard,
+    .simuladosBotao {
+        transition: transform 160ms ease, filter 160ms ease;
+    }
+
+    .simuladosCard:not(.catalogo-card-vazio):hover {
+        transform: translateY(-2px);
+    }
+
+    .simuladosBotao:active:not(:disabled) {
+        transform: translateY(1px);
+    }
+}
+
+@media (min-width: 1101px) {
+    .simulados .simuladosGrade {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .simulados .simuladosCabecalho {
+        margin-bottom: 18px;
+    }
+
+    .simuladosAbas {
+        display: flex;
+        width: 100%;
+    }
+
+    .simuladosAbas button {
+        flex: 1;
+    }
+
+    .simuladosPainel {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .simuladosMoki {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        width: 84px;
+        height: 80px;
+        opacity: .26;
+        pointer-events: none;
+    }
+
+    .simuladosMoki img {
+        width: 61px;
+        height: 62px;
+    }
+
+    .simuladosCatalogo,
+    .redacoesListaTemas {
+        margin-top: 24px;
+    }
+
+    .simulados .simuladosGrade {
+        gap: 15px;
+    }
+}
+
+/* A tela ocupa a área útil da rota, com o recuo da navegação apenas no desktop. */
+.auth-page:has(> main.simulados) {
+    box-sizing: border-box;
+    inset-inline: 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin-inline: 0;
+    padding: 0;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    animation: none;
+    transform: none;
+}
+
+.auth-page:has(> main.simulados) > main.simulados {
+    inset: auto;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    transform: none;
+    translate: none;
+}
+
+/* Recupera a folga da página original no desktop até Quad HD. */
+@media (1200px < width < 3200px) {
+    .auth-page:has(> main.simulados) {
+        padding: 30px;
+    }
+}
+
+.simulados .simuladosCard .simuladosCardCapa { aspect-ratio: auto; }
+.simulados :is(.simuladosFiltrosPainel, .simuladosGrupo, .simuladosCardConteudo, .redacaoDestaqueConteudo) { min-width: 0; }
+.simulados .simuladosFiltro,
+.simulados .simuladosAbas button { max-width: 100%; overflow-wrap: anywhere; }
+
+@media (min-width: 3200px) {
+    main.simulados {
+        padding-inline: clamp(174px, 11vw, 420px) clamp(24px, 2.8vw, 96px);
+    }
+
+    .simulados .simuladosLayout {
+        width: min(1960px, 54vw);
+        zoom: 1.55;
+    }
+}
+
+@media (max-width: 1100px), (max-width: 1400px) and (pointer: coarse) {
+    body:has(main.simulados) .auth-page:has(> main.simulados) { padding: 0; }
+
+    .auth-page:has(> main.simulados) > main.simulados,
+    main.simulados {
+        --sim-lateral: max(clamp(12px, 3vw, 28px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+        padding: max(24px, env(safe-area-inset-top, 0px)) var(--sim-lateral)
+                 calc(108px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .simulados .simuladosLayout { width: min(100%, 1040px); }
+    .simulados .simuladosGrade {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .simulados .simuladosFiltro { min-height: 44px; }
+}
+
+@media (max-width: 700px) {
+    .simulados .simuladosGrade { grid-template-columns: minmax(0, 1fr); }
+    .simulados .simuladosPainel { grid-template-columns: minmax(0, 1fr); }
+    .simulados .simuladosMoki {
+        position: absolute;
+        inset: 0 0 auto auto;
+        z-index: -1;
+        width: 84px;
+        height: 80px;
+        opacity: .26;
+        pointer-events: none;
+    }
+    .simulados .simuladosMoki img { width: 61px; height: 62px; }
+    .simulados .simuladosCardAcoes .primario { min-width: 0; }
+    .simulados .simuladosAnos .simuladosFiltro { min-width: 58px; }
 }

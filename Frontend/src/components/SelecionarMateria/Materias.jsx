@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import "./Materias.css";
 
 import { apiFetch } from "../utils/api";
+
+import "./Materias.css";
 import brIcon from "../../assets/materias/brasil.svg";
 import enIcon from "../../assets/materias/ingles.svg";
 import cienciaIcon from "../../assets/materias/ciencia.svg";
@@ -18,24 +20,19 @@ const materias = [
     { id: 4, nome: "Geografia", descricao: "Espaço e território", cor: "#64724a", icon: geoIcon },
     { id: 6, nome: "Inglês", descricao: "Língua Inglesa", cor: "#465936", icon: enIcon }
 ];
-
 function pontoPolar(cx, cy, raio, angulo) {
     const radianos = ((angulo - 90) * Math.PI) / 180;
-
     return {
         x: cx + raio * Math.cos(radianos),
         y: cy + raio * Math.sin(radianos)
     };
 }
-
 function criarFatia(cx, cy, raioExterno, raioInterno, inicio, fim) {
     const externoInicio = pontoPolar(cx, cy, raioExterno, fim);
     const externoFim = pontoPolar(cx, cy, raioExterno, inicio);
     const internoInicio = pontoPolar(cx, cy, raioInterno, inicio);
     const internoFim = pontoPolar(cx, cy, raioInterno, fim);
-
     const arcoGrande = fim - inicio <= 180 ? 0 : 1;
-
     return [
         `M ${externoInicio.x} ${externoInicio.y}`,
         `A ${raioExterno} ${raioExterno} 0 ${arcoGrande} 0 ${externoFim.x} ${externoFim.y}`,
@@ -44,7 +41,6 @@ function criarFatia(cx, cy, raioExterno, raioInterno, inicio, fim) {
         "Z"
     ].join(" ");
 }
-
 function Materias({
     draft,
     refAtividade,
@@ -57,38 +53,24 @@ function Materias({
     const [aberto, setAberto] = useState(false);
     const [materiaAtiva, setMateriaAtiva] = useState(materias[0]);
     const [materiaHover, setMateriaHover] = useState(null);
-
     const [trilha, setTrilha] = useState({
         materiaId: materias[0].id,
         total: 0,
         concluidas: 0,
         carregando: true
     });
-
     const refTrilha = useRef(null);
 
-    // Identifica requisições antigas e impede atualizações fora de ordem.
-    const requisicaoAtual = useRef(0);
-
-    // Fecha a atividade.
+    // O botão Sair precisa limpar o número no pai para permitir reabrir a mesma lição.
     useEffect(() => {
         function aoFechar() {
             setAtividadeAtual(null);
-
-            if (refTrilha.current) {
-                refTrilha.current.style.opacity = "1";
-            }
+            if (refTrilha.current) refTrilha.current.style.opacity = "1";
         }
-
         window.addEventListener("simio:atividade-fechada", aoFechar);
-
-        return () => {
-            window.removeEventListener("simio:atividade-fechada", aoFechar);
-        };
+        return () => window.removeEventListener("simio:atividade-fechada", aoFechar);
     }, [setAtividadeAtual]);
-
     const materiaExibida = materiaHover || materiaAtiva;
-
     const materiasRenderizadas = materias
         .map((materia, index) => ({ materia, index }))
         .sort((a, b) => {
@@ -190,36 +172,21 @@ function Materias({
                     concluidas: Math.min(total, concluidasBanco),
                     carregando: false
                 });
-
             } catch (erro) {
-                if (
-                    erro.name !== "AbortError" &&
-                    numeroRequisicao === requisicaoAtual.current
-                ) {
+                if (erro.name !== "AbortError") {
                     console.error("Erro ao carregar trilha:", erro);
-
-                    setTrilha(anterior => ({
-                        ...anterior,
-                        carregando: false
-                    }));
+                    setTrilha(anterior => ({ ...anterior, carregando: false }));
                 }
             }
         }
-
         carregarTrilha();
-
-        return () => {
-            controller.abort();
-        };
-
+        return () => controller.abort();
     }, [draft?.id, materiaAtiva.id, atvLiberada]);
-
     function selecionarMateria(materia) {
         setMateriaAtiva(materia);
         setMateriaHover(null);
         setMateriaAtual(materia.id);
         setAtividadeAtual(null);
-
         if (materia.id !== materiaAtiva.id) {
             setTrilha({
                 materiaId: materia.id,
@@ -228,65 +195,35 @@ function Materias({
                 carregando: true
             });
         }
-
-        if (onChange) {
-            onChange(materia);
-        }
-
+        if (onChange) onChange(materia);
         setTimeout(() => setAberto(false), 220);
     }
-
     function entrarAtividade(id) {
-        if (
-            trilha.materiaId !== materiaAtiva.id ||
-            trilha.carregando
-        ) {
-            return;
-        }
-
+        if (trilha.materiaId !== materiaAtiva.id || trilha.carregando) return;
         const proximaAtividade = trilha.concluidas + 1;
-
-        console.log("ABRINDO ATIVIDADE:", {
-            clicada: id,
-            concluidas: trilha.concluidas,
-            proxima: proximaAtividade
-        });
-
         if (id === proximaAtividade) {
-            if (draft.energia <= 0) {
-                alert("Energia insuficiente");
-                return;
+            if(draft.energia <= 0) {
+                alert("Energia insuficiente")
+                return
             }
-
             setAtividadeAtual(id);
-
-            if (refTrilha.current) {
-                refTrilha.current.style.opacity = "0";
-            }
-
-            if (refAtividade.current) {
-                refAtividade.current.style.transform = "translateX(0)";
-            }
-
+            if (refTrilha.current) refTrilha.current.style.opacity = "0";
+            if (refAtividade.current) refAtividade.current.style.transform = "translateX(0)";
         } else if (id < proximaAtividade) {
             alert("Atividade já concluída");
-
         } else {
             alert("Atividade bloqueada");
         }
     }
-
     return (
         <>
             <div className="materias-container">
-
                 {aberto && (
                     <div
                         className="materias-overlay"
                         onClick={() => setAberto(false)}
                     />
                 )}
-
                 <button
                     type="button"
                     className={`materias-botao ${aberto ? "aberto" : ""}`}
@@ -299,36 +236,20 @@ function Materias({
                             className="materias-botao-img"
                         />
                     </div>
-
-                    <span className="materias-botao-nome">
-                        {materiaAtiva.nome}
-                    </span>
-
+                    <span className="materias-botao-nome">{materiaAtiva.nome}</span>
                     <span className="materias-seta">▼</span>
                 </button>
-
                 <div className={`materias-roda-container ${aberto ? "visivel" : ""}`}>
                     <div className="materias-roda">
-
                         <svg viewBox="0 0 360 360" className="materias-svg">
-
                             {materiasRenderizadas.map(({ materia, index }) => {
                                 const tamanho = 360 / materias.length;
                                 const inicio = index * tamanho + 2;
                                 const fim = (index + 1) * tamanho - 2;
-
-                                const caminho = criarFatia(
-                                    180, 180, 165, 91, inicio, fim
-                                );
-
+                                const caminho = criarFatia(180, 180, 165, 91, inicio, fim);
                                 const meio = index * tamanho + tamanho / 2;
-
-                                const posicaoTexto = pontoPolar(
-                                    180, 180, 128, meio
-                                );
-
+                                const posicaoTexto = pontoPolar(180, 180, 128, meio);
                                 const ativa = materia.id === materiaAtiva.id;
-
                                 return (
                                     <g
                                         key={materia.id}
@@ -338,7 +259,6 @@ function Materias({
                                         onMouseLeave={() => setMateriaHover(null)}
                                     >
                                         <path d={caminho} fill={materia.cor} />
-
                                         <image
                                             href={materia.icon}
                                             x={posicaoTexto.x - 19}
@@ -347,7 +267,6 @@ function Materias({
                                             height="38"
                                             className="materia-icone-img-svg"
                                         />
-
                                         <text
                                             x={posicaoTexto.x}
                                             y={posicaoTexto.y + 17}
@@ -358,62 +277,34 @@ function Materias({
                                     </g>
                                 );
                             })}
-
                         </svg>
-
                         <div className="materias-centro">
-
-                            <div
-                                className="materias-centro-icone"
-                                key={materiaExibida.id}
-                            >
+                            <div className="materias-centro-icone" key={materiaExibida.id}>
                                 <img
                                     src={materiaExibida.icon}
                                     alt={materiaExibida.nome}
                                     className="materias-centro-img"
                                 />
                             </div>
-
                             <strong>{materiaExibida.nome}</strong>
-
                             <span>{materiaExibida.descricao}</span>
-
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div
-                className="trilha ativo"
-                id="trilha"
-                ref={refTrilha}
-            >
+            <div className="trilha ativo" id="trilha" ref={refTrilha}>
                 {trilha.materiaId === materiaAtiva.id &&
                     Array.from({ length: trilha.total }, (_, i) => {
                         const id = i + 1;
-
                         const concluida = i < trilha.concluidas;
                         const atual = i === trilha.concluidas;
-
                         return (
                             <button
                                 type="button"
                                 key={`${materiaAtiva.id}-${id}`}
                                 id={String(id)}
-                                className={`botaoAtividade ${
-                                    i % 2 === 0 ? "impar" : "par"
-                                } ${
-                                    concluida
-                                        ? "concluida"
-                                        : atual
-                                            ? "atual"
-                                            : ""
-                                }`}
-                                style={
-                                    !concluida && !atual
-                                        ? { filter: "grayscale(100%)" }
-                                        : undefined
-                                }
+                                className={`botaoAtividade ${i % 2 === 0 ? "impar" : "par"} ${concluida ? "concluida" : atual ? "atual" : ""}`}
+                                style={!concluida && !atual ? { filter: "grayscale(100%)" } : undefined}
                                 onClick={() => entrarAtividade(id)}
                             />
                         );
@@ -422,5 +313,4 @@ function Materias({
         </>
     );
 }
-
 export default Materias;

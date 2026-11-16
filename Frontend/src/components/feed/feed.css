@@ -598,6 +598,7 @@
     display: block;
     width: 42px;
     height: 48px;
+    scale: 1.4;
     margin: 0;
     object-fit: contain;
 }
@@ -684,6 +685,24 @@
     padding: 28px 20px;
     background: #20282cc9;
     backdrop-filter: blur(5px);
+}
+
+/* Mantém os estilos do feed no portal, sem criar uma caixa de layout. */
+.feed-page.feed-detail-portal {
+    display: contents;
+}
+
+/* Usa o mesmo fundo desfocado do pop-up de missões. */
+.feed-detail-portal > .feed-detail-backdrop,
+:root[data-tema="escuro"] .feed-page.feed-detail-portal > .feed-detail-backdrop {
+    z-index: 2000;
+    background: rgba(15, 23, 16, 0.72);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+body:has(> .feed-detail-portal) > .simio-sidebar-layer {
+    z-index: 1999;
 }
 
 .feed-page .feed-modal-backdrop,
@@ -1295,9 +1314,12 @@ body:has(.feed-page) #root {
     }
 
     .feed-page .feed-modal-backdrop,
-    .feed-page .feed-detail-backdrop,
     .feed-page .feed-moderation-backdrop {
         padding: 12px 8px 24px;
+    }
+
+    .feed-page .feed-detail-backdrop {
+        padding: 12px 8px;
     }
 
     .feed-page .feed-modal {
@@ -1456,17 +1478,43 @@ body:has(.feed-page) #root {
 
 /* Ordenação independente, acima da lista, sem a antiga barra de comunidades. */
 .feed-page .feed-order {
-    display: inline-flex;
+    --order-padding: 4px;
+    --order-gap: 3px;
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: repeat(2, 1fr);
     flex: 0 0 auto;
-    align-items: center;
     margin-left: auto;
     border: 1px solid var(--feed-border);
     border-radius: 12px;
-    padding: 4px;
-    gap: 3px;
+    padding: var(--order-padding);
+    gap: var(--order-gap);
     background: #e7e6df;
 }
+
+.feed-page .feed-order::before {
+    position: absolute;
+    inset: var(--order-padding) auto var(--order-padding) var(--order-padding);
+    width: calc((100% - 2 * var(--order-padding) - var(--order-gap)) / 2);
+    border-radius: 9px;
+    background: #f7f6f1;
+    box-shadow: 0 2px 0 #cccdc2;
+    pointer-events: none;
+    content: "";
+    transition: transform 220ms ease-out;
+}
+
+:root[data-tema="escuro"] .feed-page .feed-order::before {
+    background: #4a5662;
+    box-shadow: 0 2px 0 #1d252c;
+}
+
+.feed-page .feed-order:has(> button:nth-child(2)[aria-pressed="true"])::before {
+    transform: translateX(calc(100% + var(--order-gap)));
+}
+
 .feed-page .feed-order button {
+    position: relative;
     min-height: 36px;
     border: 0;
     border-radius: 9px;
@@ -1475,11 +1523,24 @@ body:has(.feed-page) #root {
     color: #6a7564;
     font-size: 12px;
     font-weight: 700;
+    transition: color 180ms ease-out;
 }
+
 .feed-page .feed-order button.active {
-    background: #f7f6f1;
-    box-shadow: 0 2px 0 #cccdc2;
     color: #425236;
+}
+
+.feed-page .feed-order button.active,
+:root[data-tema="escuro"] .feed-page .feed-order button.active[aria-pressed="true"] {
+    background: transparent;
+    box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .feed-page .feed-order::before,
+    .feed-page .feed-order button {
+        transition: none;
+    }
 }
 
 /* Cabeçalho e ações em linhas próprias, inclusive na marcação anterior do feed. */
@@ -1768,3 +1829,167 @@ body:has(.feed-page .feed-confirm-dialog[open]) .simio-sidebar-layer { display: 
 html:has(.feed-page .feed-report-dialog[open]),
 body:has(.feed-page .feed-report-dialog[open]) { overflow: hidden !important; overscroll-behavior: none; }
 body:has(.feed-page .feed-report-dialog[open]) .simio-sidebar-layer { display: none !important; }
+
+/* Centraliza o painel e mantém a rolagem de publicações longas dentro dele. */
+.feed-page .feed-detail-backdrop {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+}
+
+.feed-page .feed-detail-backdrop > .feed-detail {
+    max-height: 100%;
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+}
+
+/* Feed em fluxo, sem o recuo da sidebar quando a navegação é inferior. */
+.auth-page:has(> .feed-page:not(.feed-detail-portal)) {
+    inset-inline: 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin-inline: 0;
+    padding: 0;
+    grid-template-columns: minmax(0, 1fr);
+    animation: none;
+    transform: none;
+}
+
+.feed-page .feed-side-tip .moki {
+    width: 100%;
+    height: auto;
+    max-height: 56px;
+    scale: none;
+}
+
+.feed-page .feed-tip-content { min-width: 0; }
+.feed-page .feed-tip-content strong { font-size: 13px; }
+.feed-page .feed-tip-content p { font-size: 12px; }
+.feed-page .feed-post-text,
+.feed-page .feed-detail-body,
+.feed-page .feed-report-content { overflow-wrap: anywhere; }
+
+@media (min-width: 1101px) {
+    .auth-page > .feed-page:not(.feed-detail-portal),
+    .feed-page:not(.feed-detail-portal) {
+        padding-inline: clamp(174px, 10.7vw, 420px) clamp(24px, 2vw, 76px);
+    }
+
+    .feed-page .feed-layout {
+        width: min(100%, clamp(1400px, 72vw, 2200px));
+        grid-template-columns: minmax(0, 1fr) clamp(266px, 15.2vw, 420px);
+        column-gap: clamp(22px, 1.46vw, 48px);
+    }
+}
+
+@media (2300px <= width < 3200px) {
+    .feed-page .feed-header h1 { font-size: clamp(48px, 2.4vw, 72px); }
+    .feed-page .feed-header p,
+    .feed-page .feed-post-text { font-size: clamp(16px, .75vw, 22px); }
+    .feed-page .feed-post h2 { font-size: clamp(25px, 1.13vw, 36px); }
+    .feed-page .feed-post-body { padding: clamp(26px, 1.3vw, 46px); }
+    .feed-page .feed-side-card,
+    .feed-page .feed-side-tip { padding: clamp(24px, 1vw, 38px); }
+    .feed-page .feed-choice-name,
+    .feed-page .feed-tip-content p { font-size: 15px; }
+    .feed-page .feed-tip-content strong { font-size: 17px; }
+}
+
+/* Ajusta a escala do Feed inteiro em 4K, sem alterar a escala dos diálogos. */
+@media (min-width: 3200px) {
+    .feed-page > .feed-layout {
+        zoom: 1.5;
+        width: min(1900px, 55vw);
+        grid-template-columns: minmax(0, 1fr) 340px;
+        column-gap: 30px;
+    }
+
+    .feed-page .feed-header h1 { font-size: 48px; }
+    .feed-page .feed-header p,
+    .feed-page .feed-post-text { font-size: 16px; }
+    .feed-page .feed-post-text { max-width: 95ch; }
+    .feed-page .feed-post h2 { font-size: 27px; }
+    .feed-page .feed-choice-name,
+    .feed-page .feed-tip-content p { font-size: 13px; }
+}
+
+@media (max-width: 1100px), (max-width: 1400px) and (pointer: coarse) {
+    body:has(> .simio-sidebar-layer.mobile-nav) .auth-page:has(> .feed-page) {
+        padding: 0;
+    }
+
+    .auth-page > .feed-page:not(.feed-detail-portal),
+    .feed-page:not(.feed-detail-portal) {
+        --feed-gutter: max(clamp(12px, 3vw, 28px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+        inset: auto;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        margin: 0;
+        padding: 28px var(--feed-gutter) calc(108px + env(safe-area-inset-bottom, 0px));
+        transform: none;
+        translate: none;
+    }
+
+    .feed-page .feed-layout {
+        width: min(100%, 920px);
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .feed-page .feed-layout > .feed-sidebar {
+        grid-column: 1;
+        grid-row: 3;
+        position: static;
+        display: grid;
+        gap: 16px;
+        margin-bottom: 22px;
+    }
+
+    .feed-page .feed-layout > .feed-content { grid-row: 4; }
+    .feed-page .feed-sidebar > .feed-communities { display: none; }
+    .feed-page .feed-sidebar > .feed-mobile-community { display: grid; }
+    .feed-page .feed-mobile-community select { min-height: 44px; font-size: 16px; }
+    .feed-page .feed-side-tip {
+        grid-template-columns: 42px minmax(0, 1fr);
+        padding: 12px 14px;
+    }
+
+    .feed-page .feed-votes:has(.feed-owner-actions) { min-height: 0; }
+    .feed-page .feed-post-meta,
+    .feed-page .feed-actions-group,
+    .feed-page .feed-comment header { flex-wrap: wrap; }
+
+    .feed-page .feed-modal-backdrop > .feed-modal,
+    .feed-page .feed-moderation-panel,
+    .feed-page .feed-editor-dialog,
+    .feed-page .feed-confirm-dialog {
+        max-height: calc(100dvh - 36px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .feed-page .feed-modal :is(input, select, textarea),
+    .feed-page .feed-comment-form textarea { font-size: 16px; }
+    .feed-share-toast { bottom: calc(98px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (max-width: 560px) {
+    .feed-page .feed-compose-row { margin-bottom: 18px; }
+    .feed-page .feed-post-meta { gap: 8px; }
+    .feed-page .feed-header h1 { font-size: clamp(28px, 8vw, 33px); }
+}
+
+:root[data-tema="escuro"] .feed-page .feed-side-tip {
+    border-color: #77613e;
+    background: #3b372d;
+    box-shadow: 0 5px 0 #24231d;
+}
+:root[data-tema="escuro"] .feed-page .feed-side-tip strong { color: #ffca7f; }
+:root[data-tema="escuro"] .feed-page .feed-side-tip p { color: #e7d2b3; }
+:root[data-tema="escuro"] .feed-page .feed-mobile-community select {
+    color-scheme: dark;
+    background: var(--feed-surface-alt, #303840);
+    color: var(--feed-text, #f5f4ef);
+}

@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import {nomePelaRota} from "../menuEsquerda/menuEsquerda";
+import { useEffect, useState, useRef } from "react";
+import { nomePelaRota } from "../menuEsquerda/menuEsquerda";
 import { apiFetch } from "../utils/api";
-
 import "./MenuDireitaSuperior.css";
-import { useRef } from "react";
 
-function MenuDireitaSuperior({ draft }) {
+function MenuDireitaSuperior({ draft, compacto = false }) {
     const [posicao, setPosicao] = useState(null);
 
     useEffect(() => {
@@ -77,19 +75,64 @@ function MenuDireitaSuperior({ draft }) {
     useEffect(() => {
         const intervalo = setInterval(() => {
             setAnuncioAtual(atual => (atual + 1) % 4);
-        }, 5000);
+        }, 7000);
 
         return () => clearInterval(intervalo);
     }, []);
+
+    if (compacto) {
+        return (
+            <>
+                <Link
+                    to="/Ranking"
+                    state={{ transicaoDoRanking: true }}
+                    className="menuDireitaProgresso-item"
+                    aria-label={posicao === null ? "Ver ranking" : `Ver ranking, ${posicao}º lugar`}
+                >
+                    <strong>{posicao === null ? "—" : `${posicao}º`}</strong>
+                    <span>Ranking</span>
+                </Link>
+                <div className="menuDireitaProgresso-item">
+                    <strong><img src="/icons/fogueira-simiolab.svg" alt="" />{draft?.streak ?? "—"}</strong>
+                    <span>Sequência</span>
+                </div>
+                <div className="menuDireitaProgresso-item">
+                    <strong><img src="/icons/bateria-simiolab.svg" alt="" />{draft?.energia ?? "—"}</strong>
+                    <span>Energia</span>
+                </div>
+            </>
+        );
+    }
 
     return (
         <section
             className="menuDireita-card menuDireitaSuperior"
             aria-labelledby="menuDireita-divisao-titulo"
         >
-            <div className="streakEnergia">
-                <h4>🔥Sequência: {draft.streak} dias <br />🔋Energia: {draft.energia}</h4>
+            <div className="painel-indicadores">
+                <h4>
+                    <img
+                    src="/icons/fogueira-simiolab.svg"
+                    alt="Sequencia:"
+                    width={28}
+                    height={28}
+                    style={{ verticalAlign: "middle", marginInlineEnd: 6}}
+                    /> 
+                    <span className="painel-indicador-valor">{draft.streak}</span>
+                    <span className="painel-divisoria-vertical" aria-hidden="true" />
+                    <img
+                    src="/icons/bateria-simiolab.svg"
+                    alt="Energia:"
+                    width={28}
+                    height={28}
+                    style={{ verticalAlign: "middle", marginInlineEnd: 6}}
+                    /> 
+                    <span className="painel-indicador-valor">{draft.energia}</span>
+                </h4>
             </div>
+
+            <hr className="painel-divisoria" />
+
             <div className="menuDireita-cabecalho">
                 <h3 id="menuDireita-divisao-titulo">
                     Sua posição no ranking

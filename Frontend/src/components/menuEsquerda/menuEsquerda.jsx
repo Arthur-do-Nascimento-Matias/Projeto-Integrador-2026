@@ -16,7 +16,7 @@ const itensPrincipais = [
 
   { nome: 'Biblioteca', rota: '/biblioteca' },
 
-  { nome: 'SimIA', rota: '/chatBot', lightning: true },
+  { nome: 'SimAI', rota: '/chatBot', lightning: true },
 
   { nome: 'Feed', rota: '/feed' },
 
@@ -40,7 +40,7 @@ const fxMap = {
 
   Biblioteca: 'fx-book',
 
-  SimIA: 'fx-simia',
+  SimAI: 'fx-simia',
 
   Feed: 'fx-feed',
 
@@ -60,7 +60,7 @@ export function nomePelaRota(pathname) {
     if (rota === "/simulados") return "Simulados";
     if (rota === "/ranking") return "Ranking";
     if (rota === "/biblioteca") return "Biblioteca";
-    if (rota === "/chatbot") return "SimIA";
+    if (rota === "/chatbot") return "SimAI";
     if (rota === "/feed") return "Feed";
     if (rota === "/perfil" || rota.startsWith("/perfil/")) return "Perfil";
     if (rota === "/configuracoes") return "Configurações";
@@ -148,7 +148,7 @@ function Icone({ nome }) {
 
   }
 
-  if (nome === 'SimIA') {
+  if (nome === 'SimAI') {
 
     return (
 
@@ -214,6 +214,30 @@ function Icone({ nome }) {
 
 function MenuEsquerda() {
 
+  const [mobile, setMobile] = useState(() =>
+    window.matchMedia('(max-width: 1100px), (max-width: 1400px) and (pointer: coarse)').matches)
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1100px), (max-width: 1400px) and (pointer: coarse)')
+    const atualizar = () => { setMobile(media.matches); setMenuAberto(false) }
+    media.addEventListener('change', atualizar)
+    return () => media.removeEventListener('change', atualizar)
+  }, [])
+  const principais = mobile
+    ? itensPrincipais.filter(item => !['Ranking', 'Feed'].includes(item.nome))
+    : itensPrincipais
+  const secundarios = mobile
+    ? [...itensPrincipais.filter(item => ['Ranking', 'Feed'].includes(item.nome)), ...itensSecundarios]
+    : itensSecundarios
+
+  const calcularEscalaDesktop = () => Math.max(0.5,
+    Math.min(window.innerWidth / 1920, (window.innerHeight - 180) / 680, 2.5))
+  const [escalaDesktop, setEscalaDesktop] = useState(calcularEscalaDesktop)
+  useEffect(() => {
+    const atualizar = () => setEscalaDesktop(calcularEscalaDesktop())
+    window.addEventListener('resize', atualizar)
+    return () => window.removeEventListener('resize', atualizar)
+  }, [])
+
   const navigate = useNavigate()
 
   const location = useLocation()
@@ -238,7 +262,7 @@ function MenuEsquerda() {
 
   const [itemAtivo, setItemAtivo] = useState(ativoDaRota)
 
-  const [menuAberto, setMenuAberto] = useState(itemMenuInferior)
+  const [menuAberto, setMenuAberto] = useState(!mobile && itemMenuInferior)
 
   const [efeitoAtivo, setEfeitoAtivo] = useState('')
 
@@ -246,43 +270,28 @@ function MenuEsquerda() {
 
   const [touchLike, setTouchLike] = useState(false)
   const [mouseNaSidebar, setMouseNaSidebar] = useState(false)
+  const fecharHoverRef = useRef(null)
 
   useEffect(() => {
       setItemAtivo(ativoDaRota);
-  }, [ativoDaRota]);
+    if (mobile) setMenuAberto(false)
+  }, [ativoDaRota, mobile]);
 
-  // A expansão acompanha o mouse, mesmo durante a transição de rotas.
-  useEffect(() => {
-    function acompanharMouse(event) {
-      if (event.pointerType !== 'mouse') return
+  useEffect(() => () => clearTimeout(fecharHoverRef.current), [])
 
-      const sidebar = sidebarRef.current
-      if (!sidebar) return
+  function aoEntrarNaSidebar(event) {
+    if (event.pointerType !== 'mouse') return
 
-      const rect = sidebar.getBoundingClientRect()
-      const dentro =
-        event.clientX >= rect.left &&
-        event.clientX <= rect.right &&
-        event.clientY >= rect.top &&
-        event.clientY <= rect.bottom
+    clearTimeout(fecharHoverRef.current)
+    setMouseNaSidebar(true)
+  }
 
-      setMouseNaSidebar(dentro)
-    }
+  function aoSairDaSidebar(event) {
+    if (event.pointerType !== 'mouse') return
 
-    function aoSairDaJanela(event) {
-      if (event.pointerType === 'mouse' && event.relatedTarget === null) {
-        setMouseNaSidebar(false)
-      }
-    }
-
-    document.addEventListener('pointermove', acompanharMouse)
-    document.addEventListener('pointerout', aoSairDaJanela)
-
-    return () => {
-      document.removeEventListener('pointermove', acompanharMouse)
-      document.removeEventListener('pointerout', aoSairDaJanela)
-    }
-  }, [])
+    clearTimeout(fecharHoverRef.current)
+    fecharHoverRef.current = setTimeout(() => setMouseNaSidebar(false), 90)
+  }
 
   useEffect(() => {
 
@@ -290,9 +299,7 @@ function MenuEsquerda() {
 
     if (
 
-      ativoDaRota === 'Perfil' ||
-
-      ativoDaRota === 'Configurações'
+      !mobile && (ativoDaRota === 'Perfil' || ativoDaRota === 'Configurações')
 
     ) {
 
@@ -300,7 +307,8 @@ function MenuEsquerda() {
 
     }
 
-  }, [ativoDaRota])
+    if (mobile) setMenuAberto(false)
+  }, [ativoDaRota, mobile])
 
   useEffect(() => {
 
@@ -330,7 +338,9 @@ function MenuEsquerda() {
 
     const itemRect = item.getBoundingClientRect()
 
-    const top = itemRect.top - shellRect.top + (itemRect.height - 40) / 2
+    const escala = shellRect.height / shell.offsetHeight || 1
+    const top = (itemRect.top - shellRect.top) / escala
+      + (itemRect.height / escala - rail.offsetHeight) / 2 - shell.clientTop
 
     rail.style.top = `${top}px`
 
@@ -342,7 +352,7 @@ function MenuEsquerda() {
 
     return () => cancelAnimationFrame(frame)
 
-  }, [posicionarRail, menuAberto])
+  }, [posicionarRail, menuAberto, escalaDesktop, mobile])
 
   useEffect(() => {
 
@@ -364,7 +374,7 @@ function MenuEsquerda() {
 
     const aoClicarFora = (event) => {
 
-      if (!touchLike || !menuAberto) return
+      if ((!touchLike && !mobile) || !menuAberto) return
 
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
 
@@ -386,7 +396,7 @@ function MenuEsquerda() {
 
     }
 
-  }, [menuAberto, touchLike])
+  }, [menuAberto, touchLike, mobile])
 
   useEffect(() => () => clearTimeout(fxTimerRef.current), [])
 
@@ -448,6 +458,7 @@ function MenuEsquerda() {
 
 function aoSelecionar(item, event) {
     event.preventDefault()
+    if (mobile) setMenuAberto(false)
     criarRipple(event.currentTarget, event)
     setItemAtivo(item.nome)
     iniciarEfeito(item.nome)
@@ -551,7 +562,7 @@ function aoSelecionar(item, event) {
 
         <span className="label">{item.nome}</span>
 
-        {item.nome === 'SimIA' && <span className="ia-badge">IA</span>}
+        {item.nome === 'SimAI' && <span className="ia-badge">IA</span>}
 
       </a>
 
@@ -561,7 +572,7 @@ function aoSelecionar(item, event) {
 
   return createPortal(
 
-    <div className="simio-sidebar-layer" aria-label="Navegação SimioLab">
+    <div className={`simio-sidebar-layer${mobile ? ' mobile-nav' : ''}`} style={{ "--desktop-scale": escalaDesktop }} aria-label="Navegação SimioLab">
 
       <div className="scene">
 
@@ -584,17 +595,24 @@ function aoSelecionar(item, event) {
       <aside
 
         className={`sidebar${menuAberto ? ' more-open' : ''}${
-          mouseNaSidebar || (touchLike && menuAberto) ? ' pin-open' : ''
+          (touchLike ? menuAberto : mouseNaSidebar) ? ' pin-open' : ''
         }`}
-        onPointerEnter={(event) => {
-          if (event.pointerType === 'mouse') setMouseNaSidebar(true)
-        }}
+        onPointerEnter={aoEntrarNaSidebar}
+        onPointerLeave={aoSairDaSidebar}
 
         ref={sidebarRef}
 
       >
 
-        <div className="shell" ref={shellRef}>
+        <div
+          className="shell"
+          ref={shellRef}
+          onTransitionEnd={(event) => {
+            if (event.target === event.currentTarget && event.propertyName === 'height') {
+              posicionarRail()
+            }
+          }}
+        >
 
           <div className="active-rail" ref={railRef} aria-hidden="true" />
 
@@ -602,7 +620,7 @@ function aoSelecionar(item, event) {
 
             <div className="main-menu">
 
-              {itensPrincipais.map(renderItem)}
+              {principais.map(renderItem)}
 
             </div>
 
@@ -610,11 +628,11 @@ function aoSelecionar(item, event) {
 
               <div className="divider" />
 
-              <div className="more-menu" id="moreMenu">
+              <div className="more-menu" id="moreMenu" inert={mobile && !menuAberto ? true : undefined}>
 
                 <div className="more-menu-inner">
 
-                  {itensSecundarios.map(renderItem)}
+                  {secundarios.map(renderItem)}
 
                 </div>
 
@@ -622,7 +640,7 @@ function aoSelecionar(item, event) {
 
               <button
 
-                className="menu-toggle"
+                className={`menu-toggle${mobile && secundarios.some(item => item.nome === itemAtivo) ? ' active' : ''}`}
 
                 type="button"
 
@@ -660,7 +678,7 @@ function aoSelecionar(item, event) {
 
                 </span>
 
-                <span className="label">{menuAberto ? 'Fechar menu' : 'Mais opções'}</span>
+                <span className="label">{mobile ? (menuAberto ? 'Fechar' : 'Mais') : (menuAberto ? 'Fechar menu' : 'Mais opções')}</span>
 
               </button>
 

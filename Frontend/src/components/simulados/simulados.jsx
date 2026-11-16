@@ -11,6 +11,24 @@ const FILTROS = [
     { valor: "ingles", nome: "Inglês" }
 ];
 
+const MASCOTES_MATERIAS = {
+    portugues: Miro,
+    matematica: Bimo,
+    historia: Ibra,
+    geografia: Nala,
+    ciencias: Kimo,
+    ingles: Zoro
+};
+
+const ICONES_MATERIAS = {
+    portugues: portuguesIcone,
+    matematica: matematicaIcone,
+    historia: historiaIcone,
+    geografia: geografiaIcone,
+    ciencias: cienciasIcone,
+    ingles: inglesIcone
+};
+
 const NOMES_MATERIAS = {
     portugues: "Português",
     matematica: "Matemática",
@@ -25,7 +43,6 @@ function Simulados() {
     const [abaAtiva, setAbaAtiva] = useState("provas");
 
     const [provas, setProvas] = useState([]);
-    const [pesquisa, setPesquisa] = useState("");
     const [filtro, setFiltro] = useState("matematica");
     const [anoSelecionado, setAnoSelecionado] = useState(6);
     const [carregando, setCarregando] = useState(true);
@@ -73,38 +90,23 @@ function Simulados() {
         }
     }
 
-    const provasFiltradas = useMemo(() => {
-        return provas.filter((prova) => {
-            const materia = prova.materia || "geral";
-            const nome = prova.NomeProva || "";
-            const fonte = prova.fonteProva || "";
-            const tipo = prova.tipoProva || "";
-
-            const correspondeMateria = materia === filtro;
-            const correspondeAno = Number(prova.anoProva) === anoSelecionado;
-            const textoPesquisa = pesquisa.toLowerCase().trim();
-
-            const correspondePesquisa =
-                nome.toLowerCase().includes(textoPesquisa) ||
-                fonte.toLowerCase().includes(textoPesquisa) ||
-                tipo.toLowerCase().includes(textoPesquisa) ||
-                (NOMES_MATERIAS[materia] || "").toLowerCase().includes(textoPesquisa);
-
-            return correspondeMateria && correspondeAno && correspondePesquisa;
-        });
-    }, [provas, pesquisa, filtro, anoSelecionado]);
+    const provasFiltradas = useMemo(() => provas.filter((prova) => {
+        const materia = prova.materia || "geral";
+        return (filtro === "todas" || materia === filtro)
+            && Number(prova.anoProva) === anoSelecionado;
+    }), [provas, filtro, anoSelecionado]);
 
     function abrirProva(idProva) {
-        window.open(`http://localhost:3000/abrirProva?id=${idProva}`, "_blank");
+        window.open(`/abrirProva?id=${idProva}`, "_blank", "noopener");
     }
 
     function baixarProva(idProva) {
-        window.open(`http://localhost:3000/baixarProva?id=${idProva}`, "_blank");
+        window.open(`/baixarProva?id=${idProva}`, "_blank", "noopener");
     }
 
     function obterCapa(prova) {
         if (!prova.temCapa) return null;
-        return `http://localhost:3000/capaProva?id=${prova.idProva}`;
+        return `/capaProva?id=${prova.idProva}`;
     }
 
     function formatarTipo(tipo) {
@@ -114,257 +116,236 @@ function Simulados() {
         return "Prova";
     }
 
-    function iniciarRedacao(tema) {
+    function abrirTema(tema) {
         setTemaEmEscrita(tema);
+        window.scrollTo(0, 0);
     }
+
+    const naAbaProvas = abaAtiva === "provas";
+    const temaDestaque = temas[0];
 
     return (
         <main className="simulados">
-            <section className="simuladosCabecalho">
-                <div className="simuladosCabecalhoTopo">
-                    <div>
-                        <span className="simuladosSubtitulo">SIMIOLAB</span>
-                        <h1>
-                            {abaAtiva === "provas"
-                                ? "Provas e Simulados"
-                                : "Laboratório de Redação"}
-                        </h1>
-                        <p>
-                            {abaAtiva === "provas"
-                                ? "Explore provas, simulados e materiais em PDF para praticar seus conhecimentos e se preparar para novos desafios."
-                                : "Desenvolva sua argumentação em um ambiente focado, salve seus rascunhos e acompanhe sua evolução na escrita."}
-                        </p>
-                    </div>
-
-                    <div className="simuladosAbas">
-                        <button
-                            className={
-                                abaAtiva === "provas"
-                                    ? "simuladosAbaBotao ativo"
-                                    : "simuladosAbaBotao"
-                            }
-                            onClick={() => {
-                                setAbaAtiva("provas");
-                                setTemaEmEscrita(null);
-                            }}
-                        >
-                            Provas
-                        </button>
-
-                        <button
-                            className={
-                                abaAtiva === "redacoes"
-                                    ? "simuladosAbaBotao ativoRedacao"
-                                    : "simuladosAbaBotao"
-                            }
-                            onClick={() => setAbaAtiva("redacoes")}
-                        >
-                            Redações
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            {/* ABA 1: PROVAS */}
-            {abaAtiva === "provas" && (
-                <>
-                    <section className="simuladosPesquisa">
-
-                        <div className="simuladosFiltros">
-                            {FILTROS.map((item) => (
-                                <button
-                                    key={item.valor}
-                                    className={
-                                        filtro === item.valor
-                                            ? "simuladosFiltro ativo"
-                                            : "simuladosFiltro"
-                                    }
-                                    onClick={() => { setFiltro(item.valor); setAnoSelecionado(6); }}
-                                >
-                                    {item.nome}
-                                </button>
-                            ))}
-                        </div>
-                    </section>
-
-                    <div className="simuladosAnos" style={{ display: "flex", gap: "12px", flexWrap: "wrap", margin: "20px 0" }}>
-                        {[6, 7, 8].map((ano) => (
-                            <button
-                                key={ano}
-                                type="button"
-                                className={anoSelecionado === ano ? "simuladosFiltro ativo" : "simuladosFiltro"}
-                                onClick={() => setAnoSelecionado(ano)}
-                            >
-                                {ano}º ano
-                            </button>
-                        ))}
-                    </div>
-
-                    <section className="simuladosCatalogo">
-                        {!carregando && !erro && provasFiltradas.length > 0 && (
-                            <div className="simuladosGrade">
-                                {provasFiltradas.map((prova) => {
-                                    const capa = obterCapa(prova);
-                                    const materia = prova.materia || "geral";
-
-                                    return (
-                                        <article className="simuladosCard" key={prova.idProva}>
-                                            <div className="simuladosCardCapa">
-                                                {capa ? (
-                                                    <img src={capa} alt={prova.NomeProva} />
-                                                ) : (
-                                                    <div className="simuladosCardSemCapa">
-                                                        <span>PDF</span>
-                                                        <strong>{NOMES_MATERIAS[materia]}</strong>
-                                                    </div>
-                                                )}
-                                                <span className="simuladosCardTipo">
-                                                    {formatarTipo(prova.tipoProva)}
-                                                </span>
-                                            </div>
-
-                                            <div className="simuladosCardConteudo">
-                                                <span className="simuladosCardMateria">
-                                                    {NOMES_MATERIAS[materia]}
-                                                </span>
-                                                <h3>{prova.NomeProva}</h3>
-                                                <div className="simuladosCardAcoes">
-                                                    <button
-                                                        className="simuladosBotaoAbrir"
-                                                        onClick={() => abrirProva(prova.idProva)}
-                                                    >
-                                                        <span>Abrir</span>
-                                                    </button>
-                                                    <button
-                                                        className="simuladosBotaoBaixar"
-                                                        onClick={() => baixarProva(prova.idProva)}
-                                                    >
-                                                        ↓
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </article>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </section>
-                </>
-            )}
-
-            {/* ABA 2: REDAÇÕES — SE CLICOU EM UM TEMA, ABRE A FOLHA DE REDAÇÃO */}
-            {abaAtiva === "redacoes" && temaEmEscrita && (
-                <RedacaoEditor
-                    tema={temaEmEscrita}
-                    aoVoltar={() => setTemaEmEscrita(null)}
-                />
-            )}
-
-            {/* ABA 2: REDAÇÕES — SE NÃO CLICOU EM TEMA, MOSTRA O PAINEL */}
-            {abaAtiva === "redacoes" && !temaEmEscrita && (
-                <section className="redacoes SejaBemVindoRedacoes">
-                    <div className="redacoesConteudo">
-                        <article className="redacaoDestaque">
-                            <div className="redacaoDestaqueTopo">
-                                <span>TEMA EM DESTAQUE</span>
-                                <div className="redacaoNivel">ENEM • +150 XP</div>
-                            </div>
-
-                            <div className="redacaoDestaqueConteudo">
-                                <span className="redacaoTipo">Dissertativo-argumentativo</span>
-                                <h3>
-                                    {temas[0]?.titulo ||
-                                        "Os impactos da tecnologia na educação contemporânea"}
-                                </h3>
+            <div className="simuladosLayout">
+                {temaEmEscrita ? (
+                    <RedacaoEditor
+                        tema={temaEmEscrita}
+                        aoVoltar={() => setTemaEmEscrita(null)}
+                    />
+                ) : (
+                    <>
+                        <header className="simuladosCabecalho">
+                            <div>
+                                <h1>
+                                    {naAbaProvas ? <>Provas e <em>Simulados</em></> : <>Laboratório de <em>Redação</em></>}
+                                </h1>
                                 <p>
-                                    {temas[0]?.descricao ||
-                                        "Reflita sobre como o avanço das tecnologias digitais tem transformado a forma de ensinar, aprender e acessar conhecimento."}
+                                    {naAbaProvas
+                                        ? "Encontre provas em PDF para praticar por matéria e ano."
+                                        : "Escolha um tema, organize seus argumentos e salve seu rascunho."}
                                 </p>
                             </div>
 
-                            <div className="redacaoDestaqueRodape">
-                                <div>
-                                    <span>RECOMPENSA</span>
-                                    <strong>+150 XP</strong>
-                                </div>
-
-                                <button
-                                    onClick={() =>
-                                        iniciarRedacao(
-                                            temas[0] || {
-                                                id_tema: 1,
-                                                titulo: "Os impactos da tecnologia na educação contemporânea"
-                                            }
-                                        )
-                                    }
-                                >
-                                    Começar redação
+                            <div className="simuladosAbas" role="group" aria-label="Seções de prática">
+                                <button type="button" aria-pressed={naAbaProvas} onClick={() => setAbaAtiva("provas")}>
+                                    Provas
+                                </button>
+                                <button type="button" aria-pressed={!naAbaProvas} onClick={() => setAbaAtiva("redacoes")}>
+                                    Redações
                                 </button>
                             </div>
-                        </article>
+                        </header>
 
-                        <div className="redacoesResumo">
-                            <article className="redacaoResumoCard">
-                                <div>
-                                    <span>MINHAS REDAÇÕES</span>
-                                    <h3>Seu histórico de escrita</h3>
-                                    <p>Consulte redações enviadas, notas e feedbacks.</p>
-                                </div>
-                            </article>
+                        {naAbaProvas ? (
+                            <>
+                                <section className="simuladosPainel" aria-label="Filtros das provas">
+                                    <div className="simuladosFiltrosPainel">
+                                        <div className="simuladosGrupo" role="group" aria-labelledby="simulados-materia">
+                                            <span id="simulados-materia">Matéria</span>
+                                            <div className="simuladosFiltros">
+                                                {FILTROS.map(({ valor, nome }) => (
+                                                    <button
+                                                        key={valor}
+                                                        type="button"
+                                                        className="simuladosFiltro"
+                                                        data-materia={valor}
+                                                        aria-pressed={filtro === valor}
+                                                        onClick={() => {
+                                                            setFiltro(valor);
+                                                            setAnoSelecionado(6);
+                                                        }}
+                                                    >
+                                                        {nome}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="simuladosGrupo" role="group" aria-labelledby="simulados-ano">
+                                            <span id="simulados-ano">Ano escolar</span>
+                                            <div className="simuladosFiltros simuladosAnos">
+                                                {[6, 7, 8].map((ano) => (
+                                                    <button
+                                                        key={ano}
+                                                        type="button"
+                                                        className="simuladosFiltro"
+                                                        aria-pressed={anoSelecionado === ano}
+                                                        onClick={() => setAnoSelecionado(ano)}
+                                                    >
+                                                        {ano}º ano
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="simuladosMoki" aria-hidden="true">
+                                        <img src={MASCOTES_MATERIAS[filtro] ?? Moki} alt="" />
+                                    </div>
+                                </section>
 
-                            <article className="redacaoResumoCard">
-                                <div>
-                                    <span>RASCUNHOS SALVOS</span>
-                                    <h3>Continue de onde parou</h3>
-                                    <p>Seu rascunho é recuperado automaticamente.</p>
-                                </div>
-                                <button
-                                    onClick={() =>
-                                        iniciarRedacao(
-                                            temas[0] || {
-                                                id_tema: 1,
-                                                titulo: "Os impactos da tecnologia na educação contemporânea"
-                                            }
-                                        )
-                                    }
-                                >
-                                    Continuar rascunho →
-                                </button>
-                            </article>
-                        </div>
-                    </div>
+                                <section className="simuladosCatalogo" aria-labelledby="simulados-disponiveis">
+                                    <div className="simuladosTituloSecao">
+                                        <h2 id="simulados-disponiveis">Provas disponíveis</h2>
+                                        {!carregando && !erro && (
+                                            <span className="simuladosContagem" role="status">
+                                                {provasFiltradas.length} {provasFiltradas.length === 1 ? "PDF" : "PDFs"}
+                                            </span>
+                                        )}
+                                    </div>
 
-                    <div id="secao-temas" className="redacoesListaTemas">
-                        <div className="simuladosTituloSecao">
-                            <div>
-                                <span>PROPOSTAS DISPONÍVEIS</span>
-                                <h2>Escolha um tema para praticar</h2>
-                            </div>
-                        </div>
+                                    {carregando ? (
+                                        <>
+                                            <p className="simuladosLeitor" role="status">Carregando provas…</p>
+                                            <div className="simuladosGrade" aria-hidden="true">
+                                                {[1, 2, 3].map((item) => (
+                                                    <div className="simuladosCard catalogo-card-vazio" key={item}>
+                                                        <div className="simuladosCardCapa catalogo-esqueleto" />
+                                                        <div className="simuladosCardConteudo">
+                                                            <div className="catalogo-esqueleto catalogo-linha" />
+                                                            <div className="catalogo-esqueleto catalogo-linha" />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </>
+                                    ) : erro ? (
+                                        <div className="simuladosEstado">
+                                            <p role="alert">{erro}</p>
+                                            <button type="button" className="simuladosBotao" onClick={carregarProvas}>Tentar novamente</button>
+                                        </div>
+                                    ) : provasFiltradas.length === 0 ? (
+                                        <div className="simuladosEstado">
+                                            <p role="status">
+                                                {filtro === "todas"
+                                                    ? `Ainda não há provas para o ${anoSelecionado}º ano.`
+                                                    : `Ainda não há provas de ${NOMES_MATERIAS[filtro]} para o ${anoSelecionado}º ano.`}
+                                            </p>
+                                            {filtro !== "todas" && (
+                                                <button type="button" className="simuladosBotao" onClick={() => setFiltro("todas")}>
+                                                    Ver todas as matérias
+                                                </button>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="simuladosGrade">
+                                            {provasFiltradas.map((prova) => {
+                                                const capa = obterCapa(prova);
+                                                const materia = prova.materia || "geral";
+                                                const icone = ICONES_MATERIAS[materia];
 
-                        {!carregandoTemas && !erroTemas && temas.length > 0 && (
-                            <div className="redacoesGradeTemas">
-                                {temas.map((tema) => {
-                                    const id = tema.id_tema || tema.idTema || 1;
-                                    const titulo = tema.titulo || tema.titulo_tema || "Tema";
-                                    return (
-                                        <article key={id} className="redacaoCardTema">
-                                            <h3>{titulo}</h3>
-                                            <p>{tema.descricao}</p>
-                                            <button
-                                                className="redacaoBotaoEscrever"
-                                                onClick={() => iniciarRedacao(tema)}
-                                            >
-                                                Escrever redação →
-                                            </button>
+                                                return (
+                                                    <article className="simuladosCard" data-materia={materia} key={prova.idProva}>
+                                                        <div className="simuladosCardCapa">
+                                                            {capa && (
+                                                                <img
+                                                                    src={capa}
+                                                                    alt=""
+                                                                    className="simuladosCapaImagem"
+                                                                    loading="lazy"
+                                                                    onError={(evento) => { evento.currentTarget.hidden = true; }}
+                                                                />
+                                                            )}
+                                                            <span className="simuladosCardSimbolo" aria-hidden="true">
+                                                                {icone ? <img src={icone} alt="" /> : "PDF"}
+                                                            </span>
+                                                            <span className="simuladosCardTipo">{formatarTipo(prova.tipoProva)}</span>
+                                                        </div>
+                                                        <div className="simuladosCardConteudo">
+                                                            <p className="simuladosCardMateria">
+                                                                {NOMES_MATERIAS[materia] || "Geral"} · {prova.anoProva}º ano
+                                                            </p>
+                                                            <h3>{prova.NomeProva}</h3>
+                                                            <div className="simuladosCardAcoes">
+                                                                <button type="button" className="simuladosBotao primario" onClick={() => abrirProva(prova.idProva)}>
+                                                                    Abrir PDF <span aria-hidden="true">↗</span>
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className="simuladosBotao simuladosBotaoBaixar"
+                                                                    aria-label={`Baixar ${prova.NomeProva}`}
+                                                                    title="Baixar PDF"
+                                                                    onClick={() => baixarProva(prova.idProva)}
+                                                                >
+                                                                    <span aria-hidden="true">↓</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </article>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </section>
+                            </>
+                        ) : (
+                            <section className="redacoes" aria-label="Temas de redação">
+                                {carregandoTemas ? (
+                                    <div className="simuladosEstado"><p role="status">Carregando temas…</p></div>
+                                ) : erroTemas ? (
+                                    <div className="simuladosEstado">
+                                        <p role="alert">{erroTemas}</p>
+                                        <button type="button" className="simuladosBotao" onClick={carregarTemasRedacao}>Tentar novamente</button>
+                                    </div>
+                                ) : !temaDestaque ? (
+                                    <div className="simuladosEstado"><p role="status">Ainda não há temas disponíveis.</p></div>
+                                ) : (
+                                    <>
+                                        <article className="simuladosPainel redacaoDestaque">
+                                            <div className="redacaoDestaqueConteudo">
+                                                <span className="redacaoDestaqueEtiqueta">Tema em destaque</span>
+                                                <h2>{temaDestaque.titulo || temaDestaque.titulo_tema || "Tema de redação"}</h2>
+                                                {temaDestaque.descricao && <p>{temaDestaque.descricao}</p>}
+                                                <div className="redacaoDestaqueAcoes">
+                                                    <button type="button" className="simuladosBotao primario" onClick={() => abrirTema(temaDestaque)}>
+                                                        Começar redação <span aria-hidden="true">→</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="simuladosMoki" aria-hidden="true">
+                                                <img src={Moki} alt="" />
+                                            </div>
                                         </article>
-                                    );
-                                })}
-                            </div>
+
+                                        <div className="redacoesListaTemas">
+                                            <div className="simuladosTituloSecao"><h2>Temas para praticar</h2></div>
+                                            <div className="simuladosGrade">
+                                                {temas.map((tema) => (
+                                                    <article key={tema.id_tema ?? tema.idTema ?? tema.titulo ?? tema.titulo_tema} className="simuladosCard redacaoCardTema">
+                                                        <h3>{tema.titulo || tema.titulo_tema || "Tema de redação"}</h3>
+                                                        {tema.descricao && <p>{tema.descricao}</p>}
+                                                        <button type="button" className="simuladosBotao" onClick={() => abrirTema(tema)}>
+                                                            Abrir tema <span aria-hidden="true">→</span>
+                                                        </button>
+                                                    </article>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </section>
                         )}
-                    </div>
-                </section>
-            )}
+                    </>
+                )}
+            </div>
         </main>
     );
 }

@@ -1,0 +1,229 @@
+/* Mantém o Ranking no fluxo do documento e recorta sem criar rolagem interna. */
+.auth-page:has(> .rk-pagina) {
+  position: relative;
+  overflow: clip;
+}
+
+.rk-pagina .rk-meu-resumo,
+.rk-pagina .rk-meu-resumo:hover {
+  border-color: #dfd2b4;
+  background: linear-gradient(135deg, #fff5df, #edf0dd);
+  color: #493424;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: inset 0 1px #fff8eb, 0 5px 0 #50350f12;
+}
+
+:root[data-tema="escuro"] .rk-pagina .rk-meu-resumo,
+:root[data-tema="escuro"] .rk-pagina .rk-meu-resumo:hover {
+  border-color: #ffffff26;
+  background: linear-gradient(125deg, #483326, #3d3023 50%, #304622);
+  color: #fff7ec;
+  box-shadow: inset 0 1px #ffffff14, 0 5px 0 #171b1545;
+}
+
+.rk-pagina .rk-meu-resumo::before,
+.rk-pagina .rk-meu-resumo::after {
+  content: none;
+}
+
+.rk-pagina .rk-minha-medalha {
+  border-color: #eac280;
+  background: #f3d29c;
+  color: #523719;
+  box-shadow: inset 0 -3px #c8954e45;
+}
+
+.rk-pagina .rk-meu-resumo .rk-ir-para-posicao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  max-width: 100%;
+  margin-left: auto;
+  border: 1px solid #d47018;
+  background: #ffa429;
+  color: #402309;
+  font-weight: 800;
+  box-shadow: inset 0 1px #ffd184, 0 3px 0 #ad5717;
+}
+
+.rk-ir-para-posicao svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+@media (hover: hover) {
+  .rk-pagina .rk-meu-resumo .rk-ir-para-posicao:hover {
+    background: #ffb746;
+  }
+}
+
+.rk-pagina .rk-meu-resumo .rk-ir-para-posicao:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px #ffd184, 0 1px 0 #ad5717;
+}
+
+.rk-pagina .rk-meu-resumo .rk-ir-para-posicao:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -5px;
+}
+
+@media (max-width: 700px) {
+  .rk-pagina .rk-meu-resumo .rk-ir-para-posicao {
+    flex: 1 0 100%;
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rk-pagina .rk-meu-resumo .rk-ir-para-posicao {
+    transition: transform 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+  }
+
+  .menuDireitaSuperior a.menuDireitaSuperior-botao {
+    transition: scale 150ms ease-out, color 150ms ease-out,
+      background-color 150ms ease-out, border-color 150ms ease-out;
+  }
+
+  .menuDireitaSuperior a.menuDireitaSuperior-botao:active {
+    scale: 0.975;
+    transition-duration: 90ms;
+  }
+
+  .rk-pagina--entrada {
+    transform-origin: top left;
+    animation: rk-entrada-pela-lateral 580ms cubic-bezier(0.2, 0.75, 0.25, 1);
+  }
+
+  .rk-pagina--entrada .rk-cabecalho {
+    animation: rk-inclinacao-do-cabecalho 580ms ease-out;
+  }
+
+  .rk-pagina .rk-podio .rk-finalista {
+    animation: rk-revelar-finalista 420ms cubic-bezier(0.22, 0.74, 0.29, 1) both;
+    animation-delay: var(--rk-espera-finalista);
+  }
+
+  .rk-pagina .rk-podio .rk-coroa {
+    animation: rk-quicar-coroa 540ms ease-out backwards;
+    animation-delay: calc(var(--rk-espera-finalista) + 210ms);
+  }
+
+  .rk-pagina .rk-podio--aguardando .rk-finalista,
+  .rk-pagina .rk-podio--aguardando .rk-coroa {
+    opacity: 0;
+    animation: none;
+  }
+
+  .rk-pagina .rk-linha--destaque {
+    position: relative;
+    z-index: 1;
+  }
+
+  .rk-linha--destaque::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid #a7d974;
+    border-radius: inherit;
+    box-shadow: 0 0 0 3px #386c3447, inset 0 0 12px #a7d97470;
+    pointer-events: none;
+    animation: rk-brilho-da-linha 1050ms ease-out both;
+  }
+
+  @keyframes rk-entrada-pela-lateral {
+    from {
+      opacity: 0.24;
+      transform: translate(calc(0px - clamp(64px, 12vw, 112px)), 22px) scale(0.95);
+    }
+
+    42% {
+      opacity: 1;
+    }
+
+    68% {
+      transform: translateY(-8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes rk-inclinacao-do-cabecalho {
+    from {
+      transform: skewY(-3deg);
+    }
+
+    68% {
+      transform: skewY(0.6deg);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes rk-revelar-finalista {
+    from {
+      opacity: 0;
+      transform: translateY(34px) scale(0.93);
+    }
+
+    72% {
+      opacity: 1;
+      transform: translateY(-5px) scale(1.015);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes rk-quicar-coroa {
+    from {
+      opacity: 0;
+      transform: translateY(-18px) rotate(-24deg) scale(0.82);
+    }
+
+    47% {
+      opacity: 1;
+      transform: translateY(3px) rotate(8deg) scale(1.08);
+    }
+
+    70% {
+      transform: translateY(-5px) rotate(-13deg);
+    }
+
+    to {
+      opacity: 1;
+      transform: rotate(-9deg);
+    }
+  }
+
+  @keyframes rk-brilho-da-linha {
+    from {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+    }
+
+    25% {
+      opacity: 1;
+    }
+
+    58% {
+      opacity: 1;
+      clip-path: inset(0);
+    }
+
+    to {
+      opacity: 0;
+      clip-path: inset(0);
+    }
+  }
+}

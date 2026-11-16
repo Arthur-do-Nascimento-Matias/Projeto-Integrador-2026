@@ -172,7 +172,7 @@ class Cadastro {
                     bio,
                     email,
                     senha,
-                    vidas,
+                    energia,
                     streak,
                     xp,
                     xp_semanal,

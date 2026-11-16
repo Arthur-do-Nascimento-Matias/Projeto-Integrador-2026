@@ -135,12 +135,13 @@ function converterMissao(missaoBanco) {
 }
 
 
-function MenuDireitaInferior({ draft }) {
+function MenuDireitaInferior({ draft, compacto = false }) {
   const [missoes, setMissoes] = useState([]);
 
   const idUsuario = draft?.id;
   const modalRef = useRef(null);
   const botaoRef = useRef(null);
+  const tituloModalRef = useRef(null);
 
 
   useEffect(() => {
@@ -214,69 +215,107 @@ function MenuDireitaInferior({ draft }) {
 
 
   function abrirModal() {
-    modalRef.current?.showModal();
+    const modal = modalRef.current;
+    if (!modal || modal.open) return;
+
+    modal.showModal();
+    tituloModalRef.current?.focus({ preventScroll: true });
+    modal.scrollTop = 0;
+
+    // Aplica a posição inicial antes de iniciar a transição de entrada.
+    modal.getBoundingClientRect();
+    modal.classList.add("menuDireitaInferior-modal--visivel");
   }
 
 
-  function fecharModal() {
-    modalRef.current?.close();
+  async function fecharModal() {
+    const modal = modalRef.current;
+    if (!modal?.classList.contains("menuDireitaInferior-modal--visivel")) return;
+
+    modal.classList.remove("menuDireitaInferior-modal--visivel");
+
+    // Aguarda o movimento real, inclusive se a preferência de movimento mudar.
+    const transicao = modal.getAnimations().find(
+      (animacao) => animacao.transitionProperty === "transform"
+    );
+    await transicao?.finished.catch(() => {});
+    modal.close();
   }
 
 
   return (
     <>
-      <section
-        className="menuDireita-card menuDireitaInferior"
-        aria-labelledby="menuDireita-missoes-titulo"
-      >
-        <div className="menuDireita-cabecalho">
-          <h3 id="menuDireita-missoes-titulo">
-            Missões do dia
-          </h3>
-
-          <button
-            ref={botaoRef}
-            type="button"
-            className="menuDireitaInferior-verTodas"
-            onClick={abrirModal}
-          >
-            VER TODAS
-          </button>
-        </div>
-
-        <div
-          className="menuDireitaInferior-resumo"
-          role="status"
+      {compacto ? (
+        <button
+          ref={botaoRef}
+          type="button"
+          className="menuDireitaProgresso-item"
+          aria-label="Missões do dia"
+          aria-haspopup="dialog"
+          onClick={abrirModal}
         >
-          <span>
-            {todasConcluidas
-              ? "Todas concluídas! Muito bem!"
-              : "Um passo por vez!"}
-          </span>
+          <strong><IconeMissao nome="alvo" /></strong>
+          <span>Missões</span>
+        </button>
+      ) : (
+        <section
+          className="menuDireita-card menuDireitaInferior"
+          aria-labelledby="menuDireita-missoes-titulo"
+        >
+          <div className="menuDireita-cabecalho">
+            <h3 id="menuDireita-missoes-titulo">
+              Missões do dia
+            </h3>
 
-          <strong>
-            {concluidas}/{missoes.length}
-          </strong>
-        </div>
+            <button
+              ref={botaoRef}
+              type="button"
+              className="menuDireitaInferior-verTodas"
+              aria-haspopup="dialog"
+              onClick={abrirModal}
+            >
+              VER TODAS
+            </button>
+          </div>
 
-        <ListaMissoes
-          missoes={missoes}
-          draft={draft}
-        />
+          <div
+            className="menuDireitaInferior-resumo"
+            role="status"
+          >
+            <span>
+              {todasConcluidas
+                ? "Todas concluídas! Muito bem!"
+                : "Um passo por vez!"}
+            </span>
 
-        <div className="menuDireitaInferior-rodape">
-          <span aria-hidden="true" />
+            <strong>
+              {concluidas}/{missoes.length}
+            </strong>
+          </div>
 
-          Renovam à meia-noite · horário local
-        </div>
-      </section>
+          <ListaMissoes
+            missoes={missoes}
+            draft={draft}
+          />
+
+          <div className="menuDireitaInferior-rodape">
+            <span aria-hidden="true" />
+
+            Renovam à meia-noite · horário local
+          </div>
+        </section>
+      )}
 
       <dialog
         ref={modalRef}
         className="menuDireitaInferior-modal"
         aria-labelledby="menuDireita-missoes-modal-titulo"
+        onCancel={(evento) => {
+          evento.preventDefault();
+          fecharModal();
+        }}
         onClose={() =>
-          botaoRef.current?.focus()
+          botaoRef.current?.focus({ preventScroll: true })
         }
         onClick={(evento) => {
           if (
@@ -293,17 +332,13 @@ function MenuDireitaInferior({ draft }) {
               SUA JORNADA DIÁRIA
             </span>
 
-            <button
-              type="button"
-              className="menuDireitaInferior-fechar"
-              onClick={fecharModal}
-              aria-label="Fechar missões"
-              autoFocus
-            >
-            </button>
           </div>
 
-          <h2 id="menuDireita-missoes-modal-titulo">
+          <h2
+            id="menuDireita-missoes-modal-titulo"
+            ref={tituloModalRef}
+            tabIndex={-1}
+          >
             Pequenos passos.
             <br />
             Grandes conquistas.

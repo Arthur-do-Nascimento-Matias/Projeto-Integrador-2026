@@ -15,6 +15,8 @@ function RedacaoEditor({ tema, aoVoltar }) {
     const [idRedacao, setIdRedacao] = useState(null);
     const [tituloRedacao, setTituloRedacao] = useState("");
     const [textoRedacao, setTextoRedacao] = useState("");
+    const [etapaSelecionada, setEtapaSelecionada] = useState(0);
+    const etapa = ETAPAS_REDACAO[etapaSelecionada];
 
     const [carregandoRascunho, setCarregandoRascunho] = useState(true);
     const [salvando, setSalvando] = useState(false);
@@ -131,18 +133,18 @@ function RedacaoEditor({ tema, aoVoltar }) {
     return (
         <div className="editorRedacaoAmbiente">
             <header className="editorTopo">
-                <button className="editorBotaoVoltar" onClick={aoVoltar}>
+                <button type="button" className="simuladosBotao editorBotaoVoltar" onClick={aoVoltar}>
                     ← Voltar para temas
                 </button>
 
                 <div className="editorStatusTopo">
                     {statusSalvamento && (
-                        <span className="editorBadgeSalvo">
+                        <span className="editorBadgeSalvo" role="status">
                             <span className="pontoVerde" />
                             {statusSalvamento}
                         </span>
                     )}
-                    <span className="editorBadgeXp">VALE +150 XP</span>
+                    <span className="editorBadgeXp">+150 XP</span>
                 </div>
             </header>
 
@@ -151,7 +153,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
                 <aside className="editorColunaApoio">
                     <div className="editorCardTema">
                         <span className="editorSubtag">
-                            PROPOSTA DE REDAÇÃO • TEMA #{idTema}
+                            Proposta de redação
                         </span>
                         <h2>{tituloTema}</h2>
                         <p className="editorDescricaoTema">
@@ -159,8 +161,8 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                 "A partir da leitura dos textos motivadores, redija um texto dissertativo-argumentativo em modalidade escrita formal da língua portuguesa."}
                         </p>
 
-                        <div className="editorTextosMotivadores">
-                            <h4>Textos motivadores e instruções</h4>
+                        <details className="editorTextosMotivadores">
+                            <summary>Textos motivadores e instruções</summary>
                             <div className="editorTextoBloco">
                                 <strong>Texto de apoio</strong>
                                 <p>
@@ -175,26 +177,33 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                 <li>Apresente uma proposta de intervenção no final.</li>
                                 <li>Escreva entre <strong>7 e 30 linhas</strong>.</li>
                             </ul>
-                        </div>
+                        </details>
                     </div>
 
-                    <div className="editorMokiCard">
-  <div className="editorMokiAvatar">
-    <img
-        src={Moki}
-        alt="Moki"
-        className="editorMokiImagem"
-    />
-</div>
-                        <div className="editorMokiFala">
-                            <strong>teste 123</strong>
-                            <p>
-                                {estatisticas.palavras < 50
-                                    ? "Comece apresentando o tema no 1º parágrafo!"
-                                    : "Ótimo ritmo! Lembre-se de salvar seu rascunho."}
-                            </p>
+                    <details className="editorMokiCard" open>
+                        <summary className="editorGuiaTitulo">
+                            <span className="editorMokiAvatar">
+                                <img src={Moki} alt="" className="editorMokiImagem" />
+                            </span>
+                            <strong>Guia de redação do Moki</strong>
+                        </summary>
+                        <div className="editorGuiaEtapas" role="group" aria-label="Partes da redação">
+                            {ETAPAS_REDACAO.map(({ nome }, indice) => (
+                                <button
+                                    key={nome}
+                                    type="button"
+                                    aria-pressed={etapaSelecionada === indice}
+                                    onClick={() => setEtapaSelecionada(indice)}
+                                >
+                                    {nome}
+                                </button>
+                            ))}
                         </div>
-                    </div>
+                        <div className="editorMokiFala" aria-live="polite">
+                            <p>{etapa.dica}</p>
+                            <p className="editorGuiaPergunta">{etapa.pergunta}</p>
+                        </div>
+                    </details>
                 </aside>
 
                 {/* LADO DIREITO: FOLHA PAUTADA */}
@@ -202,7 +211,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
                     <div className="folhaRedacaoContainer">
                         <div className="folhaCabecalho">
                             <div>
-                                <span className="folhaMarca">FOLHA OFICIAL • SIMIOLAB</span>
+                                <span className="folhaMarca">Sua redação</span>
                                 <small>
                                     {idRedacao ? `Rascunho #${idRedacao}` : "Novo rascunho"}
                                 </small>
@@ -221,7 +230,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
 
                         {carregandoRascunho ? (
                             <div className="folhaCarregando">
-                                <p>Buscando seu rascunho salvo...</p>
+                                <p role="status">Buscando seu rascunho salvo…</p>
                             </div>
                         ) : (
                             <>
@@ -229,6 +238,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                     <input
                                         type="text"
                                         className="folhaInputTitulo"
+                                        aria-label="Título da redação"
                                         placeholder="Título da sua redação (opcional)"
                                         value={tituloRedacao}
                                         onChange={(e) => setTituloRedacao(e.target.value)}
@@ -236,7 +246,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
                                 </div>
 
                                 <div className="folhaCorpoPautado">
-                                    <div className="folhaNumerosLinhas">
+                                    <div className="folhaNumerosLinhas" aria-hidden="true">
                                         {Array.from({ length: 30 }, (_, idx) => (
                                             <span key={idx + 1}>
                                                 {String(idx + 1).padStart(2, "0")}
@@ -246,6 +256,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
 
                                     <textarea
                                         className="folhaTextarea"
+                                        aria-label="Texto da redação"
                                         placeholder="Comece a escrever sua redação aqui..."
                                         value={textoRedacao}
                                         onChange={(e) => setTextoRedacao(e.target.value)}
@@ -257,13 +268,13 @@ function RedacaoEditor({ tema, aoVoltar }) {
 
                         <footer className="folhaRodape">
                             <div className="folhaMensagemErro">
-                                {erro && <span>⚠️ {erro}</span>}
+                                {erro && <span role="alert">{erro}</span>}
                             </div>
 
                             <div className="folhaBotoesAcao">
                                 <button
                                     type="button"
-                                    className="botaoSalvarRascunho"
+                                    className="simuladosBotao botaoSalvarRascunho"
                                     onClick={salvarRascunho}
                                     disabled={salvando || carregandoRascunho}
                                 >
@@ -272,7 +283,7 @@ function RedacaoEditor({ tema, aoVoltar }) {
 
                                 <button
                                     type="button"
-                                    className="botaoEnviarCorrecao"
+                                    className="simuladosBotao primario botaoEnviarCorrecao"
                                     onClick={enviarParaCorrecao}
                                     disabled={enviandoCorrecao || salvando || carregandoRascunho}
                                 >

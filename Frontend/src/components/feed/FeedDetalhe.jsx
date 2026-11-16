@@ -284,7 +284,7 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
         }
     }
 
-    return createPortal(
+    const detalhe = (
         <div
             className="feed-detail-backdrop"
             onMouseDown={aoFechar}
@@ -412,6 +412,14 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
 
                                     <time>
                                         {tempoRelativo(post.criado_em)}
+                                        {post.editado_em && (
+                                            <span title={new Date(post.editado_em).toLocaleString('pt-BR', {
+                                                dateStyle: 'short',
+                                                timeStyle: 'short'
+                                            })}>
+                                                {' · Editado'}
+                                            </span>
+                                        )}
                                     </time>
                                 </div>
 
@@ -740,7 +748,10 @@ function FeedDetalhe({ idPost, aoFechar, aoAtualizar, aoDenunciaEnviada }) {
                     </section>
                 </div>
             )}
-        </div>, 
+        </div>
+    )
+    return createPortal(
+        <div className="feed-page feed-detail-portal">{detalhe}</div>,
         document.body
     )
 }

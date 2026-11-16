@@ -1,7 +1,17 @@
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
 import { apiFetch } from "../utils/api";
 import Moki from "../../assets/MOKI.png";
 import "./ranking.css";
+=======
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigationType } from "react-router-dom";
+
+import { EVENTO_MISSOES } from "../utils/missoes";
+import Moki from "../../assets/MOKI.png";
+import "./Ranking.css";
+import "./ranking-transicao.css";
+>>>>>>> origin/theo
 
 const moki = "/avatares-simio/moki.png";
 const zoro = "/avatares-simio/zoro.png";
@@ -27,6 +37,14 @@ const fotosPerfil = {
 
 const numero = new Intl.NumberFormat("pt-BR");
 const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
+<<<<<<< HEAD
+=======
+let ultimoRanking;
+
+function prefereMovimentoReduzido() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+>>>>>>> origin/theo
 
 // Próxima segunda-feira, às 00h, no horário do navegador.
 function proximaSegunda() {
@@ -89,36 +107,76 @@ function Coroa() {
 }
 
 export default function Ranking({ usuarioId }) {
-  const [participantes, setParticipantes] = useState([]);
-  const [carregando, setCarregando] = useState(true);
+  const { state } = useLocation();
+  const tipoDeNavegacao = useNavigationType();
+  const animarEntrada = tipoDeNavegacao === "PUSH" && state?.transicaoDoRanking === true;
+
+  const [prazo, setPrazo] = useState(proximaSegunda);
+  const [participantes, setParticipantes] = useState(() =>
+    ultimoRanking?.prazo === prazo ? ultimoRanking.participantes : []
+  );
+  const [carregando, setCarregando] = useState(() => ultimoRanking?.prazo !== prazo);
   const [erro, setErro] = useState("");
   const [tentativa, setTentativa] = useState(0);
+  const [aguardandoEntrada, setAguardandoEntrada] = useState(animarEntrada);
 
-  const [prazo] = useState(proximaSegunda);
   const [contador, setContador] = useState(() => tempoRestante(prazo));
+  const paginaRef = useRef(null);
+  const listaRef = useRef(null);
   const minhaLinha = useRef(null);
+  const observadorDestaque = useRef(null);
+  const iniciouBusca = useRef(false);
+  const semanaExibida = useRef(prazo);
+  const posicoesAnteriores = useRef(null);
+  const animacoesDasLinhas = useRef(new WeakMap());
+
+  useLayoutEffect(() => {
+    if (!animarEntrada) return;
+
+    const entrada = paginaRef.current.getAnimations?.().find(
+      (animacao) => animacao.animationName === "rk-entrada-pela-lateral"
+    );
+    let ativo = true;
+    function revelarPodio() {
+      if (ativo) setAguardandoEntrada(false);
+    }
+
+    if (entrada) entrada.finished.then(revelarPodio, revelarPodio);
+    else revelarPodio();
+
+    return () => { ativo = false; };
+  }, [animarEntrada]);
 
   // Busca usuários reais e seus pontos semanais no backend.
   useEffect(() => {
-    const controller = new AbortController();
     let ativo = true;
-    let tempoEsgotado = false;
+    let controller;
+    let temporizador;
+    let atualizarDepois = false;
+    let temRanking = iniciouBusca.current || ultimoRanking?.prazo === prazo;
 
-    // Evita manter "Carregando ranking..." indefinidamente.
-    const temporizador = setTimeout(() => {
-      tempoEsgotado = true;
-      controller.abort();
-    }, 20000);
+    async function buscarRanking(mostrarCarregamento = false) {
+      if (controller) {
+        atualizarDepois = true;
+        return;
+      }
 
-    async function buscarRanking() {
-      setCarregando(true);
-      setErro("");
+      if (mostrarCarregamento && !temRanking) {
+        setCarregando(true);
+        setErro("");
+      }
+
+      controller = new AbortController();
+      let tempoEsgotado = false;
+      temporizador = setTimeout(() => {
+        tempoEsgotado = true;
+        controller.abort();
+      }, 20000);
 
       try {
-        const endpoint = `/ranking`;
-        console.log("[Ranking] Buscando:", endpoint);
+        const endpoint = `${API_URL}/ranking`;
 
-        const resposta = await apiFetch(endpoint, {
+        const resposta = await fetch(endpoint, {
           method: "GET",
           cache: "no-store",
           signal: controller.signal,
@@ -143,9 +201,26 @@ export default function Ranking({ usuarioId }) {
           foto: usuario.foto,
         }));
 
-        if (ativo) setParticipantes(participantesFormatados);
-      } catch (error) {
         if (!ativo) return;
+
+        const semana = proximaSegunda();
+        const lista = listaRef.current;
+        if (lista && semana === semanaExibida.current && !prefereMovimentoReduzido()) {
+          const topo = lista.getBoundingClientRect().top;
+          posicoesAnteriores.current = new Map(Array.from(lista.children, (linha, indice) => [
+            linha.dataset.usuarioId,
+            { indice, topo: linha.getBoundingClientRect().top - topo },
+          ]));
+        }
+
+        semanaExibida.current = semana;
+        temRanking = true;
+        iniciouBusca.current = true;
+        ultimoRanking = { prazo: semana, participantes: participantesFormatados };
+        setParticipantes(participantesFormatados);
+        setErro("");
+      } catch (error) {
+        if (!ativo || temRanking) return;
 
         console.error("[Ranking] Erro ao carregar:", error);
 
@@ -156,26 +231,74 @@ export default function Ranking({ usuarioId }) {
         }
       } finally {
         clearTimeout(temporizador);
-        if (ativo) setCarregando(false);
+        controller = undefined;
+        if (ativo) {
+          setCarregando(false);
+          if (atualizarDepois) {
+            atualizarDepois = false;
+            buscarRanking();
+          }
+        }
       }
     }
 
-    buscarRanking();
+    function atualizarRanking() {
+      if (!document.hidden) buscarRanking();
+    }
+
+    buscarRanking(true);
+    const intervalo = setInterval(() => {
+      const proximoPrazo = proximaSegunda();
+      setContador(tempoRestante(proximoPrazo));
+      setPrazo(proximoPrazo);
+      if (proximoPrazo === prazo) atualizarRanking();
+    }, 30000);
+    window.addEventListener(EVENTO_MISSOES, atualizarRanking);
+    window.addEventListener("focus", atualizarRanking);
+    document.addEventListener("visibilitychange", atualizarRanking);
 
     return () => {
       ativo = false;
+      clearInterval(intervalo);
       clearTimeout(temporizador);
-      controller.abort();
+      controller?.abort();
+      window.removeEventListener(EVENTO_MISSOES, atualizarRanking);
+      window.removeEventListener("focus", atualizarRanking);
+      document.removeEventListener("visibilitychange", atualizarRanking);
     };
-  }, [tentativa]);
+  }, [prazo, tentativa]);
+
+  useLayoutEffect(() => {
+    const anteriores = posicoesAnteriores.current;
+    posicoesAnteriores.current = null;
+    const lista = listaRef.current;
+    if (!lista || !anteriores || prefereMovimentoReduzido()) return;
+
+    const animacoes = animacoesDasLinhas.current;
+    const topo = lista.getBoundingClientRect().top;
+    const deslocamentos = Array.from(lista.children).flatMap((linha, indice) => {
+      const anterior = anteriores.get(linha.dataset.usuarioId);
+      if (!anterior || anterior.indice === indice || !linha.animate) return [];
+
+      const animacaoAnterior = animacoes.get(linha);
+      if (animacaoAnterior) animacaoAnterior.cancel();
+      const distancia = anterior.topo - (linha.getBoundingClientRect().top - topo);
+      return Math.abs(distancia) >= 1 ? [{ linha, distancia }] : [];
+    });
+
+    for (const { linha, distancia } of deslocamentos) {
+      animacoes.set(linha, linha.animate(
+        [{ translate: `0 ${distancia}px` }, { translate: "0 0px" }],
+        { duration: 480, easing: "cubic-bezier(0.22, 0.78, 0.3, 1)" }
+      ));
+    }
+  }, [participantes]);
 
   // Ordena por XP; em caso de empate, usa nome e ID.
-  const ordenados = [...participantes].sort(
-    (a, b) =>
-      b.xp - a.xp ||
-      a.nome.localeCompare(b.nome, "pt-BR") ||
-      a.id - b.id
-  );
+  const ordenados = useMemo(() => [...participantes].sort(
+    (a, b) => b.xp - a.xp || a.nome.localeCompare(b.nome, "pt-BR") || a.id - b.id
+  ), [participantes]);
+  const finalistas = ordenados.slice(0, 3);
 
   const minhaPosicao = ordenados.findIndex(
     (amigo) => Number(amigo.id) === Number(usuarioId)
@@ -188,31 +311,52 @@ export default function Ranking({ usuarioId }) {
       ? ordenados[minhaPosicao - 1].xp - eu.xp + 1
       : 0;
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setContador(tempoRestante(prazo));
-    }, 30000);
-
-    return () => clearInterval(timer);
-  }, [prazo]);
+  useEffect(() => () => observadorDestaque.current?.disconnect(), []);
 
   function encontrarPosicao() {
-    if (!minhaLinha.current) return;
+    const linha = minhaLinha.current;
+    if (!linha) return;
 
-    const reduzirMovimento = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    observadorDestaque.current?.disconnect();
+    const reduzirMovimento = prefereMovimentoReduzido();
+    const { top, bottom, height } = linha.getBoundingClientRect();
+    const alturaVisivel = document.documentElement.clientHeight;
 
-    minhaLinha.current.scrollIntoView({
-      behavior: reduzirMovimento ? "auto" : "smooth",
-      block: "center",
-    });
+    linha.focus({ preventScroll: true });
 
-    minhaLinha.current.focus({ preventScroll: true });
+    if (top < 16 || bottom > alturaVisivel - 16) {
+      window.scrollTo({
+        top: Math.max(0, window.scrollY + top - (alturaVisivel - height) / 2),
+        behavior: reduzirMovimento ? "instant" : "smooth",
+      });
+    }
+
+    if (reduzirMovimento) return;
+
+    linha.classList.remove("rk-linha--destaque");
+    if (!window.IntersectionObserver) {
+      linha.getBoundingClientRect();
+      linha.classList.add("rk-linha--destaque");
+      return;
+    }
+
+    const observador = new IntersectionObserver(([entrada]) => {
+      if (entrada.intersectionRatio < 0.5 || !linha.isConnected) return;
+
+      linha.classList.add("rk-linha--destaque");
+      observador.disconnect();
+    }, { threshold: 0.5 });
+
+    observadorDestaque.current = observador;
+    observador.observe(linha);
   }
 
   return (
-    <section className="rk-pagina" aria-labelledby="rk-titulo">
+    <section
+      ref={paginaRef}
+      className={animarEntrada ? "rk-pagina rk-pagina--entrada" : "rk-pagina"}
+      aria-labelledby="rk-titulo"
+    >
       {/* CABEÇALHO */}
       <header className="rk-cabecalho">
         <div className="rk-titulo-bloco">
@@ -269,9 +413,9 @@ export default function Ranking({ usuarioId }) {
             <span className="rk-folha rk-folha--um" aria-hidden="true" />
             <span className="rk-folha rk-folha--dois" aria-hidden="true" />
 
-            <div className="rk-podio">
+            <div className={animarEntrada && aguardandoEntrada ? "rk-podio rk-podio--aguardando" : "rk-podio"}>
               {[1, 0, 2].map((indice) => {
-                const amigo = ordenados[indice];
+                const amigo = finalistas[indice];
 
                 if (!amigo) {
                   return (
@@ -287,8 +431,11 @@ export default function Ranking({ usuarioId }) {
 
                 return (
                   <article
-                    key={amigo.id}
+                    key={indice}
                     className={`rk-finalista rk-finalista--${indice + 1}`}
+                    style={{
+                      "--rk-espera-finalista": `${(finalistas.length - indice - 1) * 140}ms`,
+                    }}
                     aria-label={`${indice + 1}º lugar: ${amigo.nome}, ${numero.format(amigo.xp)} XP`}
                   >
                     <div className="rk-personagem">
@@ -337,8 +484,11 @@ export default function Ranking({ usuarioId }) {
                 </p>
               </div>
 
-              <button type="button" onClick={encontrarPosicao}>
-                Minha posição <span aria-hidden="true">↓</span>
+              <button type="button" className="rk-ir-para-posicao" onClick={encontrarPosicao}>
+                Minha posição
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M10 4v12m-5-5 5 5 5-5" />
+                </svg>
               </button>
             </aside>
           )}
@@ -354,13 +504,14 @@ export default function Ranking({ usuarioId }) {
               <span>XP DA SEMANA</span>
             </header>
 
-            <ol className="rk-lista">
+            <ol className="rk-lista" ref={listaRef}>
               {ordenados.map((amigo, indice) => {
                 const souEu = Number(amigo.id) === Number(usuarioId);
 
                 return (
                   <li
                     key={amigo.id}
+                    data-usuario-id={amigo.id}
                     ref={souEu ? minhaLinha : undefined}
                     tabIndex={souEu ? -1 : undefined}
                     className={`rk-linha${souEu ? " rk-linha--eu" : ""}`}

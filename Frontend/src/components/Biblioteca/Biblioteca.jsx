@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { apiFetch } from "../utils/api";
 import "../Biblioteca/Biblioteca.css";
+import "./Biblioteca.css";
+import "../estadoCatalogo.css";
 import {
     registrarLivroAberto,
     registrarVisitaBiblioteca,
     registrarLeitura
 } from "../utils/missoes";
+
+import miroBiblioteca from '../../assets/Miro/miro-biblioteca.png';
 
 function normalizarBusca(texto) {
     return String(texto || "")
@@ -24,10 +28,24 @@ const titulosAlternativos = {
 function Biblioteca() {
     const [capas, setCapas] = useState([]);
     const [busca, setBusca] = useState("");
+    const [estado, setEstado] = useState("carregando");
+
+    async function carregarLivros() {
+        setEstado("carregando");
+        try {
+            const resposta = await fetch("http://localhost:3000/livros", { signal: AbortSignal.timeout(20000) });
+            if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+            const dados = await resposta.json();
+            if (!Array.isArray(dados)) throw new Error("Resposta de livros inválida.");
+            setCapas(dados);
+            setEstado("pronto");
+        } catch (erro) {
+            console.error("Erro ao carregar os livros:", erro);
+            setEstado("erro");
+        }
+    }
 
     useEffect(() => {
-
-
         registrarVisitaBiblioteca()
             .catch((erro) => {
                 console.error(
@@ -120,15 +138,16 @@ function Biblioteca() {
 
             <div className="biblioteca-header">
 
-                <div className="biblioteca-identidade">
+                <div className="biblioteca-marca">
+                    <div className="biblioteca-miro-wrap">
+                        <img className="biblioteca-miro" src={miroBiblioteca} alt="Miro" />
+                        <span className="biblioteca-miro-nome" aria-hidden="true">Miro</span>
+                    </div>
+                    <div className="biblioteca-identidade">
+                        <span className="biblioteca-label">ACERVO</span>
+                        <h1>Biblioteca</h1>
 
-                    <span className="biblioteca-label">
-                        ACERVO
-                    </span>
-
-                    <h1>
-                        Biblioteca
-                    </h1>
+                    </div>
 
                 </div>
 
@@ -158,13 +177,11 @@ function Biblioteca() {
                     </div>
 
 
-                    <span className="biblioteca-quantidade">
-                        {livrosFiltrados.length}
-
-                        {livrosFiltrados.length === 1
-                            ? " livro"
-                            : " livros"}
-                    </span>
+                    {estado === "pronto" && (
+                        <span className="biblioteca-quantidade">
+                            {livrosFiltrados.length} {livrosFiltrados.length === 1 ? "livro" : "livros"}
+                        </span>
+                    )}
 
                 </div>
 
@@ -194,53 +211,86 @@ function Biblioteca() {
                     LIVROS
                 ======================================== */}
 
-                <div className="capas">
+                {estado === "carregando" && (
+                    <>
+                        <p className="catalogo-estado" role="status">Carregando livros…</p>
+                        <div className="capas" aria-hidden="true">
+                            {[1, 2, 3].map((item) => (
+                                <div className="livro" key={item}>
+                                    <div className="livro-capa-wrap catalogo-esqueleto" />
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
 
-                    {livrosFiltrados.map((capa) => (
+                {estado === "erro" && (
+                    <div className="catalogo-estado">
+                        <p role="alert">Não conseguimos carregar os livros.</p>
+                        <button type="button" onClick={carregarLivros}>Tentar novamente</button>
+                    </div>
+                )}
 
-                        <div
-                            className="livro"
-                            key={capa.id}
-                        >
+                {estado === "pronto" && livrosFiltrados.length === 0 && (
+                    <div className="catalogo-estado">
+                        <p role="status">
+                            {capas.length ? "Nenhum livro encontrado." : "Ainda não há livros no acervo."}
+                        </p>
+                        {capas.length > 0 && (
+                            <button type="button" onClick={() => setBusca("")}>Limpar busca</button>
+                        )}
+                    </div>
+                )}
+
+                {estado === "pronto" && livrosFiltrados.length > 0 && (
+                    <div className="capas">
+
+                        {livrosFiltrados.map((capa) => (
 
                             <div
-                                className="livro-capa-wrap"
-                                onClick={() => abrirLivro(capa.id)}
+                                className="livro"
+                                key={capa.id}
                             >
 
-                                <img
-                                    id={capa.id}
-                                    className="capa"
-                                    src={`data:image/jpeg;base64,${capa.img}`}
-                                    alt={`Capa do livro ${capa.id}`}
-                                />
+                                <div
+                                    className="livro-capa-wrap"
+                                    onClick={() => abrirLivro(capa.id)}
+                                >
+
+                                    <img
+                                        id={capa.id}
+                                        className="capa"
+                                        src={`data:image/jpeg;base64,${capa.img}`}
+                                        alt={`Capa do livro ${capa.id}`}
+                                    />
 
 
-                                <div className="livro-acao">
+                                    <div className="livro-acao">
 
-                                    <span>
-                                        Abrir livro
-                                    </span>
+                                        <span>
+                                            Abrir livro
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div className="livro-prateleira">
+
+                                    <div className="prateleira-luz"></div>
+
+                                    <div className="prateleira-frente"></div>
 
                                 </div>
 
                             </div>
 
+                        ))}
 
-
-                            <div className="livro-prateleira">
-
-                                <div className="prateleira-luz"></div>
-
-                                <div className="prateleira-frente"></div>
-
-                            </div>
-
-                        </div>
-
-                    ))}
-
-                </div>
+                    </div>
+                )}
 
             </div>
 

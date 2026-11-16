@@ -1,11 +1,16 @@
 
 import { rejects } from 'assert';
 import { error } from 'console';
+<<<<<<< HEAD
 import mysql from 'mysql2';
+=======
+import mysql from 'mysql';
+>>>>>>> origin/theo
 import { resolve } from 'nodemailer/lib/shared/url.js';
 class Conexao {
     static connect() {
         const connection = mysql.createConnection({
+<<<<<<< HEAD
                 host: process.env.DB_HOST || '127.0.0.1',
                 port: Number(process.env.DB_PORT || 3306),
                 user: process.env.DB_USER || 'root',
@@ -18,6 +23,13 @@ class Conexao {
                     }
                 })
             });
+=======
+            host: '127.0.0.1',
+            user: 'root',
+            password: '',
+            database: 'integrador'
+        });
+>>>>>>> origin/theo
         connection.connect();
         return connection;
     }

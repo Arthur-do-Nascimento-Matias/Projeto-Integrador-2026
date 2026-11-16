@@ -7,10 +7,36 @@
   min-height: fit-content;
 }
 
-.streakEnergia {
+.painel-indicadores{
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px 16px;
+  padding: 5px;
+  height: 50px;
+
   display: flex;
-  flex-direction: column;
-  gap: -100px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+}
+
+.painel-indicador-valor {
+  position: relative;
+  top: 2px;
+}
+
+.painel-divisoria{
+  border: 0.50px solid rgba(255, 255, 255, 0.06);
+  margin: 10px 0;
+}
+
+.painel-indicadores .painel-divisoria-vertical {
+  display: inline-block;
+  width: 1.5px;
+  height: 20px;
+  margin-inline: 27px;
+  vertical-align: middle;
+  background: rgba(255, 240, 219, 0.12);
 }
 
 .menuDireitaSuperior-conteudo {
@@ -116,6 +142,16 @@
 :root[data-tema="escuro"] .ad::before {
     color: #c5bba9;
 }
+.ad img {
+    transition: all 800ms ease;
+
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+
+    animation: aparecerAd 1.5s ease both;
+}
 
 .ad:hover {
   cursor: pointer;
@@ -132,48 +168,4 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-.ad {
-    position: relative;
-    width: 100%;
-    height: 150px;
-    overflow: hidden;
-}
-
-.ad a {
-    position: absolute;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    opacity: 0;
-    visibility: hidden;
-
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-
-    pointer-events: none;
-}
-
-.ad a.ad-ativo {
-    opacity: 1;
-    visibility: visible;
-
-    pointer-events: auto;
-}
-
-.ad img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-    display: block;
-    transition: all 800ms ease;
-
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-
-    animation: aparecerAd 1.5s ease both;
 }

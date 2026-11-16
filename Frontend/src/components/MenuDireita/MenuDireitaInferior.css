@@ -18,10 +18,17 @@
   white-space: nowrap;
 
   cursor: pointer;
+  transition: color 160ms ease, scale 150ms ease-out;
 }
 
 .menuDireitaInferior-verTodas:hover {
   color: #ffc2c5;
+}
+
+.menuDireitaInferior-verTodas:active,
+.menuDireitaInferior-voltar:active {
+  scale: 0.97;
+  transition-duration: 90ms;
 }
 
 /* RESUMO */
@@ -240,6 +247,23 @@
 
 /* MODAL */
 
+.menuDireitaInferior-modal,
+.menuDireitaInferior-modal::backdrop {
+  --missoes-duracao: 190ms;
+  --missoes-curva: cubic-bezier(0.45, 0, 0.85, 0.65);
+
+  opacity: 0;
+  transition: opacity var(--missoes-duracao) var(--missoes-curva);
+}
+
+.menuDireitaInferior-modal--visivel,
+.menuDireitaInferior-modal--visivel::backdrop {
+  --missoes-duracao: 280ms;
+  --missoes-curva: cubic-bezier(0.2, 0.75, 0.3, 1);
+
+  opacity: 1;
+}
+
 .menuDireitaInferior-modal {
   position: fixed;
   inset: 0;
@@ -252,6 +276,7 @@
 
   box-sizing: border-box;
   overflow-y: auto;
+  overscroll-behavior: contain;
 
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 24px;
@@ -267,11 +292,21 @@
   font-family: "Rubik", sans-serif;
 
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
+
+  transform: translateY(14px) scale(0.975);
+  transition:
+    opacity var(--missoes-duracao) var(--missoes-curva),
+    transform var(--missoes-duracao) var(--missoes-curva);
+}
+
+.menuDireitaInferior-modal--visivel {
+  transform: none;
 }
 
 .menuDireitaInferior-modal::backdrop {
   background: rgba(15, 23, 16, 0.72);
 
+  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
 }
 
@@ -323,6 +358,8 @@
   font-size: 28px;
   font-weight: 800;
   line-height: 1.2;
+  letter-spacing: normal;
+  word-spacing: 0.12em;
 }
 
 .menuDireitaInferior-modal-descricao {
@@ -379,6 +416,7 @@
   font-weight: 800;
 
   cursor: pointer;
+  transition: background-color 160ms ease, scale 150ms ease-out;
 }
 
 .menuDireitaInferior-voltar:hover {
@@ -388,6 +426,24 @@
 .menuDireitaInferior-modal button:focus-visible {
   outline: 2px solid #ffe1a0;
   outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuDireitaInferior-modal,
+  .menuDireitaInferior-modal::backdrop,
+  .menuDireitaInferior-verTodas,
+  .menuDireitaInferior-voltar {
+    transition: none;
+  }
+
+  .menuDireitaInferior-modal {
+    transform: none;
+  }
+
+  .menuDireitaInferior-verTodas:active,
+  .menuDireitaInferior-voltar:active {
+    scale: 1;
+  }
 }
 
 @media(max-width: 1366px) {

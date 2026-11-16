@@ -258,7 +258,7 @@ useEffect(() => {
             setConteudo('')
             setCriandoPost(false)
 
-            await carregarPosts()
+            await atualizarFeed()
 
         } catch (erroAtual) {
             setErro(erroAtual.message)
@@ -356,16 +356,13 @@ useEffect(() => {
                         </button>
                     </div>
 
-                    <label className="feed-mobile-community">
-                        <span>Comunidade</span>
-                        <select value={comunidadeAtiva} onChange={event => setComunidadeAtiva(event.target.value)}>
-                            <option value="">Todas as comunidades</option>
-                            {comunidades.map(comunidade => (
-                                <option key={comunidade.id_comunidade} value={comunidade.slug}>{comunidade.nome}</option>
-                            ))}
-                        </select>
-                    </label>
                 </div>
+
+                <FeedLateral
+                    comunidades={comunidades}
+                    comunidadeAtiva={comunidadeAtiva}
+                    setComunidadeAtiva={setComunidadeAtiva}
+                />
 
             <section className="feed-content">
                 {erro && (
@@ -485,6 +482,14 @@ useEffect(() => {
 
                                         <time>
                                             {tempoRelativo(post.criado_em)}
+                                            {post.editado_em && (
+                                                <span title={new Date(post.editado_em).toLocaleString('pt-BR', {
+                                                    dateStyle: 'short',
+                                                    timeStyle: 'short'
+                                                })}>
+                                                    {' · Editado'}
+                                                </span>
+                                            )}
                                         </time>
                                     </div>
 
@@ -512,11 +517,6 @@ useEffect(() => {
                     </section>
                 )}
             </section>
-             <FeedLateral 
-                 comunidades={comunidades} 
-                 comunidadeAtiva={comunidadeAtiva}
-                setComunidadeAtiva={setComunidadeAtiva}
-             />
     </div>
 
             {criandoPost && (
@@ -620,7 +620,7 @@ useEffect(() => {
             {moderacaoAberta && (
     <FeedModeracao
         aoFechar={() => setModeracaoAberta(false)}
-        aoAtualizarFeed={carregarPosts}
+        aoAtualizarFeed={atualizarFeed}
     />
 )}
 
