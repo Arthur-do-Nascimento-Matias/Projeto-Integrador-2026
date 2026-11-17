@@ -1,3 +1,4 @@
+import { renovarEnergia, consultar } from './Energia.js';
 
 import { rejects } from 'assert';
 import { error } from 'console';
@@ -63,54 +64,31 @@ class Conexao {
             })
         })
     }
-    static getAtividades(param) {
-        return new Promise((resolve, reject) => {
-            const connection = Conexao.connect();
-
-            const sqlVerificador = 'SELECT energia FROM usuarios WHERE id_usuario = ?'
-
-            connection.query(sqlVerificador, [param.id], (error, results) => {
-                if(error) {
-                    connection.end()
-                    return reject(error)
-                }
-                if(results[0] <= 0) {
-                    connection.end()
-                    return
-                }
-            })
-
-            const sql = 'SELECT * FROM `perguntas` WHERE id_materia = ? AND ordem = ?';
-            connection.query(sql, [param.materia, param.atividadeAtual], (error, perguntas) => {
-                if (error) {
-                    connection.end();
-                    return reject(error);
-                }
-                if (!perguntas || perguntas.length === 0) {
-                    connection.end();
-                    return resolve({
-                        concluido: true,
-                        perguntas: [],
-                        alternativas: []
-                    });
-                }
-                const sqlAlternativas = 'SELECT * FROM `alternativas` WHERE id_pergunta = ?';
-                connection.query(
-                    sqlAlternativas,
-                    [perguntas[0].id_pergunta],
-                    (erroAlternativas, alternativas) => {
-                        connection.end();
-                        if (erroAlternativas) {
-                            return reject(erroAlternativas);
-                        }
-                        resolve({
-                            perguntas,
-                            alternativas
-                        });
-                    }
-                );
-            });
-        });
+    static async getAtividades(param) {
+        const connection = Conexao.connect();
+        try {
+            await renovarEnergia(connection, param.id);
+            const usuarios = await consultar(connection,
+                'SELECT energia FROM usuarios WHERE id_usuario = ?', [param.id]);
+            if (!usuarios.length) {
+                throw Object.assign(new Error('Usuário não encontrado.'), { status: 404 });
+            }
+            if (Number(usuarios[0].energia) <= 0) {
+                throw Object.assign(new Error('Energia insuficiente. Você recebe 5 energias no próximo dia.'), { status: 403 });
+            }
+            const perguntas = await consultar(connection,
+                'SELECT * FROM perguntas WHERE id_materia = ? AND ordem = ?',
+                [param.materia, param.atividadeAtual]);
+            if (!perguntas.length) {
+                return { concluido: true, perguntas: [], alternativas: [] };
+            }
+            const alternativas = await consultar(connection,
+                'SELECT * FROM alternativas WHERE id_pergunta = ?',
+                [perguntas[0].id_pergunta]);
+            return { perguntas, alternativas };
+        } finally {
+            connection.end();
+        }
     }
     static criarTrilha(id, idUser) {
         const colunas = [
@@ -263,7 +241,13 @@ class Conexao {
             );
         });
     }
-    static getPerfil(idUsuario) {
+    static async getPerfil(idUsuario) {
+        const renovacao = Conexao.connect();
+        try {
+            await renovarEnergia(renovacao, idUsuario);
+        } finally {
+            renovacao.end();
+        }
         return new Promise((resolve, reject) => {
             const connection = Conexao.connect();
             const sql = `
@@ -418,7 +402,11 @@ class Conexao {
         const query = (sql, params) => new Promise((resolve, reject) => {
             connection.query(sql, params, (erro, resultado) => erro ? reject(erro) : resolve(resultado));
         });
+        let transacaoAberta = false;
         try {
+            await query('START TRANSACTION');
+            transacaoAberta = true;
+            await renovarEnergia(connection, idUsuario);
             // Compare e atualize na mesma instrução SQL: duas chamadas concorrentes
             // para a atividade 1 não conseguem avançar o contador até 2.
             const resultado = await query(`
@@ -430,22 +418,32 @@ class Conexao {
                     xp_semanal = COALESCE(xp_semanal, 0) + ?
                 WHERE id_usuario = ?
                   AND COALESCE(${coluna}, 0) = ?
+                  AND energia > 0
             `, [atividade, xp, xp, idUsuario, atividade - 1]);
             if (resultado.affectedRows === 1) {
+                await query('COMMIT');
+                transacaoAberta = false;
                 return { registrada: true, jaRegistrada: false, xp_ganho: xp, atividades_concluidas: atividade };
             }
             const usuarios = await query(`
-                SELECT COALESCE(${coluna}, 0) AS concluidas
+                SELECT COALESCE(${coluna}, 0) AS concluidas, energia
                 FROM usuarios WHERE id_usuario = ? LIMIT 1
             `, [idUsuario]);
             if (!usuarios.length) throw falha('Usuário não encontrado.', 404);
             const concluidas = Number(usuarios[0].concluidas);
             if (concluidas >= atividade) {
+                await query('COMMIT');
+                transacaoAberta = false;
                 return { registrada: false, jaRegistrada: true, xp_ganho: 0, atividades_concluidas: concluidas };
             }
+            if (Number(usuarios[0].energia) <= 0) throw falha('Energia insuficiente.', 403);
             throw falha('Esta atividade ainda está bloqueada. Atualize a trilha.', 409);
         } finally {
-            connection.end();
+            try {
+                if (transacaoAberta) await query('ROLLBACK');
+            } finally {
+                connection.end();
+            }
         }
     }
 }

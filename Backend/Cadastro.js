@@ -1,3 +1,4 @@
+import { DIA_ENERGIA_SQL } from './Energia.js'
 import mysql from 'mysql2'
 import bcrypt from 'bcrypt'
 import Email from './Email.js'
@@ -168,6 +169,7 @@ class Cadastro {
                     email,
                     senha,
                     energia,
+                    energia_renovada_em,
                     streak,
                     xp,
                     xp_semanal,
@@ -179,7 +181,7 @@ class Cadastro {
                     atvidades_concluidas_historia,
                     atvidades_concluidas_geral
                 )
-                VALUES (?, ?, 'Este aluno ainda não adicionou uma bio.', ?, ?, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                VALUES (?, ?, 'Este aluno ainda não adicionou uma bio.', ?, ?, 5, ${DIA_ENERGIA_SQL}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
             `
 
             connection.query(

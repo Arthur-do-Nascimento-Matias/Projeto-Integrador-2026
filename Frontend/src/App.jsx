@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { apiFetch } from '/src/components/utils/api'
 import {
@@ -150,6 +149,50 @@ function ConteudoApp({
     estaNoGit,
     navigate
   ]);
+
+  // Confere a virada do dia com a aba aberta e ao voltar para ela.
+  useEffect(() => {
+    if (estaNoLogin || estaNoIndex || estaNaRedefinicaoSenha || estaNoInstagram || estaNoGit) return;
+    const obterDia = () => new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date());
+    let diaSincronizado = obterDia();
+    let carregando = false;
+    let cancelado = false;
+
+    async function conferirEnergia() {
+      const dia = obterDia();
+      if (cancelado || carregando || dia === diaSincronizado || document.visibilityState === 'hidden') return;
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      carregando = true;
+      try {
+        const resposta = await apiFetch('/perfil', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const dados = await resposta.json();
+        if (cancelado || token !== localStorage.getItem('token') || !resposta.ok || !dados.ok) return;
+        setDraft(anterior => String(anterior.id) === String(dados.usuario.id_usuario)
+          ? { ...anterior, energia: dados.usuario.energia }
+          : anterior);
+        diaSincronizado = dia;
+      } catch (erro) {
+        console.error('Erro ao renovar energia:', erro);
+      } finally {
+        carregando = false;
+      }
+    }
+
+    const intervalo = window.setInterval(conferirEnergia, 30000);
+    window.addEventListener('focus', conferirEnergia);
+    document.addEventListener('visibilitychange', conferirEnergia);
+    return () => {
+      cancelado = true;
+      window.clearInterval(intervalo);
+      window.removeEventListener('focus', conferirEnergia);
+      document.removeEventListener('visibilitychange', conferirEnergia);
+    };
+  }, [estaNoLogin, estaNoIndex, estaNaRedefinicaoSenha, estaNoInstagram, estaNoGit]);
 
   const [mode, setMode] = useState('login')
 

@@ -816,3 +816,27 @@ body,
 :root[data-tema="escuro"] .recover-modal strong {
   color: white;
 }
+
+/* Painel de atividades: fundo acompanha toda a rolagem. */
+body:has(.auth-page #trilha) {
+  --painel-fundo: #e8e2d2;
+  background: var(--painel-fundo);
+}
+
+:root[data-tema="escuro"] body:has(.auth-page #trilha) {
+  --painel-fundo: #232b33;
+}
+
+body:has(.auth-page #trilha) #root {
+  background: var(--painel-fundo);
+}
+
+.auth-page:has(#trilha) {
+  position: relative;
+  inset: auto;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  background-color: var(--painel-fundo);
+}

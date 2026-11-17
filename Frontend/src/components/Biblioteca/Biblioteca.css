@@ -950,121 +950,76 @@
     grid-template-columns: repeat(6, calc(180 * var(--biblioteca-unidade)));
 }
 
-/* Tablets: mantém espaço para o menu lateral e permite capas maiores. */
-@media (max-width: 1100px) {
-    .container:has(> .biblioteca-header) {
-        --biblioteca-unidade: 1px;
-        inset: 24px 18px 24px 128px;
-        translate: none;
-        width: auto;
-        height: auto;
-        border-radius: 32px;
-    }
-    .biblioteca-header { padding: 24px; gap: 20px; flex-wrap: wrap; }
-    .biblioteca-marca { padding-left: 16px; gap: 22px; }
-    .biblioteca-miro { width: 68px; scale: 1; }
-    .biblioteca-identidade h1 { font-size: 28px; }
-    .biblioteca-header-direita { flex: 1 1 260px; gap: 12px; }
-    .biblioteca-busca { flex: 1; width: auto; min-width: 0; height: 44px; }
-    .biblioteca-busca input { font-size: 16px; }
-    .biblioteca-conteudo { padding: 0 24px 24px; }
-    .container:has(> .biblioteca-header) .capas {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 36px 20px;
-    }
-    .container:has(> .biblioteca-header) .livro { width: 100%; min-width: 0; }
-    .container:has(> .biblioteca-header) .livro-capa-wrap {
-        width: calc(100% - 18px);
-        height: auto;
-        aspect-ratio: 18 / 29;
-    }
-    .livro-prateleira { width: 100%; height: 12px; margin-top: 14px; }
+
+/* Mobile: sobrescreve a geometria de desktop que usa !important. */
+@media (max-width: 1100px), (max-width: 1400px) and (pointer: coarse) {
+  .auth-page:has(.biblioteca-header) {
+    position: relative; inset: auto; width: 100%; min-width: 0;
+    margin: 0; padding: 0; min-height: 100dvh;
+    transform: none; translate: none; scale: none; animation: none;
+  }
+  .container:has(> .biblioteca-header) {
+    --biblioteca-unidade: 1px;
+    inset: max(12px, env(safe-area-inset-top, 0px))
+      max(12px, env(safe-area-inset-right, 0px))
+      calc(106px + env(safe-area-inset-bottom, 0px))
+      max(12px, env(safe-area-inset-left, 0px)) !important;
+    width: auto !important; height: auto !important;
+    min-width: 0; min-height: 0; max-width: none; max-height: none;
+    margin: 0 !important; transform: none !important;
+    translate: none !important; scale: 1 !important;
+    animation: none; border-radius: 24px; border-width: 2px;
+    overflow: auto;
+  }
+  .container:has(> .biblioteca-header) .biblioteca-header {
+    width: 100%; min-width: 0; box-sizing: border-box;
+    padding: 20px; gap: 16px; flex-wrap: wrap;
+  }
+  .container:has(> .biblioteca-header) .biblioteca-marca { min-width: 0; padding: 0; gap: 16px; }
+  .container:has(> .biblioteca-header) .biblioteca-miro { width: 60px; height: auto; scale: 1; }
+  .container:has(> .biblioteca-header) .biblioteca-identidade h1 { font-size: clamp(24px, 4vw, 32px); line-height: 1.15; }
+  .container:has(> .biblioteca-header) .biblioteca-header-direita {
+    flex: 1 1 280px; min-width: 0; max-width: 100%; gap: 12px;
+  }
+  .container:has(> .biblioteca-header) .biblioteca-busca { flex: 1 1 0; width: auto; min-width: 0; height: 44px; }
+  .container:has(> .biblioteca-header) .biblioteca-busca input { width: 100%; min-width: 0; font-size: 16px; }
+  .container:has(> .biblioteca-header) .biblioteca-conteudo {
+    flex: 1 1 auto; min-width: 0; min-height: 120px;
+    padding: 0 20px 28px; overflow-y: auto; overflow-x: hidden;
+  }
+  .container:has(> .biblioteca-header) .capas {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px 20px; padding: 8px 0 24px;
+  }
+  .container:has(> .biblioteca-header) .livro { width: 100%; min-width: 0; }
+  .container:has(> .biblioteca-header) .livro-capa-wrap {
+    width: calc(100% - 16px); max-width: 220px;
+    height: auto; aspect-ratio: 18 / 29;
+  }
+  .container:has(> .biblioteca-header) .livro-prateleira { width: 100%; max-width: 240px; height: 12px; margin-top: 14px; }
 }
-@media (min-width: 901px) and (max-width: 1100px) {
-    .container:has(> .biblioteca-header) .capas {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
+@media (min-width: 901px) and (max-width: 1100px),
+       (min-width: 901px) and (max-width: 1400px) and (pointer: coarse) {
+  .container:has(> .biblioteca-header) .capas { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
-/* Celulares: menu inferior, busca em linha própria e duas capas por linha. */
-@media (max-width: 700px) {
-    .container:has(> .biblioteca-header) {
-        inset: max(10px, env(safe-area-inset-top)) 10px
-               calc(88px + env(safe-area-inset-bottom));
-        border-radius: 24px;
-        border-width: 2px;
-    }
-    .biblioteca-header { padding: 20px 16px 16px; gap: 16px; }
-    .biblioteca-marca { gap: 14px; padding-left: 10px; }
-    .biblioteca-miro { width: 56px; }
-    .biblioteca-identidade h1 { font-size: 26px; }
-    .biblioteca-header-direita { flex-basis: 100%; gap: 10px; }
-    .biblioteca-quantidade { font-size: 11px; }
-    .biblioteca-conteudo { padding: 0 16px 24px; }
-    .biblioteca-secao-topo { margin-bottom: 20px; }
-    .container:has(> .biblioteca-header) .capas {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 28px 16px;
-    }
-    .biblioteca-miro-nome { right: auto; left: 0; top: 100%; }
-    .biblioteca-miro-nome::before { display: none; }
+@media (max-width: 600px) {
+  .container:has(> .biblioteca-header) .biblioteca-header { padding: 16px; gap: 12px; }
+  .container:has(> .biblioteca-header) .biblioteca-header-direita {
+    flex: 0 0 100%; flex-direction: column; align-items: stretch; gap: 8px;
+  }
+  .container:has(> .biblioteca-header) .biblioteca-busca { flex: 0 0 auto; width: 100%; }
+  .container:has(> .biblioteca-header) .biblioteca-quantidade { align-self: flex-end; }
+  .container:has(> .biblioteca-header) .biblioteca-conteudo { padding-inline: 12px; }
+  .container:has(> .biblioteca-header) .biblioteca-secao-topo { margin-bottom: 20px; }
+  .container:has(> .biblioteca-header) .capas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
+  .container:has(> .biblioteca-header) .biblioteca-miro-nome { right: auto; left: 0; top: 100%; }
+  .container:has(> .biblioteca-header) .biblioteca-miro-nome::before { display: none; }
 }
 @media (hover: none) {
-    .container:has(> .biblioteca-header) .livro-capa-wrap,
-    .container:has(> .biblioteca-header) .livro:hover .capa {
-        transform: none;
-        filter: none;
-    }
-    .container:has(> .biblioteca-header) .livro-capa-wrap::before { opacity: 0; }
-    .container:has(> .biblioteca-header) .livro-acao { opacity: 1; transform: none; }
+  .container:has(> .biblioteca-header) .livro-capa-wrap, .container:has(> .biblioteca-header) .livro:hover .capa { transform: none !important; filter: none !important; }
+  .container:has(> .biblioteca-header) .livro-capa-wrap::before { opacity: 0 !important; }
+  .container:has(> .biblioteca-header) .livro-acao { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-    .container:has(> .biblioteca-header) *,
-    .container:has(> .biblioteca-header) *::before { transition: none; }
-}
-
-/* Busca: permite que os filhos encolham dentro do cabeçalho. */
-@media (max-width: 1100px) {
-    .container > .biblioteca-header,
-    .container .biblioteca-header-direita {
-        min-width: 0;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-    .container .biblioteca-busca {
-        min-width: 0;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-    .container .biblioteca-busca input {
-        flex: 1 1 0;
-        width: 0;
-        min-width: 0;
-        max-width: 100%;
-    }
-}
-@media (max-width: 700px) {
-    .container > .biblioteca-header {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-        padding: 20px 16px 16px;
-        gap: 16px;
-    }
-    .container .biblioteca-header-direita {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        flex: 0 0 auto;
-        width: 100%;
-        gap: 8px;
-    }
-    .container .biblioteca-busca {
-        flex: 0 0 auto;
-        width: 100%;
-        height: 44px;
-    }
-    .container .biblioteca-quantidade {
-        align-self: flex-end;
-    }
+  .container:has(> .biblioteca-header) *, .container:has(> .biblioteca-header) *::before { transition: none; }
 }

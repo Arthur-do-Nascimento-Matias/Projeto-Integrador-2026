@@ -1,3 +1,4 @@
+import { renovarEnergia, consultar } from './Energia.js'
 import mysql from 'mysql2';
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
@@ -72,7 +73,7 @@ class Login {
                     bcrypt.compare(
                         dados.senha,
                         usuario.senha,
-                        function (err, senhaCorreta) {
+                        async function (err, senhaCorreta) {
 
                             if (err) {
                                 connection.end()
@@ -87,6 +88,19 @@ class Login {
                                     message: 'Login ou senha incorretos'
                                 })
 
+                                return
+                            }
+
+                            try {
+                                await renovarEnergia(connection, usuario.id_usuario)
+                                const atualizados = await consultar(connection,
+                                    'SELECT energia FROM usuarios WHERE id_usuario = ?',
+                                    [usuario.id_usuario])
+                                if (!atualizados.length) throw new Error('Usuário não encontrado.')
+                                usuario.energia = atualizados[0].energia
+                            } catch (erro) {
+                                connection.end()
+                                reject(erro)
                                 return
                             }
 
