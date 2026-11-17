@@ -1,6 +1,6 @@
 import mysql from 'mysql2'
 import bcrypt from 'bcrypt'
-//import Email from './Email.js'
+import Email from './Email.js'
 
 class Cadastro {
 
@@ -149,12 +149,13 @@ class Cadastro {
                 10
             )
 
-            const connection = mysql.createConnection({
-                host: '127.0.0.1',
-                user: 'root',
-                password: '',
-                database: 'integrador',
-            })
+          const connection = mysql.createConnection({
+            host: process.env.DB_HOST || '127.0.0.1',
+            port: Number(process.env.DB_PORT || 3306),
+            user: process.env.DB_USER || 'root',
+            password: process.env.DB_PASSWORD || '',
+            database: process.env.DB_NAME || 'integrador',
+        });
 
             connection.connect()
 

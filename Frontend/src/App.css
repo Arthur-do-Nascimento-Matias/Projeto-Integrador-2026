@@ -810,3 +810,9 @@ body,
 :root[data-tema="escuro"] .feed-share-toast { border-color: #64865a; background: #31482f; box-shadow: 0 5px 0 #1b2b19; color: #dce9d2; }
 :root[data-tema="escuro"] .feed-share-toast > button:hover { background: #48633d; }
 :root[data-tema="escuro"] .feed-share-toast--erro { border-color: #826b46; background: #493d2c; box-shadow: 0 5px 0 #2d251b; color: #ead7b5; }
+
+:root[data-tema="escuro"] #verification-title, 
+:root[data-tema="escuro"] .recover-modal p, 
+:root[data-tema="escuro"] .recover-modal strong {
+  color: white;
+}
