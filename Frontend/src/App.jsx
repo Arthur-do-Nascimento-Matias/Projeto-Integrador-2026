@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { apiFetch } from '/src/components/utils/api'
 import {
@@ -147,10 +148,12 @@ function ConteudoApp({
     estaNoIndex,
     estaNoInstagram,
     estaNoGit,
+    estaNaRedefinicaoSenha,
+    location.pathname,
     navigate
   ]);
 
-  // Confere a virada do dia com a aba aberta e ao voltar para ela.
+  // Sincroniza a ofensiva e confere a virada do dia com a aba aberta.
   useEffect(() => {
     if (estaNoLogin || estaNoIndex || estaNaRedefinicaoSenha || estaNoInstagram || estaNoGit) return;
     const obterDia = () => new Intl.DateTimeFormat('en-CA', {
@@ -162,7 +165,7 @@ function ConteudoApp({
 
     async function conferirEnergia() {
       const dia = obterDia();
-      if (cancelado || carregando || dia === diaSincronizado || document.visibilityState === 'hidden') return;
+      if (cancelado || carregando || document.visibilityState === 'hidden') return;
       const token = localStorage.getItem('token');
       if (!token) return;
       carregando = true;
@@ -172,12 +175,17 @@ function ConteudoApp({
         });
         const dados = await resposta.json();
         if (cancelado || token !== localStorage.getItem('token') || !resposta.ok || !dados.ok) return;
+        const mudouDia = dia !== diaSincronizado;
         setDraft(anterior => String(anterior.id) === String(dados.usuario.id_usuario)
-          ? { ...anterior, energia: dados.usuario.energia }
+          ? {
+              ...anterior,
+              streak: dados.usuario.streak,
+              ...(mudouDia ? { energia: dados.usuario.energia } : {})
+            }
           : anterior);
         diaSincronizado = dia;
       } catch (erro) {
-        console.error('Erro ao renovar energia:', erro);
+        console.error('Erro ao sincronizar ofensiva e energia:', erro);
       } finally {
         carregando = false;
       }

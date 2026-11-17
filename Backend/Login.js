@@ -1,3 +1,4 @@
+import { expirarOfensiva } from './Ofensiva.js'
 import { renovarEnergia, consultar } from './Energia.js'
 import mysql from 'mysql2';
 import bcrypt from 'bcrypt'
@@ -93,11 +94,13 @@ class Login {
 
                             try {
                                 await renovarEnergia(connection, usuario.id_usuario)
+                                await expirarOfensiva(connection, usuario.id_usuario)
                                 const atualizados = await consultar(connection,
-                                    'SELECT energia FROM usuarios WHERE id_usuario = ?',
+                                    'SELECT energia, streak FROM usuarios WHERE id_usuario = ?',
                                     [usuario.id_usuario])
                                 if (!atualizados.length) throw new Error('Usuário não encontrado.')
                                 usuario.energia = atualizados[0].energia
+                                usuario.streak = atualizados[0].streak
                             } catch (erro) {
                                 connection.end()
                                 reject(erro)

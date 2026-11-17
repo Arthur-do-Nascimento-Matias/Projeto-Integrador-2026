@@ -1,3 +1,5 @@
+import { expirarOfensiva } from './Ofensiva.js';
+import { DIA_ENERGIA_SQL } from './Energia.js';
 import { renovarEnergia, consultar } from './Energia.js';
 
 import { rejects } from 'assert';
@@ -245,6 +247,7 @@ class Conexao {
         const renovacao = Conexao.connect();
         try {
             await renovarEnergia(renovacao, idUsuario);
+            await expirarOfensiva(renovacao, idUsuario);
         } finally {
             renovacao.end();
         }
@@ -415,7 +418,15 @@ class Conexao {
                     energia = energia - 1,
                     atvidades_concluidas_geral = COALESCE(atvidades_concluidas_geral, 0) + 1,
                     xp = COALESCE(xp, 0) + ?,
-                    xp_semanal = COALESCE(xp_semanal, 0) + ?
+                    xp_semanal = COALESCE(xp_semanal, 0) + ?,
+                    streak = CASE
+                        WHEN data_ultima_atividade = ${DIA_ENERGIA_SQL}
+                            THEN COALESCE(streak, 0)
+                        WHEN data_ultima_atividade = ${DIA_ENERGIA_SQL} - INTERVAL 1 DAY
+                            THEN COALESCE(streak, 0) + 1
+                        ELSE 1
+                    END,
+                    data_ultima_atividade = ${DIA_ENERGIA_SQL}
                 WHERE id_usuario = ?
                   AND COALESCE(${coluna}, 0) = ?
                   AND energia > 0
