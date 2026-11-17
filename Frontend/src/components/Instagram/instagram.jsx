@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 
-import Theo from "../../assets/nos/img/luciano.jpg";
-import Arthur from "../../assets/nos/img/calleri.jpg";
-import Kauan from "../../assets/nos/img/lucas.jpg";
-import Simao from "../../assets/nos/img/rafael.jpg";
+import Theo from "../../assets/nos/img/theo.jpeg";
+import Arthur from "../../assets/nos/img/arthur.jfif";
+import Kauan from "../../assets/nos/img/kauan.jfif";
+import Simao from "../../assets/nos/img/simao.jfif";
+import EquipeCompleta from "../../assets/nos/img/equipe-completa.png";
 
 import "./instagram.css";
 
@@ -68,7 +69,6 @@ function Instagram() {
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M19 12H5m7-7-7 7 7 7" />
           </svg>
-
           Voltar ao site
         </Link>
       </header>
@@ -94,7 +94,6 @@ function Instagram() {
                 stroke="none"
               />
             </svg>
-
             Nosso Instagram
           </h1>
 
@@ -110,9 +109,7 @@ function Instagram() {
 
                 <div className="card__conteudo">
                   <span className="card__cargo">DESENVOLVEDOR</span>
-
                   <h2>{pessoa.nome}</h2>
-
                   <p>{pessoa.area}</p>
                   <p>{pessoa.funcao}</p>
 
@@ -126,9 +123,7 @@ function Instagram() {
                     <svg className="instagram__icone" aria-hidden="true">
                       <use href="#icone-instagram" />
                     </svg>
-
                     <span>Ver Instagram</span>
-
                     <svg className="instagram__seta" aria-hidden="true">
                       <use href="#icone-seta" />
                     </svg>
@@ -136,6 +131,13 @@ function Instagram() {
                 </div>
               </article>
             ))}
+
+            <article className="card card-equipe-completa">
+              <img
+                src={EquipeCompleta}
+                alt="Foto de toda a equipe SimioLab"
+              />
+            </article>
           </div>
         </section>
       </main>

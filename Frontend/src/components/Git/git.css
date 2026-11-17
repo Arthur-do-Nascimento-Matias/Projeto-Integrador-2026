@@ -450,125 +450,31 @@ body:has(.pagina-github) {
   min-width: 0;
   overflow-wrap: anywhere;
 }
-
-/* =========================================================
-   RESPONSIVIDADE — GITHUB
-   Mantém as proporções originais dos cards
-   ========================================================= */
-
-/* iPad e tablets */
-
-@media (min-width: 701px) and (max-width: 1100px) {
-  .pagina-github .cabecalho,
-  .pagina-github .equipe,
-  .pagina-github .rodape {
-    width: min(100% - 48px, 900px);
-  }
-
-  .pagina-github .cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
-  }
-
-  .pagina-github .card {
-    min-width: 0;
-  }
-
-  .pagina-github .foto {
-    aspect-ratio: 4 / 5;
-  }
-
-  .pagina-github .card__funcoes {
-    gap: 18px;
-    margin-top: 28px;
-  }
+/* Enquadramento das fotos da equipe */
+:is(.pagina-github, .pagina-instagram) .foto img {
+  scale: var(--zoom-foto, 1.27);
+  transform-origin: center bottom;
 }
 
-/* Celulares */
-
-@media (max-width: 700px) {
-  .pagina-github .cabecalho,
-  .pagina-github .equipe,
-  .pagina-github .rodape {
-    width: calc(100% - 32px);
-  }
-
-  .pagina-github .cabecalho {
-    padding-block: 16px;
-  }
-
-  .pagina-github .equipe {
-    padding-top: 12px;
-    padding-bottom: 34px;
-  }
-
-  .pagina-github .equipe > h1 {
-    gap: 10px;
-    margin-bottom: 26px;
-    font-size: clamp(24px, 7vw, 32px);
-  }
-
-  .pagina-github .cards {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  .pagina-github .card {
-    width: 100%;
-    border-radius: 23px;
-  }
-
-  .pagina-github .foto {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    border-radius: 16px;
-  }
-
-  .pagina-github .card__conteudo {
-    padding: 18px 6px 8px;
-  }
-
-  .pagina-github .card h2 {
-    font-size: 23px;
-  }
-
-  .pagina-github .card__funcoes {
-    gap: 16px;
-    margin: 26px 0 20px;
-  }
-
-  .pagina-github .github {
-    min-height: 46px;
-  }
-
-  .pagina-github .rodape {
-    justify-content: center;
-    text-align: center;
-  }
+/* Arthur */
+:is(.pagina-github, .pagina-instagram) .card:nth-child(2) {
+  --zoom-foto: 1.42;
 }
 
-/* Celulares pequenos */
+/* Guilherme Simão */
+:is(.pagina-github, .pagina-instagram) .card:nth-child(4) {
+  --zoom-foto: 1.34;
+}
 
-@media (max-width: 380px) {
-  .pagina-github .cabecalho,
-  .pagina-github .equipe,
-  .pagina-github .rodape {
-    width: calc(100% - 24px);
-  }
+.pagina-github .card-equipe-completa {
+  grid-column: 1 / -1;
+  padding: 12px;
+}
 
-  .pagina-github .card {
-    padding: 10px;
-  }
-
-  .pagina-github .card h2 {
-    font-size: 21px;
-  }
-
-  .pagina-github .card__funcoes li {
-    font-size: 13px;
-  }
-
-  .pagina-github .github {
-    font-size: 11px;
-  }
+.pagina-github .card-equipe-completa img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: contain;
 }

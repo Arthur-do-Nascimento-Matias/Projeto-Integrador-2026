@@ -757,6 +757,7 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
               </span>
             </div>
 
+
             <nav className="simio-rodape__nav" aria-label="Navegação do rodapé">
               <div className="simio-rodape__coluna">
                 <h3>Explore</h3>
@@ -771,6 +772,7 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
               <div className="simio-rodape__coluna">
                 <h3>Nosso universo</h3>
 
+            
                 <ul>
                   <li><a href="#biblioteca-home">Conheça a Biblioteca</a></li>
                 </ul>
@@ -781,6 +783,28 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
                 </p>
               </div>
             </nav>
+            <a
+              className="simio-rodape__instagram-oficial"
+              href="https://www.instagram.com/simiolabbrasil/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="simio-rodape__instagram-avatar">
+                <img src={moki} alt="" width="112" height="112" loading="lazy" />
+              </span>
+
+              <span className="simio-rodape__instagram-texto">
+                <span className="simio-rodape__instagram-perfil">@simiolabbrasil</span>
+                <strong>Acompanhe o SimioLab no Instagram</strong>
+                <span className="simio-rodape__instagram-descricao">
+                  Novidades do projeto, anúncios e muito mais.
+                </span>
+              </span>
+
+              <span className="simio-rodape__instagram-acao">
+                Seguir no Instagram <span aria-hidden="true">↗</span>
+              </span>
+            </a>
           </div>
 
           <div className="simio-rodape__base">
@@ -844,7 +868,7 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
               <Link
                 className="simio-social simio-social--instagram"
                 to="/instagram"
-                aria-label="Acompanhe o SimioLab no Instagram"
+                aria-label="Conheça os perfis da equipe no Instagram"
               >
                 <span className="simio-social__icone">
                   <svg
@@ -868,7 +892,7 @@ function Index({ mode, setMode, tema, setTema, alternarTema }) {
 
                 <span className="simio-social__texto">
                   <small>POR TRÁS DO PROJETO</small>
-                  <strong>Instagram</strong>
+                  <strong>Instagram da equipe</strong>
                 </span>
 
                 <svg
