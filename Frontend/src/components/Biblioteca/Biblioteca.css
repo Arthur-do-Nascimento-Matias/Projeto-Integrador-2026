@@ -6,49 +6,47 @@
     CONTAINER PRINCIPAL
     ========================================================= */
 
-    .container {
+   .container {
+    --biblioteca-unidade: min(0.0546875vw, 0.12dvh);
 
-        position: absolute;
+    position: fixed !important;
 
-        z-index: 1;
+    width: min(1536px, calc(100vw - 260px)) !important;
+    height: min(700px, calc(100dvh - 40px)) !important;
 
-        width: 75%;
-        height: calc(700 * var(--biblioteca-unidade));
+    top: 50% !important;
+    left: calc(50% + 110px) !important;
 
-        margin-top: calc(10 * var(--biblioteca-unidade));
-        margin-left: calc(165 * var(--biblioteca-unidade));
+    margin: 0 !important;
 
-        scale: 1.12;
+    transform: translate(-50%, -50%) !important;
+    translate: none !important;
+    scale: 1 !important;
 
-        display: flex;
-        flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-        box-sizing: border-box;
+    overflow: hidden;
+    box-sizing: border-box;
 
-        border-radius: calc(46 * var(--biblioteca-unidade));
+    border-radius: calc(46 * var(--biblioteca-unidade));
+    border: calc(3 * var(--biblioteca-unidade)) solid #8A7662;
 
-        border:
-            calc(3 * var(--biblioteca-unidade)) solid #8A7662;
+    background: linear-gradient(
+        180deg,
+        #806e60 0%,
+        #766557 38%,
+        #62604a 68%,
+        #3e5529 100%
+    );
 
-        background:
+    box-shadow:
+        0 calc(28 * var(--biblioteca-unidade))
+        calc(60 * var(--biblioteca-unidade))
+        rgba(45, 33, 24, 0.38);
 
-            linear-gradient(180deg,
-                #806e60 0%,
-                #766557 38%,
-                #62604a 68%,
-                #3e5529 100%);
-
-        box-shadow:
-
-            0 calc(28 * var(--biblioteca-unidade)) calc(60 * var(--biblioteca-unidade)) rgba(45, 33, 24, 0.38);
-
-        overflow: hidden;
-
-        font-family:
-            "Rubik",
-            sans-serif;
-
-    }
+    font-family: "Rubik", sans-serif;
+}
 
 
     /* =========================================================
@@ -930,16 +928,20 @@
    A unidade acompanha largura e altura disponíveis sem distorcer o painel. */
 .container:has(> .biblioteca-header) {
     --biblioteca-unidade: min(0.0546875vw, 0.12dvh);
+
     position: fixed;
-    inset: auto;
-    left: 54vw;
-    top: 50%;
+
+    inset: 50% auto auto 50%;
     translate: -50% -50%;
+
+    width: min(1536px, calc(100vw - 200px));
+    height: min(700px, calc(100dvh - 40px));
+
+    margin: 0;
     transform: none;
     scale: 1;
-    margin: 0;
-    width: calc(1536 * var(--biblioteca-unidade));
-    height: calc(700 * var(--biblioteca-unidade));
+
+    box-sizing: border-box;
 }
 .biblioteca-conteudo { overscroll-behavior: contain; }
 .biblioteca-busca input { min-width: 0; }
